@@ -16,8 +16,6 @@ t_doc_rec = {
 
 tabla = pd.DataFrame(t_doc_rec)
 
-
-
 # II. Funciones
 
 # o) Obtener dato
@@ -64,6 +62,27 @@ def enviar():
     messagebox.showinfo("¡Excelente!", "El registro se ha ingresado correctamente")
 
 # III. Aplicativo
+# Rejilla
+elementos_rejilla = (
+    ('L', 0, 0, 'HT entrante'),
+    ('E', 0, 1),
+
+    ('L', 1, 0, 'Fecha de recepción OEFA'),
+    ('E', 1, 1),
+
+    ('L', 2, 0, 'Tipo de documento'),
+    ('E', 2, 1),
+
+    ('L', 0, 2, 'HT entrante'),
+    ('E', 0, 3),
+
+    ('L', 1, 2, 'Fecha de recepción OEFA'),
+    ('E', 1, 3),
+
+    ('L', 2, 2, 'Tipo de documento'),
+    ('E', 2, 3)
+)
+
 
 # i) Apertura de ventana
 app_ospa = Tk()
@@ -72,19 +91,20 @@ app_ospa = Tk()
 reg = app_ospa.register(valnum)
 
 # Frames de la aplicación
-lienzo1 = Frame(app_ospa)
+lienzo1 = Cuadro(app_ospa)
 lienzo1.pack()
 
 lienzo2 = Frame(app_ospa)
 lienzo2.pack()
 
 lienzo3 = Cuadro(app_ospa)
+#lienzo4 = Cuadro(app_ospa)
 
 # ii) Objetos
 # Labels
-l1_titulo = Label(lienzo1, text="Ospa: Observatorio")
-l1_label1 = Label(lienzo1, text="HT entrante")
-l1_label2 = Label(lienzo1, text="Vía de recepción")
+#l1_titulo = Label(lienzo1, text="Ospa: Observatorio")
+#l1_label1 = Label(lienzo1, text="HT entrante")
+#l1_label2 = Label(lienzo1, text="Vía de recepción")
 # l1_label3 = Label(lienzo1, text="Aporte del documento")
 
 # l2_titulo = Label(lienzo2, text="Otros")
@@ -94,8 +114,8 @@ l2_label3 = Label(lienzo2, text="Tipo de documento")
 l2_label4 = Label(lienzo2, text="N° de documento")
 
 # Valores
-l1_valor1 = StringVar()
-l1_valor2 = StringVar()
+#l1_valor1 = StringVar()
+#l1_valor2 = StringVar()
 # l1_valor3 = StringVar()
 
 l2_valor1 = StringVar()
@@ -104,8 +124,8 @@ l2_valor3 = StringVar()
 l2_valor4 = StringVar()
 
 # Entries
-l1_entry1 = Entry(lienzo1, textvariable=l1_valor1, width= 20, borderwidth=2)
-l1_entry2 = Entry(lienzo1, textvariable=l1_valor2, width= 20, borderwidth=2)
+#l1_entry1 = Entry(lienzo1, textvariable=l1_valor1, width= 20, borderwidth=2)
+#l1_entry2 = Entry(lienzo1, textvariable=l1_valor2, width= 20, borderwidth=2)
 # l1_entry3 = Entry(lienzo1, textvariable=l1_valor3, width= 20, borderwidth=2)
 
 l2_entry1 = DateEntry(lienzo2, textvariable=l2_valor1, background='darkblue', foreground='white', width= 9, borderwidth=2)
@@ -119,17 +139,19 @@ l2_entry4.config(validate="key", validatecommand=(reg, '%P'))
 boton = Button(lienzo2, text="Guardar", command=enviar)
 
 # Objetos definidos por elemetos de GUI
+lienzo1.agregar_rejilla(elementos_rejilla)
 lienzo3.agregar_escenario(2, 2, tabla, enviar, enviar, enviar)
+
 
 # Ubicaciones
 # Lienzo 1
-l1_titulo.grid(row= 0, column=0, columnspan=4)
-l1_label1.grid(row= 1, column=0)
-l1_label2.grid(row= 1, column=2)
+#l1_titulo.grid(row= 0, column=0, columnspan=4)
+#l1_label1.grid(row= 1, column=0)
+#l1_label2.grid(row= 1, column=2)
 # l1_label3.grid(row= 3, column=0)
 
-l1_entry1.grid(row= 1, column=1)
-l1_entry2.grid(row= 1, column=3)
+#l1_entry1.grid(row= 1, column=1)
+#l1_entry2.grid(row= 1, column=3)
 # l1_entry3.grid(row= 3, column=1)
 
 # Lienzo 2
