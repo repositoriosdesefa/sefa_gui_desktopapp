@@ -176,7 +176,7 @@ class Cuadro(Frame):
         self.y= y
         self.x= x
         self.data = StringVar()
-        self.entrada = Entry(self.z, textvariable=self.data, width= 43)
+        self.entrada = Entry(self.z, textvariable=self.data, width= 42)
         self.entrada.grid(row= self.y, column=self.x, pady=4, padx=8)
         self.lista_de_objetos.append((self.entrada))
         self.lista_de_datos.append((self.data))
@@ -253,7 +253,7 @@ class Cuadro(Frame):
         self.y = y
         self.x = x
         self.listadesplegable = listadesplegable
-        self.combo = ttk.Combobox(self.z, state="readonly", width=40)
+        self.combo = ttk.Combobox(self.z, state="readonly", width=39)
         self.combo.grid(row = self.y, column = self.x, pady=4, padx=8)
         self.combo["values"] = self.listadesplegable
         self.combo.set(self.listadesplegable[0])
@@ -288,8 +288,11 @@ class Cuadro(Frame):
         
         self.y = y
         self.x = x
-        self.cal = DateEntry(self.z, width=12, background='darkblue',
-                    foreground='white', borderwidth=2)
+
+        # No es necesario crear un StringVar()
+        self.cal = DateEntry(self.z, width=39, background='darkblue',
+                            foreground='white', borderwidth=1)
+        
         self.cal.grid(row = self.y, column = self.x, pady=4, padx=8)
         self.lista_de_objetos.append((self.cal))
         self.lista_de_datos.append((self.cal))
@@ -357,7 +360,7 @@ class Cuadro(Frame):
                 print('Error, el valor de i[0] es {row[0]}')
 
     #----------------------------------------------------------------------
-    def agregar_escenario(self, row, column, data_frame, funcion1, funcion2, funcion3):
+    def agregar_escenario(self, row, column, data_frame, funcion1, funcion2):
         """Método de la clase Cuadro. \n
         Permite..."""
 
@@ -457,10 +460,10 @@ class Cuadro(Frame):
 
             boton_ver = Label(
                 valores_subframe,
-                text='VER',
+                text='Detalle',
                 font=formato.tipo_de_letra_tabla,
                 fg = formato.letras_del_boton,
-                width=4,
+                width=8,
                 height=1,
                 relief=GROOVE,
                 cursor="hand2",
@@ -470,34 +473,34 @@ class Cuadro(Frame):
             boton_ver.bind("<Button-1>",lambda e,argumento=argumento:self.funcion1(argumento))
             self.Efecto_de_boton(boton_ver)
 
-            boton_editar = Label(
-                valores_subframe,
-                text='EDIT',
-                font=formato.tipo_de_letra_tabla,
-                fg = formato.letras_del_boton,
-                width=4,
-                height=1,
-                relief=GROOVE,
-                cursor="hand2",
-                bg=formato.boton_sin_que_pase_cursor
-            )
-            boton_editar.grid(row=0, column=len(lista_de_valores)+2)
-            boton_editar.bind("<Button-1>",lambda e,argumento=argumento:self.funcion2(argumento))
-            self.Efecto_de_boton(boton_editar)
+            #boton_editar = Label(
+            #    valores_subframe,
+            #    text='EDIT',
+            #    font=formato.tipo_de_letra_tabla,
+            #    fg = formato.letras_del_boton,
+            #    width=4,
+            #    height=1,
+            #    relief=GROOVE,
+            #    cursor="hand2",
+            #    bg=formato.boton_sin_que_pase_cursor
+            #)
+            #boton_editar.grid(row=0, column=len(lista_de_valores)+2)
+            #boton_editar.bind("<Button-1>",lambda e,argumento=argumento:self.funcion3(argumento))
+            #self.Efecto_de_boton(boton_editar)
 
             boton_eliminar = Label(
                 valores_subframe,
-                text='DEL',
+                text='Eliminar',
                 font=formato.tipo_de_letra_tabla,
                 fg = formato.letras_del_boton,
-                width=4,
+                width=8,
                 height=1,
                 relief=GROOVE,
                 cursor="hand2",
                 bg=formato.boton_sin_que_pase_cursor
             )
-            boton_eliminar.grid(row=0, column=len(lista_de_valores)+3)
-            boton_eliminar.bind("<Button-1>",lambda e,argumento=argumento:self.funcion3(argumento))
+            boton_eliminar.grid(row=0, column=len(lista_de_valores)+2)
+            boton_eliminar.bind("<Button-1>",lambda e,argumento=argumento:self.funcion2(argumento))
             self.Efecto_de_boton(boton_eliminar)
 
     #----------------------------------------------------------------------
@@ -522,7 +525,7 @@ class Cuadro(Frame):
         self.lista_output = []
         for i in self.lista:
             if type(i).__name__ == 'DateEntry':
-                self.lista_output.append(i.get_date())
+                self.lista_output.append(str(i.get_date()))
             elif type(i).__name__ == 'ScrolledText':
                 self.lista_output.append(i.get("1.0", "end-1c"))
             else:
