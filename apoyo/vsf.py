@@ -73,18 +73,18 @@ class VerticalScrolledFrame:
     def __str__(self):
         return str(self.outer)
 
-class Vitrina(Frame):
+class Vitrina_vista(Frame):
     """"""
 
     #----------------------------------------------------------------------
-    def __init__(self, window, tabla, funcion1, funcion2, funcion3, height=100, width=1600):
+    def __init__(self, window, tabla, funcion1, funcion2, height=100, width=1600):
         """Constructor"""
 
         self.window = window
         self.tabla = tabla
         self.funcion1 = funcion1
         self.funcion2 = funcion2
-        self.funcion3 = funcion3
+        #self.funcion3 = funcion3
         self.height = height
         self.width = width
         
@@ -175,10 +175,10 @@ class Vitrina(Frame):
 
             boton_ver = Label(
                 valores_subframe,
-                text='VER',
+                text='Detalle',
                 font=formato.tipo_de_letra_tabla,
                 fg = formato.letras_del_boton,
-                width=5,
+                width=7,
                 height=1,
                 relief='groove',
                 cursor="hand2",
@@ -188,34 +188,34 @@ class Vitrina(Frame):
             boton_ver.bind("<Button-1>",lambda e,argumento=argumento:self.funcion1(argumento))
             self.Efecto_de_boton(boton_ver)
 
-            boton_editar = Label(
-                valores_subframe,
-                text='EDIT',
-                font=formato.tipo_de_letra_tabla,
-                fg = formato.letras_del_boton,
-                width=5,
-                height=1,
-                relief='groove',
-                cursor="hand2",
-                bg=formato.boton_sin_que_pase_cursor
-            )
-            boton_editar.grid(row=0, column=len(lista_de_valores)+2)
-            boton_editar.bind("<Button-1>",lambda e,argumento=argumento:self.funcion2(argumento))
-            self.Efecto_de_boton(boton_editar)
+            #boton_editar = Label(
+            #    valores_subframe,
+            #    text='EDIT',
+            #    font=formato.tipo_de_letra_tabla,
+            #    fg = formato.letras_del_boton,
+            #    width=5,
+            #    height=1,
+            #    relief='groove',
+            #    cursor="hand2",
+            #    bg=formato.boton_sin_que_pase_cursor
+            #)
+            #boton_editar.grid(row=0, column=len(lista_de_valores)+2)
+            #boton_editar.bind("<Button-1>",lambda e,argumento=argumento:self.funcion2(argumento))
+            #self.Efecto_de_boton(boton_editar)
 
             boton_eliminar = Label(
                 valores_subframe,
-                text='DEL',
+                text='Eliminar',
                 font=formato.tipo_de_letra_tabla,
                 fg = formato.letras_del_boton,
-                width=5,
+                width=7,
                 height=1,
                 relief='groove',
                 cursor="hand2",
                 bg=formato.boton_sin_que_pase_cursor
             )
-            boton_eliminar.grid(row=0, column=len(lista_de_valores)+3)
-            boton_eliminar.bind("<Button-1>",lambda e,argumento=argumento:self.funcion3(argumento))
+            boton_eliminar.grid(row=0, column=len(lista_de_valores)+2)
+            boton_eliminar.bind("<Button-1>",lambda e,argumento=argumento:self.funcion2(argumento))
             self.Efecto_de_boton(boton_eliminar)
 
     #----------------------------------------------------------------------

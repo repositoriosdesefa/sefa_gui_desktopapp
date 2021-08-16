@@ -16,8 +16,8 @@ class Ingresar_contrasena_de_adminitrador(Ventana):
 
         self.c1 = Cuadro(self)
         self.c1.agregar_label(0,0,' ')
-        self.c1.agregar_imagen(1,0,'administrador.png',150,150)
-        self.c1.agregar_titulo(2,0,'PERMISOS DE ADMINISTRADOR')
+        self.c1.agregar_imagen(1,0,'Logo_OSPA.png',350,120)
+        self.c1.agregar_titulo(2,0,'Inicio')
         
         rejilla =(
             ('L',0,0,'Usuario:'),
@@ -70,8 +70,8 @@ class Administrar_usuarios(Ventana):
 
         self.c1 = Cuadro(self)
         self.c1.agregar_label(0,0,' ')
-        self.c1.agregar_imagen(1,0,'users.png',692,200)
-        self.c1.agregar_titulo(2,0,'USUARIOS ACTIVOS')
+        self.c1.agregar_imagen(1,0,'Logo_OSPA.png',692,200)
+        self.c1.agregar_titulo(2,0,'Inicio')
         
         v1 = Vitrina(self, tabla_de_usuarios, self.ver_usuario, self.funcion_de_prueba, self.funcion_de_prueba, height=120, width=850)
 
