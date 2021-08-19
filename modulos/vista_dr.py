@@ -1,7 +1,7 @@
 from PIL.Image import ImagePointHandler
 import pandas as pd
 from tkinter import Tk
-from modulos import busqueda
+from modulos import busqueda_dr
 import gspread
 from apoyo.elemetos_de_GUI import Cuadro, Ventana
 from apoyo.manejo_de_bases import Base_de_datos
@@ -142,7 +142,7 @@ class Doc_recibidos_vista(Ventana):
         """"""
         self.desaparecer()
         # LargoxAncho
-        subFrame = busqueda.Doc_recibidos_busqueda(self, 600, 1200, "Pantalla de búsqueda")
+        subFrame = busqueda_dr.Doc_recibidos_busqueda(self, 600, 1200, "Pantalla de búsqueda")
 
 
 
