@@ -1,12 +1,14 @@
 from PIL.Image import ImagePointHandler
 import pandas as pd
 from tkinter import Tk
+from modulos import busqueda
 import gspread
 from apoyo.elemetos_de_GUI import Cuadro, Ventana
 from apoyo.manejo_de_bases import Base_de_datos
-from apoyo.vsf import Vitrina
+from apoyo.vsf import Vitrina_vista
 from tkinter import messagebox
 import apoyo.datos_frecuentes as dfrec
+
 
 class Doc_recibidos_vista(Ventana):
     """"""
@@ -17,13 +19,17 @@ class Doc_recibidos_vista(Ventana):
 
         Ventana.__init__(self, *args)
         # Valores de lista desplegable
-        tipo_respuesta = ('Si', 'No')
         tipo_ingreso = ('DIRECTO', 'DERIVACION-SUBDIRECCION', 
                         'DERIVACION-SUPERVISION', 'DERIVACION-SINADA')
         tipo_documento = ('OFICIO', 'MEMORANDO', 'CARTA', 'OFICIO CIRCULAR','MEMORANDO CIRCULAR', 'CARTA CIRCULAR',
                           'INFORME', 'RESOLUCIÓN', 'CÉDULA DE NOTIFICACIÓN', 'INFORME MÚLTIPLE', 'OTROS')
         especialista = ('Zurita, Carolina', 'López, José')
         tipo_indicacion = ('No corresponde', 'Archivar')
+        es_respuesta = ('Si', 'No')
+        tipo_respuesta = ('Ejecutó supervisión','Solicitó información a administrado',
+                          'Ejecutó acción de evaluación', 'Inició PAS', 'Administrado en adecuación / formalización',
+                          'Programó supervisión', 'Programó acción de evaluación', 'No es competente',
+                          'No corresponde lo solicitado', 'En evaluación de la EFA', 'Otros')
 
         # Labels and Entries
         rejilla_dr = (
@@ -48,20 +54,23 @@ class Doc_recibidos_vista(Ventana):
             ('L', 3, 0, 'Remitente'),
             ('E', 3, 1),
 
-            ('L', 3, 2, '¿Es respuesta?'),
-            ('CX', 3, 3, tipo_respuesta),
+            ('L', 3, 2, 'Asunto'),
+            ('E', 3, 3),
 
-            ('L', 4, 0, 'Asunto'),
-            ('E', 4, 1),
+            ('L', 4, 0, 'Especialista asignado'),
+            ('CX', 4, 1, especialista),
 
-            ('L', 4, 2, 'Especialista asignado'),
-            ('CX', 4, 3, especialista),
+            ('L', 4, 2, 'Indicación'),
+            ('CX', 4, 3, tipo_indicacion),
 
             ('L', 5, 0, 'Aporte del documento'),
             ('E', 5, 1),
 
-            ('L', 5, 2, 'Indicación'),
-            ('CX', 5, 3, tipo_indicacion)
+            ('L', 5, 2, '¿Es respuesta?'),
+            ('CX', 5, 3, es_respuesta),
+
+            ('L', 6, 0, 'Respuesta'),
+            ('CX', 6, 1, tipo_respuesta)
         )
 
         # Lista de DE
@@ -87,16 +96,17 @@ class Doc_recibidos_vista(Ventana):
         # 2do Frame
         c2 = Cuadro(self)
         c2.agregar_button(1,1,'Enviar', self.enviar_dr)
+        c2.agregar_button(1,2,'Búsqueda', self.busqueda_dr)
         # 3er Frame
         c3 = Cuadro(self)
         c3.agregar_titulo(2, 0, 'Documentos emitidos asociados')
-        v1 = Vitrina(self, tabla_de_dr, self.funcion_de_prueba, 
+        v1 = Vitrina_vista(self, tabla_de_dr, self.funcion_de_prueba, 
                     self.funcion_de_prueba,
                     height=80, width=1050)       
 
         c4 = Cuadro(self)
         c4.agregar_titulo(2,0,'Extremo de problemas asociados')
-        v2 = Vitrina(self, tabla_de_ep, self.funcion_de_prueba, 
+        v2 = Vitrina_vista(self, tabla_de_ep, self.funcion_de_prueba, 
                     self.funcion_de_prueba,
                     height=80, width=1050)
     #----------------------------------------------------------------------
@@ -117,14 +127,23 @@ class Doc_recibidos_vista(Ventana):
     #----------------------------------------------------------------------
     def ir_a_busqueda_de(self):
         """"""
-        self.desaparecer()
-        subframe = Pantalla_de_busqueda_de(self, 500, 400, 'Búsqueda de documentos recibidos')
+        #self.desaparecer()
+        #subframe = Pantalla_de_busqueda_de(self, 500, 400, 'Búsqueda de documentos recibidos')
 
     #----------------------------------------------------------------------
     def ir_a_busqueda_ep(self):
         """"""
+        #self.desaparecer()
+        #subframe = Pantalla_de_busqueda_ep(self, 500, 400, 'Búsqueda de extremos de problemas')
+
+        #----------------------------------------------------------------------
+
+    def busqueda_dr(self):
+        """"""
         self.desaparecer()
-        subframe = Pantalla_de_busqueda_ep(self, 500, 400, 'Búsqueda de extremos de problemas')
+        # LargoxAncho
+        subFrame = busqueda.Doc_recibidos_busqueda(self, 600, 1200, "Pantalla de búsqueda")
+
 
 
 class Pantalla_de_usuario(Ventana):
