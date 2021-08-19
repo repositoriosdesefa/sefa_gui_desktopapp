@@ -2,7 +2,7 @@ import pandas as pd
 from tkinter import Tk
 from apoyo.elemetos_de_GUI import Cuadro, Ventana
 from apoyo.manejo_de_bases import Base_de_datos
-from apoyo.vsf import Vitrina
+from apoyo.vsf import Vitrina_vista
 import apoyo.datos_frecuentes as dfrec
 
 class Ingresar_contrasena_de_adminitrador(Ventana):
@@ -73,7 +73,7 @@ class Administrar_usuarios(Ventana):
         self.c1.agregar_imagen(1,0,'Logo_OSPA.png',692,200)
         self.c1.agregar_titulo(2,0,'Inicio')
         
-        v1 = Vitrina(self, tabla_de_usuarios, self.ver_usuario, self.funcion_de_prueba, self.funcion_de_prueba, height=120, width=850)
+        v1 = Vitrina_vista(self, tabla_de_usuarios, self.ver_usuario, self.funcion_de_prueba, self.funcion_de_prueba, height=120, width=850)
 
         c2 = Cuadro(self)
         c2.agregar_button(0,0,'Crear usuario', self.ir_a_crear_usuario)
