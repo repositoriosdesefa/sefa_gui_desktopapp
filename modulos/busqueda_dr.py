@@ -8,11 +8,14 @@ from apoyo.elemetos_de_GUI import Cuadro, Ventana
 from apoyo.manejo_de_bases import Base_de_datos
 from apoyo.vsf import Vitrina_busqueda
 import apoyo.datos_frecuentes as dfrec
+from modulos import vista_dr
 
 class Doc_recibidos_busqueda(Ventana):
-
-
+    """"""
+    
+    #----------------------------------------------------------------------
     def __init__(self, *args):
+        """Constructor"""
 
         Ventana.__init__(self, *args)
 
@@ -85,7 +88,8 @@ class Doc_recibidos_busqueda(Ventana):
         c2.agregar_titulo(2, 0, 'Búsqueda de documentos recibidos')
 
 
-        self.v1 = Vitrina_busqueda(self, self.tabla_de_dr, self.Buscar, self.funcion_de_prueba, height=200, width=1030)
+        self.v1 = Vitrina_busqueda(self, self.tabla_de_dr, self.ver_dr, 
+                                   self.funcion_de_prueba, height=200, width=1030)
 
     def Buscar(self):
 
@@ -146,10 +150,17 @@ class Doc_recibidos_busqueda(Ventana):
 
 
 
-    def ver_usuario(self):
+    def ver_dr(self, x):
+        """"""
+        self.x = x
+        texto_documento = 'Documento recibido: ' + x
 
-        self.x = X
-        texto_usuario = 'Usuario: ' + X
+        b1 = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOC_RECIBIDOS')
+        lb1 = b1.listar_datos_de_fila(self.x)
+        lista_para_insertar = [lb1[0], lb1[1],lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], lb1[12]]
+        
+        self.desaparecer()
+        subframe = vista_dr.Doc_recibidos_vista(self, 600, 1100, texto_documento, nuevo=False, lista=lista_para_insertar)
 
     def funcion_de_prueba(self, x):
         """"""
