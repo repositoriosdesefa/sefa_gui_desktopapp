@@ -2,6 +2,8 @@ from tkinter.constants import X
 import pandas as pd
 import numpy as np
 from tkinter import Tk
+
+from pyasn1.type.univ import Null
 from apoyo.elemetos_de_GUI import Cuadro, Ventana
 from apoyo.manejo_de_bases import Base_de_datos
 from apoyo.vsf import Vitrina_busqueda
@@ -17,8 +19,8 @@ class Doc_recibidos_busqueda(Ventana):
         b1 = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOC_RECIBIDOS')
         self.tabla_inicial = b1.generar_dataframe()
         self.tabla_inicial2 = self.tabla_inicial.rename(columns={'Tipo de documento':'Tipodedocumento','HT Entrante':'HTEntrante'})
-        self.tabla_de_dr = self.tabla_inicial2.iloc[:, [0,2,3,6,5,8]]
-        self.tabla_de_dr = self.tabla_de_dr.rename(columns={'HT Entrante':'N° registro Siged','Fecha de ingreso SEFA':'Fecha ingreso SEFA','Remitente':'Remitente','Tipo de documento':'Tipodoc'})
+        self.tabla_de_dr = self.tabla_inicial2.iloc[:, [0,2,3,6,4,5,8]]
+        self.tabla_de_dr = self.tabla_de_dr.rename(columns={'HTEntrante':'N° registro Siged','Fecha de ingreso SEFA':'Fecha ingreso SEFA','Remitente':'Remitente','Tipodedocumento':'Tipo de documento'})
 
         self.listatipodoc = list(set(self.tabla_inicial2['Tipodedocumento']))
         self.listadestina = list(set(self.tabla_inicial2['Remitente']))
@@ -83,7 +85,7 @@ class Doc_recibidos_busqueda(Ventana):
         c2.agregar_titulo(2, 0, 'Búsqueda de documentos recibidos')
 
 
-        self.v1 = Vitrina_busqueda(self, self.tabla_de_dr, self.Buscar, self.funcion_de_prueba, height=200, width=900)
+        self.v1 = Vitrina_busqueda(self, self.tabla_de_dr, self.Buscar, self.funcion_de_prueba, height=200, width=1030)
 
     def Buscar(self):
 
@@ -91,40 +93,44 @@ class Doc_recibidos_busqueda(Ventana):
         self.tipodoc = listas_filtro[0]
         self.remitente = listas_filtro[1]
         self.ht = listas_filtro[2]
+        self.fecha = listas_filtro[3]
 
-        if self.tipodoc in self.listatipodoc :
+        if self.tipodoc != "":
             self.v1.Eliminar_vitrina()
-            criteriofiltrado = self.tabla_inicial2['Tipodedocumento']==self.tipodoc
-            self.tabla_de_dt = self.tabla_inicial2[criteriofiltrado]
-            self.tabla_filtrada = self.tabla_de_dt.iloc[:, [0,2,3,6,5,8]]
-            self.tabla_filtrada = self.tabla_filtrada.rename(columns={'HT Entrante':'N° registro Siged','Fecha de ingreso SEFA':'Fecha ingreso SEFA','Remitente':'Remitente'})
-            self.v1 = Vitrina_busqueda(self, self.tabla_filtrada, self.Buscar, self.funcion_de_prueba, height=200, width=900)
-
-            # if self.remitente in self.listadestina :
-            #    self.v1.Eliminar_vitrina()
-            #    self.tabla_filtrada = self.tabla_filtrada[self.tabla_filtrada['Remitente']==self.remitente]
-            #    self.v1 = Vitrina_busqueda(self, self.tabla_filtrada, self.Buscar, self.funcion_de_prueba, height=200, width=900)
-
-            #    if self.ht in self.listaht :
-            #        self.v1.Eliminar_vitrina()
-            #        self.tabla_filtrada = self.tabla_filtrada[self.tabla_filtrada['HTEntrante']==self.ht]
-            #        self.v1 = Vitrina(self, self.tabla_filtrada, self.Buscar, self.funcion_de_prueba, self.funcion_de_prueba, height=200, width=900)
- 
-            #    else:
-            #        self.tabla_filtrada
-
-            #else:
-            #    self.tabla_filtrada
+            self.tabla_filtrada = self.tabla_de_dr[self.tabla_de_dr['Tipo de documento']==self.tipodoc]
+            self.v1 = Vitrina_busqueda(self, self.tabla_filtrada, self.Buscar, self.funcion_de_prueba, height=200, width=1030)
+            if self.remitente != "":
+                self.v1.Eliminar_vitrina()
+                self.tabla_filtrada2 = self.tabla_filtrada[self.tabla_filtrada['Remitente']==self.remitente]
+                self.v1 = Vitrina_busqueda(self, self.tabla_filtrada2, self.Buscar, self.funcion_de_prueba, height=200, width=1030)
+                if self.ht != "":
+                    self.v1.Eliminar_vitrina()
+                    self.tabla_filtrada3 = self.tabla_filtrada2[self.tabla_filtrada2['N° registro Siged']==self.ht]
+                    self.v1 = Vitrina_busqueda(self, self.tabla_filtrada3, self.Buscar, self.funcion_de_prueba, height=200, width=1030)
+                    if self.fecha != "":
+                        self.v1.Eliminar_vitrina()
+                        self.tabla_filtrada4 = self.tabla_filtrada3[self.tabla_filtrada3['Fecha ingreso SEFA']==self.fecha]
+                        self.v1 = Vitrina_busqueda(self, self.tabla_filtrada4, self.Buscar, self.funcion_de_prueba, height=200, width=1030)
+                    else:
+                        self.tabla_de_dr
+                else:
+                    self.tabla_filtrada2
+            else:
+                if self.ht != "":
+                    self.v1.Eliminar_vitrina()
+                    self.tabla_filtrada2 = self.tabla_filtrada[self.tabla_filtrada['N° registro Siged']==self.ht]
+                    self.v1 = Vitrina_busqueda(self, self.tabla_filtrada2, self.Buscar, self.funcion_de_prueba, height=200, width=1030)
+                    if self.fecha != "":
+                        self.v1.Eliminar_vitrina()
+                        self.tabla_filtrada3 = self.tabla_filtrada2[self.tabla_filtrada2['Fecha ingreso SEFA']==self.fecha]
+                        self.v1 = Vitrina_busqueda(self, self.tabla_filtrada3, self.Buscar, self.funcion_de_prueba, height=200, width=1030)
+                else:
+                     if self.fecha != "":
+                        self.v1.Eliminar_vitrina()
+                        self.tabla_filtrada2 = self.tabla_filtrada[self.tabla_filtrada['Fecha ingreso SEFA']==self.fecha]
+                        self.v1 = Vitrina_busqueda(self, self.tabla_filtrada2, self.Buscar, self.funcion_de_prueba, height=200, width=1030)
         else:
             self.tabla_de_dr
-
-        #c15 = Cuadro(self)
-        #c15.agregar_button(5,3,'Buscar', self.ir_a_crear_usuario)
-
-        #c16 = Cuadro(self)
-        #c16.agregar_button(5,1,'Limpiar', self.ir_a_crear_usuario)
-
-
 
     def limpiar(self):
 
@@ -132,6 +138,7 @@ class Doc_recibidos_busqueda(Ventana):
         #subframe = Doc_recibidos_vista(self, 500, 1300, 'Interfaz para el control de usuarios') 
         #subframe = Doc_recibidos_vista(self, 500, 400, 'Nuevo usuario')
         self.v1.Eliminar_vitrina()
+
 
 
 
