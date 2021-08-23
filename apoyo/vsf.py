@@ -158,6 +158,7 @@ class Vitrina_vista(Frame):
                 'valores': lista_de_valores 
             }
 
+            # Valores de tabla
             tabla_valor = pd.DataFrame(elementos_valores)
             for i,row in tabla_valor.iterrows():
                 valor = Label(
@@ -165,6 +166,7 @@ class Vitrina_vista(Frame):
                     text=row[1],
                     font=formato.tipo_de_letra_tabla,
                     width=25, 
+                    height = 4,
                     relief='groove',
                     bg= formato.fondo_valores_de_tabla,
                     wraplength=125, 
@@ -181,13 +183,13 @@ class Vitrina_vista(Frame):
                 font=formato.tipo_de_letra_tabla,
                 fg = formato.letras_del_boton,
                 width=7,
-                height=1,
+                height=2,
                 relief='groove',
                 cursor="hand2",
                 bg=formato.boton_sin_que_pase_cursor
             )
             boton_ver.grid(row=0, column=len(lista_de_valores)+1)
-            boton_ver.bind("<Button-1>",lambda e,argumento=argumento:self.funcion1(argumento))
+            boton_ver.bind("<Button-1>", lambda e, argumento=argumento:self.funcion1(argumento))
             self.Efecto_de_boton(boton_ver)
 
             #boton_editar = Label(
@@ -211,7 +213,7 @@ class Vitrina_vista(Frame):
                 font=formato.tipo_de_letra_tabla,
                 fg = formato.letras_del_boton,
                 width=7,
-                height=1,
+                height=2,
                 relief='groove',
                 cursor="hand2",
                 bg=formato.boton_sin_que_pase_cursor
