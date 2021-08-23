@@ -109,12 +109,16 @@ class Doc_recibidos_busqueda(Ventana):
                     self.v1 = Vitrina_busqueda(self, self.tabla_filtrada3, self.Buscar, self.funcion_de_prueba, height=200, width=1030)
                     if self.fecha != "":
                         self.v1.Eliminar_vitrina()
-                        self.tabla_filtrada4 = self.tabla_filtrada3[self.tabla_filtrada3['Fecha ingreso SEFA']==self.fecha]
+                        self.tabla_filtrada4 = self.tabla_filtrada3[self.tabla_filtrada3['Fecha de ingreso OEFA']==self.fecha]
                         self.v1 = Vitrina_busqueda(self, self.tabla_filtrada4, self.Buscar, self.funcion_de_prueba, height=200, width=1030)
                     else:
                         self.tabla_de_dr
                 else:
-                    self.tabla_filtrada2
+                    if self.fecha != "":
+                        self.v1.Eliminar_vitrina()
+                        self.tabla_filtrada3 = self.tabla_filtrada2[self.tabla_filtrada2['Fecha de ingreso OEFA']==self.fecha]
+                        self.v1 = Vitrina_busqueda(self, self.tabla_filtrada3, self.Buscar, self.funcion_de_prueba, height=200, width=1030)
+                  
             else:
                 if self.ht != "":
                     self.v1.Eliminar_vitrina()
@@ -122,12 +126,12 @@ class Doc_recibidos_busqueda(Ventana):
                     self.v1 = Vitrina_busqueda(self, self.tabla_filtrada2, self.Buscar, self.funcion_de_prueba, height=200, width=1030)
                     if self.fecha != "":
                         self.v1.Eliminar_vitrina()
-                        self.tabla_filtrada3 = self.tabla_filtrada2[self.tabla_filtrada2['Fecha ingreso SEFA']==self.fecha]
+                        self.tabla_filtrada3 = self.tabla_filtrada2[self.tabla_filtrada2['Fecha de ingreso OEFA']==self.fecha]
                         self.v1 = Vitrina_busqueda(self, self.tabla_filtrada3, self.Buscar, self.funcion_de_prueba, height=200, width=1030)
                 else:
                      if self.fecha != "":
                         self.v1.Eliminar_vitrina()
-                        self.tabla_filtrada2 = self.tabla_filtrada[self.tabla_filtrada['Fecha ingreso SEFA']==self.fecha]
+                        self.tabla_filtrada2 = self.tabla_filtrada[self.tabla_filtrada['Fecha de ingreso OEFA']==self.fecha]
                         self.v1 = Vitrina_busqueda(self, self.tabla_filtrada2, self.Buscar, self.funcion_de_prueba, height=200, width=1030)
         else:
             self.tabla_de_dr
@@ -159,3 +163,4 @@ class Doc_recibidos_busqueda(Ventana):
       #      self.mostrar_datos()
 
        # self.mostrar_datos()
+       

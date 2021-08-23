@@ -139,7 +139,7 @@ class Vitrina_vista(Frame):
             text='Opciones',
             font=formato.tipo_de_letra_tabla,
             fg = formato.letras_del_boton,
-            width= 16, 
+            width= 16,
             height=1, 
             relief='groove',
             bg=formato.fondo_encabezados_de_tabla
@@ -294,7 +294,7 @@ class Vitrina_busqueda(Frame):
                 text=row[1],
                 font=formato.tipo_de_letra_tabla,
                 fg = formato.letras_del_boton,
-                width= 25, 
+                width= 21,#se modifico 
                 height=1, 
                 relief='groove',
                 bg=formato.fondo_encabezados_de_tabla
@@ -306,7 +306,7 @@ class Vitrina_busqueda(Frame):
             text='Opciones',
             font=formato.tipo_de_letra_tabla,
             fg = formato.letras_del_boton,
-            width= 16, 
+            width= 16, #se modifico 
             height=1, 
             relief='groove',
             bg=formato.fondo_encabezados_de_tabla
@@ -331,7 +331,7 @@ class Vitrina_busqueda(Frame):
                     valores_subframe, 
                     text=row[1],
                     font=formato.tipo_de_letra_tabla,
-                    width=25, 
+                    width=21,#se modifico  
                     relief='groove',
                     bg= formato.fondo_valores_de_tabla,
                     wraplength=125, 
@@ -344,7 +344,7 @@ class Vitrina_busqueda(Frame):
 
             boton_ver = Label(
                 valores_subframe,
-                text='Asociar',
+                text='VER',
                 font=formato.tipo_de_letra_tabla,
                 fg = formato.letras_del_boton,
                 width=7,
@@ -374,10 +374,10 @@ class Vitrina_busqueda(Frame):
 
             boton_eliminar = Label(
                 valores_subframe,
-                text='Eliminar',
+                text='ASOCIAR',
                 font=formato.tipo_de_letra_tabla,
                 fg = formato.letras_del_boton,
-                width=7,
+                width=8,
                 height=1,
                 relief='groove',
                 cursor="hand2",
