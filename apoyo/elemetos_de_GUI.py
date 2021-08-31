@@ -253,10 +253,10 @@ class Cuadro(Frame):
         self.y = y
         self.x = x
         self.listadesplegable = listadesplegable
-        self.combo = ttk.Combobox(self.z, state="readonly", width=39)
+        self.combo = ttk.Combobox(self.z, state="normal", width=39)
         self.combo.grid(row = self.y, column = self.x, pady=4, padx=8)
         self.combo["values"] = self.listadesplegable
-        self.combo.set(self.listadesplegable[0])
+        self.combo.set('')
         self.lista_de_objetos.append((self.combo))
         self.lista_de_datos.append((self.combo))
 
@@ -294,6 +294,8 @@ class Cuadro(Frame):
                             foreground='white', borderwidth=1)
         
         self.cal.grid(row = self.y, column = self.x, pady=4, padx=8)
+        #self.cal.set_date()
+        self.cal["state"] = "normal"
         self.lista_de_objetos.append((self.cal))
         self.lista_de_datos.append((self.cal))
 
@@ -541,7 +543,12 @@ class Cuadro(Frame):
         df_listas = list(zip(self.informacion_a_introducir, self.lista))
         tabla_listas = pd.DataFrame(df_listas)
         for i, row in tabla_listas.iterrows():
-            row[1].set(row[0])
+            try:
+                row[1].set(row[0])
+            except:
+                row[1].set_date(str(row[0]))
+            else:
+                row[1].set(row[0])
 
 class MenuSefa():
 
