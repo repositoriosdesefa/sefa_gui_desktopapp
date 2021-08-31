@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import scrolledtext as sc
 from tkinter import ttk
 from tkcalendar import Calendar, DateEntry
+import datetime
 import apoyo.formato as formato 
 import pandas as pd
 from PIL import Image, ImageTk
@@ -256,7 +257,7 @@ class Cuadro(Frame):
         self.combo = ttk.Combobox(self.z, state="readonly", width=39)
         self.combo.grid(row = self.y, column = self.x, pady=4, padx=8)
         self.combo["values"] = self.listadesplegable
-        self.combo.set(self.listadesplegable[0])
+        self.combo.set('')
         self.lista_de_objetos.append((self.combo))
         self.lista_de_datos.append((self.combo))
 
@@ -388,7 +389,7 @@ class Cuadro(Frame):
         self.tabla = data_frame
         self.funcion1 = funcion1
         self.funcion2 = funcion2
-        self.funcion3 = funcion3
+        #self.funcion3 = funcion3
 
         escenario_frame = Frame(self.z)
         escenario_frame.grid(row=self.row, column=self.column)
@@ -525,7 +526,8 @@ class Cuadro(Frame):
         self.lista_output = []
         for i in self.lista:
             if type(i).__name__ == 'DateEntry':
-                self.lista_output.append(str(i.get_date()))
+                fecha = i.get_date()
+                self.lista_output.append(str(fecha.strftime("%d/%m/%Y")))
             elif type(i).__name__ == 'ScrolledText':
                 self.lista_output.append(i.get("1.0", "end-1c"))
             else:
@@ -535,13 +537,18 @@ class Cuadro(Frame):
     #----------------------------------------------------------------------
     def insertar_lista_de_datos(self, informacion_a_introducir):
         """"""
-
         self.informacion_a_introducir = informacion_a_introducir
+
         self.lista = self.lista_de_datos
         df_listas = list(zip(self.informacion_a_introducir, self.lista))
         tabla_listas = pd.DataFrame(df_listas)
         for i, row in tabla_listas.iterrows():
-            row[1].set(row[0])
+            try: 
+                row[1].set(row[0])
+            except:
+                row[1].set_date(str(row[0]))
+            else:
+                row[1].set(row[0])
 
 class MenuSefa():
 
