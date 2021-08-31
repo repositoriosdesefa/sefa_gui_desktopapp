@@ -79,9 +79,7 @@ class Doc_recibidos_busqueda(Ventana):
         self.tipodoc = self.listas_filtro[0]
         self.remitente = self.listas_filtro[1]
         self.ht = self.listas_filtro[2]
-        fecha_original = self.listas_filtro[3]
-        objeto_fecha = datetime.datetime.strptime(fecha_original, '%Y-%m-%d')
-        self.fecha = str(objeto_fecha.strftime("%d/%m/%Y"))
+        self.fecha = self.listas_filtro[3]
 
         if self.tipodoc != "":
             self.v1.Eliminar_vitrina()
