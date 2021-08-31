@@ -27,6 +27,7 @@ marco_pedido = ('EFA', 'OEFA',
                 'Colaboración', 'Delegación', 'Conocimiento')
 
 # Bases de datos principales
+b_efa = Base_de_datos('1pjHXiz15Zmw-49Nr4o1YdXJnddUX74n7Tbdf5SH7Lb0', 'Directorio')
 b_dr = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOC_RECIBIDOS')
 b_dr_cod = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOCS_R')
 b_dr_hist = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'HISTORIAL_DR')
@@ -44,6 +45,18 @@ class Doc_recibidos_vista(Ventana):
         Ventana.__init__(self, *args)
 
         self.nuevo = nuevo
+
+        # Lista de DE
+        tabla_de_de = b_de.generar_dataframe()
+        tabla_de_de = tabla_de_de.drop(['ID_DE', 'ID_DR', 'ID_EP', 'Fecha proyecto final', 'Fecha de firma',
+                                        'Tipo de documento', 'Marco de pedido', '¿Se emitió documento?'], axis=1)                  
+        # Lista de EP
+        tabla_de_ep = b_ep.generar_dataframe()
+        tabla_de_ep = tabla_de_ep.drop(['ID_DE', 'ID_DR', 'ID_EP'], axis=1)
+
+        # Desplegable EFA
+        tabla_directorio = b_efa.generar_dataframe()
+        lista_efa = list(set(tabla_directorio['Entidad u oficina']))
 
         # Labels and Entries
         rejilla_dr = (
@@ -66,7 +79,7 @@ class Doc_recibidos_vista(Ventana):
             ('E', 2, 3),
 
             ('L', 3, 0, 'Remitente'),
-            ('E', 3, 1),
+            ('CX', 3, 1, lista_efa),
 
             ('L', 3, 2, 'Asunto'),
             ('E', 3, 3),
@@ -86,14 +99,6 @@ class Doc_recibidos_vista(Ventana):
             ('L', 6, 0, 'Respuesta'),
             ('CX', 6, 1, tipo_respuesta)
         )
-
-        # Lista de DE
-        tabla_de_de = b_de.generar_dataframe()
-        tabla_de_de = tabla_de_de.drop(['ID_DE', 'ID_DR', 'ID_EP', 'Fecha proyecto final', 'Fecha de firma',
-                                        'Tipo de documento', 'Marco de pedido', '¿Se emitió documento?'], axis=1)
-        # Lista de EP
-        tabla_de_ep = b_ep.generar_dataframe()
-        tabla_de_ep = tabla_de_ep.drop(['ID_DE', 'ID_DR', 'ID_EP'], axis=1)
 
         # Ubicaiones
         # Frame de Título
