@@ -95,19 +95,20 @@ class Base_de_datos():
         self.lista_de_datos_sencilla = lista_de_datos
         self.worksheet.append_row(self.lista_de_datos_sencilla)
     
-    #----------------------------------------------------------------------
+    #---------------------------------------------------------------------
     def agregar_datos_generando_codigo(self, lista_de_datos):
         """[...]"""
 
-        self.lista_de_datos = lista_de_datos
+        self.lista_de_datos = [lista_de_datos]
         tabla = self.generar_dataframe()
-        if tabla.empty == True:
+        if len(tabla.index) == 0:
             numero = 1
-        elif dt.datetime.strptime(tabla['fecha_hora_creacion'].tolist()[-1], "%Y-%m-%d %H:%M:%S.%f").year != self.hoy.year:
+        elif dt.datetime.strptime(tabla['F_CREACION'].tolist()[-1], "%Y-%m-%d %H:%M:%S.%f").year != self.hoy.year: 
             numero = 1
         else:
-            last = tabla['numero'].tolist()[-1]
+            last = tabla['CORRELATIVO'].tolist()[-1]
             numero = last + 1
+        
         self.codigo = self.pestanna + "-" + str(self.hoy.year) + "-" + str(numero)
         self.datos_obligatorios = [self.codigo, str(self.hoy), numero]
         self.lista_de_datos_completos = self.datos_obligatorios + self.lista_de_datos
