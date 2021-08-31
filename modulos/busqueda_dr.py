@@ -171,10 +171,11 @@ class Doc_recibidos_busqueda(Ventana):
 
         b1 = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOC_RECIBIDOS')
         lb1 = b1.listar_datos_de_fila(self.x)
-        lista_para_insertar = [lb1[0], lb1[1],lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], lb1[12]]
+        lista_para_insertar = [lb1[0], lb1[1], lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], lb1[12]]
         
         self.desaparecer()
         subframe = vista_dr.Doc_recibidos_vista(self, 600, 1100, texto_documento, nuevo=False, lista=lista_para_insertar)
+
 
     def funcion_de_prueba(self, x):
         """"""
