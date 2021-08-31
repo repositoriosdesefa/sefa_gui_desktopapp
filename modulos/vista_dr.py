@@ -12,19 +12,27 @@ import apoyo.datos_frecuentes as dfrec
 # Valores de lista desplegable
 tipo_ingreso = ('DIRECTO', 'DERIVACION-SUBDIRECCION', 
                 'DERIVACION-SUPERVISION', 'DERIVACION-SINADA')
-tipo_documento = ('', 'OFICIO', 'MEMORANDO', 'CARTA', 'OFICIO CIRCULAR','MEMORANDO CIRCULAR', 'CARTA CIRCULAR',
+tipo_documento = ('OFICIO', 'MEMORANDO', 'CARTA', 'OFICIO CIRCULAR','MEMORANDO CIRCULAR', 'CARTA CIRCULAR',
                   'INFORME', 'RESOLUCIÓN', 'CÉDULA DE NOTIFICACIÓN', 'INFORME MÚLTIPLE', 'OTROS')
-especialista = ('','Zurita, Carolina', 'López, José')
-tipo_indicacion = ('','No corresponde', 'Archivar')
-si_no = ('','Si', 'No')
-tipo_respuesta = ('','Ejecutó supervisión','Solicitó información a administrado',
+especialista = ('Zurita, Carolina', 'López, José')
+tipo_indicacion = ('No corresponde', 'Archivar')
+si_no = ('Si', 'No')
+tipo_respuesta = ('Ejecutó supervisión','Solicitó información a administrado',
                   'Ejecutó acción de evaluación', 'Inició PAS', 'Administrado en adecuación / formalización',
                   'Programó supervisión', 'Programó acción de evaluación', 'No es competente',
                   'No corresponde lo solicitado', 'En evaluación de la EFA', 'Otros')
-categorias = ('','Pedido de información', 'Pedido de información adicional', 'Pedido de información urgente',
+categorias = ('Pedido de información', 'Pedido de información adicional', 'Pedido de información urgente',
               'Reiterativo', 'Oficio a OCI')
-marco_pedido = ('','EFA', 'OEFA',
+marco_pedido = ('EFA', 'OEFA',
                 'Colaboración', 'Delegación', 'Conocimiento')
+
+# Bases de datos principales
+b_dr = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOC_RECIBIDOS')
+b_dr_cod = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOCS_R')
+b_dr_hist = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'HISTORIAL_DR')
+# Bases de datos complementarias
+b_de = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOC_EMITIDOS')
+b_ep = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'EXTREMOS')
 
 class Doc_recibidos_vista(Ventana):
     """"""
@@ -46,10 +54,10 @@ class Doc_recibidos_vista(Ventana):
             ('CX', 0, 3, tipo_ingreso),
 
             ('L', 1, 0, 'Fecha de recepción OEFA'),
-            ('E', 1, 1),
+            ('D', 1, 1),
 
             ('L', 1, 2, 'Fecha de recepción SEFA'),
-            ('E', 1, 3),
+            ('D', 1, 3),
 
             ('L', 2, 0, 'Tipo de documento'),
             ('CX', 2, 1, tipo_documento),
@@ -80,13 +88,11 @@ class Doc_recibidos_vista(Ventana):
         )
 
         # Lista de DE
-        b1 = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOC_EMITIDOS')
-        tabla_de_de = b1.generar_dataframe()
+        tabla_de_de = b_de.generar_dataframe()
         tabla_de_de = tabla_de_de.drop(['ID_DE', 'ID_DR', 'ID_EP', 'Fecha proyecto final', 'Fecha de firma',
                                         'Tipo de documento', 'Marco de pedido', '¿Se emitió documento?'], axis=1)
         # Lista de EP
-        b2 = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'EXTREMOS')
-        tabla_de_ep = b2.generar_dataframe()
+        tabla_de_ep = b_ep.generar_dataframe()
         tabla_de_ep = tabla_de_ep.drop(['ID_DE', 'ID_DR', 'ID_EP'], axis=1)
 
         # Ubicaiones
@@ -132,8 +138,21 @@ class Doc_recibidos_vista(Ventana):
     def enviar_dr(self):
         """"""
         datos_ingresados = self.c1.obtener_lista_de_datos()
-        b0 = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOC_RECIBIDOS')
-        b0.agregar_datos(datos_ingresados)
+
+        # Pestaña 1: Código Único
+        codigo_ht = datos_ingresados[0]
+        b_dr_cod.agregar_datos_generando_codigo(codigo_ht)
+        
+        # Pestaña 2: 
+        lista_descargada_codigo = b_dr_cod.listar_datos_de_fila(codigo_ht)
+        codigo_dr = lista_descargada_codigo[0]
+        lista_a_cargar = datos_ingresados + [codigo_dr]
+        b_dr.agregar_datos(lista_a_cargar)
+
+        # Pestaña 3
+        hora_de_creacion = lista_descargada_codigo[1]
+        lista_historial = lista_a_cargar + [hora_de_creacion]
+        b_dr_hist.agregar_datos(lista_historial)
         
         # Confirmación de registro
         messagebox.showinfo("¡Excelente!", "El registro se ha ingresado correctamente")
@@ -189,10 +208,10 @@ class Doc_emitidos_vista(Ventana):
             ('CX', 0, 3, categorias),
 
             ('L', 1, 0, 'Fecha de proyecto final'),
-            ('E', 1, 1),
+            ('D', 1, 1),
 
             ('L', 1, 2, 'Fecha de firma'),
-            ('E', 1, 3),
+            ('D', 1, 3),
 
             ('L', 2, 0, 'Tipo de documento'),
             ('CX', 2, 1, tipo_documento),
@@ -210,22 +229,22 @@ class Doc_emitidos_vista(Ventana):
             ('CX', 4, 1, marco_pedido),
 
             ('L', 4, 2, 'Fecha de notificación'),
-            ('E', 4, 3),
+            ('D', 4, 3),
 
             ('L', 5, 0, '¿Se emitió documento?'),
             ('CX', 5, 1, si_no)
 
         )
 
-        # Lista de DE
-        b1 = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOC_RECIBIDOS')
-        tabla_de_dr = b1.generar_dataframe()
+        # Lista de DR
+        self.b_dr = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOC_RECIBIDOS')
+        tabla_de_dr = self.b_dr.generar_dataframe()
         tabla_de_dr = tabla_de_dr.drop(['ID_DE', 'ID_DR', 'ID_EP', 'Via de recepción',
                                         'Fecha de ingreso OEFA', 'Tipo de documento', 'Especialista',
                                         'Indicación', '¿Es respuesta?', 'Respuesta'], axis=1)
         # Lista de EP
-        b2 = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'EXTREMOS')
-        tabla_de_ep = b2.generar_dataframe()
+        self.b_ep = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'EXTREMOS')
+        tabla_de_ep = self.b_ep.generar_dataframe()
         tabla_de_ep = tabla_de_ep.drop(['ID_DE', 'ID_DR', 'ID_EP'], axis=1)
 
         # Ubicaiones
@@ -271,8 +290,9 @@ class Doc_emitidos_vista(Ventana):
     def enviar_de(self):
         """"""
         datos_ingresados = self.c1.obtener_lista_de_datos()
-        b0 = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOC_EMITIDOS')
-        b0.agregar_datos(datos_ingresados)
+        b0 = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOCS_R')
+        codigo = datos_ingresados[0]
+        b0.agregar_datos_generando_codigo(codigo)
         
         # Confirmación de registro
         messagebox.showinfo("¡Excelente!", "El registro se ha ingresado correctamente")
