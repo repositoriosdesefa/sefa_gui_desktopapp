@@ -3,7 +3,7 @@ import pandas as pd
 from tkinter import Tk
 from modulos import busqueda_dr
 import gspread
-from apoyo.elemetos_de_GUI import Cuadro, Ventana
+from apoyo.elemetos_de_GUI import Cuadro, Ventana, CustomHovertip
 from apoyo.manejo_de_bases import Base_de_datos
 from apoyo.vsf import Vitrina_vista
 from tkinter import messagebox
@@ -118,11 +118,18 @@ class Doc_recibidos_vista(Ventana):
 
         # 2do Frame
         c2 = Cuadro(self)
-        c2.agregar_button(1,1,'Enviar', self.enviar_dr)
-        c2.agregar_button(1,2,'Búsqueda', self.busqueda_dr)
+        c2.agregar_button(0,1,'Guardar', self.enviar_dr)
+
+        #CustomHovertip(prueba, text="Si pulsa aquí va a colgar, si pulsa aquí va a colgaraaaaai pulsa aquí va a colgari pulsa aquí va a colgari pulsa aquí va a colgar", hover_delay=500)
+
+        
         # 3er Frame
         c3 = Cuadro(self)
-        c3.agregar_titulo(2, 0, 'Documentos emitidos asociados')
+        c3.agregar_button(0, 0,'(+) Agregar', self.busqueda_dr)
+        c3.agregar_titulo(0, 1,'                                                       ')
+        c3.agregar_titulo(0, 2, 'Documentos emitidos asociados')
+        c3.agregar_titulo(0, 3,'                              ')
+        c3.agregar_titulo(0, 4,'                              ')
         v1 = Vitrina_vista(self, tabla_de_de, self.ver_de, 
                     self.funcion_de_prueba,
                     height=80, width=1050)       
@@ -133,12 +140,7 @@ class Doc_recibidos_vista(Ventana):
                     self.funcion_de_prueba,
                     height=80, width=1050)
         
-        
-    #----------------------------------------------------------------------
-    def funcion_de_prueba(self, x):
-        """"""
-        print(x)
-
+    
      #----------------------------------------------------------------------
     def enviar_dr(self):
         """"""
@@ -171,11 +173,17 @@ class Doc_recibidos_vista(Ventana):
 
         b1 = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOC_EMITIDOS')
         lb1 = b1.listar_datos_de_fila(self.x)
-        lista_para_insertar = [lb1[0], lb1[1],lb1[2],lb1[3], lb1[4], lb1[5], 
-                               lb1[6], lb1[7], lb1[8], lb1[9], lb1[10]]
+        lista_para_insertar = [lb1[1],lb1[2],lb1[3], lb1[4], lb1[5], 
+                               lb1[6], lb1[7], lb1[8], lb1[9], lb1[10], lb1[11]]
         
         self.desaparecer()
         subframe = Doc_emitidos_vista(self, 600, 1100, texto_documento, nuevo=False, lista=lista_para_insertar)
+    
+    #----------------------------------------------------------------------
+    def funcion_de_prueba(self, x):
+        """"""
+        CustomHovertip(x, text="Si pulsa aquí va a colgar, si pulsa aquí va a colgaraaaaai pulsa aquí va a colgari pulsa aquí va a colgari pulsa aquí va a colgar", hover_delay=500)
+
 
     #----------------------------------------------------------------------
     def ir_a_busqueda_ep(self):
@@ -270,17 +278,22 @@ class Doc_emitidos_vista(Ventana):
 
         # 2do Frame
         c2 = Cuadro(self)
-        c2.agregar_button(1,1,'Enviar', self.enviar_de)
-        c2.agregar_button(1,2,'Búsqueda', self.busqueda_dr)
+        c2.agregar_button(1,1,'Guardar', self.enviar_de)
+
         # 3er Frame
         c3 = Cuadro(self)
         c3.agregar_titulo(2,0,'Extremo de problemas asociados')
         v1 = Vitrina_vista(self, tabla_de_ep, self.ver_dr, 
                     self.funcion_de_prueba,
                     height=80, width=1050)
+
         # 4to Frame
         c4 = Cuadro(self)
-        c4.agregar_titulo(2, 0, 'Documentos recibidos asociados')
+        c4.agregar_button(0, 0,'(+) Agregar', self.busqueda_dr)
+        c4.agregar_titulo(0, 1,'                                                       ')
+        c4.agregar_titulo(0, 2, 'Documentos recibidos asociados')
+        c4.agregar_titulo(0, 3,'                              ')
+        c4.agregar_titulo(0, 4,'                              ')
         v2 = Vitrina_vista(self, tabla_de_dr, self.ver_dr, 
                     self.funcion_de_prueba,
                     height=80, width=1050)  
@@ -310,8 +323,8 @@ class Doc_emitidos_vista(Ventana):
 
         b1 = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOC_RECIBIDOS')
         lb1 = b1.listar_datos_de_fila(self.x)
-        lista_para_insertar = [lb1[0], lb1[1],lb1[2],lb1[3], lb1[4], lb1[5], 
-                               lb1[6], lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], lb1[12]]
+        lista_para_insertar = [lb1[1],lb1[2],lb1[3], lb1[4], lb1[5], 
+                               lb1[6], lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], lb1[12], lb1[13]]
         
         self.desaparecer()
         subframe = Doc_recibidos_vista(self, 600, 1100, texto_documento, nuevo=False, lista=lista_para_insertar)

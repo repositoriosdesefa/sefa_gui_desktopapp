@@ -23,7 +23,7 @@ class Doc_recibidos_busqueda(Ventana):
         b1 = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOC_RECIBIDOS')
         self.tabla_inicial = b1.generar_dataframe()
         self.tabla_inicial2 = self.tabla_inicial.rename(columns={'Tipo de documento':'Tipodedocumento','HT Entrante':'HTEntrante'})
-        self.tabla_de_dr = self.tabla_inicial2.iloc[:, [0,2,3,6,4,5,8]]
+        self.tabla_de_dr = self.tabla_inicial2.iloc[:, [1,3,4,7,5,6,9]]
         self.tabla_de_dr = self.tabla_de_dr.rename(columns={'HTEntrante':'N° registro Siged','Fecha de ingreso SEFA':'Fecha ingreso SEFA','Remitente':'Remitente','Tipodedocumento':'Tipo de documento'})
 
         self.listatipodoc = list(set(self.tabla_inicial2['Tipodedocumento']))
@@ -171,7 +171,7 @@ class Doc_recibidos_busqueda(Ventana):
 
         b1 = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOC_RECIBIDOS')
         lb1 = b1.listar_datos_de_fila(self.x)
-        lista_para_insertar = [lb1[0], lb1[1], lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], lb1[12]]
+        lista_para_insertar = [lb1[1], lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], lb1[12], lb1[13]]
         
         self.desaparecer()
         subframe = vista_dr.Doc_recibidos_vista(self, 600, 1100, texto_documento, nuevo=False, lista=lista_para_insertar)
