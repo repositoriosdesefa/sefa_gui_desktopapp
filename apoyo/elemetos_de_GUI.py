@@ -6,6 +6,8 @@ import datetime
 import apoyo.formato as formato 
 import pandas as pd
 from PIL import Image, ImageTk
+import tkinter as tk
+from idlelib.tooltip import Hovertip
 
 class Ventana(Toplevel):
     """"""
@@ -613,6 +615,16 @@ class ScrollFrame(Frame):
         if (event.widget.winfo_width() != event.width) and (event.widget.winfo_height()  != event.height):
             canvas_width, canvas_height = event.width, event.height
             self.canvas.itemconfig(self.canvas_window, width = canvas_width, height = canvas_height)
+
+class CustomHovertip(Hovertip):
+    def showcontents(self):
+        label = tk.Label(
+            self.tipwindow, text=self.text, justify=tk.LEFT,
+            bg="#ffffff", fg="#151515", relief=tk.SOLID, 
+            borderwidth=1, wraplength=200, 
+            font=("Helvetica", 8)
+            )
+        label.pack()
 
 
 
