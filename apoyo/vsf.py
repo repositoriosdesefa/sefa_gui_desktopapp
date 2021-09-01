@@ -1,3 +1,4 @@
+from apoyo.elemetos_de_GUI import CustomHovertip
 import tkinter as tk
 from tkinter import Frame, Canvas, Label
 import apoyo.formato as formato 
@@ -219,8 +220,9 @@ class Vitrina_vista(Frame):
                 bg=formato.boton_sin_que_pase_cursor
             )
             boton_eliminar.grid(row=0, column=len(lista_de_valores)+2)
+            CustomHovertip(boton_eliminar, text = "Pruebaaaaaaaaaaaa aaaaaaaaaaaaaaa aaaaaaaaaaaaaa")
             boton_eliminar.bind("<Button-1>",lambda e,argumento=argumento:self.funcion2(argumento))
-            self.Efecto_de_boton(boton_eliminar)
+            #self.Efecto_de_boton(boton_eliminar)
 
     #----------------------------------------------------------------------
     def Efecto_de_boton(self, boton):
