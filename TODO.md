@@ -1,20 +1,31 @@
 # Pendientes
+- [ ] Descargar Markdown all in one para Visual Code
+
 ## busqueda_dr
-- [ X ] Widget de fecha con predeterminado vacío (Observación)
+- [x] Widget de fecha con predeterminado vacío (Observación)
+- [ ] Agregar nuevo filtro en reemplazo del filtro de fecha
 - [ ] Crear pantalla de búsqueda de doc emitidos
 - [ ] Crear método de asociar
 
 ## vista_dr
-- [ X ] Mostrar inicialmente la vitrina vacía
-- [ X ] Actualizar entries, según tamaño que corresponda
-- [ X ] Relacionar documentos emitidos y asociados
+- [x] Mostrar inicialmente la vitrina vacía
+- [ ] Mostrar label cuando no hayan valores o cambiar fondo de tabla vacía
+- [x] Actualizar entries, según tamaño que corresponda
+- [ ] Agregar entry con scrolltext
+- [ ] Relacionar documentos emitidos y asociados
 - [ ] Crear método eliminar
 
 ## vsf
-- [ ] Incorporar un botón "lupa"
-- [ ] Agregar en el botón "lupa" el tooltip
+- [ ] Integrar a elemetos_de_gui
+- [ ] Ajustar el tamaño de la fila de la vitrina
+- [ ] Cambiar el color del encabezado
+- [ ] Incorporar una imagen (de "lupa") en 'Opciones' de vitrina o Columna Adicional
+- [ ] Agregar sobre la imagen de "lupa" el tooltip
+- [ ] (Opcional) Tooltip sobre los textos (Texto con puntos suspensivos)
 - [ ] Acondicionar tooltip para que funcione con el loop
 
 ## Base de datos
-- [ X ] Armar tablas con datos reales para docs recibidos (Lucho)
+- [x] Armar tablas con datos reales para docs recibidos (Lucho)
 - [ ] Armar tablas con datos reales para docs emitidos (Lucia)
+- [ ] Armar tablas con datos reales para problemas (Lucia)
+- [ ] Armar tablas con datos reales para macro-problemas (Lucia)
