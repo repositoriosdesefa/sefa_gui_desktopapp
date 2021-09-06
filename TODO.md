@@ -8,6 +8,7 @@
 - [ X ] Mostrar inicialmente la vitrina vacía
 - [ X ] Actualizar entries, según tamaño que corresponda
 - [ X ] Relacionar documentos emitidos y asociados
+- [ ] Crear método eliminar
 
 ## vsf
 - [ ] Incorporar un botón "lupa"
@@ -15,5 +16,5 @@
 - [ ] Acondicionar tooltip para que funcione con el loop
 
 ## Base de datos
-- [ ] Armar tablas con datos reales para docs recibidos (Lucia)
-- [ X ] Armar tablas con datos reales para docs emitidos (Lucho)
+- [ X ] Armar tablas con datos reales para docs recibidos (Lucho)
+- [ ] Armar tablas con datos reales para docs emitidos (Lucia)
