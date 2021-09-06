@@ -167,7 +167,7 @@ class Vitrina_vista(Frame):
                     text=row[1],
                     font=formato.tipo_de_letra_tabla,
                     width=25, 
-                    height = 4,
+                    height = 2,
                     relief='groove',
                     bg= formato.fondo_valores_de_tabla,
                     wraplength=125, 
