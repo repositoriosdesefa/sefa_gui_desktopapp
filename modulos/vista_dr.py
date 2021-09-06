@@ -15,7 +15,7 @@ tipo_ingreso = ('DIRECTO', 'DERIVACION-SUBDIRECCION',
 tipo_documento = ('OFICIO', 'MEMORANDO', 'CARTA', 'OFICIO CIRCULAR','MEMORANDO CIRCULAR', 'CARTA CIRCULAR',
                   'INFORME', 'RESOLUCIÓN', 'CÉDULA DE NOTIFICACIÓN', 'INFORME MÚLTIPLE', 'OTROS')
 especialista = ('Zurita, Carolina', 'López, José')
-tipo_indicacion = ('No corresponde', 'Archivar')
+tipo_indicacion = ('No corresponde', 'Archivar', 'Actualizar', 'Crear')
 si_no = ('Si', 'No')
 tipo_respuesta = ('Ejecutó supervisión','Solicitó información a administrado',
                   'Ejecutó acción de evaluación', 'Inició PAS', 'Administrado en adecuación / formalización',
@@ -47,12 +47,17 @@ class Doc_recibidos_vista(Ventana):
         self.nuevo = nuevo
 
         # Lista de DE
-        tabla_de_de = b_de.generar_dataframe()
-        tabla_de_de = tabla_de_de.drop(['ID_DE', 'ID_DR', 'ID_EP', 'Fecha proyecto final', 'Fecha de firma',
-                                        'Tipo de documento', 'Marco de pedido', '¿Se emitió documento?'], axis=1)                  
+        tabla_de_de_completa = b_de.generar_dataframe()
+        tabla_de_de_id =  tabla_de_de_completa.drop(['Fecha proyecto final', 'Fecha de firma', 'Tipo de documento',
+                                                     'Marco de pedido', '¿Se emitió documento?'], axis=1)
+        # Lista de DE asociados
+        tabla_de_de = tabla_de_de_id.drop(['ID_DE', 'ID_DR', 'ID_EP'], axis=1)
+        tabla_de_de_nuevo = tabla_de_de.iloc[100:,]
         # Lista de EP
-        tabla_de_ep = b_ep.generar_dataframe()
-        tabla_de_ep = tabla_de_ep.drop(['ID_DE', 'ID_DR', 'ID_EP'], axis=1)
+        tabla_de_ep_completa = b_ep.generar_dataframe()
+        tabla_de_ep_id = tabla_de_ep_completa
+        tabla_de_ep = tabla_de_ep_id.drop(['ID_DE', 'ID_DR', 'ID_EP'], axis=1)
+        tabla_de_ep_nuevo = tabla_de_ep.iloc[100:,]
 
         # Desplegable EFA
         tabla_directorio = b_efa.generar_dataframe()
@@ -81,23 +86,23 @@ class Doc_recibidos_vista(Ventana):
             ('L', 3, 0, 'Remitente'),
             ('CX', 3, 1, lista_efa),
 
-            ('L', 3, 2, 'Asunto'),
-            ('E', 3, 3),
+            ('L', 3, 2, 'Especialista asignado'),
+            ('CX', 3, 3, especialista),
 
-            ('L', 4, 0, 'Especialista asignado'),
-            ('CX', 4, 1, especialista),
-
-            ('L', 4, 2, 'Indicación'),
-            ('CX', 4, 3, tipo_indicacion),
+            ('L', 4, 0, 'Asunto'),
+            ('EL', 4, 1, 112),
 
             ('L', 5, 0, 'Aporte del documento'),
-            ('E', 5, 1),
+            ('EL', 5, 1, 112),
 
-            ('L', 5, 2, '¿Es respuesta?'),
-            ('CX', 5, 3, si_no),
+            ('L', 6, 0, 'Indicación'),
+            ('CX', 6, 1, tipo_indicacion),
 
-            ('L', 6, 0, 'Respuesta'),
-            ('CX', 6, 1, tipo_respuesta)
+            ('L', 6, 2, '¿Es respuesta?'),
+            ('CX', 6, 3, si_no),
+
+            ('L', 7, 0, 'Respuesta'),
+            ('CX', 7, 1, tipo_respuesta)
         )
 
         # Ubicaiones
@@ -116,12 +121,10 @@ class Doc_recibidos_vista(Ventana):
             self.lista_para_insertar = lista
             self.c1.insertar_lista_de_datos(self.lista_para_insertar)
 
+
         # 2do Frame
         c2 = Cuadro(self)
         c2.agregar_button(0,1,'Guardar', self.enviar_dr)
-
-        #CustomHovertip(prueba, text="Si pulsa aquí va a colgar, si pulsa aquí va a colgaraaaaai pulsa aquí va a colgari pulsa aquí va a colgari pulsa aquí va a colgar", hover_delay=500)
-
         
         # 3er Frame
         c3 = Cuadro(self)
@@ -130,16 +133,32 @@ class Doc_recibidos_vista(Ventana):
         c3.agregar_titulo(0, 2, 'Documentos emitidos asociados')
         c3.agregar_titulo(0, 3,'                              ')
         c3.agregar_titulo(0, 4,'                              ')
-        v1 = Vitrina_vista(self, tabla_de_de, self.ver_de, 
-                    self.funcion_de_prueba,
-                    height=80, width=1050)       
+        if self.nuevo != True:
+            lista_para_filtrar = lista
+            id_doc = lista_para_filtrar[0]
+            tabla_de_de_vinculada = tabla_de_de_id[tabla_de_de_id['ID_DR']==id_doc]
+            tabla_de_de = tabla_de_de_vinculada.drop(['ID_DE', 'ID_DR', 'ID_EP'], axis=1)
+            v1 = Vitrina_vista(self, tabla_de_de, self.ver_de, 
+                               self.funcion_de_prueba, height=80, width=1050)  
+        else:
+            v1 = Vitrina_vista(self, tabla_de_de_nuevo, self.ver_de, 
+                               self.funcion_de_prueba, height=80, width=1050)
+
         # 4to Frame
         c4 = Cuadro(self)
-        c4.agregar_titulo(2,0,'Extremo de problemas asociados')
-        v2 = Vitrina_vista(self, tabla_de_ep, self.ver_de, 
-                    self.funcion_de_prueba,
-                    height=80, width=1050)
-        
+        c4.agregar_button(0, 0,'(+) Agregar', self.busqueda_dr)
+        c4.agregar_titulo(0, 1,'                                                       ')
+        c4.agregar_titulo(0, 2, 'Extremo de problemas asociados')
+        c4.agregar_titulo(0, 3,'                              ')
+        c4.agregar_titulo(0, 4,'                              ')
+
+        if self.nuevo != True:
+            v2 = Vitrina_vista(self, tabla_de_ep, self.ver_de, 
+                               self.funcion_de_prueba, height=80, width=1050)
+        else:
+            v2 = Vitrina_vista(self, tabla_de_ep_nuevo, self.ver_de, 
+                               self.funcion_de_prueba, height=80, width=1050)  
+    
     
      #----------------------------------------------------------------------
     def enviar_dr(self):
@@ -171,8 +190,7 @@ class Doc_recibidos_vista(Ventana):
         self.x = x
         texto_documento = 'Documento emitido: ' + x
 
-        b1 = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOC_EMITIDOS')
-        lb1 = b1.listar_datos_de_fila(self.x)
+        lb1 = b_de.listar_datos_de_fila(self.x)
         lista_para_insertar = [lb1[1],lb1[2],lb1[3], lb1[4], lb1[5], 
                                lb1[6], lb1[7], lb1[8], lb1[9], lb1[10], lb1[11]]
         
@@ -182,8 +200,7 @@ class Doc_recibidos_vista(Ventana):
     #----------------------------------------------------------------------
     def funcion_de_prueba(self, x):
         """"""
-        CustomHovertip(x, text="Si pulsa aquí va a colgar, si pulsa aquí va a colgaraaaaai pulsa aquí va a colgari pulsa aquí va a colgari pulsa aquí va a colgar", hover_delay=500)
-
+        print(x)
 
     #----------------------------------------------------------------------
     def ir_a_busqueda_ep(self):
@@ -212,12 +229,16 @@ class Doc_emitidos_vista(Ventana):
 
         self.nuevo = nuevo
 
+        # Desplegable EFA
+        tabla_directorio = b_efa.generar_dataframe()
+        lista_efa = list(set(tabla_directorio['Entidad u oficina']))
+
         # Labels and Entries
         rejilla_dr = (
             ('L', 0, 0, 'HT de salida'),
             ('E', 0, 1),
 
-            ('L', 0, 2, 'Categorías'),
+            ('L', 0, 2, 'Categoría'),
             ('CX', 0, 3, categorias),
 
             ('L', 1, 0, 'Fecha de proyecto final'),
@@ -233,31 +254,29 @@ class Doc_emitidos_vista(Ventana):
             ('E', 2, 3),
 
             ('L', 3, 0, 'Destinatario'),
-            ('E', 3, 1),
+            ('CX', 3, 1, lista_efa),
 
-            ('L', 3, 2, 'Detalle de requerimiento'),
-            ('E', 3, 3),
+            ('L', 3, 2, '¿Se emitió documento?'),
+            ('CX', 3, 3, si_no),
 
-            ('L', 4, 0, 'Marco de pedido'),
-            ('CX', 4, 1, marco_pedido),
+            ('L', 4, 0, 'Detalle de requerimiento'),
+            ('EL', 4, 1, 112),
 
-            ('L', 4, 2, 'Fecha de notificación'),
-            ('D', 4, 3),
+            ('L', 5, 0, 'Marco de pedido'),
+            ('CX', 5, 1, marco_pedido),
 
-            ('L', 5, 0, '¿Se emitió documento?'),
-            ('CX', 5, 1, si_no)
+            ('L', 5, 2, 'Fecha de notificación'),
+            ('D', 5, 3)
 
         )
 
         # Lista de DR
-        self.b_dr = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOC_RECIBIDOS')
-        tabla_de_dr = self.b_dr.generar_dataframe()
+        tabla_de_dr = b_dr.generar_dataframe()
         tabla_de_dr = tabla_de_dr.drop(['ID_DE', 'ID_DR', 'ID_EP', 'Via de recepción',
                                         'Fecha de ingreso OEFA', 'Tipo de documento', 'Especialista',
                                         'Indicación', '¿Es respuesta?', 'Respuesta'], axis=1)
         # Lista de EP
-        self.b_ep = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'EXTREMOS')
-        tabla_de_ep = self.b_ep.generar_dataframe()
+        tabla_de_ep = b_ep.generar_dataframe()
         tabla_de_ep = tabla_de_ep.drop(['ID_DE', 'ID_DR', 'ID_EP'], axis=1)
 
         # Ubicaiones
@@ -283,9 +302,9 @@ class Doc_emitidos_vista(Ventana):
         # 3er Frame
         c3 = Cuadro(self)
         c3.agregar_titulo(2,0,'Extremo de problemas asociados')
-        v1 = Vitrina_vista(self, tabla_de_ep, self.ver_dr, 
-                    self.funcion_de_prueba,
-                    height=80, width=1050)
+        if self.nuevo != True:
+            v1 = Vitrina_vista(self, tabla_de_ep, self.ver_dr, 
+                               self.funcion_de_prueba, height=80, width=1050)
 
         # 4to Frame
         c4 = Cuadro(self)
@@ -294,9 +313,9 @@ class Doc_emitidos_vista(Ventana):
         c4.agregar_titulo(0, 2, 'Documentos recibidos asociados')
         c4.agregar_titulo(0, 3,'                              ')
         c4.agregar_titulo(0, 4,'                              ')
-        v2 = Vitrina_vista(self, tabla_de_dr, self.ver_dr, 
-                    self.funcion_de_prueba,
-                    height=80, width=1050)  
+        if self.nuevo != True:
+            v2 = Vitrina_vista(self, tabla_de_dr, self.ver_dr, 
+                               self.funcion_de_prueba, height=80, width=1050)  
         
         
     #----------------------------------------------------------------------
@@ -323,7 +342,7 @@ class Doc_emitidos_vista(Ventana):
 
         b1 = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOC_RECIBIDOS')
         lb1 = b1.listar_datos_de_fila(self.x)
-        lista_para_insertar = [lb1[1],lb1[2],lb1[3], lb1[4], lb1[5], 
+        lista_para_insertar = [lb1[1], lb1[2],lb1[3], lb1[4], lb1[5], 
                                lb1[6], lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], lb1[12], lb1[13]]
         
         self.desaparecer()
