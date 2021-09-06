@@ -71,7 +71,7 @@ class Doc_recibidos_busqueda(Ventana):
 
 
         self.v1 = Vitrina_busqueda(self, self.tabla_de_dr, self.ver_dr, 
-                                   self.funcion_de_prueba, height=200, width=1030)
+                                   self.funcion_de_asociar, height=200, width=1030)
 
     def Buscar(self):
 
@@ -84,76 +84,76 @@ class Doc_recibidos_busqueda(Ventana):
         if self.tipodoc != "":
             self.v1.Eliminar_vitrina()
             self.tabla_filtrada = self.tabla_de_dr[self.tabla_de_dr['Tipo de documento']==self.tipodoc]
-            self.v1 = Vitrina_busqueda(self, self.tabla_filtrada, self.Buscar, self.funcion_de_prueba, height=200, width=1030)
+            self.v1 = Vitrina_busqueda(self, self.tabla_filtrada, self.Buscar, self.funcion_de_asociar, height=200, width=1030)
             if self.remitente != "":
                 self.v1.Eliminar_vitrina()
                 self.tabla_filtrada2 = self.tabla_filtrada[self.tabla_filtrada['Remitente']==self.remitente]
-                self.v1 = Vitrina_busqueda(self, self.tabla_filtrada2, self.Buscar, self.funcion_de_prueba, height=200, width=1030)
+                self.v1 = Vitrina_busqueda(self, self.tabla_filtrada2, self.Buscar, self.funcion_de_asociar, height=200, width=1030)
                 if self.ht != "":
                     self.v1.Eliminar_vitrina()
                     self.tabla_filtrada3 = self.tabla_filtrada2[self.tabla_filtrada2['N° registro Siged']==self.ht]
-                    self.v1 = Vitrina_busqueda(self, self.tabla_filtrada3, self.Buscar, self.funcion_de_prueba, height=200, width=1030)
+                    self.v1 = Vitrina_busqueda(self, self.tabla_filtrada3, self.Buscar, self.funcion_de_asociar, height=200, width=1030)
                     if self.fecha != "":
                         self.v1.Eliminar_vitrina()
                         self.tabla_filtrada4 = self.tabla_filtrada3[self.tabla_filtrada3['Fecha de ingreso OEFA']==self.fecha]
-                        self.v1 = Vitrina_busqueda(self, self.tabla_filtrada4, self.Buscar, self.funcion_de_prueba, height=200, width=1030)
+                        self.v1 = Vitrina_busqueda(self, self.tabla_filtrada4, self.Buscar, self.funcion_de_asociar, height=200, width=1030)
                     
                 else:
                     if self.fecha != "":
                         self.v1.Eliminar_vitrina()
                         self.tabla_filtrada3 = self.tabla_filtrada2[self.tabla_filtrada2['Fecha de ingreso OEFA']==self.fecha]
-                        self.v1 = Vitrina_busqueda(self, self.tabla_filtrada3, self.Buscar, self.funcion_de_prueba, height=200, width=1030)
+                        self.v1 = Vitrina_busqueda(self, self.tabla_filtrada3, self.Buscar, self.funcion_de_asociar, height=200, width=1030)
                   
             else:
                 if self.ht != "":
                     self.v1.Eliminar_vitrina()
                     self.tabla_filtrada2 = self.tabla_filtrada[self.tabla_filtrada['N° registro Siged']==self.ht]
-                    self.v1 = Vitrina_busqueda(self, self.tabla_filtrada2, self.Buscar, self.funcion_de_prueba, height=200, width=1030)
+                    self.v1 = Vitrina_busqueda(self, self.tabla_filtrada2, self.Buscar, self.funcion_de_asociar, height=200, width=1030)
                     if self.fecha != "":
                         self.v1.Eliminar_vitrina()
                         self.tabla_filtrada3 = self.tabla_filtrada2[self.tabla_filtrada2['Fecha de ingreso OEFA']==self.fecha]
-                        self.v1 = Vitrina_busqueda(self, self.tabla_filtrada3, self.Buscar, self.funcion_de_prueba, height=200, width=1030)
+                        self.v1 = Vitrina_busqueda(self, self.tabla_filtrada3, self.Buscar, self.funcion_de_asociar, height=200, width=1030)
                 else:
                     if self.fecha != "":
                         self.v1.Eliminar_vitrina()
                         self.tabla_filtrada2 = self.tabla_filtrada[self.tabla_filtrada['Fecha de ingreso OEFA']==self.fecha]
-                        self.v1 = Vitrina_busqueda(self, self.tabla_filtrada2, self.Buscar, self.funcion_de_prueba, height=200, width=1030)
+                        self.v1 = Vitrina_busqueda(self, self.tabla_filtrada2, self.Buscar, self.funcion_de_asociar, height=200, width=1030)
                    
         
         else:
             if self.remitente != "":
                 self.v1.Eliminar_vitrina()
                 self.tabla_filtrada = self.tabla_de_dr[self.tabla_de_dr['Remitente']==self.remitente]
-                self.v1 = Vitrina_busqueda(self, self.tabla_filtrada, self.Buscar, self.funcion_de_prueba, height=200, width=1030)
+                self.v1 = Vitrina_busqueda(self, self.tabla_filtrada, self.Buscar, self.funcion_de_asociar, height=200, width=1030)
                 if self.ht != "":
                     self.v1.Eliminar_vitrina()
                     self.tabla_filtrada2 = self.tabla_filtrada[self.tabla_filtrada['N° registro Siged']==self.ht]
-                    self.v1 = Vitrina_busqueda(self, self.tabla_filtrada2, self.Buscar, self.funcion_de_prueba, height=200, width=1030)
+                    self.v1 = Vitrina_busqueda(self, self.tabla_filtrada2, self.Buscar, self.funcion_de_asociar, height=200, width=1030)
                     if self.fecha != "":
                         self.v1.Eliminar_vitrina()
                         self.tabla_filtrada3 = self.tabla_filtrada2[self.tabla_filtrada2['Fecha de ingreso OEFA']==self.fecha]
-                        self.v1 = Vitrina_busqueda(self, self.tabla_filtrada4, self.Buscar, self.funcion_de_prueba, height=200, width=1030)
+                        self.v1 = Vitrina_busqueda(self, self.tabla_filtrada4, self.Buscar, self.funcion_de_asociar, height=200, width=1030)
                 else:
                     if self.fecha != "":
                         self.v1.Eliminar_vitrina()
                         self.tabla_filtrada2 = self.tabla_filtrada[self.tabla_filtrada['Fecha de ingreso OEFA']==self.fecha]
-                        self.v1 = Vitrina_busqueda(self, self.tabla_filtrada, self.Buscar, self.funcion_de_prueba, height=200, width=1030)
+                        self.v1 = Vitrina_busqueda(self, self.tabla_filtrada, self.Buscar, self.funcion_de_asociar, height=200, width=1030)
               
             else:
                 if self.ht != "":
                     self.v1.Eliminar_vitrina()
                     self.tabla_filtrada = self.tabla_de_dr[self.tabla_de_dr['N° registro Siged']==self.ht]
-                    self.v1 = Vitrina_busqueda(self, self.tabla_filtrada, self.Buscar, self.funcion_de_prueba, height=200, width=1030)
+                    self.v1 = Vitrina_busqueda(self, self.tabla_filtrada, self.Buscar, self.funcion_de_asociar, height=200, width=1030)
                     if self.fecha != "":
                         self.v1.Eliminar_vitrina()
                         self.tabla_filtrada2 = self.tabla_filtrada[self.tabla_filtrada['Fecha de ingreso OEFA']==self.fecha]
-                        self.v1 = Vitrina_busqueda(self, self.tabla_filtrada2, self.Buscar, self.funcion_de_prueba, height=200, width=1030)
+                        self.v1 = Vitrina_busqueda(self, self.tabla_filtrada2, self.Buscar, self.funcion_de_asociar, height=200, width=1030)
   
                 else:
                     if self.fecha != "":
                         self.v1.Eliminar_vitrina()
                         self.tabla_filtrada = self.tabla_de_dr[self.tabla_de_dr['Fecha de ingreso OEFA']==self.fecha]
-                        self.v1 = Vitrina_busqueda(self, self.tabla_filtrada, self.Buscar, self.funcion_de_prueba, height=200, width=1030)
+                        self.v1 = Vitrina_busqueda(self, self.tabla_filtrada, self.Buscar, self.funcion_de_asociar, height=200, width=1030)
     
 
     def limpiar(self):
@@ -177,9 +177,8 @@ class Doc_recibidos_busqueda(Ventana):
         subframe = vista_dr.Doc_recibidos_vista(self, 600, 1100, texto_documento, nuevo=False, lista=lista_para_insertar)
 
 
-    def funcion_de_prueba(self, x):
+    def funcion_de_asociar(self, x):
         """"""
-
         print(x)
 
     #def Buscar(self):
