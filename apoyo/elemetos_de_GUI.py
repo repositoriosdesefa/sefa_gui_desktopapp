@@ -183,6 +183,19 @@ class Cuadro(Frame):
         self.entrada.grid(row= self.y, column=self.x, pady=4, padx=8)
         self.lista_de_objetos.append((self.entrada))
         self.lista_de_datos.append((self.data))
+    
+    #----------------------------------------------------------------------
+    def agregar_entry_largo(self, y, x, ancho):
+        """Método de la clase Cuadro. \n
+        Permite agregar una entrada de texto grande al Frame creado con la Clase Cuadro."""
+
+        self.y= y
+        self.x= x
+        self.data = StringVar()
+        self.entrada = Entry(self.z, textvariable=self.data, width = ancho)
+        self.entrada.grid(row= self.y, column=self.x, columnspan= 3, pady=4, padx=8)
+        self.lista_de_objetos.append((self.entrada))
+        self.lista_de_datos.append((self.data))
 
     #----------------------------------------------------------------------
     def agregar_entry_password(self, y, x):
@@ -329,6 +342,10 @@ class Cuadro(Frame):
             elif row[0] == 'E':
 
                 self.agregar_entry(row[1], row[2])
+            
+            elif row[0] == 'EL':
+
+                self.agregar_entry_largo(row[1], row[2], row[3])
 
             elif row[0] == 'EP':
 
