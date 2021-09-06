@@ -1,13 +1,13 @@
 # Pendientes
 ## busqueda_dr
-- [ ] Widget de fecha con predeterminado vacío 
+- [ X ] Widget de fecha con predeterminado vacío (Observación)
 - [ ] Crear pantalla de búsqueda de doc emitidos
 - [ ] Crear método de asociar
 
 ## vista_dr
-- [ ] Mostrar inicialmente la vitrina vacía
-- [ ] Actualizar entries, según tamaño que corresponda
-- [ ] Relacionar documentos emitidos y asociados
+- [ X ] Mostrar inicialmente la vitrina vacía
+- [ X ] Actualizar entries, según tamaño que corresponda
+- [ X ] Relacionar documentos emitidos y asociados
 
 ## vsf
 - [ ] Incorporar un botón "lupa"
@@ -16,4 +16,4 @@
 
 ## Base de datos
 - [ ] Armar tablas con datos reales para docs recibidos (Lucia)
-- [ ] Armar tablas con datos reales para docs emitidos (Lucho)
+- [ X ] Armar tablas con datos reales para docs emitidos (Lucho)
