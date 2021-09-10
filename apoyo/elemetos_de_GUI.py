@@ -219,11 +219,10 @@ class Cuadro(Frame):
         self.x= x
         self.text_area = sc.ScrolledText(self.z, 
                             wrap = WORD, 
-                            width = 40, 
-                            height = 5, 
-                            font = ("Times New Roman",
-                            11))
-        self.text_area.grid(row = self.y, column = self.x, pady=4, padx=8)
+                            width = 108, 
+                            height = 2, 
+                            font = ("Times New Roman", 8))
+        self.text_area.grid(row = self.y, column = self.x, columnspan= 3, pady=4, padx=8)
         self.lista_de_objetos.append((self.text_area))
         self.lista_de_datos.append((self.text_area))
 
@@ -566,8 +565,13 @@ class Cuadro(Frame):
         for i, row in tabla_listas.iterrows():
             try:
                 row[1].set(row[0])
-            except:
-                row[1].set_date(str(row[0]))
+            except AttributeError:
+                try:
+                    datetime.datetime.strptime(str(row[0]), '%d/%m/%Y')
+                except ValueError: 
+                    row[1].insert(INSERT, str(row[0]))
+                else:
+                    row[1].set_date(row[0])
             else:
                 row[1].set(row[0])
 
