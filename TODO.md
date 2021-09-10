@@ -3,7 +3,7 @@
 
 ## busqueda_dr
 - [x] Widget de fecha con predeterminado vacío (Observación)
-- [ ] Agregar nuevo filtro en reemplazo del filtro de fecha
+- [x] Agregar nuevo filtro en reemplazo del filtro de fecha
 - [ ] Crear pantalla de búsqueda de doc emitidos
 - [ ] Crear método de asociar
 
@@ -14,7 +14,6 @@
 - [x] Agregar entry con scrolltext
 - [ ] Relacionar documentos emitidos y asociados
 - [ ] Crear método eliminar
-
 ## vsf
 - [ ] Integrar a elemetos_de_gui
 - [ ] Ajustar el tamaño de la fila de la vitrina
@@ -26,6 +25,7 @@
 
 ## Base de datos
 - [x] Armar tablas con datos reales para docs recibidos (Lucho)
-- [ ] Armar tablas con datos reales para docs emitidos (Lucia)
+- [x] Armar tablas con datos reales para docs emitidos (Lucia)
 - [ ] Armar tablas con datos reales para problemas (Lucia)
 - [ ] Armar tablas con datos reales para macro-problemas (Lucia)
+- [ ] Crear tablas de reiterativos y OCI
