@@ -335,7 +335,8 @@ class Vitrina_busqueda(Frame):
                     valores_subframe, 
                     text=row[1],
                     font=formato.tipo_de_letra_tabla,
-                    width=21,#se modifico  
+                    width=21,
+                    height=3,#se modifico  
                     relief='groove',
                     bg= formato.fondo_valores_de_tabla,
                     wraplength=125, 
@@ -352,7 +353,7 @@ class Vitrina_busqueda(Frame):
                 font=formato.tipo_de_letra_tabla,
                 fg = formato.letras_del_boton,
                 width=7,
-                height=1,
+                height=3,
                 relief='groove',
                 cursor="hand2",
                 bg=formato.boton_sin_que_pase_cursor
@@ -382,7 +383,7 @@ class Vitrina_busqueda(Frame):
                 font=formato.tipo_de_letra_tabla,
                 fg = formato.letras_del_boton,
                 width=8,
-                height=1,
+                height=3,
                 relief='groove',
                 cursor="hand2",
                 bg=formato.boton_sin_que_pase_cursor
