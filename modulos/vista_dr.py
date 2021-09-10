@@ -3,7 +3,7 @@ import pandas as pd
 from tkinter import Tk
 from modulos import busqueda_dr
 import gspread
-from apoyo.elemetos_de_GUI import Cuadro, Ventana, CustomHovertip
+from apoyo.elementos_de_GUI import Cuadro, Ventana, CustomHovertip
 from apoyo.manejo_de_bases import Base_de_datos
 from apoyo.vsf import Vitrina_vista
 from tkinter import messagebox
@@ -177,7 +177,7 @@ class Doc_recibidos_vista(Ventana):
         else:
             c4.agregar_label(1, 2,'                  0 extremos de problemas asociados') 
 
-     #----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def enviar_dr(self):
         """"""
         datos_ingresados = self.c1.obtener_lista_de_datos()
@@ -208,8 +208,8 @@ class Doc_recibidos_vista(Ventana):
         texto_documento = 'Documento emitido: ' + x
 
         lb1 = b_de.listar_datos_de_fila(self.x)
-        lista_para_insertar = [lb1[1],lb1[2],lb1[3], lb1[4], lb1[5], 
-                               lb1[6], lb1[7], lb1[8], lb1[9], lb1[10], lb1[11]]
+        lista_para_insertar = [lb1[1],lb1[4],lb1[5], lb1[6], lb1[7], 
+                               lb1[8], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14]]
         
         self.desaparecer()
         subframe = Doc_emitidos_vista(self, 650, 1100, texto_documento, nuevo=False, lista=lista_para_insertar)
@@ -231,7 +231,7 @@ class Doc_recibidos_vista(Ventana):
         """"""
         self.desaparecer()
         # LargoxAncho
-        subFrame = busqueda_dr.Doc_recibidos_busqueda(self, 500, 1200, "Pantalla de búsqueda")
+        SubFrame = busqueda_dr.Doc_emitidos_busqueda(self, 500, 1200, "Pantalla de búsqueda")
 
 
 
