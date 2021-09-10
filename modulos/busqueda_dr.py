@@ -5,7 +5,7 @@ from tkinter import Tk
 import gspread
 
 from pyasn1.type.univ import Null
-from apoyo.elemetos_de_GUI import Cuadro, Ventana
+from apoyo.elementos_de_GUI import Cuadro, Ventana
 from apoyo.manejo_de_bases import Base_de_datos
 from apoyo.vsf import Vitrina_busqueda
 import apoyo.datos_frecuentes as dfrec
@@ -15,7 +15,6 @@ from tkinter import messagebox
 
 class Doc_recibidos_busqueda(Ventana):
     """"""
-    
     #----------------------------------------------------------------------
     def __init__(self, *args):
         """Constructor"""
@@ -33,8 +32,6 @@ class Doc_recibidos_busqueda(Ventana):
         self.listadestina = list(set(self.tabla_2['REMITENTE']))
         #self.listaht = list(set(self.tabla_dr['HT_ENTRANTE']))
         #self.listacodigo = list(set(self.tabla_dr['COD_PROBLEMA']))
-
-
 
         self.rejilla_dr = (
 
@@ -75,6 +72,7 @@ class Doc_recibidos_busqueda(Ventana):
         self.v1 = Vitrina_busqueda(self, self.tabla_dr, self.ver_dr, 
                                    self.funcion_de_asociar, height=200, width=1030)
 
+    #----------------------------------------------------------------------
     def Buscar(self):
 
         self.listas_filtro = self.c1.obtener_lista_de_datos()
@@ -163,15 +161,13 @@ class Doc_recibidos_busqueda(Ventana):
                                    self.funcion_de_asociar, height=200, width=1030)
 
     
-
+    #----------------------------------------------------------------------
     def limpiar(self):
-        
         
         self.v1.Eliminar_vitrina()
 
 
-
-
+    #----------------------------------------------------------------------
     def ver_dr(self, x):
         """"""
         self.x = x
@@ -185,7 +181,7 @@ class Doc_recibidos_busqueda(Ventana):
         self.desaparecer()
         subframe = vista_dr.Doc_recibidos_vista(self, 600, 1100, texto_documento, nuevo=False, lista=lista_para_insertar)
 
-
+    #----------------------------------------------------------------------
     def funcion_de_asociar(self, x):
         """"""
         self.x = x
@@ -221,8 +217,8 @@ class Doc_emitidos_busqueda(Ventana):
         self.de = bde.generar_dataframe()
         self.tabla_de2 = self.de.rename(columns={'HT_ID_DE':'ID DOC EMITIDO','COD_PROBLEMA':'CODIGO','HT_SALIDA':'NRO REGISTRO SIGED',
         'NUM_DOC':'NRO DOCUMENTO','ESTADO_DOCE':'ESTADO','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','DETALLE_REQUERIMIENTO':'DETALLE'})
-        self.tabla_de3 = self.tabla_de2.iloc[:, [1, 3, 2, 10, 8, 15, 19, 7]]
-        self.tabla_de4 = self.tabla_de2.iloc[1:100, [1, 3, 2, 10, 8, 15, 19, 7]]
+        self.tabla_de3 = self.tabla_de2.iloc[:, [1, 4, 10, 8, 15, 19, 12]]
+        self.tabla_de4 = self.tabla_de2.iloc[1:100, [1, 4, 10, 8, 15, 19, 12]]
         #self.tabla_dr = self.tabla_dr.rename(columns={'COD_PROBLEMA':'CODIGO','HT_ENTRANTE':'NRO REGISTRO SIGED','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.'})
 
         self.listacategoria = list(set(self.tabla_de2['CATEGORIA']))
@@ -275,7 +271,8 @@ class Doc_emitidos_busqueda(Ventana):
 
 
         self.vde1 = Vitrina_busqueda(self, self.tabla_de4, self.ver_de, self.funcion_de_asociar_de, height=200, width=1030)
-
+    
+    #----------------------------------------------------------------------
     def Buscar_de(self):
 
         self.listas_filtrode = self.cde1.obtener_lista_de_datos()
@@ -289,12 +286,12 @@ class Doc_emitidos_busqueda(Ventana):
         if self.decate != "":
             self.vde1.Eliminar_vitrina()
             self.tabla_filtradade = self.tabla_de2[self.tabla_de2['CATEGORIA']==self.decate]
-            self.tabla_de4 = self.tabla_filtradade.iloc[:, [1, 3, 2, 10, 8, 15, 19, 7]]
+            self.tabla_de4 = self.tabla_filtradade.iloc[:, [1, 4, 10, 8, 15, 19, 12]]
             self.vde1 = Vitrina_busqueda(self, self.tabla_de4, self.Buscar_de, self.funcion_de_asociar_de, height=200, width=1030)
             if self.detipodoc != "":
                 self.vde1.Eliminar_vitrina()
                 self.tabla_filtradade2 = self.tabla_filtradade[self.tabla_filtradade['TIPO_DOC']==self.detipodoc]
-                self.tabla_de5 = self.tabla_filtradade2.iloc[:, [1, 3, 2, 10, 8, 15, 19, 7]]
+                self.tabla_de5 = self.tabla_filtradade2.iloc[:, [1, 4, 10, 8, 15, 19, 12]]
                 self.vde1 = Vitrina_busqueda(self, self.tabla_de5, self.Buscar_de, self.funcion_de_asociar_de, height=200, width=1030)
                 if self.deht != "":
                     self.vde1.Eliminar_vitrina()
@@ -415,14 +412,11 @@ class Doc_emitidos_busqueda(Ventana):
                                 self.tabla_de9 = self.tabla_de8[self.tabla_de8['NRO DOCUMENTO']==self.dedoc]
                                 self.vde1 = Vitrina_busqueda(self, self.tabla_de9, self.Buscar_de, self.funcion_de_asociar_de, height=200, width=1030)
 
-    
-
+    #----------------------------------------------------------------------
     def limpiar_de(self):
         self.vde1.Eliminar_vitrina()
 
-
-
-
+    #----------------------------------------------------------------------
     def ver_de(self, x):
         """"""
         self.x = x
@@ -430,12 +424,12 @@ class Doc_emitidos_busqueda(Ventana):
 
         bde = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOC_EMITIDOS_FINAL')
         lb1 = bde.listar_datos_de_fila(self.x)
-        lista_para_insertar = [lb1[1], lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], lb1[12], lb1[13]]
-        
+        lista_para_insertar = [lb1[1],lb1[4],lb1[5], lb1[6], lb1[7], 
+                               lb1[8], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14]]
         self.desaparecer()
-        subframe = vista_dr.Doc_recibidos_vista(self, 600, 1100, texto_documento, nuevo=False, lista=lista_para_insertar)
+        subframe = vista_dr.Doc_emitidos_vista(self, 600, 1100, texto_documento, nuevo=False, lista=lista_para_insertar)
 
-
+    #----------------------------------------------------------------------
     def funcion_de_asociar_de(self, x):
         """"""
         self.x = x
