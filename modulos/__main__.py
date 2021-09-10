@@ -1,6 +1,5 @@
 from tkinter import Tk
 from modulos import logueo
-from modulos import administracion
 from modulos import vista_dr
 
 ########################################################################
