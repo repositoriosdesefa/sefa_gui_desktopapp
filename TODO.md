@@ -4,8 +4,10 @@
 ## busqueda_dr
 - [x] Widget de fecha con predeterminado vacío (Observación)
 - [x] Agregar nuevo filtro en reemplazo del filtro de fecha
-- [ ] Crear pantalla de búsqueda de doc emitidos
-- [ ] Crear método de asociar
+- [x] Crear pantalla de búsqueda de doc emitidos
+- [x] Crear método de asociar
+- [ ] Relacionar el ID interno con el ID del aplicativo
+- [ ] Actualizar tabla de RELACIONES con su historial
 
 ## vista_dr
 - [x] Mostrar inicialmente la vitrina vacía
@@ -14,6 +16,7 @@
 - [x] Agregar entry con scrolltext
 - [ ] Relacionar documentos emitidos y asociados
 - [ ] Crear método eliminar
+
 ## vsf
 - [ ] Integrar a elemetos_de_gui
 - [ ] Ajustar el tamaño de la fila de la vitrina
