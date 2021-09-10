@@ -1,5 +1,5 @@
 # Pendientes
-- [ ] Descargar Markdown all in one para Visual Code
+- [x] Descargar Markdown all in one para Visual Code
 
 ## busqueda_dr
 - [x] Widget de fecha con predeterminado vacío (Observación)
@@ -9,9 +9,9 @@
 
 ## vista_dr
 - [x] Mostrar inicialmente la vitrina vacía
-- [ ] Mostrar label cuando no hayan valores o cambiar fondo de tabla vacía
+- [x] Mostrar label cuando no hayan valores o cambiar fondo de tabla vacía
 - [x] Actualizar entries, según tamaño que corresponda
-- [ ] Agregar entry con scrolltext
+- [x] Agregar entry con scrolltext
 - [ ] Relacionar documentos emitidos y asociados
 - [ ] Crear método eliminar
 
