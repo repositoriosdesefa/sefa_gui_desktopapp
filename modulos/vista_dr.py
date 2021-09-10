@@ -33,6 +33,7 @@ b_efa = Base_de_datos(id_b_efa, 'Directorio')
 b_dr = Base_de_datos(id_b_ospa, 'DOC_RECIBIDOS_FINAL')
 b_dr_cod = Base_de_datos(id_b_ospa, 'DOCS_R')
 b_dr_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_DR')
+base_relacion = Base_de_datos(id_b_ospa, 'RELACION')
 # Bases de datos complementarias
 b_de = Base_de_datos(id_b_ospa, 'DOC_EMITIDOS_FINAL')
 b_ep = Base_de_datos(id_b_ospa, 'EXTREMOS')
@@ -50,9 +51,9 @@ class Doc_recibidos_vista(Ventana):
 
         # Lista de DE
         tabla_de_de_completa = b_de.generar_dataframe()
-        tabla_de_de_id =  tabla_de_de_completa.drop(['FECHA_PROYECTO_FINAL',
+        tabla_de_de_id =  tabla_de_de_completa.drop(['HT_SALIDA', 'COD_PROBLEMA', 'FECHA_PROYECTO_FINAL',
                                                     'FECHA_FIRMA', 'TIPO_DOC', 'SE_EMITIO',
-                                                    'MARCO_PEDIDO',
+                                                    'MARCO_PEDIDO', 'FECHA_ULTIMO_MOV', 'FECHA_ASIGNACION',
                                                     'PLAZO', 'ESTADO_DOCE', 'ESPECIALISTA'], axis=1)
         # Lista de DE asociados
         tabla_de_de = tabla_de_de_id.drop(['ID_DR', 'ID_DE', 'ID_EP'], axis=1)
@@ -131,7 +132,7 @@ class Doc_recibidos_vista(Ventana):
         
         # 3er Frame
         c3 = Cuadro(self)
-        c3.agregar_button(0, 0,'(+) Agregar', self.busqueda_dr)
+        c3.agregar_button(0, 0,'(+) Agregar', self.busqueda_de)
         c3.agregar_titulo(0, 1,'                                                       ')
         c3.agregar_titulo(0, 2, 'Documentos emitidos asociados')
         c3.agregar_titulo(0, 3,'                              ')
@@ -139,9 +140,20 @@ class Doc_recibidos_vista(Ventana):
 
         # Generar vitrina de documentos emitidos asociados
         if self.nuevo != True:
+            # Uso la lista que hereda
             lista_para_filtrar = lista
+            # Obtengo el ID del usuario
             id_doc = lista_para_filtrar[0]
-            tabla_de_de_vinculada = tabla_de_de_id[tabla_de_de_id['ID_DR']==id_doc]
+            # Generación de tabla de relación
+            tabla_de_relacion = base_relacion.generar_dataframe()
+            # Con ese ID, filtro la tabla de relacion
+            tabla_filtrada = tabla_de_relacion[tabla_de_relacion['ID_DR']==id_doc]
+            # Me quedo con el vector a filtrar
+            vector_de = tabla_filtrada['ID_DE']
+            valor_prueba = 'DOCS_E-2021-2'
+            # Filtro con el vector de documentos emitidos asociados
+            tabla_de_de_vinculada = tabla_de_de_id[tabla_de_de_id['ID_DE']==valor_prueba]
+            # Tabla de documentos emitidos filtrada
             tabla_de_de = tabla_de_de_vinculada.drop(['ID_DE', 'ID_DR', 'ID_EP'], axis=1)
             if len(tabla_de_de.index) > 0:
                 v1 = Vitrina_vista(self, tabla_de_de, self.ver_de, 
@@ -153,7 +165,7 @@ class Doc_recibidos_vista(Ventana):
 
         # 4to Frame
         c4 = Cuadro(self)
-        c4.agregar_button(0, 0,'(+) Agregar', self.busqueda_dr)
+        c4.agregar_button(0, 0,'(+) Agregar', self.busqueda_de)
         c4.agregar_titulo(0, 1,'                                                       ')
         c4.agregar_titulo(0, 2, 'Extremo de problemas asociados')
         c4.agregar_titulo(0, 3,'                              ')
@@ -215,7 +227,7 @@ class Doc_recibidos_vista(Ventana):
 
         #----------------------------------------------------------------------
 
-    def busqueda_dr(self):
+    def busqueda_de(self):
         """"""
         self.desaparecer()
         # LargoxAncho
@@ -364,6 +376,6 @@ class Doc_emitidos_vista(Ventana):
 
     def busqueda_dr(self):
         """"""
-        #self.desaparecer()
+        self.desaparecer()
         # LargoxAncho
-        #subFrame = busqueda_dr.Doc_recibidos_busqueda(self, 600, 1200, "Pantalla de búsqueda")
+        subFrame = busqueda_dr.Doc_recibidos_busqueda(self, 600, 1200, "Pantalla de búsqueda")
