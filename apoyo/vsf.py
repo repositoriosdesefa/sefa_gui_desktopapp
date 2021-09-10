@@ -1,4 +1,4 @@
-from apoyo.elemetos_de_GUI import CustomHovertip
+from apoyo.elementos_de_GUI import CustomHovertip
 import tkinter as tk
 from tkinter import Frame, Canvas, Label
 import apoyo.formato as formato 
