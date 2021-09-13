@@ -2,7 +2,7 @@ import datetime as dt
 from random import choice
 import pandas as pd
 from tkinter import Tk, Frame
-from apoyo.elemetos_de_GUI import Cuadro, Ventana
+from apoyo.elementos_de_GUI import Cuadro, Ventana
 from apoyo.manejo_de_bases import Base_de_datos, Correo_electronico
 from apoyo.vsf import Vitrina
 import apoyo.datos_frecuentes as dfrec
