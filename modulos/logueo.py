@@ -1,6 +1,6 @@
 import pandas as pd
 from tkinter import Tk
-from apoyo.elemetos_de_GUI import Cuadro, Ventana
+from apoyo.elementos_de_GUI import Cuadro, Ventana
 from apoyo.manejo_de_bases import Base_de_datos
 from modulos.administracion import Ingresar_contrasena_de_adminitrador as adm
 
