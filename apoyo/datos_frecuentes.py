@@ -2,6 +2,8 @@
 # DATOS DE USO FRECUENTES (LISTA, TUPLAS, DICCIONARIOS) #
 #########################################################
 
+valores = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ<=>@#%&+"
+
 oficinas = [
     'ODE Amazonas',
     'ODE Áncash',
