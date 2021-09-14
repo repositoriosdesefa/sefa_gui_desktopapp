@@ -1,7 +1,5 @@
 from tkinter import Tk
 from modulos import logueo
-from modulos import vista_dr
-from modulos import administracion
 
 ########################################################################
 class Aplicacion(object):
@@ -13,10 +11,7 @@ class Aplicacion(object):
 
         self.root = parent
         self.root.withdraw()
-        subFrame = administracion.Ingresar_contrasena_de_adminitrador(self, 450, 400, "Inicio")
-        
-        # LargoxAncho
-        # subFrame = vista_dr.Doc_recibidos_vista(self,650, 1100,'Documentos recibidos')
+        subFrame = logueo.logueo1_Ingreso_de_usuario(self, 450, 400, "Acceso de usuarios")
 
 #----------------------------------------------------------------------
 def main():
