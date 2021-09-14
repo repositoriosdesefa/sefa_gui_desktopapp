@@ -2,6 +2,12 @@ import gspread as gs
 import pandas as pd
 import string
 import datetime as dt
+from email.utils import formataddr
+import smtplib
+import email.message
+from email.message import EmailMessage
+import email.mime.text
+import apoyo.formato as formato 
 
 class Base_de_datos():
     """"""
@@ -30,6 +36,14 @@ class Base_de_datos():
 
         self.tabla = self.generar_dataframe()
         print(self.tabla)
+
+    #----------------------------------------------------------------------
+    def contar_coincidencias(self, variable):
+        """[...]"""
+
+        self.variable = variable
+        lista_de_coincidencias = self.worksheet.findall(self.variable)
+        return len(lista_de_coincidencias)
 
     #----------------------------------------------------------------------
     def identificar_fila_por_variable(self, variable):
@@ -113,3 +127,44 @@ class Base_de_datos():
         self.datos_obligatorios = [self.codigo, str(self.hoy), numero]
         self.lista_de_datos_completos = self.datos_obligatorios + self.lista_de_datos
         self.worksheet.append_row(self.lista_de_datos_completos)
+
+class Correo_electronico():
+    """"""
+    
+    #----------------------------------------------------------------------
+    def __init__(self, destinatario, asunto, mensaje):
+        """Constructor"""
+
+        self.destinatario = destinatario
+        self.asunto = asunto
+        self.msg = mensaje
+
+        self.sender = 'herramientasdesefa@gmail.com'
+        self.from_ = formataddr(('Herramientas de Sefa', self.sender))
+        self.to_ = self.destinatario
+        self.subject = self.asunto
+        self.firma = self.obtener()
+
+        self.em = EmailMessage()
+        self.em.set_content(self.msg)
+        self.em['To'] = self.to_
+        self.em['From'] = self.from_
+        self.em['Subject'] = self.subject
+
+    #----------------------------------------------------------------------
+    def obtener(self):
+        """[...]"""
+        
+        b0 = Base_de_datos('12gzaAx7GkEUDjEmiJG693in8ADyCPxej5cUv9YA2vyY','Administrador')
+        datos_registrados = b0.listar_datos_de_fila('ADMIN_001')
+        firma = datos_registrados[2]
+        return firma
+
+    #----------------------------------------------------------------------
+    def enviar(self):
+        """[...]"""
+
+        s = smtplib.SMTP('smtp.gmail.com: 587')
+        s.starttls()
+        s.login(self.sender, self.firma)
+        s.send_message(self.em, self.em['From'], [self.em['To']])
