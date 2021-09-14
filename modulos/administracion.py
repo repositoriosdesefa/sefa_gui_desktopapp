@@ -4,6 +4,7 @@ import pandas as pd
 from tkinter import Tk, Frame
 from apoyo.elementos_de_GUI import Cuadro, Ventana
 from apoyo.manejo_de_bases import Base_de_datos, Correo_electronico
+from modulos.vista_dr import Doc_recibidos_vista
 from apoyo.vsf import Vitrina
 import apoyo.datos_frecuentes as dfrec
 
@@ -40,7 +41,7 @@ class Ingresar_contrasena_de_adminitrador(Ventana):
         """"""
         
         self.desaparecer()
-        subframe = Administrar_usuarios(self, 500, 1200, 'Interfaz para el control de usuarios')
+        subframe = Doc_recibidos_vista(self, 650, 1200, 'Documentos recibidos')
 
     #----------------------------------------------------------------------
     def comprobar_datos_de_administrador(self):
