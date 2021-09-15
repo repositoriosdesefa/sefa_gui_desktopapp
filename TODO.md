@@ -35,5 +35,5 @@
 
 ## Logueo
 
-- [ ] Desarrollar GUI logueo2 Recuperar contrasena
-- [ ] Desarrollar GUI logueo3 Cambiar contrasena
+- [x] Desarrollar GUI logueo2 Recuperar contrasena
+- [x] Desarrollar GUI logueo3 Cambiar contrasena
