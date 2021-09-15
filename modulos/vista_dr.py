@@ -9,6 +9,7 @@ from apoyo.vsf import Vitrina_vista
 from tkinter import messagebox
 import apoyo.datos_frecuentes as dfrec
 
+# Prueba rama
 # Valores de lista desplegable
 tipo_ingreso = ('DIRECTO', 'DERIVACION-SUBDIRECCION', 
                 'DERIVACION-SUPERVISION', 'DERIVACION-SINADA')
