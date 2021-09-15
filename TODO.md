@@ -32,3 +32,8 @@
 - [ ] Armar tablas con datos reales para problemas (Lucia)
 - [ ] Armar tablas con datos reales para macro-problemas (Lucia)
 - [ ] Crear tablas de reiterativos y OCI
+
+## Logueo
+
+- [ ] Desarrollar GUI logueo2 Recuperar contrasena
+- [ ] Desarrollar GUI logueo3 Cambiar contrasena
