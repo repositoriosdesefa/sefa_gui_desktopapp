@@ -11,7 +11,7 @@ class Aplicacion(object):
 
         self.root = parent
         self.root.withdraw()
-        subFrame = logueo.logueo1_Ingreso_de_usuario(self, 450, 400, "Acceso de usuarios")
+        subFrame = logueo.logueo1_Ingreso_de_usuario(self, 450, 400, "Herramientas de Sefa - Versión 0.0")
 
 #----------------------------------------------------------------------
 def main():

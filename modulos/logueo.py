@@ -2,7 +2,7 @@ import pandas as pd
 from tkinter import Tk
 from apoyo.elementos_de_GUI import Cuadro, Ventana
 from apoyo.manejo_de_bases import Base_de_datos
-from modulos.administracion import Ingresar_contrasena_de_adminitrador as adm
+from modulos import administracion as adm
 
 class logueo1_Ingreso_de_usuario(Ventana):
     """"""
@@ -15,8 +15,8 @@ class logueo1_Ingreso_de_usuario(Ventana):
 
         c1 = Cuadro(self)
         c1.agregar_label(0,0,' ')
-        c1.agregar_imagen(1,0,'herramientas.png',200,50)
-        c1.agregar_label(2,0,' ')
+        c1.agregar_imagen(1,0,'herramientas_de_sefa.png',300,100)
+        c1.agregar_titulo(2,0,'ACCESO DE USUARIOS')
 
         c2 = Cuadro(self)
         rejilla = (
@@ -34,7 +34,8 @@ class logueo1_Ingreso_de_usuario(Ventana):
         c4 = Cuadro(self)
         rejilla2 = (
             ('BL',0,0,'Recuperar contraseña', self.ir_a_recuperar_contrasena),
-            ('BL',1,0,'Cambiar contraseña', self.ir_a_cambiar_contrasena)
+            ('BL',1,0,'Cambiar contraseña', self.ir_a_cambiar_contrasena),
+            ('BL',2,0,'Acceso de administrador', self.ir_a_administracion)
         )
         c4.agregar_rejilla(rejilla2)
 
@@ -59,11 +60,11 @@ class logueo1_Ingreso_de_usuario(Ventana):
         subframe = logueo3_Cambiar_contrasena(self, 500, 500,'Cambiar contraseña')
     
     #----------------------------------------------------------------------
-    def ir_a_administracion(self):
+    def ir_a_administracion(self, event):
         """"""
 
         self.desaparecer()
-        subframe = adm.Administrar_usuarios(self, 500,500,'Permisos de administrador')
+        subframe = adm.Ingresar_contrasena_de_adminitrador(self, 450,400,'Acceso de administrador')
 
 class logueo2_Recuperar_contrasena(Ventana):
     """"""

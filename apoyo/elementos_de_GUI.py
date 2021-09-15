@@ -188,7 +188,7 @@ class Cuadro(Frame):
         self.imagen_cargada = self.imagen_cargada.resize((self.largo, self.alto), Image.ANTIALIAS)
         self.imagen = ImageTk.PhotoImage(self.imagen_cargada)
         self.imagen_label = Label(self.z, image=self.imagen)
-        self.imagen_label.grid(row = self.y, column = self.x, pady=4, padx=8)
+        self.imagen_label.grid(row = self.y, column = self.x)
         self.lista_de_objetos.append((self.imagen_label))
 
     #----------------------------------------------------------------------
@@ -615,7 +615,9 @@ class MenuSefa():
     #----------------------------------------------------------------------
     def __init__(self, window):
         """Constructor"""
-
+        
+        version = f'Usted está utilizando la versión 0.0 del aplicativo \n jojojo'
+        
         menubar = Menu(window)
         window.config(menu=menubar)
 
@@ -628,6 +630,8 @@ class MenuSefa():
         helpmenu.add_command(label="Ayuda")
         helpmenu.add_separator()
         helpmenu.add_command(label="Acerca de...")
+
+        # Añadir "Archivo" y "Ayuda" a la barra de Menu
 
         menubar.add_cascade(label="Archivo", menu=filemenu)
         menubar.add_cascade(label="Ayuda", menu=helpmenu)
