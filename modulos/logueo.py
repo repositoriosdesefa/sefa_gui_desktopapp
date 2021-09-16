@@ -1,7 +1,7 @@
 import pandas as pd
 from tkinter import Tk
 from apoyo.elementos_de_GUI import Cuadro, Ventana
-from apoyo.manejo_de_bases import Base_de_datos
+from apoyo.manejo_de_bases import Base_de_datos, Correo_electronico
 from modulos import administracion as adm
 from modulos import menu_principal as mp
 from modulos import variables_globales as vg
@@ -110,12 +110,12 @@ class logueo2_Recuperar_contrasena(Ventana):
         c1.agregar_imagen(1,0,'email.png',100,100)
         c1.agregar_titulo(2,0,'RECUPERAR CONTRASEÑA')
 
-        c2 = Cuadro(self)
+        self.c2 = Cuadro(self)
         rejilla = (
             ('L',0,0,'Correo electrónico:'),
             ('E',1,0)
         )
-        c2.agregar_rejilla(rejilla)
+        self.c2.agregar_rejilla(rejilla)
 
         c3 = Cuadro(self)
         c3.agregar_label(0,0,' ')
@@ -126,7 +126,28 @@ class logueo2_Recuperar_contrasena(Ventana):
     def enviar_contrasena_al_email(self):
         """"""
 
-        print('Contraseña enviada al email')
+        datos_ingresados = self.c2.obtener_lista_de_datos()
+        correo = datos_ingresados[0]
+
+        b1 = Base_de_datos('12gzaAx7GkEUDjEmiJG693in8ADyCPxej5cUv9YA2vyY', 'Usuario')
+        b2 = Base_de_datos('12gzaAx7GkEUDjEmiJG693in8ADyCPxej5cUv9YA2vyY', 'Datos_de_usuario')
+
+        if b1.contar_coincidencias(correo) == 0:
+            print('No existe un usuario con ese correo electrónico')
+        else:
+            lista_para_identificar_usuario = b1.listar_datos_de_fila(correo)
+            vg.cod_usuario = lista_para_identificar_usuario[0]
+            lista_con_datos_de_usuario = b2.listar_datos_de_fila(vg.cod_usuario)
+            if lista_con_datos_de_usuario[7] == 'ELIMINADO':
+                print('Este usuario se encuentra deshabilitado, contactese con el equipo de proyectos para gestionar su habilitación')
+            else:
+                contrasena = lista_con_datos_de_usuario[6]
+                asunto = 'Herramientas de Sefa | Recuperación de contraseña'
+                mensaje = 'Su contraseña actual es: ' + contrasena
+
+                email = Correo_electronico(correo, asunto, mensaje)
+                email.enviar()
+                self.volver()
 
 class logueo3_Cambiar_contrasena(Ventana):
     """"""
