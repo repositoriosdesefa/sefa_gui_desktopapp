@@ -49,6 +49,11 @@ class Ventana(Toplevel):
         self.desaparecer()
         self.ventana_anterior.aparecer()
 
+    #----------------------------------------------------------------------
+    def destruir(self):
+        """"""
+
+        self.destroy()
 class Cuadro(Frame):
     """"""
     

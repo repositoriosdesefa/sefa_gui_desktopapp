@@ -6,6 +6,7 @@ from apoyo.elementos_de_GUI import Cuadro, Ventana
 from apoyo.manejo_de_bases import Base_de_datos, Correo_electronico
 from apoyo.vsf import Vitrina
 import apoyo.datos_frecuentes as dfrec
+from modulos import logueo
 
 class Ingresar_contrasena_de_adminitrador(Ventana):
     """"""
@@ -40,7 +41,7 @@ class Ingresar_contrasena_de_adminitrador(Ventana):
         """"""
         
         self.desaparecer()
-        subframe = Administrar_usuarios(self, 500, 1200, 'Interfaz para el control de usuarios')
+        subframe = Administrar_usuarios(self, 500, 800, 'Interfaz para el control de usuarios')
 
     #----------------------------------------------------------------------
     def comprobar_datos_de_administrador(self):
@@ -80,7 +81,7 @@ class Administrar_usuarios(Ventana):
 
         c3 = Cuadro(self)
         c3.agregar_button(0,0,'Crear usuario', self.ir_a_crear_usuario)
-        c3.agregar_button(0,1,'Menu principal', self.ir_a_crear_usuario)
+        c3.agregar_button(0,1,'Inicio', self.volver_a_logueo)
         c3.agregar_button(0,2,'Eliminados', self.ir_a_usuarios_eliminados)
     
     #----------------------------------------------------------------------
@@ -95,7 +96,7 @@ class Administrar_usuarios(Ventana):
         """"""
 
         self.desaparecer()
-        subframe = Administar_eliminados(self, 500, 1200, 'Usuarios eliminados')
+        subframe = Administar_eliminados(self, 500, 800, 'Usuarios eliminados')
 
     #----------------------------------------------------------------------
     def ver_usuario(self, x):
@@ -166,6 +167,13 @@ class Administrar_usuarios(Ventana):
         self.f2 = Frame(self.f1)
         self.f2.pack()
         self.generar_vitrina()
+
+    #----------------------------------------------------------------------
+    def volver_a_logueo(self):
+        """"""
+
+        self.destruir()
+        subFrame = logueo.logueo1_Ingreso_de_usuario(self, 450, 400, "Herramientas de Sefa - Versión 0.0")
 
 class Pantalla_de_usuario(Ventana):
     """"""
