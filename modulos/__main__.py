@@ -16,6 +16,7 @@ class Aplicacion(object):
 #----------------------------------------------------------------------
 def main():
     root = Tk()
+    root.iconbitmap('images/S_de_Sefa.ico')
     app = Aplicacion(root)
     root.mainloop()
 

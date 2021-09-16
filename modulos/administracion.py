@@ -1,7 +1,7 @@
 import datetime as dt
 from random import choice
 import pandas as pd
-from tkinter import Tk, Frame
+from tkinter import Tk, Frame, messagebox
 from apoyo.elementos_de_GUI import Cuadro, Ventana
 from apoyo.manejo_de_bases import Base_de_datos, Correo_electronico
 from apoyo.vsf import Vitrina
@@ -51,10 +51,10 @@ class Ingresar_contrasena_de_adminitrador(Ventana):
         b0 = Base_de_datos('12gzaAx7GkEUDjEmiJG693in8ADyCPxej5cUv9YA2vyY','Administrador')
         datos_registrados = b0.listar_datos_de_fila('ADMIN_001')
         if datos_ingresados[0] != datos_registrados[1]:
-            print('Usuario incorrecto')
+            messagebox.showerror('Error al ingresar datos', 'Usted ha ingresado un correo electrónico no registrado.')
         else:
             if datos_ingresados[1] != datos_registrados[2]:
-                print('Contraseña incorrecta')
+                messagebox.showerror('Error al ingresar datos', 'Usted ha ingresado una contraseña incorrecta.')
             else:
                 self.ir()
 
@@ -241,7 +241,7 @@ class Pantalla_de_usuario(Ventana):
 
         if valor_de_comprobacion == True:
 
-            print('Ese correo ya ha sido registrado')
+            messagebox.showerror('Error al ingresar datos', 'El correo electrónico ingresado pertenece a un usuario registrado con anterioridad.')
         
         else:
 
@@ -293,7 +293,7 @@ class Pantalla_de_usuario(Ventana):
 
         if valor_de_comprobacion == True:
 
-            print('Ese correo ya ha sido registrado')
+            messagebox.showerror('Error al ingresar datos', 'El correo electrónico ingresado pertenece a un usuario registrado con anterioridad.')
         
         else:
 
