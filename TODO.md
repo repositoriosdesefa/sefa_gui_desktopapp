@@ -33,7 +33,12 @@
 - [ ] Armar tablas con datos reales para macro-problemas (Lucia)
 - [ ] Crear tablas de reiterativos y OCI
 
-## Logueo
+## logueo y administracion
 
 - [x] Desarrollar GUI logueo2 Recuperar contrasena
 - [x] Desarrollar GUI logueo3 Cambiar contrasena
+- [ ] Ajustar tamaños de pantalla de administracion
+- [ ] Generar cuadros de dialogo en administracion (reemplazando los prints)
+- [ ] Generar cuadros de dialogo en logueo (reemplazando los prints)
+- [ ] Evaluar combinar los archivos administracion y logueo
+- [ ] (Para futuras versiones): Simplificar funciones con elementos comunes // Posible creación de la class Usuario. 
