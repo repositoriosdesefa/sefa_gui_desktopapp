@@ -31,12 +31,14 @@ marco_pedido = ('EFA', 'OEFA',
 id_b_efa = '1pjHXiz15Zmw-49Nr4o1YdXJnddUX74n7Tbdf5SH7Lb0'
 id_b_ospa = '13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4'
 b_efa = Base_de_datos(id_b_efa, 'Directorio')
-b_dr = Base_de_datos(id_b_ospa, 'DOC_RECIBIDOS_FINAL')
 b_dr_cod = Base_de_datos(id_b_ospa, 'DOCS_R')
+b_dr = Base_de_datos(id_b_ospa, 'DOC_RECIBIDOS_FINAL')
 b_dr_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_DR')
-base_relacion = Base_de_datos(id_b_ospa, 'RELACION')
+base_relacion_docs = Base_de_datos(id_b_ospa, 'RELACION')
 # Bases de datos complementarias
+b_de_cod = Base_de_datos(id_b_ospa, 'DOCS_E')
 b_de = Base_de_datos(id_b_ospa, 'DOC_EMITIDOS_FINAL')
+b_de_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_DE')
 b_ep = Base_de_datos(id_b_ospa, 'EXTREMOS')
 
 class Doc_recibidos_vista(Ventana):
@@ -146,7 +148,7 @@ class Doc_recibidos_vista(Ventana):
             # Obtengo el ID del usuario
             id_doc = lista_para_filtrar[0]
             # Generación de tabla de relación
-            tabla_de_relacion = base_relacion.generar_dataframe()
+            tabla_de_relacion = base_relacion_docs.generar_dataframe()
             # Con ese ID, filtro la tabla de relacion
             tabla_filtrada = tabla_de_relacion[tabla_de_relacion['ID_DR']==id_doc]
             # Me quedo con el vector a filtrar
@@ -158,7 +160,7 @@ class Doc_recibidos_vista(Ventana):
             tabla_de_de = tabla_de_de_vinculada.drop(['ID_DE', 'ID_DR', 'ID_EP'], axis=1)
             if len(tabla_de_de.index) > 0:
                 v1 = Vitrina_vista(self, tabla_de_de, self.ver_de, 
-                                   self.funcion_de_prueba, height=80, width=1050) 
+                                   self.eliminar_de, height=80, width=1050) 
             else:
                 c3.agregar_label(1, 2, '                  0 documentos emitidos asociados')
         else:
@@ -166,15 +168,15 @@ class Doc_recibidos_vista(Ventana):
 
         # 4to Frame
         c4 = Cuadro(self)
-        c4.agregar_button(0, 0,'(+) Agregar', self.busqueda_de)
+        c4.agregar_button(0, 0,'(+) Agregar', self.busqueda_ep)
         c4.agregar_titulo(0, 1,'                                                       ')
         c4.agregar_titulo(0, 2, 'Extremo de problemas asociados')
         c4.agregar_titulo(0, 3,'                              ')
         c4.agregar_titulo(0, 4,'                              ')
 
         if self.nuevo != True:
-            v2 = Vitrina_vista(self, tabla_de_ep, self.ver_de, 
-                               self.funcion_de_prueba, height=80, width=1050)
+            v2 = Vitrina_vista(self, tabla_de_ep, self.ver_ep, 
+                               self.eliminar_ep, height=80, width=1050)
         else:
             c4.agregar_label(1, 2,'                  0 extremos de problemas asociados') 
 
@@ -202,6 +204,13 @@ class Doc_recibidos_vista(Ventana):
         messagebox.showinfo("¡Excelente!", "El registro se ha ingresado correctamente")
 
     #----------------------------------------------------------------------
+    def busqueda_de(self):
+        """"""
+        self.desaparecer()
+        # LargoxAncho
+        SubFrame = busqueda_dr.Doc_emitidos_busqueda(self, 500, 1200, "Pantalla de búsqueda")
+
+    #----------------------------------------------------------------------
     def ver_de(self, x):
         """"""
         
@@ -216,23 +225,24 @@ class Doc_recibidos_vista(Ventana):
         subframe = Doc_emitidos_vista(self, 650, 1100, texto_documento, nuevo=False, lista=lista_para_insertar)
     
     #----------------------------------------------------------------------
-    def funcion_de_prueba(self, x):
+    def eliminar_de(self, x):
         """"""
-        print(x)
+        print("Eliminar documento emitido asociado")
+    
+    #----------------------------------------------------------------------
+    def busqueda_ep(self):
+        """"""
+        print("Pantalla de búsqueda de extremo de problemas")
+    
+    #----------------------------------------------------------------------
+    def ver_ep(self, x):
+        """"""
+        print("Ver extremo de problema asociado")
 
     #----------------------------------------------------------------------
-    def ir_a_busqueda_ep(self):
+    def eliminar_ep(self, x):
         """"""
-        #self.desaparecer()
-        #subframe = Pantalla_de_busqueda_ep(self, 500, 400, 'Búsqueda de extremos de problemas')
-
-        #----------------------------------------------------------------------
-
-    def busqueda_de(self):
-        """"""
-        self.desaparecer()
-        # LargoxAncho
-        SubFrame = busqueda_dr.Doc_emitidos_busqueda(self, 500, 1200, "Pantalla de búsqueda")
+        print("Eliminar extremo de problema asociado")
 
 
 
@@ -290,7 +300,7 @@ class Doc_emitidos_vista(Ventana):
 
         # Lista de DR
         tabla_de_dr = b_dr.generar_dataframe()
-        tabla_de_dr = tabla_de_dr.drop(['ID_DR',  'COD_PROBLEMA', 'VIA_RECEPCION', 'HT_ENTRANTE',
+        tabla_de_dr = tabla_de_dr.drop(['COD_PROBLEMA', 'VIA_RECEPCION', 'HT_ENTRANTE',
                                         'F_ING_OEFA', 'TIPO_DOC', 'ESPECIALISTA',
                                         'INDICACION', 'TIPO_RESPUESTA', 'RESPUESTA',
                                         'FECHA_ULTIMO_MOV', 'FECHA_ASIGNACION'], axis=1)
@@ -320,10 +330,19 @@ class Doc_emitidos_vista(Ventana):
 
         # 3er Frame
         c3 = Cuadro(self)
-        c3.agregar_titulo(2,0,'Extremo de problemas asociados')
+        c3.agregar_button(0, 0,'(+) Agregar', self.busqueda_ep)
+        c3.agregar_titulo(0, 1,'                                                       ')
+        c3.agregar_titulo(0, 2, 'Extremo de problemas asociados')
+        c3.agregar_titulo(0, 3,'                              ')
+        c3.agregar_titulo(0, 4,'                              ')
+
         if self.nuevo != True:
-            v1 = Vitrina_vista(self, tabla_de_ep, self.ver_dr, 
-                               self.funcion_de_prueba, height=80, width=1050)
+
+            # Agregar condicional para filtrar los problemas relacionados
+            c3.agregar_label(1, 2, '                0 extremos de problemas asociados')
+
+        else:
+            c3.agregar_label(1, 2, '                0 extremos de problemas asociados')
 
         # 4to Frame
         c4 = Cuadro(self)
@@ -332,15 +351,41 @@ class Doc_emitidos_vista(Ventana):
         c4.agregar_titulo(0, 2, 'Documentos recibidos asociados')
         c4.agregar_titulo(0, 3,'                              ')
         c4.agregar_titulo(0, 4,'                              ')
+        
+        # Generar vitrina de documentos recibidos asociados
         if self.nuevo != True:
-            v2 = Vitrina_vista(self, tabla_de_dr, self.ver_dr, 
-                               self.funcion_de_prueba, height=80, width=1050)  
+            # Uso la lista que hereda
+            lista_para_filtrar = lista
+            # Obtengo el ID del usuario
+            id_usuario = lista_para_filtrar[0]
+            # Genero las tablas para el filtrado 
+            tabla_de_codigo = b_de_cod.generar_dataframe() # Tabla de códigos
+            tabla_de_relacion = base_relacion_docs.generar_dataframe() # Tabla de relación
+            # Filtro la tabla para obtener el ID de la 
+            tabla_de_codigo_filtrada = tabla_de_codigo[tabla_de_codigo['HT_ID']==id_usuario]
+            id_interno = tabla_de_codigo_filtrada.iloc[0,0]
+            # Con ese ID, filtro la tabla de relacion
+            tabla_relacion_filtrada = tabla_de_relacion[tabla_de_relacion['ID_DE']==id_interno]
+            # Me quedo con el vector a filtrar en forma de lista
+            lista_dr = list(tabla_relacion_filtrada['ID_DR'].unique())
+            # Filtro la tabla de documentos recibidos
+            tabla_de_dr_filtrada = tabla_de_dr[tabla_de_dr['ID_DR'].isin(lista_dr)]
+            # Tabla de documentos emitidos filtrada
+            tabla_de_dr = tabla_de_dr_filtrada.drop(['ID_DR'], axis=1)
+            if len(tabla_de_dr.index) > 0:
+                v1 = Vitrina_vista(self, tabla_de_dr, self.ver_dr, 
+                                   self.eliminar_dr, height=80, width=1050) 
+            else:
+                c3.agregar_label(1, 2, '                  0 documentos emitidos asociados')
+        else:
+            c3.agregar_label(1, 2, '                  0 documentos emitidos asociados') 
         
         
     #----------------------------------------------------------------------
-    def funcion_de_prueba(self, x):
+    def busqueda_ep(self, x):
         """"""
-        print(x)
+        y = x + "Búsqueda de extremo de problema"
+        print(y)
 
      #----------------------------------------------------------------------
     def enviar_de(self):
@@ -365,16 +410,14 @@ class Doc_emitidos_vista(Ventana):
                                lb1[6], lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], lb1[12], lb1[13]]
         
         self.desaparecer()
-        subframe = Doc_recibidos_vista(self, 650, 1100, texto_documento, nuevo=False, lista=lista_para_insertar)
+        subframe = Doc_recibidos_vista(self, 650, 1200, texto_documento, nuevo=False, lista=lista_para_insertar)
 
     #----------------------------------------------------------------------
-    def ir_a_vista_ep(self):
+    def eliminar_dr(self):
         """"""
-        #self.desaparecer()
-        #subframe = Pantalla_de_vista_ep(self, 500, 400, 'Búsqueda de extremos de problemas')
+        print("Eliminar documento recibido asociado")
 
-        #----------------------------------------------------------------------
-
+    #----------------------------------------------------------------------
     def busqueda_dr(self):
         """"""
         self.desaparecer()
