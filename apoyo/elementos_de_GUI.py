@@ -54,6 +54,7 @@ class Ventana(Toplevel):
         """"""
 
         self.destroy()
+        
 class Cuadro(Frame):
     """"""
     
