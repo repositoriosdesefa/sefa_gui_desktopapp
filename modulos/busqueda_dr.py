@@ -218,7 +218,7 @@ class Doc_emitidos_busqueda(Ventana):
         self.tabla_de2 = self.de.rename(columns={'HT_ID_DE':'ID DOC EMITIDO','COD_PROBLEMA':'CODIGO','HT_SALIDA':'NRO REGISTRO SIGED',
         'NUM_DOC':'NRO DOCUMENTO','ESTADO_DOCE':'ESTADO','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','DETALLE_REQUERIMIENTO':'DETALLE'})
         self.tabla_de3 = self.tabla_de2.iloc[:, [1, 4, 10, 8, 15, 19, 12]]
-        self.tabla_de4 = self.tabla_de2.iloc[1:100, [1, 4, 10, 8, 15, 19, 12]]
+        self.tabla_de4 = self.tabla_de2.iloc[0:99, [1, 4, 10, 8, 15, 19, 12]]
         #self.tabla_dr = self.tabla_dr.rename(columns={'COD_PROBLEMA':'CODIGO','HT_ENTRANTE':'NRO REGISTRO SIGED','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.'})
 
         self.listacategoria = list(set(self.tabla_de2['CATEGORIA']))
