@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import messagebox 
 from tkinter import scrolledtext as sc
 from tkinter import ttk
 from tkcalendar import Calendar, DateEntry
@@ -633,14 +634,30 @@ class MenuSefa():
         filemenu.add_command(label="Salir", command=window.quit)
 
         helpmenu = Menu(menubar, tearoff=0)
-        helpmenu.add_command(label="Ayuda")
+        helpmenu.add_command(label="Manual", command=self.lanzar_msj_manual)
         helpmenu.add_separator()
-        helpmenu.add_command(label="Acerca de...")
+        helpmenu.add_command(label="Acerca de...", command=self.lanzar_msj_acerca_de)
 
         # Añadir "Archivo" y "Ayuda" a la barra de Menu
 
         menubar.add_cascade(label="Archivo", menu=filemenu)
         menubar.add_cascade(label="Ayuda", menu=helpmenu)
+
+    #----------------------------------------------------------------------
+    def lanzar_msj_manual(self):
+        """"""
+
+        messagebox.showinfo('Manual de usuario', 'Pronto incorporaremos un manual de usuario que estará disponible desde esta opción.')
+    
+    #----------------------------------------------------------------------
+    def lanzar_msj_acerca_de(self):
+        """"""
+
+        info1 = 'Esta herramienta ha sido elaborada por el equipo de proyectos de Sefa.\n'
+        espacio = ' \n'
+        info2 = 'Usted está utilizando la versión 0.0'
+        info_completa = info1 + espacio + info2
+        messagebox.showinfo('Información sobre este aplicativo', info_completa)
 
 class ScrollFrame(Frame):
 
