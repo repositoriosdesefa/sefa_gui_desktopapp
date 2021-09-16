@@ -1,3 +1,4 @@
+import datetime as dt
 import pandas as pd
 from tkinter import Tk
 from apoyo.elementos_de_GUI import Cuadro, Ventana
@@ -163,7 +164,7 @@ class logueo3_Cambiar_contrasena(Ventana):
         c1.agregar_imagen(1,0,'password.png',100,100)
         c1.agregar_titulo(2,0,'CAMBIAR CONTRASEÑA')
 
-        c2 = Cuadro(self)
+        self.c2 = Cuadro(self)
         rejilla = (
             ('L',0,0,'Correo electrónico:'),
             ('E',1,0),
@@ -174,7 +175,7 @@ class logueo3_Cambiar_contrasena(Ventana):
             ('L',6,0,'Confirmar nueva contraseña:'),
             ('E',7,0),
         )
-        c2.agregar_rejilla(rejilla)
+        self.c2.agregar_rejilla(rejilla)
 
         c3 = Cuadro(self)
         c3.agregar_label(0,0,' ')
@@ -185,6 +186,35 @@ class logueo3_Cambiar_contrasena(Ventana):
     def cambiar_contrasena(self):
         """"""
 
-        print('Contraseña cambiada')
-    
+        datos_ingresados = self.c2.obtener_lista_de_datos()
+        correo = datos_ingresados[0]
+        contrasenna_actual = datos_ingresados[1]
+        nueva_contrasenna = datos_ingresados[2]
+        nueva_contrasenna_confirmacion = datos_ingresados[3]
+
+        b1 = Base_de_datos('12gzaAx7GkEUDjEmiJG693in8ADyCPxej5cUv9YA2vyY', 'Usuario')
+        b2 = Base_de_datos('12gzaAx7GkEUDjEmiJG693in8ADyCPxej5cUv9YA2vyY', 'Datos_de_usuario')
+        b3 = Base_de_datos('12gzaAx7GkEUDjEmiJG693in8ADyCPxej5cUv9YA2vyY', 'Historial')
+
+        if b1.contar_coincidencias(correo) == 0:
+            print('No existe un usuario con ese correo electrónico')
+        else:
+            lista_para_identificar_usuario = b1.listar_datos_de_fila(correo)
+            vg.cod_usuario = lista_para_identificar_usuario[0]
+            lista_con_datos_de_usuario = b2.listar_datos_de_fila(vg.cod_usuario)
+            if lista_con_datos_de_usuario[7] == 'ELIMINADO':
+                print('Este usuario se encuentra deshabilitado, contactese con el equipo de proyectos para gestionar su habilitación')
+            else:
+                if lista_con_datos_de_usuario[6] != contrasenna_actual:
+                    print('Contraseña incorrecta')
+                else:
+                    if nueva_contrasenna != nueva_contrasenna_confirmacion:
+                        print('La nueva contraseña no coincide con el texto ingresado en la confirmación')
+                    else:
+                        b2.cambiar_un_dato_de_una_fila(vg.cod_usuario, 7, nueva_contrasenna)
+                        nuevos_datos_de_usuario = b2.listar_datos_de_fila(vg.cod_usuario)
+                        hora = str(dt.datetime.now())
+                        nuevos_datos_de_usuario_para_historial = nuevos_datos_de_usuario + [hora]
+                        b3.agregar_datos(nuevos_datos_de_usuario_para_historial)
+                        self.volver()
 
