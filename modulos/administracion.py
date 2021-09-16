@@ -51,7 +51,7 @@ class Ingresar_contrasena_de_adminitrador(Ventana):
         b0 = Base_de_datos('12gzaAx7GkEUDjEmiJG693in8ADyCPxej5cUv9YA2vyY','Administrador')
         datos_registrados = b0.listar_datos_de_fila('ADMIN_001')
         if datos_ingresados[0] != datos_registrados[1]:
-            messagebox.showerror('Error al ingresar datos', 'Usted ha ingresado un correo electrónico no registrado.')
+            messagebox.showerror('Error al ingresar datos', 'Usted ha ingresado un usuario no registrado.')
         else:
             if datos_ingresados[1] != datos_registrados[2]:
                 messagebox.showerror('Error al ingresar datos', 'Usted ha ingresado una contraseña incorrecta.')
