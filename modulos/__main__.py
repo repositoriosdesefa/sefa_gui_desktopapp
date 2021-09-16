@@ -13,7 +13,7 @@ class Aplicacion(object):
 
         self.root = parent
         self.root.withdraw()
-        subFrame = administracion.Ingresar_contrasena_de_adminitrador(self, 450, 400, "Inicio")
+        subFrame = vista_dr.Doc_recibidos_vista(self, 650, 1200, "Inicio")
         
         # LargoxAncho
         # subFrame = vista_dr.Doc_recibidos_vista(self,650, 1100,'Documentos recibidos')
