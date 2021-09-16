@@ -3,6 +3,8 @@ from tkinter import Tk
 from apoyo.elementos_de_GUI import Cuadro, Ventana
 from apoyo.manejo_de_bases import Base_de_datos
 from modulos import administracion as adm
+from modulos import menu_principal as mp
+from modulos import variables_globales as vg
 
 class logueo1_Ingreso_de_usuario(Ventana):
     """"""
@@ -18,18 +20,18 @@ class logueo1_Ingreso_de_usuario(Ventana):
         c1.agregar_imagen(1,0,'herramientas_de_sefa.png',300,100)
         c1.agregar_titulo(2,0,'ACCESO DE USUARIOS')
 
-        c2 = Cuadro(self)
+        self.c2 = Cuadro(self)
         rejilla = (
             ('L',0,0,'Correo electrónico:'),
             ('E',1,0),
             ('L',2,0, 'Contraseña:'),
             ('EP',3,0)
         )
-        c2.agregar_rejilla(rejilla)
+        self.c2.agregar_rejilla(rejilla)
 
         c3 = Cuadro(self)
         c3.agregar_label(0,0,' ')
-        c3.agregar_button(1,0,'Ingresar', self.ingresar_a_la_aplicacion)
+        c3.agregar_button(1,0,'Ingresar', self.comprobar_datos)
 
         c4 = Cuadro(self)
         rejilla2 = (
@@ -40,10 +42,38 @@ class logueo1_Ingreso_de_usuario(Ventana):
         c4.agregar_rejilla(rejilla2)
 
     #----------------------------------------------------------------------
-    def ingresar_a_la_aplicacion(self):
+    def comprobar_datos(self):
         """"""
 
-        print('Ingresar a aplicación')
+        datos_ingresados = self.c2.obtener_lista_de_datos()
+        correo = datos_ingresados[0]
+        contrasenna = datos_ingresados[1]
+
+        b1 = Base_de_datos('12gzaAx7GkEUDjEmiJG693in8ADyCPxej5cUv9YA2vyY', 'Usuario')
+        b2 = Base_de_datos('12gzaAx7GkEUDjEmiJG693in8ADyCPxej5cUv9YA2vyY', 'Datos_de_usuario')
+
+        if b1.contar_coincidencias(correo) == 0:
+            print('No existe un usuario con ese correo electrónico')
+        else:
+            lista_para_identificar_usuario = b1.listar_datos_de_fila(correo)
+            vg.cod_usuario = lista_para_identificar_usuario[0]
+            lista_con_datos_de_usuario = b2.listar_datos_de_fila(vg.cod_usuario)
+            if lista_con_datos_de_usuario[7] == 'ELIMINADO':
+                print('Este usuario se encuentra deshabilitado, contactese con el equipo de proyectos para gestionar su habilitación')
+            else:
+                if lista_con_datos_de_usuario[6] != contrasenna:
+                    print('Contraseña incorrecta')
+                else:
+                    vg.usuario = lista_con_datos_de_usuario[4]
+                    vg.oficina = lista_con_datos_de_usuario[5]
+                    self.ir()
+
+    #----------------------------------------------------------------------
+    def ir(self):
+        """"""
+        
+        self.desaparecer()
+        subframe = mp.Menu_principal(self, 500, 500, 'Menu principal')
     
     #----------------------------------------------------------------------
     def ir_a_recuperar_contrasena(self, event):
