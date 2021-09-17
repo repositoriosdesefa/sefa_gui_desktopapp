@@ -19,7 +19,10 @@
 - [x] Crear método para eliminar documentos asociados
 - [x] Crear tabla con historial de relaciones
 - [x] Actualizar método de enviar DE con información con historial
-- [ ] Actualizar método de guardar DE con modificación
+- [x] Actualizar método de guardar DE con modificación
+- [x] Crear método de actualización de ventana con datos modificados
+- [x] Crear pantalla de navegación
+- [x] Crear botones provisionales para facilitar navegación
 
 ## vsf
 - [ ] Integrar a elemetos_de_gui
