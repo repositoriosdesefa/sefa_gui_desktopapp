@@ -241,7 +241,7 @@ class Cuadro(Frame):
                             wrap = WORD, 
                             width = 108, 
                             height = 2, 
-                            font = ("Times New Roman", 8))
+                            font = ("Helvetica", 8))
         self.text_area.grid(row = self.y, column = self.x, columnspan= 3, pady=4, padx=8)
         self.lista_de_objetos.append((self.text_area))
         self.lista_de_datos.append((self.text_area))
