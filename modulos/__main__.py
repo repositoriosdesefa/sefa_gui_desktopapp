@@ -13,7 +13,7 @@ class Aplicacion(object):
 
         self.root = parent
         self.root.withdraw()
-        subFrame = vista_dr.Doc_recibidos_vista(self, 650, 1200, "Inicio")
+        subFrame = vista_dr.inicio_app_OSPA(self, 400, 400, "Inicio")
         
         # LargoxAncho
         # subFrame = vista_dr.Doc_recibidos_vista(self,650, 1100,'Documentos recibidos')
