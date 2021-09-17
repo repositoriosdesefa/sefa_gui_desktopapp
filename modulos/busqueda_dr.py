@@ -215,10 +215,13 @@ class Doc_emitidos_busqueda(Ventana):
 
         bde = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOC_EMITIDOS_FINAL')
         self.de = bde.generar_dataframe()
-        self.tabla_de2 = self.de.rename(columns={'HT_ID_DE':'ID DOC EMITIDO','COD_PROBLEMA':'CODIGO','HT_SALIDA':'NRO REGISTRO SIGED',
-        'NUM_DOC':'NRO DOCUMENTO','ESTADO_DOCE':'ESTADO','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','DETALLE_REQUERIMIENTO':'DETALLE'})
-        self.tabla_de3 = self.tabla_de2.iloc[:, [1, 4, 10, 8, 15, 19, 12]]
-        self.tabla_de4 = self.tabla_de2.iloc[0:99, [1, 4, 10, 8, 15, 19, 12]]
+        self.tabla_de2 = self.de.rename(columns={'HT_ID_DE':'ID DOC EMITIDO','COD_PROBLEMA':'CODIGO',
+                                                'HT_SALIDA':'NRO REGISTRO SIGED',
+                                                'NUM_DOC':'NRO DOCUMENTO','ESTADO_DOCE':'ESTADO',
+                                                'FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.',
+                                                'DETALLE_REQUERIMIENTO':'DETALLE'})
+        self.tabla_de3 = self.tabla_de2.iloc[:, [1, 18, 7, 6, 13, 16, 9]]
+        self.tabla_de4 = self.tabla_de2.iloc[0:99, [1, 18, 7, 6, 13, 16, 9]]
         #self.tabla_dr = self.tabla_dr.rename(columns={'COD_PROBLEMA':'CODIGO','HT_ENTRANTE':'NRO REGISTRO SIGED','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.'})
 
         self.listacategoria = list(set(self.tabla_de2['CATEGORIA']))
@@ -286,12 +289,12 @@ class Doc_emitidos_busqueda(Ventana):
         if self.decate != "":
             self.vde1.Eliminar_vitrina()
             self.tabla_filtradade = self.tabla_de2[self.tabla_de2['CATEGORIA']==self.decate]
-            self.tabla_de4 = self.tabla_filtradade.iloc[:, [1, 4, 10, 8, 15, 19, 12]]
+            self.tabla_de4 = self.tabla_filtradade.iloc[:, [1, 18, 7, 6, 13, 16, 9]]
             self.vde1 = Vitrina_busqueda(self, self.tabla_de4, self.Buscar_de, self.funcion_de_asociar_de, height=200, width=1030)
             if self.detipodoc != "":
                 self.vde1.Eliminar_vitrina()
                 self.tabla_filtradade2 = self.tabla_filtradade[self.tabla_filtradade['TIPO_DOC']==self.detipodoc]
-                self.tabla_de5 = self.tabla_filtradade2.iloc[:, [1, 4, 10, 8, 15, 19, 12]]
+                self.tabla_de5 = self.tabla_filtradade2.iloc[:, [1, 18, 7, 6, 13, 16, 9]]
                 self.vde1 = Vitrina_busqueda(self, self.tabla_de5, self.Buscar_de, self.funcion_de_asociar_de, height=200, width=1030)
                 if self.deht != "":
                     self.vde1.Eliminar_vitrina()
@@ -424,8 +427,8 @@ class Doc_emitidos_busqueda(Ventana):
 
         bde = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOC_EMITIDOS_FINAL')
         lb1 = bde.listar_datos_de_fila(self.x)
-        lista_para_insertar = [lb1[1],lb1[4],lb1[5], lb1[6], lb1[7], 
-                               lb1[8], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14]]
+        lista_para_insertar = [lb1[1],lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], 
+                                lb1[7], lb1[8], lb1[9], lb1[10], lb1[11]]
         self.desaparecer()
         subframe = vista_dr.Doc_emitidos_vista(self, 600, 1100, texto_documento, nuevo=False, lista=lista_para_insertar)
 
