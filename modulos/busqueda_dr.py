@@ -24,8 +24,8 @@ class Doc_recibidos_busqueda(Ventana):
         b1 = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOC_RECIBIDOS_FINAL')
         self.tabla_inicial = b1.generar_dataframe()
         self.tabla_2 = self.tabla_inicial.rename(columns={'HT_ID':'NRO DOC','HT_ENTRANTE':'NRO REGISTRO SIGED','COD_PROBLEMA':'CODIGO','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','APORTE_DOC':'ASUNTO'})
-        self.tabla_3 = self.tabla_2.iloc[:, [2, 3, 6, 9, 13, 16, 12]]
-        self.tabla_dr = self.tabla_2.iloc[0:99, [2, 3, 6, 9, 13, 16, 12]]
+        self.tabla_3 = self.tabla_2.iloc[:, [1, 2, 5, 8, 12, 15, 10]]
+        self.tabla_dr = self.tabla_2.iloc[0:99, [1, 2, 5, 8, 12, 15, 10]]
         #self.tabla_dr = self.tabla_dr.rename(columns={'COD_PROBLEMA':'CODIGO','HT_ENTRANTE':'NRO REGISTRO SIGED','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.'})
 
         self.listatipodoc = list(set(self.tabla_2['TIPO_DOC']))
@@ -84,7 +84,7 @@ class Doc_recibidos_busqueda(Ventana):
         if self.tipodoc != "":
             self.v1.Eliminar_vitrina()
             self.tabla_filtrada = self.tabla_2[self.tabla_2['TIPO_DOC']==self.tipodoc]
-            self.tabla_dr = self.tabla_filtrada.iloc[:, [2, 3, 6, 9, 13, 16, 12]]
+            self.tabla_dr = self.tabla_filtrada.iloc[:, [1, 2, 5, 8, 12, 15, 10]]
             self.v1 = Vitrina_busqueda(self, self.tabla_dr, self.Buscar, self.funcion_de_asociar, height=200, width=1030)
             if self.remitente != "":
                 self.v1.Eliminar_vitrina()
@@ -175,11 +175,11 @@ class Doc_recibidos_busqueda(Ventana):
 
         b1 = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOC_RECIBIDOS_FINAL')
         lb1 = b1.listar_datos_de_fila(self.x)
-        lista_para_insertar = [lb1[2],lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], lb1[9], 
-                              lb1[10], lb1[11], lb1[12], lb1[13], lb1[14], lb1[15]]
+        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], 
+                                lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14]]
         
         self.desaparecer()
-        subframe = vista_dr.Doc_recibidos_vista(self, 600, 1100, texto_documento, nuevo=False, lista=lista_para_insertar)
+        subframe = vista_dr.Doc_recibidos_vista(self, 600, 1200, texto_documento, nuevo=False, lista=lista_para_insertar)
 
     #----------------------------------------------------------------------
     def funcion_de_asociar(self, x):
