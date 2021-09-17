@@ -289,12 +289,12 @@ class Doc_emitidos_busqueda(Ventana):
         if self.decate != "":
             self.vde1.Eliminar_vitrina()
             self.tabla_filtradade = self.tabla_de2[self.tabla_de2['CATEGORIA']==self.decate]
-            self.tabla_de4 = self.tabla_filtradade.iloc[:, [1, 18, 7, 6, 13, 16, 9]]
+            self.tabla_de4 = self.tabla_filtradade.iloc[:, [2, 19, 7, 6, 14, 17, 9]]
             self.vde1 = Vitrina_busqueda(self, self.tabla_de4, self.Buscar_de, self.funcion_de_asociar_de, height=200, width=1030)
             if self.detipodoc != "":
                 self.vde1.Eliminar_vitrina()
                 self.tabla_filtradade2 = self.tabla_filtradade[self.tabla_filtradade['TIPO_DOC']==self.detipodoc]
-                self.tabla_de5 = self.tabla_filtradade2.iloc[:, [1, 18, 7, 6, 13, 16, 9]]
+                self.tabla_de5 = self.tabla_filtradade2.iloc[:,  [2, 19, 7, 6, 14, 17, 9]]
                 self.vde1 = Vitrina_busqueda(self, self.tabla_de5, self.Buscar_de, self.funcion_de_asociar_de, height=200, width=1030)
                 if self.deht != "":
                     self.vde1.Eliminar_vitrina()
@@ -367,7 +367,7 @@ class Doc_emitidos_busqueda(Ventana):
                 if self.deht != "":
                     self.vde1.Eliminar_vitrina()
                     self.tabla_filtradade2 = self.tabla_filtradade[self.tabla_filtradade['NRO REGISTRO SIGED']==self.deht]
-                    self.tabla_de5 = self.tabla_filtradade2.iloc[:, [1, 3, 2, 10, 8, 15, 19, 7]]
+                    self.tabla_de5 = self.tabla_filtradade2.iloc[:,  [2, 19, 7, 6, 14, 17, 9]]
                     self.vde1 = Vitrina_busqueda(self, self.tabla_de5, self.Buscar_de, self.funcion_de_asociar_de, height=200, width=1030)
                     if self.dedestin != "":
                         self.vde1.Eliminar_vitrina()
@@ -427,8 +427,8 @@ class Doc_emitidos_busqueda(Ventana):
 
         bde = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOC_EMITIDOS_FINAL')
         lb1 = bde.listar_datos_de_fila(self.x)
-        lista_para_insertar = [lb1[1],lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], 
-                                lb1[7], lb1[8], lb1[9], lb1[10], lb1[11]]
+        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], 
+                                lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], lb1[12]]
         self.desaparecer()
         subframe = vista_dr.Doc_emitidos_vista(self, 600, 1100, texto_documento, nuevo=False, lista=lista_para_insertar)
 
