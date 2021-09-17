@@ -433,17 +433,30 @@ class Doc_emitidos_vista(Ventana):
         tabla_de_codigo_de = b_de_cod.generar_dataframe()
         # Guardo el ID de usuario que llega
         if self.nuevo != True:
-            # ID ingresado en la rejilla
-            id_usuario = datos_ingresados[0]
-            valor_de_comprobacion = self.comprobar_id(b_de_cod, id_usuario) # Comprobar si el id de usuario ya existe
-        else:
-            # ID insertado en la rejilla
-            id_usuario = self.lista_para_insertar[0]
-            valor_de_comprobacion = self.comprobar_id(b_de_cod, id_usuario) # Comprobar si el id de usuario ya existe
+            
+            # En caso exista ID insertado en la rejilla
+            id_usuario = self.lista_para_insertar[0] # Compruebo si son iguales
+            if self.lista_para_insertar[0] == datos_ingresados[0]:
+                #Filtro las tablas para obtener el ID interno
+                tabla_codigo_de_filtrada = tabla_de_codigo_de[tabla_de_codigo_de['HT_ID']==id_usuario]
+                id_interno_de = tabla_codigo_de_filtrada.iloc[0,0]
+                #Realizo la comprobación en la base
+                valor_de_comprobacion = self.comprobar_id(b_de_cod, id_usuario) # Comprobar si el id de usuario ya existe 
+            else:
+                # Utilizo el insertado para filtrar
+                id_usuario_insertado = self.lista_para_insertar[0]
+                tabla_codigo_de_filtrada = tabla_de_codigo_de[tabla_de_codigo_de['HT_ID']==id_usuario_insertado]
+                id_interno_de = tabla_codigo_de_filtrada.iloc[0,0]
+                # Utilizo el ingresado para actualizar
+                id_usuario_modificado = datos_ingresados[0]
+                id_usuario = id_usuario_modificado
+                valor_de_comprobacion = self.comprobar_id(b_de_cod, id_usuario) # Comprobar si el id de usuario ya existe
 
-        # Filtro las tablas para obtener el ID interno
-        tabla_codigo_de_filtrada = tabla_de_codigo_de[tabla_de_codigo_de['HT_ID']==id_usuario]
-        id_interno_de = tabla_codigo_de_filtrada.iloc[0,0]
+        else:
+                # ID ingresado en la rejilla
+                id_usuario = datos_ingresados[0]
+                valor_de_comprobacion = self.comprobar_id(b_de_cod, id_usuario) # Comprobar si el id de usuario ya existe
+       
 
         if valor_de_comprobacion == True:
             # Pestaña 1: Código Único
