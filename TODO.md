@@ -14,8 +14,12 @@
 - [x] Mostrar label cuando no hayan valores o cambiar fondo de tabla vacía
 - [x] Actualizar entries, según tamaño que corresponda
 - [x] Agregar entry con scrolltext
-- [ ] Relacionar documentos emitidos y asociados
-- [ ] Crear método eliminar
+- [x] Crear método de generar vitrina
+- [x] Crear método de actualizar vitrina
+- [x] Crear método para eliminar documentos asociados
+- [x] Crear tabla con historial de relaciones
+- [x] Actualizar método de enviar DE con información con historial
+- [ ] Actualizar método de guardar DE con modificación
 
 ## vsf
 - [ ] Integrar a elemetos_de_gui
