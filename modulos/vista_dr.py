@@ -49,6 +49,57 @@ b_ep = Base_de_datos(id_b_ospa, 'EXTREMOS')
 id_b_efa = '1pjHXiz15Zmw-49Nr4o1YdXJnddUX74n7Tbdf5SH7Lb0'
 b_efa = Base_de_datos(id_b_efa, 'Directorio')
 
+class inicio_app_OSPA(Ventana):
+    """"""
+    
+    #----------------------------------------------------------------------
+    def __init__(self, *args):
+        """Constructor"""
+        
+        Ventana.__init__(self, *args)
+
+        c1 = Cuadro(self)
+        c1.agregar_label(0, 1, ' ')
+        c1.agregar_imagen(1, 1,'Logo_OSPA.png',202,49)
+        c1.agregar_label(2, 1,' ')
+        c1.agregar_button(3, 1, "DR", self.vista_dr)
+        c1.agregar_label(4, 1,' ')
+        c1.agregar_button(5, 1, "BDR", self.busqueda_dr)
+        c1.agregar_label(6, 1,' ')
+        c1.agregar_button(7, 1, "DE", self.vista_de)
+        c1.agregar_label(8, 1,' ')
+        c1.agregar_button(9, 1, "BDE", self.busqueda_de)
+        c1.agregar_label(10, 1,' ')
+
+    #----------------------------------------------------------------------
+    def vista_dr(self):
+
+        self.desaparecer()
+        # LargoxAncho
+        SubFrame = Doc_recibidos_vista(self, 650, 1200, "Documentos recibidos")
+    
+    #----------------------------------------------------------------------
+    def busqueda_dr(self):
+
+        self.desaparecer()
+        # LargoxAncho
+        SubFrame = busqueda_dr.Doc_recibidos_busqueda(self, 500, 1200, "Búsqueda de documentos recibidos")
+
+    #----------------------------------------------------------------------
+    def vista_de(self):
+
+        self.desaparecer()
+        # LargoxAncho
+        SubFrame = Doc_emitidos_vista(self, 650, 1200, "Documentos emitidos")
+    
+    #----------------------------------------------------------------------
+    def busqueda_de(self):
+
+        self.desaparecer()
+        # LargoxAncho
+        SubFrame = busqueda_dr.Doc_emitidos_busqueda(self, 500, 1200, "Búsqueda de documentos emitidos")
+
+
 
 class Doc_recibidos_vista(Ventana):
     """"""
@@ -140,8 +191,9 @@ class Doc_recibidos_vista(Ventana):
             self.frame_rejilla.insertar_lista_de_datos(self.lista_para_insertar)
 
         # 3. Frame de botón de rejilla
-        boton_rejilla = Cuadro(self)
-        boton_rejilla.agregar_button(0,1,'Guardar', self.enviar_dr)
+        f_boton = Cuadro(self)
+        f_boton.agregar_button(0, 1, 'Guardar', self.enviar_dr)
+        f_boton.agregar_button(0, 2, 'Inicio', self.inicio_app) # Botón provisional
         
         # 4. Frame de botón y títulos de vitrina 1
         boton_vitrina_1 = Cuadro(self)
@@ -257,6 +309,13 @@ class Doc_recibidos_vista(Ventana):
     def eliminar_ep(self, x):
         """"""
         print("Eliminar extremo de problema asociado")
+    
+    #----------------------------------------------------------------------
+    def inicio_app(self):
+        """"""
+        self.desaparecer()
+        # LargoxAncho
+        subFrame = inicio_app_OSPA(self, 400, 400, "Inicio")
 
 
 
@@ -344,7 +403,8 @@ class Doc_emitidos_vista(Ventana):
 
         # 3. Frame de botón de rejilla
         f_boton = Cuadro(self)
-        f_boton.agregar_button(1,1,'Guardar', self.enviar_de)
+        f_boton.agregar_button(0, 1, 'Guardar', self.enviar_de)
+        f_boton.agregar_button(0, 2, 'Inicio', self.inicio_app) # Botón provisional
 
         # 4. Frame de botón y títulos de vitrina 1
         boton_vitrina_1 = Cuadro(self)
@@ -433,33 +493,28 @@ class Doc_emitidos_vista(Ventana):
         tabla_de_codigo_de = b_de_cod.generar_dataframe()
         # Guardo el ID de usuario que llega
         if self.nuevo != True:
-            
+
             # En caso exista ID insertado en la rejilla
-            id_usuario = self.lista_para_insertar[0] # Compruebo si son iguales
-            if self.lista_para_insertar[0] == datos_ingresados[0]:
-                #Filtro las tablas para obtener el ID interno
-                tabla_codigo_de_filtrada = tabla_de_codigo_de[tabla_de_codigo_de['HT_ID']==id_usuario]
-                id_interno_de = tabla_codigo_de_filtrada.iloc[0,0]
-                #Realizo la comprobación en la base
-                valor_de_comprobacion = self.comprobar_id(b_de_cod, id_usuario) # Comprobar si el id de usuario ya existe 
-            else:
-                # Utilizo el insertado para filtrar
-                id_usuario_insertado = self.lista_para_insertar[0]
-                tabla_codigo_de_filtrada = tabla_de_codigo_de[tabla_de_codigo_de['HT_ID']==id_usuario_insertado]
-                id_interno_de = tabla_codigo_de_filtrada.iloc[0,0]
-                # Utilizo el ingresado para actualizar
-                id_usuario_modificado = datos_ingresados[0]
-                id_usuario = id_usuario_modificado
-                valor_de_comprobacion = self.comprobar_id(b_de_cod, id_usuario) # Comprobar si el id de usuario ya existe
+            id_usuario_insertado = self.lista_para_insertar[0] # Compruebo si son iguales
+            valor_de_comprobacion = self.comprobar_id(b_de_cod, id_usuario_insertado)
+            id_usuario = id_usuario_insertado
 
         else:
-                # ID ingresado en la rejilla
-                id_usuario = datos_ingresados[0]
-                valor_de_comprobacion = self.comprobar_id(b_de_cod, id_usuario) # Comprobar si el id de usuario ya existe
+            # ID ingresado en la rejilla
+            id_usuario_ingresado = datos_ingresados[0]
+            valor_de_comprobacion = self.comprobar_id(b_de_cod, id_usuario_ingresado) # Comprobar si el id de usuario ya existe
+            id_usuario = id_usuario_ingresado
        
-
+        # Modifico o creo, según exista
         if valor_de_comprobacion == True:
+            # A partir del código comprobado
+            tabla_codigo_de_filtrada = tabla_de_codigo_de[tabla_de_codigo_de['HT_ID']==id_usuario_insertado]
+            id_interno_de = tabla_codigo_de_filtrada.iloc[0,0]
             # Pestaña 1: Código Único
+            # Obtengo los datos ingresados
+            id_usuario_ingresado = datos_ingresados[0]
+            id_usuario = id_usuario_ingresado
+            # Actualizo las tablas en la web
             hora_de_modificacion = str(dt.datetime.now())
             b_de_cod.cambiar_un_dato_de_una_fila(id_interno_de, 4, id_usuario) # Se actualiza código interno
             b_de_cod.cambiar_un_dato_de_una_fila(id_interno_de, 2, hora_de_modificacion) # Se actualiza código interno
@@ -474,6 +529,8 @@ class Doc_emitidos_vista(Ventana):
             b_de_hist.agregar_datos(lista_historial) # Se sube la info
 
             messagebox.showinfo("¡Excelente!", "Se ha actualizado el registro")
+
+            self.actualizar_doc_vista(id_usuario)
         
         else:
             # Pestaña 1: Código Único
@@ -495,7 +552,19 @@ class Doc_emitidos_vista(Ventana):
         
             # Confirmación de registro
             messagebox.showinfo("¡Excelente!", "Se ha ingresado un nuevo registro")  
+    
+    #----------------------------------------------------------------------
+    def actualizar_doc_vista(self, id_usuario):
 
+        texto_documento = 'Documento emitido: ' + id_usuario
+
+        lb1 = b_de.listar_datos_de_fila(id_usuario)
+        lista_para_insertar = [lb1[1],lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], 
+                                lb1[7], lb1[8], lb1[9], lb1[10], lb1[11]]
+        
+        self.desaparecer()
+        subframe = Doc_emitidos_vista(self, 650, 1100, texto_documento, nuevo=False, lista=lista_para_insertar)
+    
     #----------------------------------------------------------------------
     def busqueda_ep(self, x):
         """"""
@@ -577,5 +646,11 @@ class Doc_emitidos_vista(Ventana):
             return True
         else:
             return False
-        
+    
+    #----------------------------------------------------------------------
+    def inicio_app(self):
+        """"""
+        self.desaparecer()
+        # LargoxAncho
+        subFrame = inicio_app_OSPA(self, 400, 400, "Inicio")
 
