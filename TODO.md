@@ -23,6 +23,8 @@
 - [x] Crear método de actualización de ventana con datos modificados
 - [x] Crear pantalla de navegación
 - [x] Crear botones provisionales para facilitar navegación
+- [x] Simplificación del uso de código/id de usuario/interno
+- [ ] Replicar métodos para la clase de documentos recibidos
 
 ## vsf
 - [ ] Integrar a elemetos_de_gui
