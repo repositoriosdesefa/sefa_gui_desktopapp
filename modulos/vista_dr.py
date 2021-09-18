@@ -81,6 +81,7 @@ class inicio_app_OSPA(Ventana):
     #----------------------------------------------------------------------
     def busqueda_dr(self):
 
+
         self.desaparecer()
         # LargoxAncho
         SubFrame = busqueda_dr.Doc_recibidos_busqueda(self, 500, 1200, "Búsqueda de documentos recibidos")
@@ -105,7 +106,7 @@ class Doc_recibidos_vista(Ventana):
     """"""
     
     #----------------------------------------------------------------------
-    def __init__(self, *args, nuevo=True, lista=None):
+    def __init__(self, *args, nuevo=True, lista=None, id_doc = None):
         """Constructor"""
 
         Ventana.__init__(self, *args)
@@ -221,7 +222,7 @@ class Doc_recibidos_vista(Ventana):
             # Filtro con el vector de documentos emitidos asociados
             tabla_de_de_vinculada = tabla_de_de_id[tabla_de_de_id['ID_DE']==valor_prueba]
             # Tabla de documentos emitidos filtrada
-            tabla_de_de = tabla_de_de_vinculada.drop(['ID_DE', 'ID_DR', 'ID_EP'], axis=1)
+            tabla_de_de = tabla_de_de_vinculada.drop(['ID_DE'], axis=1)
             if len(tabla_de_de.index) > 0:
                 v1 = Vitrina_vista(self, tabla_de_de, self.ver_de, 
                                    self.eliminar_de, height=80, width=1050) 
@@ -253,7 +254,7 @@ class Doc_recibidos_vista(Ventana):
 
         # Pestaña 1: Código Único
         codigo_ht = datos_ingresados[0]
-        b_dr_cod.agregar_datos_generando_codigo(codigo_ht)
+        b_dr_cod.agregar_dato_generando_id(codigo_ht)
         
         # Pestaña 2: 
         lista_descargada_codigo = b_dr_cod.listar_datos_de_fila(codigo_ht)
@@ -279,17 +280,16 @@ class Doc_recibidos_vista(Ventana):
     #----------------------------------------------------------------------
     def ver_de(self, x):
         """"""
-        
         self.x = x
         texto_documento = 'Documento emitido: ' + x
 
-        lb1 = b_de.listar_datos_de_fila(self.x)
-        lista_para_insertar = [lb1[1],lb1[4],lb1[5], lb1[6], lb1[7], 
-                               lb1[8], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14]]
-        
+        bde = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOC_EMITIDOS_FINAL')
+        lb1 = bde.listar_datos_de_fila(self.x)
+        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], 
+                                lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], lb1[12]]
         self.desaparecer()
-        subframe = Doc_emitidos_vista(self, 650, 1100, texto_documento, nuevo=False, lista=lista_para_insertar)
-    
+        subframe = Doc_emitidos_vista(self, 600, 1100, texto_documento, nuevo=False, lista=lista_para_insertar)
+
     #----------------------------------------------------------------------
     def eliminar_de(self, x):
         """"""
@@ -323,7 +323,7 @@ class Doc_emitidos_vista(Ventana):
     """"""
     
     #----------------------------------------------------------------------
-    def __init__(self, *args, nuevo=True, lista=None):
+    def __init__(self, *args, nuevo=True, lista=None, id_doc=None):
         """Constructor"""
 
         Ventana.__init__(self, *args)
@@ -400,6 +400,7 @@ class Doc_emitidos_vista(Ventana):
 
         if self.nuevo != True: # En caso exista se inserta en las rejillas
             self.frame_rejilla.insertar_lista_de_datos(self.lista_para_insertar)
+            self.id_usuario = id_doc
 
         # 3. Frame de botón de rejilla
         f_boton = Cuadro(self)
@@ -444,16 +445,14 @@ class Doc_emitidos_vista(Ventana):
         
     #----------------------------------------------------------------------
     def generar_vitrina(self, frame_vitrina,
-                        tabla_codigo_entrada, tabla_salida, tabla_relacion, 
+                        tabla_codigo_entrada, tabla_salida, base_relacion, 
                         id_entrada, id_salida, funcion_ver, funcion_eliminar):
         """"""
-        # Uso la lista que hereda
-        lista_para_filtrar = self.lista_para_insertar
-        # Obtengo el ID del usuario
-        id_usuario = lista_para_filtrar[0]
+        # Obtengo el ID del usuario que heredo
+        id_usuario = self.id_usuario
         # Genero las tablas para el filtrado 
         tabla_de_codigo = tabla_codigo_entrada.generar_dataframe() # Tabla de códigos
-        tabla_de_relacion = tabla_relacion.generar_dataframe() # Tabla de relación
+        tabla_de_relacion = base_relacion.generar_dataframe() # Tabla de relación
         # Filtro la tabla para obtener el ID de la 
         tabla_de_codigo_filtrada = tabla_de_codigo[tabla_de_codigo['HT_ID']==id_usuario]
         id_interno = tabla_de_codigo_filtrada.iloc[0,0]
@@ -493,9 +492,8 @@ class Doc_emitidos_vista(Ventana):
         tabla_de_codigo_de = b_de_cod.generar_dataframe()
         # Guardo el ID de usuario que llega
         if self.nuevo != True:
-
             # En caso exista ID insertado en la rejilla
-            id_usuario_insertado = self.lista_para_insertar[0] # Compruebo si son iguales
+            id_usuario_insertado = self.id_usuario # Compruebo si son iguales
             valor_de_comprobacion = self.comprobar_id(b_de_cod, id_usuario_insertado)
             id_usuario = id_usuario_insertado
 
@@ -508,7 +506,7 @@ class Doc_emitidos_vista(Ventana):
         # Modifico o creo, según exista
         if valor_de_comprobacion == True:
             # A partir del código comprobado
-            tabla_codigo_de_filtrada = tabla_de_codigo_de[tabla_de_codigo_de['HT_ID']==id_usuario_insertado]
+            tabla_codigo_de_filtrada = tabla_de_codigo_de[tabla_de_codigo_de['HT_ID']==id_usuario]
             id_interno_de = tabla_codigo_de_filtrada.iloc[0,0]
             # Pestaña 1: Código Único
             # Obtengo los datos ingresados
@@ -529,47 +527,50 @@ class Doc_emitidos_vista(Ventana):
             b_de_hist.agregar_datos(lista_historial) # Se sube la info
 
             messagebox.showinfo("¡Excelente!", "Se ha actualizado el registro")
-
             self.actualizar_doc_vista(id_usuario)
         
         else:
+            # Timestamp
+            ahora = str(dt.datetime.now())
             # Pestaña 1: Código Único
-            b_de_cod.agregar_datos_generando_codigo(id_usuario)
-            # Obtengo lo recién ingresado
-            lista_descargada_codigo = b_de_cod.listar_datos_de_fila(id_usuario) # Se trae la info
+            b_de_cod.agregar_dato_generando_id(id_usuario, ahora)
+            # Obtengo el ID creado por el momento de ingreso
+            lista_descargada_codigo = b_de_cod.listar_datos_de_fila(ahora) # Se trae la info
         
             # Pestaña 2:       
             # Obtengo el ID interno
-            codigo_de = lista_descargada_codigo[0]
+            cod_interno = lista_descargada_codigo[0]
+            cod_usuario = lista_descargada_codigo[3]
             # Creo el vector a subir
-            lista_a_cargar = [codigo_de] + datos_ingresados
+            lista_a_cargar = [cod_interno] + [cod_usuario] + datos_ingresados
             b_de.agregar_datos(lista_a_cargar) # Se sube la info
 
             # Pestaña 3
-            hora_de_creacion = lista_descargada_codigo[1] # De lo creado en la pestaña 1
+            hora_de_creacion = str(ahora) # De lo creado en la pestaña 1
             lista_historial = lista_a_cargar + [hora_de_creacion] # Lo subido a la pestaña 2 + hora
             b_de_hist.agregar_datos(lista_historial) # Se sube la info
         
             # Confirmación de registro
-            messagebox.showinfo("¡Excelente!", "Se ha ingresado un nuevo registro")  
+            messagebox.showinfo("¡Excelente!", "Se ha ingresado un nuevo registro")
+            self.actualizar_doc_vista(cod_usuario) 
     
     #----------------------------------------------------------------------
     def actualizar_doc_vista(self, id_usuario):
 
-        texto_documento = 'Documento emitido: ' + id_usuario
+        texto_documento = 'Documento emitido: ' +  id_usuario
 
         lb1 = b_de.listar_datos_de_fila(id_usuario)
-        lista_para_insertar = [lb1[1],lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], 
-                                lb1[7], lb1[8], lb1[9], lb1[10], lb1[11]]
+        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], 
+                                lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], lb1[12]]
         
         self.desaparecer()
-        subframe = Doc_emitidos_vista(self, 650, 1100, texto_documento, nuevo=False, lista=lista_para_insertar)
+        subframe = Doc_emitidos_vista(self, 650, 1100, texto_documento, 
+                                        nuevo=False, lista=lista_para_insertar, id_doc = id_usuario)
     
     #----------------------------------------------------------------------
-    def busqueda_ep(self, x):
+    def busqueda_ep(self):
         """"""
-        y = x + "Búsqueda de extremo de problema"
-        print(y)
+        print("Búsqueda de extremo de problema")
 
     #----------------------------------------------------------------------
     def ver_ep(self, x):
@@ -586,9 +587,13 @@ class Doc_emitidos_vista(Ventana):
     #----------------------------------------------------------------------
     def busqueda_dr(self):
         """"""
+        # Obtengo el ID usuario
+        id_usuario = "2021-1/2018-E01-014945"
+        texto_pantalla = "Documento emitido: " + id_usuario
         self.desaparecer()
         # LargoxAncho
-        subFrame = busqueda_dr.Doc_recibidos_busqueda(self, 600, 1200, "Pantalla de búsqueda")
+        SubFrame = busqueda_dr.Doc_recibidos_busqueda(self, 500, 1200, texto_pantalla,
+                                                    nuevo=False, dato=id_usuario)
 
     #----------------------------------------------------------------------
     def ver_dr(self, id_usuario):
@@ -609,7 +614,7 @@ class Doc_emitidos_vista(Ventana):
         """"""
         # Obtengo los ID del usuario
         codigo_dr = id_usuario_dr
-        codigo_de = self.lista_para_insertar[0]
+        codigo_de = self.id_usuario
         # Genero las tablas de código 
         tabla_de_codigo_dr = b_dr_cod.generar_dataframe()
         tabla_de_codigo_de = b_de_cod.generar_dataframe()
