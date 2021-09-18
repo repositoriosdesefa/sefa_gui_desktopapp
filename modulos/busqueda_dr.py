@@ -16,10 +16,15 @@ from tkinter import messagebox
 class Doc_recibidos_busqueda(Ventana):
     """"""
     #----------------------------------------------------------------------
-    def __init__(self, *args):
+    def __init__(self, *args, nuevo=True, lista=None):
         """Constructor"""
 
         Ventana.__init__(self, *args)
+
+        # Almacenamos información heredada
+        self.nuevo = nuevo
+        if self.nuevo != True: # En caso exista
+            self.lista_para_insertar = lista
 
         b1 = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOC_RECIBIDOS_FINAL')
         self.tabla_inicial = b1.generar_dataframe()
@@ -254,8 +259,8 @@ class Doc_emitidos_busqueda(Ventana):
         )
         
         self.cde0 = Cuadro(self)
-        self.cde0.agregar_label(0,0,' ')
-        self.cde0.agregar_imagen(1,0,'Logo_OSPA.png',202,49)
+        self.cde0.agregar_label(0, 0,' ')
+        self.cde0.agregar_imagen(1, 0,'Logo_OSPA.png',202,49)
 
         self.cde1 = Cuadro(self)
         self.cde1.agregar_rejilla(self.rejilla_de)
@@ -430,7 +435,8 @@ class Doc_emitidos_busqueda(Ventana):
         lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], 
                                 lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], lb1[12]]
         self.desaparecer()
-        subframe = vista_dr.Doc_emitidos_vista(self, 600, 1100, texto_documento, nuevo=False, lista=lista_para_insertar)
+        subframe = vista_dr.Doc_emitidos_vista(self, 600, 1100, texto_documento, 
+                                                nuevo=False, lista=lista_para_insertar, id_doc=x)
 
     #----------------------------------------------------------------------
     def funcion_de_asociar_de(self, x):
