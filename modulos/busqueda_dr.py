@@ -16,7 +16,7 @@ from tkinter import messagebox
 class Doc_recibidos_busqueda(Ventana):
     """"""
     #----------------------------------------------------------------------
-    def __init__(self, *args, nuevo=True, lista=None):
+    def __init__(self, *args, nuevo=True, lista=None, id_doc = None):
         """Constructor"""
 
         Ventana.__init__(self, *args)
