@@ -27,7 +27,7 @@
 - [x] Replicar métodos para la clase de documentos recibidos
 
 ## vsf
-- [ ] Integrar a elemetos_de_gui
+- [x] Integrar a elementos_de_gui
 - [ ] Ajustar el tamaño de la fila de la vitrina
 - [ ] Cambiar el color del encabezado
 - [ ] Incorporar una imagen (de "lupa") en 'Opciones' de vitrina o Columna Adicional
