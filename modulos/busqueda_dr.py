@@ -1,17 +1,11 @@
 from tkinter.constants import X
-import pandas as pd
-import numpy as np
-from tkinter import Tk
-import gspread
-import datetime as dt
-from pyasn1.type.univ import Null
-from apoyo.elementos_de_GUI import Cuadro, Ventana
+from tkinter import messagebox
+
+from apoyo.elementos_de_GUI import Cuadro, Ventana, Vitrina_busqueda
 from apoyo.manejo_de_bases import Base_de_datos
-from apoyo.vsf import Vitrina_busqueda
 import apoyo.datos_frecuentes as dfrec
 from modulos import vista_dr
-import datetime
-from tkinter import messagebox
+
 
 id_b_ospa = '13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4'
 # 0. Tablas relacionales
@@ -40,7 +34,7 @@ b_efa = Base_de_datos(id_b_efa, 'Directorio')
 class Doc_recibidos_busqueda(Ventana):
     """"""
     #----------------------------------------------------------------------
-    def __init__(self, *args, nuevo=True, lista=None):
+    def __init__(self, *args, nuevo=True, lista=None, id_doc = None):
         """Constructor"""
 
         Ventana.__init__(self, *args)
@@ -55,6 +49,7 @@ class Doc_recibidos_busqueda(Ventana):
         self.tabla_2 = self.tabla_inicial.rename(columns={'HT_ID':'ID DOC RECIBIDO','HT_ENTRANTE':'NRO REGISTRO SIGED','COD_PROBLEMA':'CODIGO','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','APORTE_DOC':'ASUNTO'})
         self.tabla_3 = self.tabla_2.iloc[:, [1, 5, 17, 8, 12, 15, 9]]
         self.tabla_dr = self.tabla_2.iloc[0:99, [1, 5, 17, 8, 12, 15, 9]]
+
 
         self.listatipodoc = list(set(self.tabla_2['TIPO_DOC']))
         self.listadestina = list(set(self.tabla_2['REMITENTE']))
@@ -114,6 +109,7 @@ class Doc_recibidos_busqueda(Ventana):
             self.tabla_drr = self.tabla_filtrada.iloc[0:99, [1, 5, 17, 8, 12, 15, 9]]
             self.v1 = Vitrina_busqueda(self, self.tabla_drr, self.ver_dr, self.funcion_de_asociar, height=200, width=1030)
             if self.ht != "":
+
                 self.v1.Eliminar_vitrina()
                 self.tabla_filtrada3 = self.tabla_filtrada[self.tabla_filtrada['NRO REGISTRO SIGED']==self.ht]
                 self.tabla_dr2 = self.tabla_filtrada3.iloc[:, [1, 5, 17, 8, 12, 15, 9]]
@@ -206,11 +202,12 @@ class Doc_recibidos_busqueda(Ventana):
 
         b1 = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOC_RECIBIDOS_FINAL')
         lb1 = b1.listar_datos_de_fila(self.x)
-        lista_para_insertar = [lb1[1],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], 
-                              lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14]]
+        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], 
+                                lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14]]
         
         self.desaparecer()
-        subframe = vista_dr.Doc_recibidos_vista(self, 600, 1100, texto_documento, nuevo=False, lista=lista_para_insertar)
+        subframe = vista_dr.Doc_recibidos_vista(self, 650, 1150, texto_documento, nuevo=False, 
+                                                lista=lista_para_insertar, id_doc = x)
 
     #----------------------------------------------------------------------
     def funcion_de_asociar(self, x):
@@ -333,8 +330,8 @@ class Doc_emitidos_busqueda(Ventana):
         )
         
         self.cde0 = Cuadro(self)
-        self.cde0.agregar_label(0,0,' ')
-        self.cde0.agregar_imagen(1,0,'Logo_OSPA.png',202,49)
+        self.cde0.agregar_label(0, 0,' ')
+        self.cde0.agregar_imagen(1, 0,'Logo_OSPA.png',202,49)
 
         self.cde1 = Cuadro(self)
         self.cde1.agregar_rejilla(self.rejilla_de)
@@ -675,10 +672,11 @@ class Doc_emitidos_busqueda(Ventana):
 
         bde = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOC_EMITIDOS_FINAL')
         lb1 = bde.listar_datos_de_fila(self.x)
-        lista_para_insertar = [lb1[1],lb1[3],lb1[4], lb1[5], lb1[6], 
-                               lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], lb1[12]]
+        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], 
+                                lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], lb1[12]]
         self.desaparecer()
-        subframe = vista_dr.Doc_emitidos_vista(self, 600, 1100, texto_documento, nuevo=False, lista=lista_para_insertar)
+        subframe = vista_dr.Doc_emitidos_vista(self, 650, 1150, texto_documento, 
+                                                nuevo=False, lista=lista_para_insertar, id_doc=x)
 
     #----------------------------------------------------------------------
     def funcion_de_asociar_de(self, x):
