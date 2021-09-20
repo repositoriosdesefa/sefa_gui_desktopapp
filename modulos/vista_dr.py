@@ -1,13 +1,10 @@
 import datetime as dt
-from PIL.Image import ImagePointHandler
-import pandas as pd
-from tkinter import Tk
-from modulos import busqueda_dr
-import gspread
-from apoyo.elementos_de_GUI import Cuadro, Ventana, CustomHovertip
-from apoyo.manejo_de_bases import Base_de_datos
-from apoyo.vsf import Vitrina_vista
+
 from tkinter import messagebox
+
+from modulos import busqueda_dr
+from apoyo.elementos_de_GUI import Cuadro, Ventana, Hovertip_Sefa, Vitrina_vista 
+from apoyo.manejo_de_bases import Base_de_datos
 import apoyo.datos_frecuentes as dfrec
 
 # Prueba rama

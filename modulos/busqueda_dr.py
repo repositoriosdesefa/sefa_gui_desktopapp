@@ -1,17 +1,11 @@
 from tkinter.constants import X
-import pandas as pd
-import numpy as np
-from tkinter import Tk
-import gspread
+from tkinter import messagebox
 
-from pyasn1.type.univ import Null
-from apoyo.elementos_de_GUI import Cuadro, Ventana
+from apoyo.elementos_de_GUI import Cuadro, Ventana, Vitrina_busqueda
 from apoyo.manejo_de_bases import Base_de_datos
-from apoyo.vsf import Vitrina_busqueda
 import apoyo.datos_frecuentes as dfrec
 from modulos import vista_dr
-import datetime
-from tkinter import messagebox
+
 
 class Doc_recibidos_busqueda(Ventana):
     """"""
