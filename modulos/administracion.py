@@ -1,11 +1,13 @@
 import datetime as dt
-from random import choice
 import pandas as pd
+
+from random import choice
 from tkinter import Tk, Frame
+
 from apoyo.elementos_de_GUI import Cuadro, Ventana
 from apoyo.manejo_de_bases import Base_de_datos, Correo_electronico
 from modulos.vista_dr import Doc_recibidos_vista
-from apoyo.vsf import Vitrina
+
 import apoyo.datos_frecuentes as dfrec
 
 class Ingresar_contrasena_de_adminitrador(Ventana):
