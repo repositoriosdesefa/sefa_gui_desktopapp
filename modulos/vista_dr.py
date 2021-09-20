@@ -308,7 +308,7 @@ class Doc_recibidos_vista(Ventana):
             
             # Pestaña 3
             lista_historial = lista_a_sobreescribir + [hora_de_modificacion] # Lo subido a la pestaña 2 + hora
-            b_de_hist.agregar_datos(lista_historial) # Se sube la info
+            b_dr_hist.agregar_datos(lista_historial) # Se sube la info
 
             messagebox.showinfo("¡Excelente!", "Se ha actualizado el registro")
             self.actualizar_vista_dr(nuevo_cod_usuario_dr)
