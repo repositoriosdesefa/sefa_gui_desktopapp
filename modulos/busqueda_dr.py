@@ -1,5 +1,6 @@
 from tkinter.constants import X
 from tkinter import messagebox
+import datetime as dt
 
 from apoyo.elementos_de_GUI import Cuadro, Ventana, Vitrina_busqueda
 from apoyo.manejo_de_bases import Base_de_datos
@@ -43,6 +44,7 @@ class Doc_recibidos_busqueda(Ventana):
         self.nuevo = nuevo
         if self.nuevo != True: #en caso exista
             self.id_usuario = lista
+            self.cod_doc_de = id_doc
 
         b1 = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOC_RECIBIDOS_FINAL')
         self.tabla_inicial = b1.generar_dataframe()
@@ -220,7 +222,7 @@ class Doc_recibidos_busqueda(Ventana):
         self.IDDR_FINAL = self.IDDR[0]
 
         #OBTENER EL ID USUARIO DEL DOCUMENTO EMITIDO
-        codigode = self.id_usuario
+        codigode = self.cod_doc_de
         # OBTENER EL ID INTERNO DEL DOCUMENTO EMITIDO
         tabla_de_codigo_de = b_de.generar_dataframe()
         tabla_codigo_de_filtrada = tabla_de_codigo_de[tabla_de_codigo_de.HT_ID == codigode]
@@ -282,7 +284,7 @@ class Doc_emitidos_busqueda(Ventana):
     """"""
     
     #----------------------------------------------------------------------
-    def __init__(self, *args, nuevo=True, lista=None):
+    def __init__(self, *args, nuevo=True, lista=None, id_doc = None):
         """Constructor"""
 
         Ventana.__init__(self, *args)
@@ -291,6 +293,7 @@ class Doc_emitidos_busqueda(Ventana):
         self.nuevo = nuevo
         if self.nuevo != True: #en caso exista
             self.id_usuario = lista
+            self.cod_doc_dr = id_doc
 
         bde = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOC_EMITIDOS_FINAL')
         self.de = bde.generar_dataframe()
@@ -689,15 +692,14 @@ class Doc_emitidos_busqueda(Ventana):
         self.IDDE_FINAL = self.IDDE[0]
 
         #OBTENER EL ID USUARIO DEL DOCUMENTO RECIBIDO
-        codigodr = self.id_usuario
-
+        codigodr = self.cod_doc_dr
         # OBTENER EL ID INTERNO DEL DOCUMENTO RECIBIDO
-        tabla_de_codigo_dr = b_de.generar_dataframe()
+        tabla_de_codigo_dr = b_dr.generar_dataframe()
         tabla_codigo_de_filtrada = tabla_de_codigo_dr[tabla_de_codigo_dr.HT_ID == codigodr]
         id_interno_dr = tabla_codigo_de_filtrada.iloc[0,0]
 
         # Definición de ID de relación
-        id_relacion_doc = self.IDDE_FINAL + "/" + id_interno_dr
+        id_relacion_doc = id_interno_dr + "/" +  self.IDDE_FINAL
 
         # BUSCAR COINCIDENCIAS
         valor_repetido = self.comprobar_id(base_relacion_docs, id_relacion_doc)
@@ -716,9 +718,9 @@ class Doc_emitidos_busqueda(Ventana):
             b0 = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'RELACION_DOCS')
 
             # Pestaña 1: Código Único
-            datos_insertar = [id_relacion_doc,self.IDDE_FINAL,id_interno_dr,'ACTIVO',hora_de_modificacion]
+            datos_insertar = [id_relacion_doc,id_interno_dr, self.IDDE_FINAL,'ACTIVO',hora_de_modificacion]
             b0.agregar_datos(datos_insertar)
-            datos_a_cargar_hist = [id_relacion_doc,self.IDDE_FINAL,id_interno_dr,'ACTIVO',hora_de_modificacion,hora_de_modificacion]
+            datos_a_cargar_hist = [id_relacion_doc, id_interno_dr, self.IDDE_FINAL,'ACTIVO',hora_de_modificacion,hora_de_modificacion]
             base_relacion_d_hist.agregar_datos(datos_a_cargar_hist)
             messagebox.showinfo("¡Excelente!", "El registro ha sido asociado con éxito")
         else:
