@@ -134,23 +134,23 @@ class Doc_recibidos_vista(Ventana):
             ('L', 2, 2, 'N° de documento'),
             ('E', 2, 3),
 
-            ('L', 3, 0, 'Remitente'),
-            ('CX', 3, 1, lista_efa),
+            ('L', 3, 0, 'Asunto'),
+            ('EL', 3, 1, 112),
 
-            ('L', 3, 2, 'Especialista asignado'),
-            ('CX', 3, 3, especialista),
+            ('L', 4, 0, 'Remitente'),
+            ('CX', 4, 1, lista_efa),
 
-            ('L', 4, 0, 'Asunto'),
-            ('EL', 4, 1, 112),
+            ('L', 4, 2, '¿Es respuesta?'),
+            ('CX', 4, 3, si_no),
 
-            ('L', 5, 0, 'Aporte del documento'),
-            ('ST', 5, 1),
+            ('L', 5, 0, 'Indicación'),
+            ('CX', 5, 1, tipo_indicacion),
 
-            ('L', 6, 0, 'Indicación'),
-            ('CX', 6, 1, tipo_indicacion),
+            ('L', 5, 2, 'Especialista asignado'),
+            ('CX', 5, 3, especialista),
 
-            ('L', 6, 2, '¿Es respuesta?'),
-            ('CX', 6, 3, si_no),
+            ('L', 6, 0, 'Aporte del documento'),
+            ('ST', 6, 1),
 
             ('L', 7, 0, 'Respuesta'),
             ('CX', 7, 1, tipo_respuesta)
@@ -274,11 +274,11 @@ class Doc_recibidos_vista(Ventana):
         # Guardo el código de usuario que llega
         if self.nuevo != True:
             # En caso exista ID insertado en la rejilla
-            cod_usuario_dr = self.cod_usuario_dr # Compruebo si son iguales
+            cod_usuario_dr = self.cod_usuario_dr
             valor_de_comprobacion = self.comprobar_id(b_dr_cod, cod_usuario_dr)
 
         else:
-            # Comprobación de que no se ingresa un ID de usuario repetido
+            # Comprobación de que no se ingresa un código de usuario repetido
             ht = datos_ingresados[0]
             valor_de_comprobacion = self.comprobar_id(b_dr_cod, ht) # Comprobar si el id de usuario ya existe
        
