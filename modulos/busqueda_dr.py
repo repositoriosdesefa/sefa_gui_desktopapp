@@ -23,8 +23,8 @@ class Doc_recibidos_busqueda(Ventana):
         b1 = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOC_RECIBIDOS_FINAL')
         self.tabla_inicial = b1.generar_dataframe()
         self.tabla_2 = self.tabla_inicial.rename(columns={'HT_ID':'NRO DOC','HT_ENTRANTE':'NRO REGISTRO SIGED','COD_PROBLEMA':'CODIGO','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','APORTE_DOC':'ASUNTO'})
-        self.tabla_3 = self.tabla_2.iloc[:, [1, 2, 5, 8, 12, 15, 10]]
-        self.tabla_dr = self.tabla_2.iloc[0:99, [1, 2, 5, 8, 12, 15, 10]]
+        self.tabla_3 = self.tabla_2.iloc[:, [1, 2, 5, 9, 11, 15, 8]]
+        self.tabla_dr = self.tabla_2.iloc[0:99,[1, 2, 5, 9, 11, 15, 8]]
         #self.tabla_dr = self.tabla_dr.rename(columns={'COD_PROBLEMA':'CODIGO','HT_ENTRANTE':'NRO REGISTRO SIGED','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.'})
 
         self.listatipodoc = list(set(self.tabla_2['TIPO_DOC']))
@@ -83,7 +83,7 @@ class Doc_recibidos_busqueda(Ventana):
         if self.tipodoc != "":
             self.v1.Eliminar_vitrina()
             self.tabla_filtrada = self.tabla_2[self.tabla_2['TIPO_DOC']==self.tipodoc]
-            self.tabla_dr = self.tabla_filtrada.iloc[:, [1, 2, 5, 8, 12, 15, 10]]
+            self.tabla_dr = self.tabla_filtrada.iloc[:,[1, 2, 5, 9, 11, 15, 8]]
             self.v1 = Vitrina_busqueda(self, self.tabla_dr, self.Buscar, self.funcion_de_asociar, height=200, width=1030)
             if self.remitente != "":
                 self.v1.Eliminar_vitrina()
