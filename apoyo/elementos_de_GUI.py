@@ -295,7 +295,7 @@ class Cuadro(Frame):
         self.combo = ttk.Combobox(self.z, state="normal", width=39)
         self.combo.grid(row = self.y, column = self.x, pady=4, padx=8)
         self.combo["values"] = self.listadesplegable
-        self.combo.set('')
+        self.combo.set(' ')
         self.lista_de_objetos.append((self.combo))
         self.lista_de_datos.append((self.combo))
 
@@ -837,8 +837,8 @@ class Vitrina_vista(Frame):
             # Valores de tabla
             tabla_valor = pd.DataFrame(elementos_valores)
             for i,row in tabla_valor.iterrows():
-                if len(row[1]) > 35:
-                    texto_completo = row[1]
+                if len(str(row[1])) > 35:
+                    texto_completo = str(row[1])
                     texto_recortado = texto_completo[0:35]
                     texto_tabla_vista = texto_recortado + "..."
                     valor = Label(
