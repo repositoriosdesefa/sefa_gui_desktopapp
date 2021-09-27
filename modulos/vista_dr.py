@@ -360,7 +360,7 @@ class Doc_recibidos_vista(Ventana):
         if self.nuevo != True:
             # En caso exista un código insertado en la rejilla
             cod_usuario_dr = self.cod_usuario_dr 
-            texto_pantalla = "Documento recibido que se asociará: " + cod_usuario_dr
+            texto_pantalla = "Documento emitido que se asociará: " + cod_usuario_dr
             # Genero la nueva ventana
             self.desaparecer()
             SubFrame = busqueda_dr.Doc_emitidos_busqueda(self, 500, 1200, texto_pantalla,
