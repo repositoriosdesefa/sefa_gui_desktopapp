@@ -347,8 +347,8 @@ class Doc_recibidos_vista(Ventana):
         texto_documento = 'Documento recibido: ' +  id_usuario
 
         lb1 = b_dr.listar_datos_de_fila(id_usuario)
-        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], 
-                                lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], lb1[12]]
+        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], 
+                                lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14]]
         
         self.desaparecer()
         subframe = Doc_recibidos_vista(self, 650, 1150, texto_documento, 
@@ -363,7 +363,7 @@ class Doc_recibidos_vista(Ventana):
             texto_pantalla = "Documento recibido que se asociará: " + cod_usuario_dr
             # Genero la nueva ventana
             self.desaparecer()
-            SubFrame = busqueda_dr.Doc_recibidos_busqueda(self, 500, 1200, texto_pantalla,
+            SubFrame = busqueda_dr.Doc_emitidos_busqueda(self, 500, 1200, texto_pantalla,
                                                            nuevo=False, id_doc = cod_usuario_dr)
 
         else:
@@ -371,7 +371,7 @@ class Doc_recibidos_vista(Ventana):
             texto_pantalla = "Búsqueda de documentos emitidos"
             # Genero la nueva ventana
             self.desaparecer()
-            SubFrame = busqueda_dr.Doc_recibidos_busqueda(self, 500, 1200, texto_pantalla)
+            SubFrame = busqueda_dr.Doc_emitidos_busqueda(self, 500, 1200, texto_pantalla)
 
 
     #----------------------------------------------------------------------
