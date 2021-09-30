@@ -46,11 +46,10 @@ class Doc_recibidos_busqueda(Ventana):
             self.id_usuario = lista
             self.cod_doc_de = id_doc
 
-        b1 = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOC_RECIBIDOS_FINAL')
-        self.tabla_inicial = b1.generar_dataframe()
+        self.tabla_inicial = b_dr.generar_dataframe()
         self.tabla_2 = self.tabla_inicial.rename(columns={'HT_ID':'ID DOC RECIBIDO','HT_ENTRANTE':'NRO REGISTRO SIGED','COD_PROBLEMA':'CODIGO','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','APORTE_DOC':'ASUNTO'})
-        self.tabla_3 = self.tabla_2.iloc[:, [1, 5, 17, 8, 12, 15, 9]]
-        self.tabla_dr = self.tabla_2.iloc[0:99, [1, 5, 17, 8, 12, 15, 9]]
+        self.tabla_3 = self.tabla_2.iloc[:, [1, 5, 17, 9, 11, 15, 8]]
+        self.tabla_dr = self.tabla_2.iloc[0:99, [1, 5, 17, 9, 11, 15, 8]]
 
 
         self.listatipodoc = list(set(self.tabla_2['TIPO_DOC']))
@@ -82,7 +81,8 @@ class Doc_recibidos_busqueda(Ventana):
 
         rejilla_b = (
             ('B', 5, 4, 'Buscar', self.Buscar),
-            ('B', 5, 5, 'Limpiar', self.limpiar)
+            ('B', 5, 5, 'Limpiar', self.limpiar),
+            ('B', 5, 6, 'Volver', self.volver)
         )
         
 
@@ -105,84 +105,86 @@ class Doc_recibidos_busqueda(Ventana):
         self.codigo = self.listas_filtro[2]
         self.remitente = self.listas_filtro[3]
 
-        if self.tipodoc != "":
+        if self.tipodoc != "" or self.tipodoc != " ":
             self.v1.Eliminar_vitrina()
             self.tabla_filtrada = self.tabla_2[self.tabla_2['TIPO_DOC']==self.tipodoc]
-            self.tabla_drr = self.tabla_filtrada.iloc[0:99, [1, 5, 17, 8, 12, 15, 9]]
+            self.tabla_drr = self.tabla_filtrada.iloc[0:99, [1, 5, 17, 9, 11, 15, 8]]
             self.v1 = Vitrina_busqueda(self, self.tabla_drr, self.ver_dr, self.funcion_de_asociar, height=200, width=1030)
-            if self.ht != "":
-
+            if self.ht != "" or self.ht != " ":
                 self.v1.Eliminar_vitrina()
                 self.tabla_filtrada3 = self.tabla_filtrada[self.tabla_filtrada['NRO REGISTRO SIGED']==self.ht]
-                self.tabla_dr2 = self.tabla_filtrada3.iloc[:, [1, 5, 17, 8, 12, 15, 9]]
+                self.tabla_dr2 = self.tabla_filtrada3.iloc[:, [1, 5, 17, 9, 11, 15, 8]]
                 self.v1 = Vitrina_busqueda(self, self.tabla_dr2, self.ver_dr, self.funcion_de_asociar, height=200, width=1030)
-                if self.remitente != "":
+                if self.remitente != "" or self.remitente != " ":
                     self.v1.Eliminar_vitrina()
                     self.tabla_filtrada2 = self.tabla_dr2[self.tabla_dr2['REMITENTE']==self.remitente]
                     self.v1 = Vitrina_busqueda(self, self.tabla_filtrada2, self.ver_dr, self.funcion_de_asociar, height=200, width=1030)
-                    if self.codigo != "":
+                    if self.codigo != "" or self.codigo != " ":
                         self.v1.Eliminar_vitrina()
                         self.tabla_filtrada4 = self.tabla_filtrada2[self.tabla_filtrada2['CODIGO']==self.codigo]
                         self.v1 = Vitrina_busqueda(self, self.tabla_filtrada4, self.ver_dr, self.funcion_de_asociar, height=200, width=1030)
                     
                 else:
-                    if self.codigo != "":
+                    if self.codigo != "" or self.codigo != " ":
                         self.v1.Eliminar_vitrina()
                         self.tabla_filtrada2 = self.tabla_dr2[self.tabla_dr2['CODIGO']==self.codigo]
                         self.v1 = Vitrina_busqueda(self, self.tabla_filtrada2, self.ver_dr, self.funcion_de_asociar, height=200, width=1030)
                   
             else:
-                if self.remitente != "":
+                if self.remitente != "" or self.remitente != " ":
                     self.v1.Eliminar_vitrina()
                     self.tabla_filtrada3 = self.tabla_filtrada[self.tabla_filtrada['REMITENTE']==self.remitente]
-                    self.v1 = Vitrina_busqueda(self, self.tabla_filtrada3, self.ver_dr, self.funcion_de_asociar, height=200, width=1030)
-                    if self.codigo != "":
+                    self.tabla_filtrada33 = self.tabla_filtrada3.iloc[:, [1, 5, 17, 9, 11, 15, 8]]
+                    self.v1 = Vitrina_busqueda(self, self.tabla_filtrada33, self.ver_dr, self.funcion_de_asociar, height=200, width=1030)
+                    if self.codigo != "" or self.codigo != " ":
                         self.v1.Eliminar_vitrina()
-                        self.tabla_filtrada4 = self.tabla_filtrada3[self.tabla_filtrada3['CODIGO']==self.codigo]
+                        self.tabla_filtrada4 = self.tabla_filtrada33[self.tabla_filtrada33['CODIGO']==self.codigo]
                         self.v1 = Vitrina_busqueda(self, self.tabla_filtrada4, self.ver_dr, self.funcion_de_asociar, height=200, width=1030)
                 else:
-                    if self.codigo != "":
+                    if self.codigo != "" or self.codigo != " ":
                         self.v1.Eliminar_vitrina()
                         self.tabla_filtrada3 = self.tabla_filtrada[self.tabla_filtrada['CODIGO']==self.codigo]
-                        self.v1 = Vitrina_busqueda(self, self.tabla_filtrada3, self.ver_dr, self.funcion_de_asociar, height=200, width=1030)
+                        self.tabla_filtrada33 = self.tabla_filtrada3.iloc[:, [1, 5, 17, 9, 11, 15, 8]]
+                        self.v1 = Vitrina_busqueda(self, self.tabla_filtrada33, self.ver_dr, self.funcion_de_asociar, height=200, width=1030)
                    
         
         else:
-            if self.ht != "":
+            if self.ht != "" or self.ht!= " ":
                 self.v1.Eliminar_vitrina()
                 self.tabla_i = self.tabla_2[self.tabla_2['NRO REGISTRO SIGED']==self.ht]
-                self.tabla_drr = self.tabla_i.iloc[:, [1, 5, 17, 8, 12, 15, 9]]
+                self.tabla_drr = self.tabla_i.iloc[:, [1, 5, 17, 9, 11, 15, 8]]
                 self.v1 = Vitrina_busqueda(self, self.tabla_drr, self.ver_dr, self.funcion_de_asociar, height=200, width=1030)
-                if self.remitente != "":
+                if self.remitente != "" or self.remitente!= " ":
                     self.v1.Eliminar_vitrina()
-                    self.tabla_filtrada2 = self.tabla_dr[self.tabla_dr['REMITENTE']==self.remitente]
+                    self.tabla_filtrada2 = self.tabla_drr[self.tabla_drr['REMITENTE']==self.remitente]
                     self.v1 = Vitrina_busqueda(self, self.tabla_filtrada2, self.ver_dr, self.funcion_de_asociar, height=200, width=1030)
-                    if self.codigo != "":
+                    if self.codigo != "" or self.codigo!= " ":
                         self.v1.Eliminar_vitrina()
                         self.tabla_filtrada3 = self.tabla_filtrada2[self.tabla_filtrada2['CODIGO']==self.codigo]
                         self.v1 = Vitrina_busqueda(self, self.tabla_filtrada3, self.ver_dr, self.funcion_de_asociar, height=200, width=1030)
                 else:
-                    if self.codigo != "":
+                    if self.codigo != "" or self.codigo!= " ":
                         self.v1.Eliminar_vitrina()
                         self.tabla_filtrada2 = self.tabla_drr[self.tabla_drr['CODIGO']==self.codigo]
                         self.v1 = Vitrina_busqueda(self, self.tabla_filtrada2, self.ver_dr, self.funcion_de_asociar, height=200, width=1030)
               
             else:
-                if self.remitente != "":
+                if self.remitente != "" or self.remitente!= " ":
                     self.v1.Eliminar_vitrina()
                     self.tabla_filtrada = self.tabla_2[self.tabla_2['REMITENTE']==self.remitente]
-                    self.tabla_drr = self.tabla_filtrada.iloc[0:99, [1, 5, 17, 8, 12, 15, 9]]
+                    self.tabla_drr = self.tabla_filtrada.iloc[0:99, [1, 5, 17, 9, 11, 15, 8]]
                     self.v1 = Vitrina_busqueda(self, self.tabla_drr, self.ver_dr, self.funcion_de_asociar, height=200, width=1030)
-                    if self.codigo != "":
+                    if self.codigo != "" or self.codigo!= " ":
                         self.v1.Eliminar_vitrina()
-                        self.tabla_filtrada2 = self.tabla_dr[self.tabla_dr['CODIGO']==self.codigo]
-                        self.v1 = Vitrina_busqueda(self, self.tabla_filtrada2, self.ver_dr, self.funcion_de_asociar, height=200, width=1030)
+                        self.tabla_filtrada2 = self.tabla_filtrada[self.tabla_filtrada['CODIGO']==self.codigo]
+                        self.tabla_filtrada22 = self.tabla_filtrada2.iloc[:, [1, 5, 17, 9, 11, 15, 8]]
+                        self.v1 = Vitrina_busqueda(self, self.tabla_filtrada22, self.ver_dr, self.funcion_de_asociar, height=200, width=1030)
   
                 else:
-                    if self.codigo != "":
+                    if self.codigo != "" or self.codigo!= " ":
                         self.v1.Eliminar_vitrina()
                         self.tabla_filtrada = self.tabla_2[self.tabla_2['CODIGO']==self.codigo]
-                        self.tabla_drr = self.tabla_filtrada.iloc[0:99, [1, 5, 17, 8, 12, 15, 9]]
+                        self.tabla_drr = self.tabla_filtrada.iloc[0:99, [1, 5, 17, 9, 11, 15, 8]]
                         self.v1 = Vitrina_busqueda(self, self.tabla_drr, self.ver_dr, self.funcion_de_asociar, height=200, width=1030)
                     else:
                         self.v1.Eliminar_vitrina()
@@ -195,7 +197,11 @@ class Doc_recibidos_busqueda(Ventana):
         
         self.v1.Eliminar_vitrina()
 
-
+    #----------------------------------------------------------------------
+    def volver(self):
+        """"""
+        self.desaparecer()
+        self.ventana_anterior.aparecer()
     #----------------------------------------------------------------------
     def ver_dr(self, x):
         """"""
@@ -295,12 +301,11 @@ class Doc_emitidos_busqueda(Ventana):
             self.id_usuario = lista
             self.cod_doc_dr = id_doc
 
-        bde = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOC_EMITIDOS_FINAL')
-        self.de = bde.generar_dataframe()
+        self.de = b_de.generar_dataframe()
         self.tabla_de2 = self.de.rename(columns={'HT_ID':'ID DOC EMITIDO','COD_PROBLEMA':'CODIGO','HT_SALIDA':'NRO REGISTRO SIGED',
         'NUM_DOC':'NRO DOCUMENTO','ESTADO_DOCE':'ESTADO','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','DETALLE_REQUERIMIENTO':'DETALLE'})
-        self.tabla_de3 = self.tabla_de2.iloc[:, [1, 18, 8, 7, 13, 16, 14]]
-        self.tabla_de4 = self.tabla_de2.iloc[0:99, [1, 18, 8, 7, 13, 16, 14]]
+        self.tabla_de3 = self.tabla_de2.iloc[:, [1, 18, 8, 7, 13, 16, 10]]
+        self.tabla_de4 = self.tabla_de2.iloc[0:99, [1, 18, 8, 7, 13, 16, 10]]
         #self.tabla_dr = self.tabla_dr.rename(columns={'COD_PROBLEMA':'CODIGO','HT_ENTRANTE':'NRO REGISTRO SIGED','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.'})
 
         self.listacategoria = list(set(self.tabla_de2['CATEGORIA']))
@@ -341,7 +346,8 @@ class Doc_emitidos_busqueda(Ventana):
 
         rejilla_bde = (
             ('B', 5, 4, 'Buscar', self.Buscar_de),
-            ('B', 5, 5, 'Limpiar', self.limpiar_de)
+            ('B', 5, 5, 'Limpiar', self.limpiar_de),
+            ('B', 5, 6, 'Volver', self.volver)
         )
         
 
@@ -368,16 +374,15 @@ class Doc_emitidos_busqueda(Ventana):
         if self.deht != "":
             self.vde1.Eliminar_vitrina()
             self.tabla_filtradade = self.tabla_de2[self.tabla_de2['NRO REGISTRO SIGED']==self.deht]
-            self.tabla_de4 = self.tabla_filtradade.iloc[:, [1, 18, 8, 7, 13, 16, 14]]
+            self.tabla_de4 = self.tabla_filtradade.iloc[:, [1, 18, 8, 7, 13, 16, 10]]
             self.vde1 = Vitrina_busqueda(self, self.tabla_de4, self.ver_de, self.funcion_de_asociar_de, height=200, width=1030)
             if self.detipodoc != "":
                 self.vde1.Eliminar_vitrina()
-                self.tabla_filtradade2 = self.tabla_filtradade[self.tabla_filtradade['TIPO_DOC']==self.detipodoc]
-                self.tabla_de5 = self.tabla_filtradade2.iloc[:, [1, 18, 8, 7, 13, 16, 14]]
-                self.vde1 = Vitrina_busqueda(self, self.tabla_de5, self.ver_de, self.funcion_de_asociar_de, height=200, width=1030)
+                self.tabla_filtradade2 = self.tabla_de4[self.tabla_de4['TIPO_DOC']==self.detipodoc]
+                self.vde1 = Vitrina_busqueda(self, self.tabla_filtradade2, self.ver_de, self.funcion_de_asociar_de, height=200, width=1030)
                 if self.decate != "":
                     self.vde1.Eliminar_vitrina()
-                    self.tabla_de6 = self.tabla_de5[self.tabla_de5['CATEGORIA']==self.decate]
+                    self.tabla_de6 = self.tabla_filtradade2[self.tabla_filtradade2['CATEGORIA']==self.decate]
                     self.vde1 = Vitrina_busqueda(self, self.tabla_de6, self.ver_de, self.funcion_de_asociar_de, height=200, width=1030)
                     if self.dedestin != "":
                         self.vde1.Eliminar_vitrina()
@@ -446,7 +451,7 @@ class Doc_emitidos_busqueda(Ventana):
                 if self.decate != "":
                     self.vde1.Eliminar_vitrina()
                     self.tabla_filtradade2 = self.tabla_filtradade[self.tabla_filtradade['CATEGORIA']==self.decate]
-                    self.tabla_de5 = self.tabla_filtradade2.iloc[:, [1, 18, 2, 7, 6, 13, 16]]
+                    self.tabla_de5 = self.tabla_filtradade2.iloc[:, [1, 18, 8, 7, 13, 16, 10]]
                     self.vde1 = Vitrina_busqueda(self, self.tabla_de5, self.ver_de, self.funcion_de_asociar_de, height=200, width=1030)
                     if self.dedestin != "":
                         self.vde1.Eliminar_vitrina()
@@ -483,7 +488,7 @@ class Doc_emitidos_busqueda(Ventana):
                     if self.dedestin != "":
                         self.vde1.Eliminar_vitrina()
                         self.tabla_filtradade2 = self.tabla_filtradade[self.tabla_filtradade['DESTINATARIO']==self.dedestin]
-                        self.tabla_de5 = self.tabla_filtradade2.iloc[:, [1, 18, 8, 7, 13, 16, 14]]
+                        self.tabla_de5 = self.tabla_filtradade2.iloc[:, [1, 18, 8, 7, 13, 16, 10]]
                         self.vde1 = Vitrina_busqueda(self, self.tabla_de5, self.ver_de, self.funcion_de_asociar_de, height=200, width=1030)
                         if self.decodigo != "":
                             self.vde1.Eliminar_vitrina()
@@ -502,7 +507,7 @@ class Doc_emitidos_busqueda(Ventana):
                         if self.decodigo != "":
                             self.vde1.Eliminar_vitrina()
                             self.tabla_filtradade2 = self.tabla_filtradade[self.tabla_filtradade['CODIGO']==self.decodigo]
-                            self.tabla_de5 = self.tabla_filtradade2.iloc[:, [1, 18, 8, 7, 13, 16, 14]]
+                            self.tabla_de5 = self.tabla_filtradade2.iloc[:, [1, 18, 8, 7, 13, 16, 10]]
                             self.vde1 = Vitrina_busqueda(self, self.tabla_de5, self.ver_de, self.funcion_de_asociar_de, height=200, width=1030)
                             if self.dedoc != "":
                                 self.vde1.Eliminar_vitrina()
@@ -512,18 +517,18 @@ class Doc_emitidos_busqueda(Ventana):
                             if self.dedoc != "":
                                 self.vde1.Eliminar_vitrina()
                                 self.tabla_filtradade2 = self.tabla_filtradade[self.tabla_filtradade['NRO DOCUMENTO']==self.dedoc]
-                                self.tabla_de5 = self.tabla_filtradade2.iloc[:, [1, 18, 8, 7, 13, 16, 14]]
+                                self.tabla_de5 = self.tabla_filtradade2.iloc[:, [1, 18, 8, 7, 13, 16, 10]]
                                 self.vde1 = Vitrina_busqueda(self, self.tabla_de5, self.ver_de, self.funcion_de_asociar_de, height=200, width=1030)
         else:
             if self.detipodoc != "":
                 self.vde1.Eliminar_vitrina()
                 self.tabla_filtradade = self.tabla_de2[self.tabla_de2['TIPO_DOC']==self.detipodoc]
-                self.tabla_de4 = self.tabla_filtradade.iloc[:, [1, 18, 8, 7, 13, 16, 14]]
+                self.tabla_de4 = self.tabla_filtradade.iloc[:, [1, 18, 8, 7, 13, 16, 10]]
                 self.vde1 = Vitrina_busqueda(self, self.tabla_de4, self.ver_de, self.funcion_de_asociar_de, height=200, width=1030)
                 if self.decate != "":
                     self.vde1.Eliminar_vitrina()
                     self.tabla_deI = self.tabla_filtradade[self.tabla_filtradade['CATEGORIA']==self.decate]
-                    self.tabla_de5 = self.tabla_deI.iloc[:, [1, 18, 8, 7, 13, 16, 14]]
+                    self.tabla_de5 = self.tabla_deI.iloc[:, [1, 18, 8, 7, 13, 16, 10]]
                     self.vde1 = Vitrina_busqueda(self, self.tabla_de5, self.ver_de, self.funcion_de_asociar_de, height=200, width=1030)
                     if self.dedestin != "":
                         self.vde1.Eliminar_vitrina()
@@ -593,7 +598,7 @@ class Doc_emitidos_busqueda(Ventana):
                 if self.decate != "":
                     self.vde1.Eliminar_vitrina()
                     self.tabla_filtradade = self.tabla_de2[self.tabla_de2['CATEGORIA']==self.decate]
-                    self.tabla_de4 = self.tabla_filtradade.iloc[:, [1, 18, 8, 7, 13, 16, 14]]
+                    self.tabla_de4 = self.tabla_filtradade.iloc[0:99, [1, 18, 8, 7, 13, 16, 14]]
                     self.vde1 = Vitrina_busqueda(self, self.tabla_de4, self.ver_de, self.funcion_de_asociar_de, height=200, width=1030)
                     if self.dedestin != "":
                         self.vde1.Eliminar_vitrina()
@@ -630,7 +635,7 @@ class Doc_emitidos_busqueda(Ventana):
                     if self.dedestin != "":
                         self.vde1.Eliminar_vitrina()
                         self.tabla_filtradade = self.tabla_de2[self.tabla_de2['DESTINATARIO']==self.dedestin]
-                        self.tabla_de4 = self.tabla_filtradade.iloc[:, [1, 18, 8, 7, 13, 16, 14]]
+                        self.tabla_de4 = self.tabla_filtradade.iloc[:, [1, 18, 8, 7, 13, 16, 10]]
                         self.vde1 = Vitrina_busqueda(self, self.tabla_de4, self.ver_de, self.funcion_de_asociar_de, height=200, width=1030)
                         if self.decodigo != "":
                             self.vde1.Eliminar_vitrina()
@@ -649,7 +654,7 @@ class Doc_emitidos_busqueda(Ventana):
                         if self.decodigo != "":
                             self.vde1.Eliminar_vitrina()
                             self.tabla_filtradade = self.tabla_de2[self.tabla_de2['CODIGO']==self.decodigo]
-                            self.tabla_de4 = self.tabla_filtradade.iloc[:, [1, 18, 8, 7, 13, 16, 14]]
+                            self.tabla_de4 = self.tabla_filtradade.iloc[:, [1, 18, 8, 7, 13, 16, 10]]
                             self.vde1 = Vitrina_busqueda(self, self.tabla_de4, self.ver_de, self.funcion_de_asociar_de, height=200, width=1030)
                             if self.dedoc != "":
                                 self.vde1.Eliminar_vitrina()
@@ -659,13 +664,19 @@ class Doc_emitidos_busqueda(Ventana):
                             if self.dedoc != "":
                                 self.vde1.Eliminar_vitrina()
                                 self.tabla_filtradade = self.tabla_de2[self.tabla_de2['NRO DOCUMENTO']==self.dedoc]
-                                self.tabla_de4 = self.tabla_filtradade.iloc[:, [1, 18, 8, 7, 13, 16, 14]]
+                                self.tabla_de4 = self.tabla_filtradade.iloc[:, [1, 18, 8, 7, 13, 16, 10]]
                                 self.vde1 = Vitrina_busqueda(self, self.tabla_de4, self.ver_de, self.funcion_de_asociar_de, height=200, width=1030)
                            
 
     #----------------------------------------------------------------------
     def limpiar_de(self):
         self.vde1.Eliminar_vitrina()
+
+    #----------------------------------------------------------------------
+    def volver(self):
+        """"""
+        self.desaparecer()
+        self.ventana_anterior.aparecer()
 
     #----------------------------------------------------------------------
     def ver_de(self, x):

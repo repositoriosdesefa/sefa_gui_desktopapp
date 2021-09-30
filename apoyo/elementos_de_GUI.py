@@ -300,6 +300,21 @@ class Cuadro(Frame):
         self.lista_de_datos.append((self.combo))
 
     #----------------------------------------------------------------------
+    def agregar_combobox_ingreso(self, y, x, listadesplegable):
+        """Método de la clase Cuadro. \n
+        Permite agregar una lista desplegable al Frame creado con la Clase Cuadro."""
+        
+        self.y = y
+        self.x = x
+        self.listadesplegable = listadesplegable
+        self.combo = ttk.Combobox(self.z, state="normal", width=39)
+        self.combo.grid(row = self.y, column = self.x, pady=4, padx=8)
+        self.combo["values"] = self.listadesplegable
+        self.combo.set(' ')
+        self.lista_de_objetos.append((self.combo))
+        self.lista_de_datos.append((self.combo))
+
+    #----------------------------------------------------------------------
     def agregar_spinbox(self, y, x, inicio, fin, incremento, defecto):
         """Método de la clase Cuadro. \n
         Permite agregar un winget con botones para incrementar o dismunir una cantidad al Frame creado con la Clase Cuadro."""
@@ -395,6 +410,11 @@ class Cuadro(Frame):
                 
                 # En este caso row[3] debe ser una lista:
                 self.agregar_combobox(row[1], row[2], row[3])
+
+            elif row[0] == 'CXI':
+                
+                # En este caso row[3] debe ser una lista:
+                self.agregar_combobox_ingreso(row[1], row[2], row[3])
             
             elif row[0] == "SB":
 
