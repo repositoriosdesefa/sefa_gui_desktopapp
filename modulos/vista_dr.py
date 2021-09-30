@@ -120,7 +120,7 @@ class Doc_recibidos_vista(Ventana):
             ('E', 0, 1),
 
             ('L', 0, 2, 'Vía de recepción'),
-            ('CX', 0, 3, tipo_ingreso),
+            ('CXI', 0, 3, tipo_ingreso),
 
             ('L', 1, 0, 'Fecha de recepción OEFA'),
             ('D', 1, 1),
@@ -129,7 +129,7 @@ class Doc_recibidos_vista(Ventana):
             ('D', 1, 3),
 
             ('L', 2, 0, 'Tipo de documento'),
-            ('CX', 2, 1, tipo_documento),
+            ('CXI', 2, 1, tipo_documento),
 
             ('L', 2, 2, 'N° de documento'),
             ('E', 2, 3),
@@ -138,22 +138,22 @@ class Doc_recibidos_vista(Ventana):
             ('EL', 3, 1, 112),
 
             ('L', 4, 0, 'Remitente'),
-            ('CX', 4, 1, lista_efa),
+            ('CXI', 4, 1, lista_efa),
 
             ('L', 4, 2, '¿Es respuesta?'),
-            ('CX', 4, 3, si_no),
+            ('CXI', 4, 3, si_no),
 
             ('L', 5, 0, 'Indicación'),
-            ('CX', 5, 1, tipo_indicacion),
+            ('CXI', 5, 1, tipo_indicacion),
 
             ('L', 5, 2, 'Especialista asignado'),
-            ('CX', 5, 3, especialista),
+            ('CXI', 5, 3, especialista),
 
             ('L', 6, 0, 'Aporte del documento'),
             ('ST', 6, 1),
 
             ('L', 7, 0, 'Respuesta'),
-            ('CX', 7, 1, tipo_respuesta)
+            ('CXI', 7, 1, tipo_respuesta)
         )
 
         # II. Tablas en ventana
@@ -487,7 +487,7 @@ class Doc_emitidos_vista(Ventana):
             ('E', 0, 1),
 
             ('L', 0, 2, 'Categoría'),
-            ('CX', 0, 3, categorias),
+            ('CXI', 0, 3, categorias),
 
             ('L', 1, 0, 'Fecha de proyecto final'),
             ('D', 1, 1),
@@ -496,22 +496,22 @@ class Doc_emitidos_vista(Ventana):
             ('D', 1, 3),
 
             ('L', 2, 0, 'Tipo de documento'),
-            ('CX', 2, 1, tipo_documento),
+            ('CXI', 2, 1, tipo_documento),
 
             ('L', 2, 2, 'N° de documento'),
             ('E', 2, 3),
 
             ('L', 3, 0, 'Destinatario'),
-            ('CX', 3, 1, lista_efa),
+            ('CXI', 3, 1, lista_efa),
 
             ('L', 3, 2, '¿Se emitió documento?'),
-            ('CX', 3, 3, si_no),
+            ('CXI', 3, 3, si_no),
 
             ('L', 4, 0, 'Detalle de requerimiento'),
             ('ST', 4, 1),
 
             ('L', 5, 0, 'Marco de pedido'),
-            ('CX', 5, 1, marco_pedido),
+            ('CXI', 5, 1, marco_pedido),
 
             ('L', 5, 2, 'Fecha de notificación'),
             ('D', 5, 3)
