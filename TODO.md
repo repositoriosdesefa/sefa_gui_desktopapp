@@ -49,3 +49,18 @@
 - [ ] Armar tablas con datos reales para problemas (Lucia)
 - [ ] Armar tablas con datos reales para macro-problemas (Lucia)
 - [ ] Crear tablas de reiterativos y OCI
+
+## Nuevas ventanas
+- [x] Creación de pantallas de menú
+- [x] Creación de pantallas equipo administrativo
+- [ ] Crear pantalla de extremo de problemas [Lucho]
+- [ ] Crear pantalla de búsqueda de extremo de problema [Lucía]
+- [ ] Crear tabla de relaciones entre documentos y extremos de problemas [Ambos]
+- [ ] Crear pantalla de administrados [Lucho]
+- [ ] Crear pantalla de búsqueda de administrados [Lucía]
+- [ ] Creación de asignaciones pendientes Equipo 1
+- [ ] Creación de asignaciones pendientes Equipo 2
+- [ ] Creación de programaciones Equipo 2
+- [ ] Pendientes por asignar (Perfil de jefe)
+- [ ] Pendeintes por firmar (Perfil de jefe)
+- [ ] Creación de pantallas de macroproblema
