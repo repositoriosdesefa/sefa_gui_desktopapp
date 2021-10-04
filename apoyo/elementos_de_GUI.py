@@ -178,6 +178,47 @@ class Cuadro(Frame):
         self.lista_de_objetos.append((self.boton))
 
     #----------------------------------------------------------------------
+    def agregar_boton_grande(self, y, x, texto, funcion, ancho, largo):
+        """Método de la clase Cuadro. \n
+        Permite agregar un botón al Frame creado con la Clase Cuadro."""
+
+        #----------------------------------------------------------------------
+        def Efecto_de_boton(boton):
+            """"""
+            #----------------------------------------------------------------------
+            def Pasar_sobre_boton(e):
+                """"""
+                boton['bg'] = formato.boton_cuando_pasa_cursor
+        
+            #----------------------------------------------------------------------
+            def Dejar_boton(e):
+                """"""
+                boton['bg'] = formato.boton_sin_que_pase_cursor
+        
+            boton.bind('<Enter>', Pasar_sobre_boton)
+            boton.bind('<Leave>', Dejar_boton)
+
+        self.y= y
+        self.x= x
+        self.texto = texto
+        self.funcion = funcion
+        self.boton = Button(
+                        self.z, 
+                        text= self.texto, 
+                        command=self.funcion,
+                        font= formato.tipo_de_letra,
+                        fg = formato.letras_del_boton,
+                        bg = formato.boton_sin_que_pase_cursor,
+                        relief="flat",
+                        cursor="hand2",
+                        width = ancho,
+                        height = largo
+                        )
+        self.boton.grid(row= self.y, column=self.x, pady=4, padx=8)
+        Efecto_de_boton(self.boton)
+        self.lista_de_objetos.append((self.boton))
+
+    #----------------------------------------------------------------------
     def agregar_imagen(self, y, x, archivo, largo, alto):
         """Método de la clase Cuadro. \n
         Permite agregar una imagen al Frame creado con la Clase Cuadro."""
@@ -307,7 +348,7 @@ class Cuadro(Frame):
         self.y = y
         self.x = x
         self.listadesplegable = listadesplegable
-        self.combo = ttk.Combobox(self.z, state="normal", width=39)
+        self.combo = ttk.Combobox(self.z, state="readonly", width=39)
         self.combo.grid(row = self.y, column = self.x, pady=4, padx=8)
         self.combo["values"] = self.listadesplegable
         self.combo.set(' ')
@@ -645,6 +686,7 @@ class MenuSefa():
         window.config(menu=menubar)
 
         filemenu = Menu(menubar, tearoff=0)
+        filemenu.add_command(label="Inicio")
         filemenu.add_command(label="Cerrar sesión")
         filemenu.add_separator()
         filemenu.add_command(label="Salir", command=window.quit)
@@ -656,6 +698,9 @@ class MenuSefa():
 
         menubar.add_cascade(label="Archivo", menu=filemenu)
         menubar.add_cascade(label="Ayuda", menu=helpmenu)
+    
+        
+
 
 # IV. ScrollFrame
 class ScrollFrame(Frame):
