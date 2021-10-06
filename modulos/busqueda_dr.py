@@ -1,4 +1,3 @@
-from tkinter.constants import X
 from tkinter import messagebox
 import datetime as dt
 
@@ -760,3 +759,135 @@ class Doc_emitidos_busqueda(Ventana):
             return True
         else:
             return False
+
+class Extremos(Ventana):
+    """"""
+    
+    #----------------------------------------------------------------------
+    def __init__(self, *args, nuevo=True, lista=None, id_doc = None):
+        """Constructor"""
+
+        Ventana.__init__(self, *args)
+
+        # Almacenamos información herededa
+        self.nuevo = nuevo
+        if self.nuevo != True: #en caso exista
+            self.id_usuario = lista
+            self.cod_doc_dr = id_doc
+        
+        # Renombramos los encabezados
+        self.ep = b_ep.generar_dataframe()
+        self.tabla_ep = self.ep.rename(columns={'ID_EP':'ID EXTREMO','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.'})
+        self.tabla_ep2 = self.tabla_ep.iloc[:, [5, 0, 1, 2, 3, 4]]
+        self.tabla_ep3 = self.tabla_ep2.iloc[0:70, [5, 0, 1, 2, 3, 4]]
+        
+        # Listas para desplegables
+        self.listaAG = list(set(self.tabla_ep['AGENTE CONTAMINANTE']))
+        self.listaCA = list(set(self.tabla_ep['COMPONENTE AMBIENTAL']))
+        self.listaACT = list(set(self.tabla_ep['ACTIVIDAD']))
+        self.listaDEPAR = list(set(self.tabla_ep['DEPARTAMENTO']))
+        self.listaPROV = list(set(self.tabla_ep['PROVINCIA']))
+        self.listaDISTR = list(set(self.tabla_ep['DISTRITO']))
+        self.listaTIPOUBI = list(set(self.tabla_ep['TIPO DE UBICACION']))
+        self.listaOCURR = list(set(self.tabla_ep['OCURRENCIA']))
+        self.listaEFA = list(set(self.tabla_ep['EFA']))
+
+
+        self.rejilla_ep = (
+
+            ('L', 0, 0, 'Agente contaminante'),
+            ('CX', 0, 1, self.listaAG),
+
+            ('L', 0, 2, 'Componente ambiental'),
+            ('CX', 0, 3, self.listaCA),
+
+            ('L', 0, 4, 'Actividad'),
+            ('CX', 0, 5, self.listaACT),
+
+            ('L', 1, 0, 'Departamento'),
+            ('CX', 1, 1, self.listaDEPAR),
+
+            ('L', 1, 2, 'Provincia'),
+            ('CX', 1, 3, self.listaPROV),
+
+            ('L', 1, 4, 'Distrito'),
+            ('CX', 1, 5, self.listaDISTR),
+
+            ('L', 2, 0, 'Tipo de ubicación'),
+            ('CX', 2, 1, self.listaTIPOUBI),
+
+            ('L', 2, 2, 'Ocurrencia'),
+            ('CX', 2, 3, self.listaOCURR),
+
+            ('L', 2, 4, 'EFA'),
+            ('CX', 2, 5, self.listaEFA),
+
+            ('L', 3, 0, 'Palabra clave en descripción'),
+            ('E', 3, 1)
+
+        )
+        
+        self.ep0 = Cuadro(self)
+        self.ep0.agregar_label(0, 0,' ')
+        self.ep0.agregar_imagen(1, 0,'Logo_OSPA.png',202,49)
+
+        self.ep1 = Cuadro(self)
+        self.ep1.agregar_rejilla(self.rejilla_ep)
+
+        rejilla_ep2 = (
+            ('B', 5, 4, 'Buscar', self.Buscar_ep),
+            ('B', 5, 5, 'Limpiar', self.limpiar_ep),
+            ('B', 5, 6, 'Volver', self.volver)
+        )
+        
+
+        ep2 = Cuadro(self)
+        ep2.agregar_rejilla(rejilla_ep2)
+
+        ep3 = Cuadro(self)
+        ep3.agregar_titulo(2, 0, 'Búsqueda de extremos')
+
+
+        self.vep = Vitrina_busqueda(self, self.tabla_ep3, self.ver_ep, self.funcion_de_asociar_ep, height=200, width=1030)
+    
+#----------------------------------------------------------------------
+    def Buscar_ep(self):
+
+        self.listas_filtrode = self.ep1.obtener_lista_de_datos()
+        self.decate = self.listas_filtrode[0] #
+        self.deht = self.listas_filtrode[1]
+        self.dedestin = self.listas_filtrode[2]
+        self.decodigo = self.listas_filtrode[3]
+        self.detipodoc = self.listas_filtrode[4] #
+        self.dedoc = self.listas_filtrode[5]
+
+#----------------------------------------------------------------------
+    def limpiar_ep(self):
+        self.vep.Eliminar_vitrina()
+
+    #----------------------------------------------------------------------
+    def volver(self):
+        """"""
+        self.desaparecer()
+        self.ventana_anterior.aparecer()
+
+    #----------------------------------------------------------------------
+    def ver_ep(self, x):
+        """"""
+        #self.x = x
+        #texto_documento = 'Documento emitido: ' + x
+        print("hola")
+        #bde = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOC_EMITIDOS_FINAL')
+        #lb1 = bde.listar_datos_de_fila(self.x)
+        #lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], 
+                                #lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], lb1[12]]
+        #self.desaparecer()
+        #subframe = vista_dr.Doc_emitidos_vista(self, 650, 1150, texto_documento, 
+                                 #               nuevo=False, lista=lista_para_insertar, id_doc=x)
+
+    #----------------------------------------------------------------------
+    def funcion_de_asociar_ep(self, x):
+        """"""
+
+        print("hola")
+     
