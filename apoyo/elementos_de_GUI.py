@@ -250,15 +250,16 @@ class Cuadro(Frame):
         self.lista_de_datos.append((self.data))
     
     #----------------------------------------------------------------------
-    def agregar_entry_largo(self, y, x, ancho):
+    def agregar_entry_personalizado(self, y, x, ancho, numero_de_columnas_unidas):
         """Método de la clase Cuadro. \n
         Permite agregar una entrada de texto grande al Frame creado con la Clase Cuadro."""
 
         self.y= y
         self.x= x
         self.data = StringVar()
+        n_columnas = int(numero_de_columnas_unidas)
         self.entrada = Entry(self.z, textvariable=self.data, width = ancho)
-        self.entrada.grid(row= self.y, column=self.x, columnspan= 3, pady=4, padx=8)
+        self.entrada.grid(row= self.y, column=self.x, columnspan= n_columnas, pady=4, padx=8)
         self.lista_de_objetos.append((self.entrada))
         self.lista_de_datos.append((self.data))
 
@@ -290,6 +291,24 @@ class Cuadro(Frame):
         self.text_area.grid(row = self.y, column = self.x, columnspan= 3, pady=4, padx=8)
         self.lista_de_objetos.append((self.text_area))
         self.lista_de_datos.append((self.text_area))
+    
+    #----------------------------------------------------------------------
+    def agregar_scrolltext_personalizado(self, y, x, ancho, numero_filas_unidas):
+        """Método de la clase Cuadro. \n
+        Permite agregar una entrada de texto largo que posee su propio scrollbar al Frame creado con la Clase Cuadro."""
+
+        self.y= y
+        self.x= x
+        self.text_area = sc.ScrolledText(self.z, 
+                            wrap = WORD, 
+                            width = ancho, 
+                            height = 2, 
+                            font = ("Helvetica", 8))
+        n_filas = int(numero_filas_unidas)
+        self.text_area.grid(row = self.y, column = self.x, columnspan= 1, rowspan= n_filas, pady=4, padx=8)
+        self.lista_de_objetos.append((self.text_area))
+        self.lista_de_datos.append((self.text_area))
+
 
     #----------------------------------------------------------------------
     def agregar_radiobutton(self, y, x, lista):
@@ -428,7 +447,7 @@ class Cuadro(Frame):
             
             elif row[0] == 'EL':
 
-                self.agregar_entry_largo(row[1], row[2], row[3])
+                self.agregar_entry_personalizado(row[1], row[2], row[3], row[4])
 
             elif row[0] == 'EP':
 
@@ -438,6 +457,10 @@ class Cuadro(Frame):
 
                 self.agregar_scrolltext(row[1], row[2])
             
+            elif row[0] == 'STP':
+
+                self.agregar_scrolltext_personalizado(row[1], row[2], row[3], row[4])
+
             elif row[0] == 'R':
                 
                 # En este caso row[3] debe ser una lista:
