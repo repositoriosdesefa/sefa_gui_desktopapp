@@ -10,7 +10,9 @@
 - [x] Relacionar el ID interno con el ID del aplicativo
 - [x] Actualizar tabla de RELACIONES con su historial
 - [ ] Búsqueda de problemas
+- [ ] Búsqueda por palabra clave
 - [ ] Búsqueda de macroproblemas
+- [ ] Actualizar vitrina_busqueda con Tooltip
 
 ## vista_dr
 - [x] Mostrar inicialmente la vitrina vacía
@@ -30,7 +32,8 @@
 - [x] Replicar métodos para la clase de documentos recibidos
 - [x] Mover rejilla para facilitar el ingreso de información al administrativo
 - [ ] No permitir ingresar un código de interfaz (de usuario) igual (Mensaje de error)
-- [ ] Vista de extremos de problemas
+- [ ] Vista de extremos de problemas (Adecuar pantalla a 3 vitrina)
+- [ ] Crear método para la asociación de más de 2 relaciones (transitividad)
 - [ ] Vista de macroproblemas
   
 ## vsf
