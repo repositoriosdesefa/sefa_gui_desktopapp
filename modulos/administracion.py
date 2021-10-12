@@ -1,10 +1,17 @@
 import datetime as dt
-from random import choice
 import pandas as pd
+
 from tkinter import Tk, Frame, messagebox
+
+
+from random import choice
+
+
+
 from apoyo.elementos_de_GUI import Cuadro, Ventana
 from apoyo.manejo_de_bases import Base_de_datos, Correo_electronico
-from apoyo.vsf import Vitrina
+from modulos.vista_dr import Doc_recibidos_vista
+
 import apoyo.datos_frecuentes as dfrec
 from modulos import logueo
 
@@ -41,7 +48,9 @@ class Ingresar_contrasena_de_adminitrador(Ventana):
         """"""
         
         self.desaparecer()
+
         subframe = Administrar_usuarios(self, 500, 800, 'Interfaz para el control de usuarios')
+
 
     #----------------------------------------------------------------------
     def comprobar_datos_de_administrador(self):
