@@ -53,6 +53,17 @@
 - [ ] Armar tablas con datos reales para macro-problemas (Lucia)
 - [ ] Crear tablas de reiterativos y OCI
 
+
+## logueo y administracion
+
+- [x] Desarrollar GUI logueo2 Recuperar contrasena
+- [x] Desarrollar GUI logueo3 Cambiar contrasena
+- [x] Ajustar tamaños de pantalla de administracion
+- [x] Generar cuadros de dialogo en administracion (reemplazando los prints)
+- [x] Generar cuadros de dialogo en logueo (reemplazando los prints)
+- [ ] Evaluar combinar los archivos administracion y logueo
+- [ ] (Para futuras versiones): Simplificar funciones con elementos comunes // Posible creación de la class Usuario. 
+
 ## Nuevas ventanas
 - [x] Creación de pantallas de menú
 - [x] Creación de pantallas equipo administrativo
@@ -67,3 +78,4 @@
 - [ ] Pendientes por asignar (Perfil de jefe)
 - [ ] Pendeintes por firmar (Perfil de jefe)
 - [ ] Creación de pantallas de macroproblema
+

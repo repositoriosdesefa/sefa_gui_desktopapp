@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import *
+from tkinter import messagebox 
 from tkinter import scrolledtext as sc
 from tkinter import ttk, Frame, Canvas, Label
 from tkcalendar import Calendar, DateEntry
@@ -52,7 +53,16 @@ class Ventana(Toplevel):
         self.desaparecer()
         self.ventana_anterior.aparecer()
 
+
+    #----------------------------------------------------------------------
+    def destruir(self):
+        """"""
+
+        self.destroy()
+        
+
 # II. Clase Cuadro
+
 class Cuadro(Frame):
     """"""
     
@@ -233,7 +243,7 @@ class Cuadro(Frame):
         self.imagen_cargada = self.imagen_cargada.resize((self.largo, self.alto), Image.ANTIALIAS)
         self.imagen = ImageTk.PhotoImage(self.imagen_cargada)
         self.imagen_label = Label(self.z, image=self.imagen)
-        self.imagen_label.grid(row = self.y, column = self.x, pady=4, padx=8)
+        self.imagen_label.grid(row = self.y, column = self.x)
         self.lista_de_objetos.append((self.imagen_label))
 
     #----------------------------------------------------------------------
@@ -704,7 +714,9 @@ class MenuSefa():
     #----------------------------------------------------------------------
     def __init__(self, window):
         """Constructor"""
-
+        
+        version = f'Usted está utilizando la versión 0.0 del aplicativo \n jojojo'
+        
         menubar = Menu(window)
         window.config(menu=menubar)
 
@@ -715,9 +727,11 @@ class MenuSefa():
         filemenu.add_command(label="Salir", command=window.quit)
 
         helpmenu = Menu(menubar, tearoff=0)
-        helpmenu.add_command(label="Ayuda")
+        helpmenu.add_command(label="Manual", command=self.lanzar_msj_manual)
         helpmenu.add_separator()
-        helpmenu.add_command(label="Acerca de...")
+        helpmenu.add_command(label="Acerca de...", command=self.lanzar_msj_acerca_de)
+
+        # Añadir "Archivo" y "Ayuda" a la barra de Menu
 
         menubar.add_cascade(label="Archivo", menu=filemenu)
         menubar.add_cascade(label="Ayuda", menu=helpmenu)
@@ -725,7 +739,26 @@ class MenuSefa():
         
 
 
+
+    #----------------------------------------------------------------------
+    def lanzar_msj_manual(self):
+        """"""
+
+        messagebox.showinfo('Manual de usuario', 'Pronto incorporaremos un manual de usuario que estará disponible desde esta opción.')
+    
+    #----------------------------------------------------------------------
+    def lanzar_msj_acerca_de(self):
+        """"""
+
+        info1 = 'Esta herramienta ha sido elaborada por el equipo de proyectos de Sefa.\n'
+        espacio = ' \n'
+        info2 = 'Usted está utilizando la versión 0.0'
+        info_completa = info1 + espacio + info2
+        messagebox.showinfo('Información sobre este aplicativo', info_completa)
+
+
 # IV. ScrollFrame
+
 class ScrollFrame(Frame):
 
     #----------------------------------------------------------------------
