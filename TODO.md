@@ -52,6 +52,7 @@
 - [ ] Armar tablas con datos reales para problemas (Lucia)
 - [ ] Armar tablas con datos reales para macro-problemas (Lucia)
 - [ ] Crear tablas de reiterativos y OCI
+- [ ] Revisión final de todas las tablas y comparación con las tablas actuales
 
 ## Nuevas ventanas
 - [x] Creación de pantallas de menú
