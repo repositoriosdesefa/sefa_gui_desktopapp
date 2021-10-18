@@ -33,14 +33,16 @@ base_relacion_d_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_RELACION_D')
 # 1. Bases de datos principales
 # Documentos recibidos
 b_dr_cod = Base_de_datos(id_b_ospa, 'DOCS_R')
-b_dr = Base_de_datos(id_b_ospa, 'DOC_RECIBIDOS_FINAL')
+b_dr = Base_de_datos(id_b_ospa, 'DOC_RECIBIDOS')
 b_dr_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_DR')
 # Documentos emitidos
 b_de_cod = Base_de_datos(id_b_ospa, 'DOCS_E')
-b_de = Base_de_datos(id_b_ospa, 'DOC_EMITIDOS_FINAL')
+b_de = Base_de_datos(id_b_ospa, 'DOC_EMITIDOS')
 b_de_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_DE')
 # Extremo de problemas
-b_ep = Base_de_datos(id_b_ospa, 'EXTREMOS')
+b_ep_cod = Base_de_datos(id_b_ospa, 'EXT_P')
+b_ep = Base_de_datos(id_b_ospa, 'EXT_PROBLEMA')
+b_de_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_EP')
 
 # 2. Bases de datos complementarias
 id_b_efa = '1pjHXiz15Zmw-49Nr4o1YdXJnddUX74n7Tbdf5SH7Lb0'
@@ -183,7 +185,7 @@ class Doc_recibidos_vista(Ventana):
         # II.2 Lista de EP
         tabla_de_ep_completa = b_ep.generar_dataframe()
         tabla_de_ep_id = tabla_de_ep_completa
-        tabla_de_ep = tabla_de_ep_id.drop(['ID_DE', 'ID_DR', 'ID_EP'], axis=1)
+        tabla_de_ep = tabla_de_ep_id.drop(['ID_EP'], axis=1)
         
         # III. Ubicaciones
         # III.1 Frame de Título
@@ -508,8 +510,8 @@ class Doc_emitidos_vista(Ventana):
             ('L', 1, 0, 'Fecha de proyecto final'),
             ('D', 1, 1),
 
-            ('L', 1, 2, 'Fecha de firma'),
-            ('D', 1, 3),
+            #('L', 1, 2, 'Fecha de firma'),
+            #('D', 1, 3),
 
             ('L', 2, 0, 'Tipo de documento'),
             ('CXI', 2, 1, tipo_documento),
@@ -529,8 +531,8 @@ class Doc_emitidos_vista(Ventana):
             ('L', 5, 0, 'Marco de pedido'),
             ('CXI', 5, 1, marco_pedido),
 
-            ('L', 5, 2, 'Fecha de notificación'),
-            ('D', 5, 3)
+            #('L', 5, 2, 'Fecha de notificación'),
+            #('D', 5, 3)
 
         )
 
@@ -543,7 +545,7 @@ class Doc_emitidos_vista(Ventana):
                                         'FECHA_ULTIMO_MOV', 'FECHA_ASIGNACION'], axis=1)
         # II.2 Lista de EP
         tabla_de_ep = b_ep.generar_dataframe()
-        self.tabla_de_ep = tabla_de_ep.drop(['ID_DE', 'ID_DR', 'ID_EP'], axis=1)
+        self.tabla_de_ep = tabla_de_ep.drop(['ID_EP'], axis=1)
 
         # III. Ubicaciones
         # III.1 Frame de Título
@@ -840,7 +842,7 @@ class Extremo_problemas_vista(Ventana):
         self.nuevo = nuevo
         if self.nuevo != True: # En caso exista
             self.lista_para_insertar = lista
-            self.cod_usuario_dr = id_doc
+            self.cod_usuario_ep = id_doc
 
         # I. Labels and Entries
         rejilla_dr = (
@@ -907,7 +909,7 @@ class Extremo_problemas_vista(Ventana):
         # II.2 Lista de EP
         tabla_de_ep_completa = b_ep.generar_dataframe()
         tabla_de_ep_id = tabla_de_ep_completa
-        tabla_de_ep = tabla_de_ep_id.drop(['ID_DE', 'ID_DR', 'ID_EP'], axis=1)
+        tabla_de_ep = tabla_de_ep_id.drop(['ID_EP'], axis=1)
         
         # III. Ubicaciones
         # III.1 Frame de Título
@@ -927,7 +929,7 @@ class Extremo_problemas_vista(Ventana):
 
         # III.3 Frame de botón de rejilla
         f_boton = Cuadro(self)
-        f_boton.agregar_button(0, 1, 'Guardar', self.enviar_dr)
+        f_boton.agregar_button(0, 1, 'Guardar', self.enviar_ep)
         f_boton.agregar_button(0, 2, 'Inicio', self.inicio_app) # Botón provisional
         
         # III.4 Frame de botón y títulos de vitrina 1
@@ -1006,52 +1008,52 @@ class Extremo_problemas_vista(Ventana):
                             id_entrada, id_salida, funcion_ver, funcion_eliminar)
 
     #----------------------------------------------------------------------
-    def enviar_dr(self):
+    def enviar_ep(self):
         """"""
         datos_ingresados = self.frame_rejilla.obtener_lista_de_datos()
         # Genero la tablas de código de DE
-        tabla_de_codigo_dr = b_dr_cod.generar_dataframe()
+        tabla_de_codigo_ep = b_dr_cod.generar_dataframe()
         # Guardo el código de usuario que llega
         if self.nuevo != True:
             # En caso exista ID insertado en la rejilla
-            cod_usuario_dr = self.cod_usuario_dr
-            valor_de_comprobacion = self.comprobar_id(b_dr_cod, cod_usuario_dr)
+            cod_usuario_ep = self.cod_usuario_ep
+            valor_de_comprobacion = self.comprobar_id(b_ep_cod, cod_usuario_ep)
 
         else:
             # Comprobación de que no se ingresa un código de usuario repetido
             ht = datos_ingresados[0]
-            valor_de_comprobacion = self.comprobar_id(b_dr_cod, ht) # Comprobar si el id de usuario ya existe
+            valor_de_comprobacion = self.comprobar_id(b_ep_cod, ht) # Comprobar si el id de usuario ya existe
        
         # Modifico o creo, según exista
         # Modificación
         if valor_de_comprobacion == True:
             # A partir del código comprobado
-            tabla_codigo_dr_filtrada = tabla_de_codigo_dr[tabla_de_codigo_dr['HT_ID']==cod_usuario_dr]
-            cod_interno_dr = tabla_codigo_dr_filtrada.iloc[0,0]
+            tabla_codigo_ep_filtrada = tabla_de_codigo_ep[tabla_de_codigo_ep['EP_ID']==cod_usuario_ep]
+            cod_interno_ep = tabla_codigo_ep_filtrada.iloc[0,0]
 
             # Pestaña 1: Código Único
             # Obtengo los datos ingresados
-            lista_descargada_codigo = b_dr_cod.listar_datos_de_fila(cod_interno_dr) # Se trae la info   
+            lista_descargada_codigo = b_ep_cod.listar_datos_de_fila(cod_interno_ep) # Se trae la info   
             # Obtengo el ID interno
-            cod_usuario_dr = lista_descargada_codigo[3]
-            correlativo = cod_interno_dr[7:20]
-            nuevo_cod_usuario_dr = correlativo + "/" + datos_ingresados[0]
+            cod_usuario_ep = lista_descargada_codigo[3]
+            correlativo = cod_interno_ep[7:20]
+            nuevo_cod_usuario_ep = correlativo + "/" + datos_ingresados[0]
             # Actualizo las tablas en la web
             hora_de_modificacion = str(dt.datetime.now())
-            b_dr_cod.cambiar_un_dato_de_una_fila(cod_interno_dr, 2, hora_de_modificacion) # Se actualiza código interno
-            b_dr_cod.cambiar_un_dato_de_una_fila(cod_interno_dr, 4, nuevo_cod_usuario_dr) # Se actualiza código interno
+            b_dr_cod.cambiar_un_dato_de_una_fila(cod_interno_ep, 2, hora_de_modificacion) # Se actualiza código interno
+            b_dr_cod.cambiar_un_dato_de_una_fila(cod_interno_ep, 4, nuevo_cod_usuario_ep) # Se actualiza código interno
 
             # Pestaña 2:       
             # Cambio los datos de una fila
-            lista_a_sobreescribir = [cod_interno_dr] + [nuevo_cod_usuario_dr] + datos_ingresados
-            b_dr.cambiar_los_datos_de_una_fila(cod_interno_dr, lista_a_sobreescribir) # Se sobreescribe la información
+            lista_a_sobreescribir = [cod_interno_ep] + [nuevo_cod_usuario_ep] + datos_ingresados
+            b_ep.cambiar_los_datos_de_una_fila(cod_interno_ep, lista_a_sobreescribir) # Se sobreescribe la información
             
             # Pestaña 3
             lista_historial = lista_a_sobreescribir + [hora_de_modificacion] # Lo subido a la pestaña 2 + hora
-            b_dr_hist.agregar_datos(lista_historial) # Se sube la info
+            b_ep_hist.agregar_datos(lista_historial) # Se sube la info
 
             messagebox.showinfo("¡Excelente!", "Se ha actualizado el registro")
-            self.actualizar_vista_dr(nuevo_cod_usuario_dr)
+            self.actualizar_vista_dr(nuevo_cod_usuario_ep)
 
         # Creación
         else:
@@ -1060,17 +1062,17 @@ class Extremo_problemas_vista(Ventana):
             # Pestaña 1: Código Único
             ht = datos_ingresados[0]
             # Creo el código único
-            b_dr_cod.agregar_dato_generando_id(ht, ahora)
+            b_ep_cod.agregar_dato_generando_id(ht, ahora)
             # Descargo el código único
-            lista_descargada_codigo = b_dr_cod.listar_datos_de_fila(ahora) # Se trae la info
+            lista_descargada_codigo = b_ep_cod.listar_datos_de_fila(ahora) # Se trae la info
         
             # Pestaña 2:       
             # Obtengo el ID interno
-            cod_interno_dr = lista_descargada_codigo[0]
-            cod_usuario_dr = lista_descargada_codigo[3]
+            cod_interno_ep = lista_descargada_codigo[0]
+            cod_usuario_ep = lista_descargada_codigo[3]
             # Creo el vector a subir
-            lista_a_cargar = [cod_interno_dr] + [cod_usuario_dr] + datos_ingresados
-            b_dr.agregar_datos(lista_a_cargar) # Se sube la info
+            lista_a_cargar = [cod_interno_ep] + [cod_usuario_ep] + datos_ingresados
+            b_ep.agregar_datos(lista_a_cargar) # Se sube la info
 
             # Pestaña 3
             hora_de_creacion = str(ahora) # De lo creado en la pestaña 1
@@ -1079,19 +1081,19 @@ class Extremo_problemas_vista(Ventana):
         
             # Confirmación de registro
             messagebox.showinfo("¡Excelente!", "Se ha ingresado un nuevo registro")
-            self.actualizar_vista_dr(cod_usuario_dr) 
+            self.actualizar_vista_dr(cod_usuario_ep) 
     
     #----------------------------------------------------------------------
     def actualizar_vista_dr(self, id_usuario):
 
-        texto_documento = 'Documento recibido: ' +  id_usuario
+        texto_documento = 'Extremo de problema: ' +  id_usuario
 
         lb1 = b_dr.listar_datos_de_fila(id_usuario)
         lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], 
                                 lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14]]
         
         self.desaparecer()
-        subframe = Doc_recibidos_vista(self, 650, 1150, texto_documento, 
+        subframe = Extremo_problemas_vista(self, 650, 1150, texto_documento, 
                                         nuevo=False, lista=lista_para_insertar, id_doc = id_usuario)
     
     #----------------------------------------------------------------------
