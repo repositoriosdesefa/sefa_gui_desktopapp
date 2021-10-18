@@ -40,9 +40,11 @@ b_de_cod = Base_de_datos(id_b_ospa, 'DOCS_E')
 b_de = Base_de_datos(id_b_ospa, 'DOC_EMITIDOS')
 b_de_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_DE')
 # Extremo de problemas
+
 b_ep_cod = Base_de_datos(id_b_ospa, 'EXT_P')
 b_ep = Base_de_datos(id_b_ospa, 'EXT_PROBLEMA')
 b_de_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_EP')
+
 
 # 2. Bases de datos complementarias
 id_b_efa = '1pjHXiz15Zmw-49Nr4o1YdXJnddUX74n7Tbdf5SH7Lb0'

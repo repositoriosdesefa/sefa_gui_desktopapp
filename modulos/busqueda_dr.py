@@ -1,7 +1,7 @@
 from tkinter import messagebox
 import datetime as dt
 
-from apoyo.elementos_de_GUI import Cuadro, Ventana, Vitrina_busqueda
+from apoyo.elementos_de_GUI import Cuadro, Ventana, Vitrina_busqueda, Vitrina_busquedaep
 from apoyo.manejo_de_bases import Base_de_datos
 import apoyo.datos_frecuentes as dfrec
 from modulos import vista_dr
@@ -21,9 +21,11 @@ b_de_cod = Base_de_datos(id_b_ospa, 'DOCS_E')
 b_de = Base_de_datos(id_b_ospa, 'DOC_EMITIDOS')
 b_de_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_DE')
 # Extremo de problemas
+
 b_ep_cod = Base_de_datos(id_b_ospa, 'EXT_P')
 b_ep = Base_de_datos(id_b_ospa, 'EXT_PROBLEMA')
 b_de_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_EP')
+
 
 # 2. Bases de datos complementarias
 id_b_efa = '1pjHXiz15Zmw-49Nr4o1YdXJnddUX74n7Tbdf5SH7Lb0'
@@ -776,8 +778,8 @@ class Extremos(Ventana):
         # Renombramos los encabezados
         self.ep = b_ep.generar_dataframe()
         self.tabla_ep = self.ep.rename(columns={'ID_EP':'ID EXTREMO','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.'})
-        self.tabla_ep2 = self.tabla_ep.iloc[:, [5, 0, 1, 2, 3, 4]]
-        self.tabla_ep3 = self.tabla_ep2.iloc[0:70, [5, 0, 1, 2, 3, 4]]
+        self.tabla_ep2 = self.tabla_ep.loc[:, ['ID EXTREMO','AGENTE CONTAMINANTE','COMPONENTE AMBIENTAL','ACTIVIDAD','DEPARTAMENTO','EFA','ESTADO','FECHA ULTIMO MOV.','DESCRIPCION']]
+        self.tabla_ep3 = self.tabla_ep2.loc[0:70, ['ID EXTREMO','AGENTE CONTAMINANTE','COMPONENTE AMBIENTAL','ACTIVIDAD','DEPARTAMENTO','EFA','ESTADO','FECHA ULTIMO MOV.','DESCRIPCION']]
         
         # Listas para desplegables
         self.listaAG = list(set(self.tabla_ep['AGENTE CONTAMINANTE']))
@@ -846,7 +848,7 @@ class Extremos(Ventana):
         ep3.agregar_titulo(2, 0, 'Búsqueda de extremos')
 
 
-        self.vep = Vitrina_busqueda(self, self.tabla_ep3, self.ver_ep, self.funcion_de_asociar_ep, height=200, width=1030)
+        self.vep = Vitrina_busquedaep(self, self.tabla_ep3, self.ver_ep, self.funcion_de_asociar_ep, height=200, width=1200)
     
 #----------------------------------------------------------------------
     def Buscar_ep(self):

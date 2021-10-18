@@ -1251,6 +1251,225 @@ class Vitrina_busqueda(Frame):
         """"""
         self.main_frame.destroy()
 
+class Vitrina_busquedaep(Frame):
+    """"""
+
+    #----------------------------------------------------------------------
+    def __init__(self, window, tabla, funcion1, funcion2, height=100, width=1600):
+        """Constructor"""
+
+        self.window = window
+        self.tabla = tabla
+        self.funcion1 = funcion1
+        self.funcion2 = funcion2
+        #self.funcion3 = funcion3
+        self.height = height
+        self.width = width
+        
+        self.main_frame = Frame(self.window)
+        self.main_frame.pack()
+
+        # Encabezados (entorno)
+
+        self.frame_base_encabezado = Frame(self.main_frame)
+        self.frame_base_encabezado.pack()
+
+        self.canvas_encabezado = Canvas(self.frame_base_encabezado, height=20, width=self.width)
+        self.canvas_encabezado.pack(side='left', fill='both', expand=True)
+
+        self.empty_frame = Frame(self.frame_base_encabezado, width=12)
+        self.empty_frame.pack(side='right', fill='both', expand=True)
+
+        self.frame_dentro_del_canvas = Frame(self.canvas_encabezado) # Éste es el frame donde colocaremos los encabezados
+
+        self.canvas_encabezado.create_window(4, 4, window=self.frame_dentro_del_canvas, anchor='nw')
+
+        # Cuerpo de la tabla (entorno)
+
+        self.frame_con_scrollbar = VerticalScrolledFrame(self.main_frame, height=self.height, width=self.width)
+        self.frame_con_scrollbar.pack()
+
+        # Incluir encabezados de la tabla
+
+        columnas_de_tabla = self.tabla.columns.values.tolist()
+        indice_de_columnas = range(len(columnas_de_tabla))
+        elementos_columnas = {
+            'index': indice_de_columnas,
+            'columnas': columnas_de_tabla
+            }
+        tabla_columna = pd.DataFrame(elementos_columnas)
+
+        for i,row in tabla_columna.iterrows():
+            encabezado = Label(
+                self.frame_dentro_del_canvas, 
+                text=row[1],
+                font=formato.tipo_de_letra_tablaep,
+                fg = formato.color_negro,
+                width= 17,#se modifico 
+                height=1, 
+                relief='groove',
+                bg=formato.fondo_encabezados_de_tabla
+                )
+            encabezado.grid(row=0, column=row[0])
+    
+        opciones_label = Label(
+            self.frame_dentro_del_canvas,
+            text='OPCIONES',
+            font=formato.tipo_de_letra_tablaep,
+            fg = formato.color_negro,
+            width= 14, #se modifico 
+            height=1, 
+            relief='groove',
+            bg=formato.fondo_encabezados_de_tabla
+            )
+        opciones_label.grid(row=0, column=len(columnas_de_tabla)+1)
+
+        opciones_labelmacro = Label(
+            self.frame_dentro_del_canvas,
+            text='MACROPROBLEMA',
+            font=formato.tipo_de_letra_tablaep,
+            fg = formato.color_negro,
+            width= 14, #se modifico 
+            height=1, 
+            relief='groove',
+            bg=formato.fondo_encabezados_de_tabla
+            )
+        opciones_labelmacro.grid(row=0, column=len(columnas_de_tabla)+2)
+
+        # Incluir elementos en el cuerpo de la tabla
+
+        for i, row in self.tabla.iterrows():
+            valores_subframe = Frame(self.frame_con_scrollbar)
+            valores_subframe.pack()
+            lista_de_valores = row.values
+            indice_de_valores = range(len(lista_de_valores))
+            elementos_valores = {
+                'index': indice_de_valores,
+                'valores': lista_de_valores 
+            }
+
+            tabla_valor = pd.DataFrame(elementos_valores)
+            for i,row in tabla_valor.iterrows():
+                valor = Label(
+                    valores_subframe, 
+                    text=row[1],
+                    font=formato.tipo_de_letra_tablaep,
+                    width=17,
+                    height=3,#se modifico  
+                    relief='groove',
+                    bg= formato.fondo_valores_de_tabla,
+                    wraplength=125, 
+                    justify="center")
+                valor.grid(row=0, column=row[0])
+
+            # Agregar botones
+            
+            argumento = lista_de_valores[0]
+
+            boton_ver = Label(
+                valores_subframe,
+                text='VER',
+                font=formato.tipo_de_letra_tablaep,
+                fg = formato.letras_del_boton,
+                width=5,
+                height=3,
+                relief='groove',
+                cursor="hand2",
+                bg=formato.boton_sin_que_pase_cursor
+            )
+            boton_ver.grid(row=0, column=len(lista_de_valores)+1)
+            boton_ver.bind("<Button-1>",lambda e,argumento=argumento:self.funcion1(argumento))
+            self.Efecto_de_boton(boton_ver)
+
+            #boton_editar = Label(
+            #    valores_subframe,
+            #    text='EDIT',
+            #    font=formato.tipo_de_letra_tabla,
+            #    fg = formato.letras_del_boton,
+            #    width=5,
+            #    height=1,
+            #    relief='groove',
+            #    cursor="hand2",
+            #    bg=formato.boton_sin_que_pase_cursor
+            #)
+            #boton_editar.grid(row=0, column=len(lista_de_valores)+2)
+            #boton_editar.bind("<Button-1>",lambda e,argumento=argumento:self.funcion2(argumento))
+            #self.Efecto_de_boton(boton_editar)
+
+            boton_asociar = Label(
+                valores_subframe,
+                text='ASOCIAR',
+                font=formato.tipo_de_letra_tablaep,
+                fg = formato.letras_del_boton,
+                width=8,
+                height=3,
+                relief='groove',
+                cursor="hand2",
+                bg=formato.boton_sin_que_pase_cursor
+            )
+            boton_asociar.grid(row=0, column=len(lista_de_valores)+2)
+            boton_asociar.bind("<Button-1>",lambda e,argumento=argumento:self.funcion2(argumento))
+            self.Efecto_de_boton(boton_asociar)
+
+            boton_macroproblema = Label(
+                valores_subframe,
+                text='VER MACROPR.',
+                font=formato.tipo_de_letra_tablaep,
+                fg = formato.letras_del_boton_macro,
+                width=14,
+                height=3,
+                relief='groove',
+                cursor="hand2",
+                bg=formato.boton_sin_que_pase_cursor_macro
+            )
+            boton_macroproblema.grid(row=0, column=len(lista_de_valores)+3)
+            boton_macroproblema.bind("<Button-1>",lambda e,argumento=argumento:self.funcion2(argumento))
+            self.Efecto_de_boton_macro(boton_macroproblema)
+
+    #----------------------------------------------------------------------
+    def Efecto_de_boton(self, boton):
+        """"""
+
+        #----------------------------------------------------------------------
+        def Pasar_sobre_boton(e):
+            """"""
+            boton['bg'] = formato.boton_cuando_pasa_cursor
+            boton['fg'] = formato.letras_del_boton_cuando_pasa_cursor
+
+        #----------------------------------------------------------------------
+        def Dejar_boton(e):
+            """"""
+            boton['bg'] = formato.boton_sin_que_pase_cursor
+            boton['fg'] = formato.letras_del_boton
+
+        boton.bind('<Enter>', Pasar_sobre_boton)
+        boton.bind('<Leave>', Dejar_boton)
+
+    #----------------------------------------------------------------------
+    def Efecto_de_boton_macro(self, boton):
+        """"""
+
+        #----------------------------------------------------------------------
+        def Pasar_sobre_boton(e):
+            """"""
+            boton['bg'] = formato.boton_cuando_pasa_cursor_macro
+            boton['fg'] = formato.letras_del_boton_cuando_pasa_cursor
+
+        #----------------------------------------------------------------------
+        def Dejar_boton(e):
+            """"""
+            boton['bg'] = formato.boton_sin_que_pase_cursor_macro
+            boton['fg'] = formato.letras_del_boton_macro
+
+        boton.bind('<Enter>', Pasar_sobre_boton)
+        boton.bind('<Leave>', Dejar_boton)
+
+    #----------------------------------------------------------------------
+    def Eliminar_vitrina(self):
+        """"""
+        self.main_frame.destroy()
+
+
 # VIII. Vitrina
 class Vitrina(Frame):
     """"""
