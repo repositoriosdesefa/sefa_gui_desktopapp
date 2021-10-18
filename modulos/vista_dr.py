@@ -33,14 +33,14 @@ base_relacion_d_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_RELACION_D')
 # 1. Bases de datos principales
 # Documentos recibidos
 b_dr_cod = Base_de_datos(id_b_ospa, 'DOCS_R')
-b_dr = Base_de_datos(id_b_ospa, 'DOC_RECIBIDOS_FINAL')
+b_dr = Base_de_datos(id_b_ospa, 'DOC_RECIBIDOS')
 b_dr_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_DR')
 # Documentos emitidos
 b_de_cod = Base_de_datos(id_b_ospa, 'DOCS_E')
-b_de = Base_de_datos(id_b_ospa, 'DOC_EMITIDOS_FINAL')
+b_de = Base_de_datos(id_b_ospa, 'DOC_EMITIDOS')
 b_de_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_DE')
 # Extremo de problemas
-b_ep = Base_de_datos(id_b_ospa, 'EXTREMOS')
+b_ep = Base_de_datos(id_b_ospa, 'EXT_PROBLEMA')
 
 # 2. Bases de datos complementarias
 id_b_efa = '1pjHXiz15Zmw-49Nr4o1YdXJnddUX74n7Tbdf5SH7Lb0'
