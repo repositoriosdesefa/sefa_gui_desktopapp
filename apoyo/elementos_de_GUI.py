@@ -365,7 +365,7 @@ class Cuadro(Frame):
         self.combo = ttk.Combobox(self.z, state="normal", width=39)
         self.combo.grid(row = self.y, column = self.x, pady=4, padx=8)
         self.combo["values"] = self.listadesplegable
-        self.combo.set(' ')
+        self.combo.set('')
         self.lista_de_objetos.append((self.combo))
         self.lista_de_datos.append((self.combo))
 
@@ -1033,7 +1033,6 @@ class Vitrina_vista(Frame):
                 bg=formato.boton_sin_que_pase_cursor
             )
             boton_eliminar.grid(row=0, column=len(lista_de_valores)+2)
-            #Hovertip_Sefa(boton_eliminar, text = "Pruebaaaaaaaaaaaa aaaaaaaaaaaaaaa aaaaaaaaaaaaaa")
             boton_eliminar.bind("<Button-1>",lambda e,argumento=argumento:self.funcion2(argumento))
             self.Efecto_de_boton(boton_eliminar)
 
@@ -1147,19 +1146,37 @@ class Vitrina_busqueda(Frame):
                 'valores': lista_de_valores 
             }
 
+            # Valores de la tabla
             tabla_valor = pd.DataFrame(elementos_valores)
             for i,row in tabla_valor.iterrows():
-                valor = Label(
-                    valores_subframe, 
-                    text=row[1],
-                    font=formato.tipo_de_letra_tabla,
-                    width=21,
-                    height=3,#se modifico  
-                    relief='groove',
-                    bg= formato.fondo_valores_de_tabla,
-                    wraplength=125, 
-                    justify="center")
-                valor.grid(row=0, column=row[0])
+                if len(str(row[1])) > 35:
+                    texto_completo = str(row[1])
+                    texto_recortado = texto_completo[0:35]
+                    texto_tabla_vista = texto_recortado + "..."
+                    valor = Label(
+                        valores_subframe, 
+                        text= texto_tabla_vista,
+                        font=formato.tipo_de_letra_tabla,
+                        width= 21, 
+                        height = 2,
+                        relief='groove',
+                        bg= formato.fondo_valores_de_tabla,
+                        wraplength=125, 
+                        justify="center")
+                    Hovertip_Sefa(valor, text = texto_completo)
+                    valor.grid(row=0, column=row[0])
+                else:
+                    valor = Label(
+                        valores_subframe, 
+                        text= row[1],
+                        font=formato.tipo_de_letra_tabla,
+                        width= 21, 
+                        height = 2,
+                        relief='groove',
+                        bg= formato.fondo_valores_de_tabla,
+                        wraplength=125, 
+                        justify="center")
+                    valor.grid(row=0, column=row[0])
 
             # Agregar botones
             
@@ -1171,7 +1188,7 @@ class Vitrina_busqueda(Frame):
                 font=formato.tipo_de_letra_tabla,
                 fg = formato.letras_del_boton,
                 width=7,
-                height=3,
+                height= 2,
                 relief='groove',
                 cursor="hand2",
                 bg=formato.boton_sin_que_pase_cursor
@@ -1201,7 +1218,7 @@ class Vitrina_busqueda(Frame):
                 font=formato.tipo_de_letra_tabla,
                 fg = formato.letras_del_boton,
                 width=8,
-                height=3,
+                height= 2,
                 relief='groove',
                 cursor="hand2",
                 bg=formato.boton_sin_que_pase_cursor

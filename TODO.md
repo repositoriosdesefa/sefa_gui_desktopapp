@@ -9,10 +9,14 @@
 - [x] Crear método de asociar
 - [x] Relacionar el ID interno con el ID del aplicativo
 - [x] Actualizar tabla de RELACIONES con su historial
+- [ ] Eliminar de la vitrina de búsqueda, docs ya asociados
+- [ ] Añadir vista de "No se han encontrados docs/extremos de acuerdo a los criterios seleccionados"
 - [ ] Búsqueda de problemas
 - [ ] Búsqueda por palabra clave
 - [ ] Búsqueda de macroproblemas
-- [ ] Actualizar vitrina_busqueda con Tooltip
+- [x] Actualizar vitrina_busqueda con Tooltip
+- [ ] Eliminar frame con entries al "Limpiar"
+- [ ] Fortalecer método "volver" con "actualizar_vista"
 
 ## vista_dr
 - [x] Mostrar inicialmente la vitrina vacía
@@ -31,6 +35,7 @@
 - [x] Simplificación del uso de código/id de usuario/interno
 - [x] Replicar métodos para la clase de documentos recibidos
 - [x] Mover rejilla para facilitar el ingreso de información al administrativo
+- [ ] Subframe de fecha de notificación y fecha de firma (Con botón).
 - [ ] No permitir ingresar un código de interfaz (de usuario) igual (Mensaje de error)
 - [ ] Vista de extremos de problemas (Adecuar pantalla a 3 vitrina)
 - [ ] Crear método para la asociación de más de 2 relaciones (transitividad)
