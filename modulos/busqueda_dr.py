@@ -1,7 +1,7 @@
 from tkinter import messagebox
 import datetime as dt
 
-from apoyo.elementos_de_GUI import Cuadro, Ventana, Vitrina_busqueda
+from apoyo.elementos_de_GUI import Cuadro, Ventana, Vitrina_busqueda, Vitrina_busquedaep
 from apoyo.manejo_de_bases import Base_de_datos
 import apoyo.datos_frecuentes as dfrec
 from modulos import vista_dr
@@ -14,21 +14,22 @@ base_relacion_d_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_RELACION_D')
 # 1. Bases de datos principales
 # Documentos recibidos
 b_dr_cod = Base_de_datos(id_b_ospa, 'DOCS_R')
-b_dr = Base_de_datos(id_b_ospa, 'DOC_RECIBIDOS_FINAL')
+b_dr = Base_de_datos(id_b_ospa, 'DOC_RECIBIDOS')
 b_dr_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_DR')
 # Documentos emitidos
 b_de_cod = Base_de_datos(id_b_ospa, 'DOCS_E')
-b_de = Base_de_datos(id_b_ospa, 'DOC_EMITIDOS_FINAL')
+b_de = Base_de_datos(id_b_ospa, 'DOC_EMITIDOS')
 b_de_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_DE')
 # Extremo de problemas
-b_ep = Base_de_datos(id_b_ospa, 'EXTREMOS')
+
+b_ep_cod = Base_de_datos(id_b_ospa, 'EXT_P')
+b_ep = Base_de_datos(id_b_ospa, 'EXT_PROBLEMA')
+b_de_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_EP')
+
 
 # 2. Bases de datos complementarias
 id_b_efa = '1pjHXiz15Zmw-49Nr4o1YdXJnddUX74n7Tbdf5SH7Lb0'
 b_efa = Base_de_datos(id_b_efa, 'Directorio')
-
-
-
 
 
 class Doc_recibidos_busqueda(Ventana):
@@ -78,15 +79,15 @@ class Doc_recibidos_busqueda(Ventana):
         self.c1 = Cuadro(self)
         self.c1.agregar_rejilla(self.rejilla_dr)
 
-        rejilla_b = (
+        self.rejilla_b = (
             ('B', 5, 4, 'Buscar', self.Buscar),
             ('B', 5, 5, 'Limpiar', self.limpiar),
             ('B', 5, 6, 'Volver', self.volver)
         )
         
 
-        c15 = Cuadro(self)
-        c15.agregar_rejilla(rejilla_b)
+        self.c15 = Cuadro(self)
+        self.c15.agregar_rejilla(self.rejilla_b)
 
         c2 = Cuadro(self)
         c2.agregar_titulo(2, 0, 'Búsqueda de documentos recibidos')
@@ -194,7 +195,9 @@ class Doc_recibidos_busqueda(Ventana):
     #----------------------------------------------------------------------
     def limpiar(self):
         
+        self.c15.eliminar_cuadro()
         self.v1.Eliminar_vitrina()
+        #self.c15.agregar_rejilla(self.rejilla_b)
 
     #----------------------------------------------------------------------
     def volver(self):
@@ -207,8 +210,7 @@ class Doc_recibidos_busqueda(Ventana):
         self.x = x
         texto_documento = 'Documento recibido: ' + x
 
-        b1 = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOC_RECIBIDOS_FINAL')
-        lb1 = b1.listar_datos_de_fila(self.x)
+        lb1 = b_dr.listar_datos_de_fila(self.x)
         lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], 
                                 lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14]]
         
@@ -222,8 +224,7 @@ class Doc_recibidos_busqueda(Ventana):
         self.x = x
         
         #OBTENER EL ID INTERNO DEL DOCUMENTO RECIBIDO
-        self.b1 = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOC_RECIBIDOS_FINAL')
-        self.IDDR = self.b1.listar_datos_de_fila(self.x)
+        self.IDDR = b_dr.listar_datos_de_fila(self.x)
         self.IDDR_FINAL = self.IDDR[0]
 
         #OBTENER EL ID USUARIO DEL DOCUMENTO EMITIDO
@@ -683,8 +684,7 @@ class Doc_emitidos_busqueda(Ventana):
         self.x = x
         texto_documento = 'Documento emitido: ' + x
 
-        bde = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOC_EMITIDOS_FINAL')
-        lb1 = bde.listar_datos_de_fila(self.x)
+        lb1 = b_de.listar_datos_de_fila(self.x)
         lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], 
                                 lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], lb1[12]]
         self.desaparecer()
@@ -778,8 +778,8 @@ class Extremos(Ventana):
         # Renombramos los encabezados
         self.ep = b_ep.generar_dataframe()
         self.tabla_ep = self.ep.rename(columns={'ID_EP':'ID EXTREMO','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.'})
-        self.tabla_ep2 = self.tabla_ep.iloc[:, [5, 0, 1, 2, 3, 4]]
-        self.tabla_ep3 = self.tabla_ep2.iloc[0:70, [5, 0, 1, 2, 3, 4]]
+        self.tabla_ep2 = self.tabla_ep.loc[:, ['ID EXTREMO','AGENTE CONTAMINANTE','COMPONENTE AMBIENTAL','ACTIVIDAD','DEPARTAMENTO','EFA','ESTADO','FECHA ULTIMO MOV.','DESCRIPCION']]
+        self.tabla_ep3 = self.tabla_ep2.loc[0:70, ['ID EXTREMO','AGENTE CONTAMINANTE','COMPONENTE AMBIENTAL','ACTIVIDAD','DEPARTAMENTO','EFA','ESTADO','FECHA ULTIMO MOV.','DESCRIPCION']]
         
         # Listas para desplegables
         self.listaAG = list(set(self.tabla_ep['AGENTE CONTAMINANTE']))
@@ -848,7 +848,7 @@ class Extremos(Ventana):
         ep3.agregar_titulo(2, 0, 'Búsqueda de extremos')
 
 
-        self.vep = Vitrina_busqueda(self, self.tabla_ep3, self.ver_ep, self.funcion_de_asociar_ep, height=200, width=1030)
+        self.vep = Vitrina_busquedaep(self, self.tabla_ep3, self.ver_ep, self.funcion_de_asociar_ep, height=200, width=1200)
     
 #----------------------------------------------------------------------
     def Buscar_ep(self):
