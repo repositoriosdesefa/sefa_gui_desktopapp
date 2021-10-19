@@ -789,7 +789,7 @@ class Extremos(Ventana):
         self.listaPROV = list(set(self.tabla_ep['PROVINCIA']))
         self.listaDISTR = list(set(self.tabla_ep['DISTRITO']))
         self.listaTIPOUBI = list(set(self.tabla_ep['TIPO DE UBICACION']))
-        self.listaOCURR = list(set(self.tabla_ep['OCURRENCIA']))
+        #self.listaOCURR = list(set(self.tabla_ep['OCURRENCIA']))
         self.listaEFA = list(set(self.tabla_ep['EFA']))
 
 
@@ -816,8 +816,8 @@ class Extremos(Ventana):
             ('L', 2, 0, 'Tipo de ubicación'),
             ('CX', 2, 1, self.listaTIPOUBI),
 
-            ('L', 2, 2, 'Ocurrencia'),
-            ('CX', 2, 3, self.listaOCURR),
+            #('L', 2, 2, 'Ocurrencia'),
+            #('CX', 2, 3, self.listaOCURR),
 
             ('L', 2, 4, 'EFA'),
             ('CX', 2, 5, self.listaEFA),
@@ -853,13 +853,13 @@ class Extremos(Ventana):
 #----------------------------------------------------------------------
     def Buscar_ep(self):
 
-        self.listas_filtrode = self.ep1.obtener_lista_de_datos()
-        self.decate = self.listas_filtrode[0] #
-        self.deht = self.listas_filtrode[1]
-        self.dedestin = self.listas_filtrode[2]
-        self.decodigo = self.listas_filtrode[3]
-        self.detipodoc = self.listas_filtrode[4] #
-        self.dedoc = self.listas_filtrode[5]
+        self.listas_filtroep = self.ep1.obtener_lista_de_datos()
+        self.palabraclave = self.listas_filtroep[8]
+        
+        if self.palabraclave != "":
+            self.vep.Eliminar_vitrina()
+            self.tabla_filtradade = self.tabla_ep2[self.tabla_ep2['DESCRIPCION'].str.contains(self.palabraclave)]
+            self.vep = Vitrina_busquedaep(self, self.tabla_filtradade, self.ver_ep, self.funcion_de_asociar_ep, height=200, width=1200)
 
 #----------------------------------------------------------------------
     def limpiar_ep(self):
