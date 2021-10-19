@@ -57,6 +57,7 @@
 - [ ] Armar tablas con datos reales para problemas (Lucia)
 - [ ] Armar tablas con datos reales para macro-problemas (Lucia)
 - [ ] Crear tablas de reiterativos y OCI
+- [ ] Revisión final de todas las tablas y comparación con las tablas actuales
 
 
 ## logueo y administracion
@@ -83,4 +84,3 @@
 - [ ] Pendientes por asignar (Perfil de jefe)
 - [ ] Pendeintes por firmar (Perfil de jefe)
 - [ ] Creación de pantallas de macroproblema
-
