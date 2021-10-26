@@ -6,11 +6,14 @@ from apoyo.manejo_de_bases import Base_de_datos
 import apoyo.datos_frecuentes as dfrec
 from modulos import vista_dr
 
-
+# BASES DE DATOS:
+#----------------------------------------------------------------------
 id_b_ospa = '13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4'
+
 # 0. Tablas relacionales
 base_relacion_docs = Base_de_datos(id_b_ospa, 'RELACION_DOCS')
 base_relacion_d_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_RELACION_D')
+
 # 1. Bases de datos principales
 # Documentos recibidos
 b_dr_cod = Base_de_datos(id_b_ospa, 'DOCS_R')
@@ -21,7 +24,6 @@ b_de_cod = Base_de_datos(id_b_ospa, 'DOCS_E')
 b_de = Base_de_datos(id_b_ospa, 'DOC_EMITIDOS')
 b_de_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_DE')
 # Extremo de problemas
-
 b_ep_cod = Base_de_datos(id_b_ospa, 'EXT_P')
 b_ep = Base_de_datos(id_b_ospa, 'EXT_PROBLEMA')
 b_de_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_EP')
@@ -30,7 +32,7 @@ b_de_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_EP')
 # 2. Bases de datos complementarias
 id_b_efa = '1pjHXiz15Zmw-49Nr4o1YdXJnddUX74n7Tbdf5SH7Lb0'
 b_efa = Base_de_datos(id_b_efa, 'Directorio')
-
+#----------------------------------------------------------------------
 
 class Doc_recibidos_busqueda(Ventana):
     """"""
@@ -46,16 +48,24 @@ class Doc_recibidos_busqueda(Ventana):
             self.id_usuario = lista
             self.cod_doc_de = id_doc
 
+        # Generamos el dataframe a filtrar
         self.tabla_inicial = b_dr.generar_dataframe()
-        self.tabla_2 = self.tabla_inicial.rename(columns={'HT_ID':'ID DOC RECIBIDO','HT_ENTRANTE':'NRO REGISTRO SIGED','COD_PROBLEMA':'CODIGO','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','APORTE_DOC':'ASUNTO'})
-        self.tabla_3 = self.tabla_2.iloc[:, [1, 5, 17, 9, 11, 15, 8]]
-        self.tabla_dr = self.tabla_2.iloc[0:99, [1, 5, 17, 9, 11, 15, 8]]
-
-
+        self.tabla_2 = self.tabla_inicial.rename(columns={'HT_ID':'ID DOC RECIBIDO','HT_ENTRANTE':'NRO REGISTRO SIGED','COD_PROBLEMA':'CODIGO','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.'})
+        self.tabla_3 = self.tabla_2.loc[:, ['ID DOC RECIBIDO','FECHA INGRESO SEFA','CODIGO','REMITENTE','INDICACION','FECHA ULTIMO MOV.','ASUNTO']]
+        self.tabla_dr = self.tabla_2.loc[0:99, ['ID DOC RECIBIDO','FECHA INGRESO SEFA','CODIGO','REMITENTE','INDICACION','FECHA ULTIMO MOV.','ASUNTO']]
+ 
+        # Información para las listas desplegables
         self.listatipodoc = list(set(self.tabla_2['TIPO_DOC']))
         self.listadestina = list(set(self.tabla_2['REMITENTE']))
 
+        # Agregando logo del ospa a la ventana y título
+        self.c0 = Cuadro(self)
+        self.c0.agregar_label(0,0,' ')
+        self.c0.agregar_imagen(1,0,'Logo_OSPA.png',202,49)
+        c2 = Cuadro(self)
+        c2.agregar_titulo(2, 0, 'Búsqueda de documentos recibidos')
 
+        # Armando rejilla con los filtros
         self.rejilla_dr = (
 
             ('L', 0, 0, 'Nro registro Siged'),
@@ -72,48 +82,48 @@ class Doc_recibidos_busqueda(Ventana):
 
         )
         
-        self.c0 = Cuadro(self)
-        self.c0.agregar_label(0,0,' ')
-        self.c0.agregar_imagen(1,0,'Logo_OSPA.png',202,49)
-
+        # Agregando rejilla a la ventana
         self.c1 = Cuadro(self)
         self.c1.agregar_rejilla(self.rejilla_dr)
 
+        # Generando rejilla para botones
         self.rejilla_b = (
             ('B', 5, 4, 'Buscar', self.Buscar),
             ('B', 5, 5, 'Limpiar', self.limpiar),
             ('B', 5, 6, 'Volver', self.volver)
         )
         
-
+        # Agregando rejilla de botones a la ventana
         self.c15 = Cuadro(self)
         self.c15.agregar_rejilla(self.rejilla_b)
 
-        c2 = Cuadro(self)
-        c2.agregar_titulo(2, 0, 'Búsqueda de documentos recibidos')
-
-
+        # Creando vitrina
         self.v1 = Vitrina_busqueda(self, self.tabla_dr, self.ver_dr, 
                                    self.funcion_de_asociar, height=200, width=1030)
 
     #----------------------------------------------------------------------
     def Buscar(self):
 
+        # Obteniendo valores de la rejilla
         self.listas_filtro = self.c1.obtener_lista_de_datos()
         self.ht = self.listas_filtro[0]
         self.tipodoc = self.listas_filtro[1]
         self.codigo = self.listas_filtro[2]
         self.remitente = self.listas_filtro[3]
 
+        self.frame_vitrina_1 = Cuadro(self)
+
+        # Creando filtro de acuerdo a la información obtenida
+
         if self.tipodoc != "" :
             self.v1.Eliminar_vitrina()
             self.tabla_filtrada = self.tabla_2[self.tabla_2['TIPO_DOC']==self.tipodoc]
-            self.tabla_drr = self.tabla_filtrada.iloc[0:99, [1, 5, 17, 9, 11, 15, 8]]
+            self.tabla_drr = self.tabla_filtrada.loc[:, ['ID DOC RECIBIDO','FECHA INGRESO SEFA','CODIGO','REMITENTE','INDICACION','FECHA ULTIMO MOV.','ASUNTO']]
             self.v1 = Vitrina_busqueda(self, self.tabla_drr, self.ver_dr, self.funcion_de_asociar, height=200, width=1030)
             if self.ht != "" :
                 self.v1.Eliminar_vitrina()
                 self.tabla_filtrada3 = self.tabla_filtrada[self.tabla_filtrada['NRO REGISTRO SIGED']==self.ht]
-                self.tabla_dr2 = self.tabla_filtrada3.iloc[:, [1, 5, 17, 9, 11, 15, 8]]
+                self.tabla_dr2 = self.tabla_filtrada3.loc[:, ['ID DOC RECIBIDO','FECHA INGRESO SEFA','CODIGO','REMITENTE','INDICACION','FECHA ULTIMO MOV.','ASUNTO']]
                 self.v1 = Vitrina_busqueda(self, self.tabla_dr2, self.ver_dr, self.funcion_de_asociar, height=200, width=1030)
                 if self.remitente != "" :
                     self.v1.Eliminar_vitrina()
@@ -122,8 +132,7 @@ class Doc_recibidos_busqueda(Ventana):
                     if self.codigo != "" :
                         self.v1.Eliminar_vitrina()
                         self.tabla_filtrada4 = self.tabla_filtrada2[self.tabla_filtrada2['CODIGO']==self.codigo]
-                        self.v1 = Vitrina_busqueda(self, self.tabla_filtrada4, self.ver_dr, self.funcion_de_asociar, height=200, width=1030)
-                    
+                        self.v1 = Vitrina_busqueda(self, self.tabla_filtrada4, self.ver_dr, self.funcion_de_asociar, height=200, width=1030)       
                 else:
                     if self.codigo != "" :
                         self.v1.Eliminar_vitrina()
@@ -134,7 +143,7 @@ class Doc_recibidos_busqueda(Ventana):
                 if self.remitente != "" :
                     self.v1.Eliminar_vitrina()
                     self.tabla_filtrada3 = self.tabla_filtrada[self.tabla_filtrada['REMITENTE']==self.remitente]
-                    self.tabla_filtrada33 = self.tabla_filtrada3.iloc[:, [1, 5, 17, 9, 11, 15, 8]]
+                    self.tabla_filtrada33 = self.tabla_filtrada3.loc[:, ['ID DOC RECIBIDO','FECHA INGRESO SEFA','CODIGO','REMITENTE','INDICACION','FECHA ULTIMO MOV.','ASUNTO']]
                     self.v1 = Vitrina_busqueda(self, self.tabla_filtrada33, self.ver_dr, self.funcion_de_asociar, height=200, width=1030)
                     if self.codigo != "" :
                         self.v1.Eliminar_vitrina()
@@ -144,7 +153,7 @@ class Doc_recibidos_busqueda(Ventana):
                     if self.codigo != "" :
                         self.v1.Eliminar_vitrina()
                         self.tabla_filtrada3 = self.tabla_filtrada[self.tabla_filtrada['CODIGO']==self.codigo]
-                        self.tabla_filtrada33 = self.tabla_filtrada3.iloc[:, [1, 5, 17, 9, 11, 15, 8]]
+                        self.tabla_filtrada33 = self.tabla_filtrada3.loc[:, ['ID DOC RECIBIDO','FECHA INGRESO SEFA','CODIGO','REMITENTE','INDICACION','FECHA ULTIMO MOV.','ASUNTO']]
                         self.v1 = Vitrina_busqueda(self, self.tabla_filtrada33, self.ver_dr, self.funcion_de_asociar, height=200, width=1030)
                    
         
@@ -152,7 +161,7 @@ class Doc_recibidos_busqueda(Ventana):
             if self.ht != "" :
                 self.v1.Eliminar_vitrina()
                 self.tabla_i = self.tabla_2[self.tabla_2['NRO REGISTRO SIGED']==self.ht]
-                self.tabla_drr = self.tabla_i.iloc[:, [1, 5, 17, 9, 11, 15, 8]]
+                self.tabla_drr = self.tabla_i.loc[:, ['ID DOC RECIBIDO','FECHA INGRESO SEFA','CODIGO','REMITENTE','INDICACION','FECHA ULTIMO MOV.','ASUNTO']]
                 self.v1 = Vitrina_busqueda(self, self.tabla_drr, self.ver_dr, self.funcion_de_asociar, height=200, width=1030)
                 if self.remitente != "" :
                     self.v1.Eliminar_vitrina()
@@ -172,19 +181,19 @@ class Doc_recibidos_busqueda(Ventana):
                 if self.remitente != "" :
                     self.v1.Eliminar_vitrina()
                     self.tabla_filtrada = self.tabla_2[self.tabla_2['REMITENTE']==self.remitente]
-                    self.tabla_drr = self.tabla_filtrada.iloc[0:99, [1, 5, 17, 9, 11, 15, 8]]
+                    self.tabla_drr = self.tabla_filtrada.loc[:, ['ID DOC RECIBIDO','FECHA INGRESO SEFA','CODIGO','REMITENTE','INDICACION','FECHA ULTIMO MOV.','ASUNTO']]
                     self.v1 = Vitrina_busqueda(self, self.tabla_drr, self.ver_dr, self.funcion_de_asociar, height=200, width=1030)
                     if self.codigo != "" :
                         self.v1.Eliminar_vitrina()
                         self.tabla_filtrada2 = self.tabla_filtrada[self.tabla_filtrada['CODIGO']==self.codigo]
-                        self.tabla_filtrada22 = self.tabla_filtrada2.iloc[:, [1, 5, 17, 9, 11, 15, 8]]
+                        self.tabla_filtrada22 = self.tabla_filtrada2.loc[:, ['ID DOC RECIBIDO','FECHA INGRESO SEFA','CODIGO','REMITENTE','INDICACION','FECHA ULTIMO MOV.','ASUNTO']]
                         self.v1 = Vitrina_busqueda(self, self.tabla_filtrada22, self.ver_dr, self.funcion_de_asociar, height=200, width=1030)
   
                 else:
                     if self.codigo != "" :
                         self.v1.Eliminar_vitrina()
                         self.tabla_filtrada = self.tabla_2[self.tabla_2['CODIGO']==self.codigo]
-                        self.tabla_drr = self.tabla_filtrada.iloc[0:99, [1, 5, 17, 9, 11, 15, 8]]
+                        self.tabla_drr = self.tabla_filtrada.loc[0:99, ['ID DOC RECIBIDO','FECHA INGRESO SEFA','CODIGO','REMITENTE','INDICACION','FECHA ULTIMO MOV.','ASUNTO']]
                         self.v1 = Vitrina_busqueda(self, self.tabla_drr, self.ver_dr, self.funcion_de_asociar, height=200, width=1030)
                     else:
                         self.v1.Eliminar_vitrina()
@@ -195,9 +204,18 @@ class Doc_recibidos_busqueda(Ventana):
     #----------------------------------------------------------------------
     def limpiar(self):
         
-        self.c15.eliminar_cuadro()
+        # Eliminando campos
+        self.c1.eliminar_cuadro()
         self.v1.Eliminar_vitrina()
-        #self.c15.agregar_rejilla(self.rejilla_b)
+        self.c15.eliminar_cuadro()
+        # Agregando rejilla a la ventana
+        self.c1 = Cuadro(self)
+        self.c1.agregar_rejilla(self.rejilla_dr)
+        self.c15 = Cuadro(self)
+        self.c15.agregar_rejilla(self.rejilla_b)
+        # Creando vitrina
+        self.v1 = Vitrina_busqueda(self, self.tabla_dr, self.ver_dr, 
+                                   self.funcion_de_asociar, height=200, width=1030)
 
     #----------------------------------------------------------------------
     def volver(self):
@@ -789,7 +807,7 @@ class Extremos(Ventana):
         self.listaPROV = list(set(self.tabla_ep['PROVINCIA']))
         self.listaDISTR = list(set(self.tabla_ep['DISTRITO']))
         self.listaTIPOUBI = list(set(self.tabla_ep['TIPO DE UBICACION']))
-        self.listaOCURR = list(set(self.tabla_ep['OCURRENCIA']))
+        #self.listaOCURR = list(set(self.tabla_ep['OCURRENCIA']))
         self.listaEFA = list(set(self.tabla_ep['EFA']))
 
 
@@ -816,8 +834,8 @@ class Extremos(Ventana):
             ('L', 2, 0, 'Tipo de ubicación'),
             ('CX', 2, 1, self.listaTIPOUBI),
 
-            ('L', 2, 2, 'Ocurrencia'),
-            ('CX', 2, 3, self.listaOCURR),
+            #('L', 2, 2, 'Ocurrencia'),
+            #('CX', 2, 3, self.listaOCURR),
 
             ('L', 2, 4, 'EFA'),
             ('CX', 2, 5, self.listaEFA),
@@ -853,13 +871,20 @@ class Extremos(Ventana):
 #----------------------------------------------------------------------
     def Buscar_ep(self):
 
-        self.listas_filtrode = self.ep1.obtener_lista_de_datos()
-        self.decate = self.listas_filtrode[0] #
-        self.deht = self.listas_filtrode[1]
-        self.dedestin = self.listas_filtrode[2]
-        self.decodigo = self.listas_filtrode[3]
-        self.detipodoc = self.listas_filtrode[4] #
-        self.dedoc = self.listas_filtrode[5]
+        self.listas_filtroep = self.ep1.obtener_lista_de_datos()
+        self.palabraclave = self.listas_filtroep[8]
+        self.efa = self.listas_filtroep[7]
+
+        
+        if self.palabraclave != "":
+            self.vep.Eliminar_vitrina()
+            self.tabla_filtradade = self.tabla_ep2[self.tabla_ep2['DESCRIPCION'].str.contains(self.palabraclave.upper())]
+            self.vep = Vitrina_busquedaep(self, self.tabla_filtradade, self.ver_ep, self.funcion_de_asociar_ep, height=200, width=1200)
+            if self.efa != "":
+                self.vep.Eliminar_vitrina()
+                self.tabla_filtradade2 = self.tabla_filtradade[self.tabla_filtradade['EFA']==self.efa]
+                self.vep = Vitrina_busqueda(self, self.tabla_filtradade2, self.ver_ep, self.funcion_de_asociar_ep, height=200, width=1200)
+           
 
 #----------------------------------------------------------------------
     def limpiar_ep(self):
@@ -888,6 +913,4 @@ class Extremos(Ventana):
     #----------------------------------------------------------------------
     def funcion_de_asociar_ep(self, x):
         """"""
-
         print("hola")
-     
