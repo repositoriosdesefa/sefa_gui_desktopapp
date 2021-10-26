@@ -19,7 +19,7 @@ class Aplicacion(object):
 
         #subFrame = logueo.logueo1_Ingreso_de_usuario(self, 450, 400, "Herramientas de Sefa - Versión 0.0")
 
-        subFrame = inicio_app_OSPA(self, 350, 400, "Inicio")
+        subFrame = inicio_app_OSPA(self, 768, 1366, "Inicio")
         
         # LargoxAncho
         # subFrame = vista_dr.Doc_recibidos_vista(self,650, 1100,'Documentos recibidos')
