@@ -35,6 +35,10 @@
 - [x] Simplificación del uso de código/id de usuario/interno
 - [x] Replicar métodos para la clase de documentos recibidos
 - [x] Mover rejilla para facilitar el ingreso de información al administrativo
+- [ ] Agregar timestamp (tiempo para cada clase de objeto)
+- [ ] EP: Primer entry sea el código de problema
+- [ ] EP: Agregar botón con "Prioridad" y vista de puntaje
+- [ ] EP: Agregar vista de f_creación y f_actualización
 - [ ] Subframe de fecha de notificación y fecha de firma (Con botón).
 - [ ] No permitir ingresar un código de interfaz (de usuario) igual (Mensaje de error)
 - [ ] Vista de extremos de problemas (Adecuar pantalla a 3 vitrina)
@@ -54,8 +58,8 @@
 ## Base de datos
 - [x] Armar tablas con datos reales para docs recibidos (Lucho)
 - [x] Armar tablas con datos reales para docs emitidos (Lucia)
-- [ ] Armar tablas con datos reales para problemas (Lucia)
-- [ ] Armar tablas con datos reales para macro-problemas (Lucia)
+- [ ] Armar tablas con datos reales para problemas
+- [ ] Armar tablas con datos reales para macro-problemas 
 - [ ] Crear tablas de reiterativos y OCI
 - [ ] Revisión final de todas las tablas y comparación con las tablas actuales
 
@@ -73,9 +77,9 @@
 ## Nuevas ventanas
 - [x] Creación de pantallas de menú
 - [x] Creación de pantallas equipo administrativo
-- [ ] Crear pantalla de extremo de problemas [Lucho]
-- [ ] Crear pantalla de búsqueda de extremo de problema [Lucía]
-- [ ] Crear tabla de relaciones entre documentos y extremos de problemas [Ambos]
+- [x] Crear pantalla de extremo de problemas [Lucho]
+- [x] Crear pantalla de búsqueda de extremo de problema [Lucía]
+- [x] Crear tabla de relaciones entre documentos y extremos de problemas [Ambos]
 - [ ] Crear pantalla de administrados [Lucho]
 - [ ] Crear pantalla de búsqueda de administrados [Lucía]
 - [ ] Creación de asignaciones pendientes Equipo 1
