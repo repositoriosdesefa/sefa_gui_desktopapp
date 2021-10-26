@@ -30,6 +30,7 @@ id_b_ospa = '13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4'
 # 0. Tablas relacionales
 base_relacion_docs = Base_de_datos(id_b_ospa, 'RELACION_DOCS')
 base_relacion_d_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_RELACION_D')
+base_relacion_ep_dr =  Base_de_datos(id_b_ospa, 'RELACION_DR-EP')
 # 1. Bases de datos principales
 # Documentos recibidos
 b_dr_cod = Base_de_datos(id_b_ospa, 'DOCS_R')
@@ -40,10 +41,9 @@ b_de_cod = Base_de_datos(id_b_ospa, 'DOCS_E')
 b_de = Base_de_datos(id_b_ospa, 'DOC_EMITIDOS')
 b_de_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_DE')
 # Extremo de problemas
-
 b_ep_cod = Base_de_datos(id_b_ospa, 'EXT_P')
 b_ep = Base_de_datos(id_b_ospa, 'EXT_PROBLEMA')
-b_de_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_EP')
+b_ep_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_EP')
 
 
 # 2. Bases de datos complementarias
@@ -187,7 +187,10 @@ class Doc_recibidos_vista(Ventana):
         # II.2 Lista de EP
         tabla_de_ep_completa = b_ep.generar_dataframe()
         tabla_de_ep_id = tabla_de_ep_completa
-        tabla_de_ep = tabla_de_ep_id.drop(['ID_EP'], axis=1)
+        self.tabla_de_ep = tabla_de_ep_id.drop(['REFERENCIA', 'EXTENSION', 'TIPO DE AFECTACION',
+                                                'PROVINCIA', 'DISTRITO', 'DESCRIPCION', 'TIPO DE UBICACION',
+                                                'CARACTERISTICA 1', 'CARACTERISTICA 2', 'TIPO CAUSA',
+                                                'CODIGO SINADA', 'ACTIVIDAD', 'FECHA_ULTIMO_MOV'], axis=1)
         
         # III. Ubicaciones
         # III.1 Frame de Título
@@ -240,8 +243,9 @@ class Doc_recibidos_vista(Ventana):
         # III.7 Frame de vitrina 2
         self.frame_vitrina_2 = Cuadro(self)
         if self.nuevo != True:
-            # Provisional
-            self.frame_vitrina_2.agregar_label(1, 2,'                  0 extremos de problemas asociados') 
+            self.generar_vitrina(self.frame_vitrina_2,
+                                 b_dr_cod, self.tabla_de_ep, base_relacion_ep_dr, 
+                                 "ID_DR", "ID_EP", self.ver_ep, self.eliminar_ep)
         else:
             self.frame_vitrina_2.agregar_label(1, 2,'                  0 extremos de problemas asociados') 
 
@@ -471,9 +475,16 @@ class Doc_recibidos_vista(Ventana):
         print("Pantalla de búsqueda de extremo de problemas")
     
     #----------------------------------------------------------------------
-    def ver_ep(self, x):
+    def ver_ep(self, id_usuario):
         """"""
-        print("Ver extremo de problema asociado")
+        texto_documento = 'Documento emitido: ' + id_usuario
+
+        lb1 = b_de.listar_datos_de_fila(id_usuario)
+        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], 
+                                lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], lb1[12]]
+        self.desaparecer()
+        subframe = Extremo_problemas_vista(self, 650, 1150, texto_documento, nuevo=False, 
+                                        lista=lista_para_insertar, id_doc = id_usuario)
 
     #----------------------------------------------------------------------
     def eliminar_ep(self, x):
@@ -1061,6 +1072,7 @@ class Extremo_problemas_vista(Ventana):
         else:
             # Timestamp
             ahora = str(dt.datetime.now())
+            hora_de_creacion = str(ahora) # De lo creado en la pestaña 1
             # Pestaña 1: Código Único
             ht = datos_ingresados[0]
             # Creo el código único
@@ -1073,13 +1085,13 @@ class Extremo_problemas_vista(Ventana):
             cod_interno_ep = lista_descargada_codigo[0]
             cod_usuario_ep = lista_descargada_codigo[3]
             # Creo el vector a subir
-            lista_a_cargar = [cod_interno_ep] + [cod_usuario_ep] + datos_ingresados
+            lista_a_cargar = [cod_interno_ep] + [cod_usuario_ep] + datos_ingresados + [hora_de_creacion]
             b_ep.agregar_datos(lista_a_cargar) # Se sube la info
 
             # Pestaña 3
-            hora_de_creacion = str(ahora) # De lo creado en la pestaña 1
-            lista_historial = lista_a_cargar + [hora_de_creacion] # Lo subido a la pestaña 2 + hora
-            b_dr_hist.agregar_datos(lista_historial) # Se sube la info
+            # Lo subido a la pestaña 2 + Hora de último movimiento
+            lista_historial = lista_a_cargar + [hora_de_creacion]
+            b_ep_hist.agregar_datos(lista_historial) # Se sube la info
         
             # Confirmación de registro
             messagebox.showinfo("¡Excelente!", "Se ha ingresado un nuevo registro")
