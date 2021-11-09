@@ -9,6 +9,18 @@ import apoyo.datos_frecuentes as dfrec
 
 # Prueba rama
 # Valores de lista desplegable
+id_b_ospa = '13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4'
+id_parametros = '1NPg8Q0O_NqQ6bkRhy4ow17x2XJ08r6Ev3R6X80WmZ3c'
+
+base_parametros = Base_de_datos(id_parametros, 'PARAMETROS')
+tabla_parametros = base_parametros.generar_dataframe()
+agente_conta = list(set(tabla_parametros['AGENTE CALCULADORA']))
+componente_amb = list(set(tabla_parametros['COMPONENTE CALCULADORA']))
+actividad_eco = list(set(tabla_parametros['ACTIVIDAD CALCULADORA']))
+extension = list(set(tabla_parametros['EXTENSION CALCULADORA']))
+ubicacion = list(set(tabla_parametros['UBICACION CALCULADORA']))
+ocurrencia = list(set(tabla_parametros['OCURRENCIA CALCULADORA']))
+
 tipo_ingreso = ('DIRECTO', 'DERIVACION-SUBDIRECCION', 
                 'DERIVACION-SUPERVISION', 'DERIVACION-SINADA')
 tipo_documento = ('OFICIO', 'MEMORANDO', 'CARTA', 'OFICIO CIRCULAR','MEMORANDO CIRCULAR', 'CARTA CIRCULAR',
@@ -25,7 +37,7 @@ categorias = ('Pedido de información', 'Pedido de información adicional', 'Ped
 marco_pedido = ('EFA', 'OEFA',
                 'Colaboración', 'Delegación', 'Conocimiento')
 
-id_b_ospa = '13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4'
+
 
 # 0. Tablas relacionales
 base_relacion_docs = Base_de_datos(id_b_ospa, 'RELACION_DOCS')
@@ -140,7 +152,7 @@ class Doc_recibidos_vista(Ventana):
             ('E', 0, 1),
 
             ('L', 0, 2, 'Vía de recepción'),
-            ('CXI', 0, 3, tipo_ingreso),
+            ('CX', 0, 3, tipo_ingreso),
 
             ('L', 1, 0, 'Fecha de recepción OEFA'),
             ('D', 1, 1),
@@ -149,7 +161,7 @@ class Doc_recibidos_vista(Ventana):
             ('D', 1, 3),
 
             ('L', 2, 0, 'Tipo de documento'),
-            ('CXI', 2, 1, tipo_documento),
+            ('CX', 2, 1, tipo_documento),
 
             ('L', 2, 2, 'N° de documento'),
             ('E', 2, 3),
@@ -158,22 +170,22 @@ class Doc_recibidos_vista(Ventana):
             ('EL', 3, 1, 112, 3),
 
             ('L', 4, 0, 'Remitente'),
-            ('CXI', 4, 1, lista_efa),
+            ('CX', 4, 1, lista_efa),
 
             ('L', 4, 2, '¿Es respuesta?'),
-            ('CXI', 4, 3, si_no),
+            ('CX', 4, 3, si_no),
 
             ('L', 5, 0, 'Indicación'),
-            ('CXI', 5, 1, tipo_indicacion),
+            ('CX', 5, 1, tipo_indicacion),
 
             ('L', 5, 2, 'Especialista asignado'),
-            ('CXI', 5, 3, especialista),
+            ('CX', 5, 3, especialista),
 
             ('L', 6, 0, 'Aporte del documento'),
             ('ST', 6, 1),
 
             ('L', 7, 0, 'Respuesta'),
-            ('CXI', 7, 1, tipo_respuesta)
+            ('CX', 7, 1, tipo_respuesta)
         )
 
         # II. Tablas en ventana
@@ -187,7 +199,7 @@ class Doc_recibidos_vista(Ventana):
         # II.2 Lista de EP
         tabla_de_ep_completa = b_ep.generar_dataframe()
         tabla_de_ep_id = tabla_de_ep_completa
-        self.tabla_de_ep = tabla_de_ep_id.drop(['REFERENCIA', 'EXTENSION', 'TIPO DE AFECTACION',
+        self.tabla_de_ep = tabla_de_ep_id.drop(['OCURRENCIA', 'EXTENSION', 'TIPO DE AFECTACION',
                                                 'PROVINCIA', 'DISTRITO', 'DESCRIPCION', 'TIPO DE UBICACION',
                                                 'CARACTERISTICA 1', 'CARACTERISTICA 2', 'TIPO CAUSA',
                                                 'CODIGO SINADA', 'ACTIVIDAD', 'FECHA_ULTIMO_MOV'], axis=1)
@@ -513,12 +525,12 @@ class Doc_emitidos_vista(Ventana):
             self.cod_usuario_de = id_doc
 
         # I. Labels and Entries
-        rejilla_dr = (
+        rejilla_de = (
             ('L', 0, 0, 'HT de salida'),
             ('E', 0, 1),
 
             ('L', 0, 2, 'Categoría'),
-            ('CXI', 0, 3, categorias),
+            ('CX', 0, 3, categorias),
 
             ('L', 1, 0, 'Fecha de proyecto final'),
             ('D', 1, 1),
@@ -527,22 +539,22 @@ class Doc_emitidos_vista(Ventana):
             #('D', 1, 3),
 
             ('L', 2, 0, 'Tipo de documento'),
-            ('CXI', 2, 1, tipo_documento),
+            ('CX', 2, 1, tipo_documento),
 
             ('L', 2, 2, 'N° de documento'),
             ('E', 2, 3),
 
             ('L', 3, 0, 'Destinatario'),
-            ('CXI', 3, 1, lista_efa),
+            ('CX', 3, 1, lista_efa),
 
             ('L', 3, 2, '¿Se emitió documento?'),
-            ('CXI', 3, 3, si_no),
+            ('CX', 3, 3, si_no),
 
             ('L', 4, 0, 'Detalle de requerimiento'),
             ('ST', 4, 1),
 
             ('L', 5, 0, 'Marco de pedido'),
-            ('CXI', 5, 1, marco_pedido),
+            ('CX', 5, 1, marco_pedido),
 
             #('L', 5, 2, 'Fecha de notificación'),
             #('D', 5, 3)
@@ -571,7 +583,7 @@ class Doc_emitidos_vista(Ventana):
 
         # III.2 Frame de rejilla
         self.frame_rejilla = Cuadro(self)
-        self.frame_rejilla.agregar_rejilla(rejilla_dr)
+        self.frame_rejilla.agregar_rejilla(rejilla_de)
         # En caso exista precedente, se inserta en la rejilla
         if self.nuevo != True: 
             self.frame_rejilla.insertar_lista_de_datos(self.lista_para_insertar)
@@ -853,22 +865,25 @@ class Extremo_problemas_vista(Ventana):
         
         # 0. Almacenamos información heredada
         self.nuevo = nuevo
+        cod_problema = '' # Objeto vacío
+
         if self.nuevo != True: # En caso exista
             self.lista_para_insertar = lista
             self.cod_usuario_ep = id_doc
+            cod_problema = lista[0]
 
         # I. Labels and Entries
-        rejilla_dr = (
-            ('L', 0, 0, 'Componente ambiental'),
-            ('EL', 0, 1, 30, 1),
+        rejilla_ep = (
+            ('L', 0, 0, 'Código de problema'),
+            ('L', 0, 1, str(cod_problema)),
 
             ('L', 0, 2, 'Departamento'),
             ('EL', 0, 3, 30, 1),
 
-            ('L', 0, 4, 'Referencia'),
+            ('L', 0, 4, 'Ocurrencia'),
             ('EL', 0, 5, 30, 1),
 
-            ('L', 1, 0, 'Tipo de afectación'),
+            ('L', 1, 0, 'Componente ambiental'),
             ('EL', 1, 1, 30, 1),
 
             ('L', 1, 2, 'Provincia'),
@@ -877,13 +892,13 @@ class Extremo_problemas_vista(Ventana):
             ('L', 1, 4, 'Descripción'),
             ('STP', 1, 5, 28, 2),
 
-            ('L', 2, 0, 'Agente contaminante'),
+            ('L', 2, 0, 'Tipo de afectación'),
             ('EL', 2, 1, 30, 1),
 
             ('L', 2, 2, 'Distrito'),
             ('EL', 2, 3, 30, 1),
 
-            ('L', 3, 0, 'Actividad'),
+            ('L', 3, 0, 'Agente contaminante'),
             ('EL', 3, 1, 30, 1),
 
             ('L', 3, 2, 'Tipo de ubicación'),
@@ -892,7 +907,7 @@ class Extremo_problemas_vista(Ventana):
             ('L', 3, 4, 'EFA'),
             ('EL', 3, 5, 30, 1),
 
-            ('L', 4, 0, 'Característica 1'),
+            ('L', 4, 0, 'Actividad'),
             ('EL', 4, 1, 30, 1),
 
             ('L', 4, 2, 'Extensión'),
@@ -901,14 +916,88 @@ class Extremo_problemas_vista(Ventana):
             ('L', 4, 4, 'Estado'),
             ('EL', 4, 5, 30, 1),
 
-            ('L', 5, 0, 'Característica 2'),
+            ('L', 5, 0, 'Característica 1'),
             ('EL', 5, 1, 30, 1),
 
             ('L', 5, 2, 'Tipo de causa'),
             ('EL', 5, 3, 30, 1),
 
             ('L', 5, 4, 'Código SINADA'),
-            ('EL', 5, 5, 30, 1)
+            ('EL', 5, 5, 30, 1),
+
+            ('L', 6, 0, 'Característica 2'),
+            ('EL', 6, 1, 30, 1),
+
+            ('L', 6, 2, '¿Es prioridad?'),
+            ('CX', 6, 3, si_no),
+
+            ('L', 6, 4, 'Puntaje'),
+            ('EL', 6, 5, 30, 1)
+
+        )
+
+        # Rejilla nuevo
+        rejilla_ep_nuevo = (
+            #('L', 0, 0, 'Código de problema'),
+            #('L', 0, 1, str(cod_problema)),
+
+            ('L', 0, 2, 'Departamento'),
+            ('EL', 0, 3, 30, 1),
+
+            ('L', 0, 4, 'Ocurrencia'),
+            ('CXP', 0, 5, 27, "readonly", ocurrencia),
+
+            ('L', 1, 0, 'Componente ambiental'),
+            ('CXP', 1, 1, 27, "readonly", componente_amb),
+
+            ('L', 1, 2, 'Provincia'),
+            ('EL', 1, 3, 30, 1),
+
+            ('L', 1, 4, 'Descripción'),
+            ('STP', 1, 5, 28, 2),
+
+            ('L', 2, 0, 'Tipo de afectación'),
+            ('EL', 2, 1, 30, 1),
+
+            ('L', 2, 2, 'Distrito'),
+            ('EL', 2, 3, 30, 1),
+
+            ('L', 3, 0, 'Agente contaminante'),
+            ('CXP', 3, 1, 27, "readonly", agente_conta),
+
+            ('L', 3, 2, 'Tipo de ubicación'),
+            ('CXP', 3, 3, 27, "readonly", ubicacion),
+
+            ('L', 3, 4, 'EFA'),
+            ('CXP', 3, 5, 27, "readonly", lista_efa),
+
+            ('L', 4, 0, 'Actividad'),
+            ('CXP', 4, 1, 27, "readonly", actividad_eco),
+
+            ('L', 4, 2, 'Extensión'),
+            ('CXP', 4, 3, 27, "readonly", extension),
+            
+            ('L', 4, 4, 'Estado'),
+            ('EL', 4, 5, 30, 1),
+
+            ('L', 5, 0, 'Característica 1'),
+            ('EL', 5, 1, 30, 1),
+
+            ('L', 5, 2, 'Tipo de causa'),
+            ('EL', 5, 3, 30, 1),
+
+            ('L', 5, 4, 'Código SINADA'),
+            ('EL', 5, 5, 30, 1),
+
+            ('L', 6, 0, 'Característica 2'),
+            ('EL', 6, 1, 30, 1),
+
+            ('L', 6, 2, '¿Es prioridad?'),
+            ('CXP', 6, 3, 27, "readonly", si_no)
+
+            #('L', 6, 4, 'Puntaje'),
+            #('EL', 6, 5, 30, 1)
+
         )
 
         # II. Tablas en ventana
@@ -935,10 +1024,12 @@ class Extremo_problemas_vista(Ventana):
 
         # III.2 Frame de rejillas
         self.frame_rejilla = Cuadro(self)
-        self.frame_rejilla.agregar_rejilla(rejilla_dr)
         # En caso exista precedente, se inserta en la rejilla
         if self.nuevo != True:
+            self.frame_rejilla.agregar_rejilla(rejilla_ep)
             self.frame_rejilla.insertar_lista_de_datos(self.lista_para_insertar)
+        else:
+            self.frame_rejilla.agregar_rejilla(rejilla_ep_nuevo)
 
         # III.3 Frame de botón de rejilla
         f_boton = Cuadro(self)
@@ -969,8 +1060,8 @@ class Extremo_problemas_vista(Ventana):
         self.boton_vitrina_2.agregar_button(0, 0,'(+) Agregar', self.busqueda_de)
         self.boton_vitrina_2.agregar_titulo(0, 1,'                                                       ')
         self.boton_vitrina_2.agregar_titulo(0, 2, 'Documentos emitidos asociados')
-        self.boton_vitrina_2.agregar_titulo(0, 3,'                              ')
-        self.boton_vitrina_2.agregar_titulo(0, 4,'                              ')
+        self.boton_vitrina_2.agregar_titulo(0, 3, '                              ')
+        self.boton_vitrina_2.agregar_titulo(0, 4, '                              ')
 
         # III.7 Frame de vitrina 2
         self.frame_vitrina_2 = Cuadro(self)
