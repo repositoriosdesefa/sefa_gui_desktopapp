@@ -362,7 +362,7 @@ class Cuadro(Frame):
         self.y = y
         self.x = x
         self.listadesplegable = listadesplegable
-        self.combo = ttk.Combobox(self.z, state="normal", width=39)
+        self.combo = ttk.Combobox(self.z, state="readonly", width=39)
         self.combo.grid(row = self.y, column = self.x, pady=4, padx=8)
         self.combo["values"] = self.listadesplegable
         self.combo.set('')
@@ -370,14 +370,16 @@ class Cuadro(Frame):
         self.lista_de_datos.append((self.combo))
 
     #----------------------------------------------------------------------
-    def agregar_combobox_ingreso(self, y, x, listadesplegable):
+    def agregar_combobox_personalizado(self, y, x, ancho, estado, listadesplegable):
         """Método de la clase Cuadro. \n
         Permite agregar una lista desplegable al Frame creado con la Clase Cuadro."""
         
         self.y = y
         self.x = x
         self.listadesplegable = listadesplegable
-        self.combo = ttk.Combobox(self.z, state="readonly", width=39)
+        ancho_definido = int(ancho)
+        estado_definido = str(estado)
+        self.combo = ttk.Combobox(self.z, state=estado_definido, width=ancho_definido)
         self.combo.grid(row = self.y, column = self.x, pady=4, padx=8)
         self.combo["values"] = self.listadesplegable
         self.combo.set(' ')
@@ -485,10 +487,10 @@ class Cuadro(Frame):
                 # En este caso row[3] debe ser una lista:
                 self.agregar_combobox(row[1], row[2], row[3])
 
-            elif row[0] == 'CXI':
+            elif row[0] == 'CXP':
                 
                 # En este caso row[3] debe ser una lista:
-                self.agregar_combobox_ingreso(row[1], row[2], row[3])
+                self.agregar_combobox_personalizado(row[1], row[2], row[3], row[4], row[5])
             
             elif row[0] == "SB":
 
