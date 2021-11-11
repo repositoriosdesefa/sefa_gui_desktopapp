@@ -15,7 +15,7 @@
 - [x] Actualizar vitrina_busqueda con Tooltip
 - [x] Eliminar frame con entries al "Limpiar"
 
-- [ ] Necesario: Añadir vista de "No se han encontrados docs/extremos de acuerdo a los criterios seleccionados"
+- [x] Necesario: Añadir vista de "No se han encontrados docs/extremos de acuerdo a los criterios seleccionados"
 - [ ] Necesario: Al hacer click en volver, actualizar la pantalla con "actualizar_vista"
 - [ ] Necesario: Búsqueda de macroproblemas
 - [ ] Necesario: Búsqueda de administrados
