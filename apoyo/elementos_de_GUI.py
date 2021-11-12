@@ -365,12 +365,12 @@ class Cuadro(Frame):
         self.combo = ttk.Combobox(self.z, state="readonly", width=39)
         self.combo.grid(row = self.y, column = self.x, pady=4, padx=8)
         self.combo["values"] = self.listadesplegable
-        self.combo.set('')
+        self.combo.set(' ')
         self.lista_de_objetos.append((self.combo))
         self.lista_de_datos.append((self.combo))
 
     #----------------------------------------------------------------------
-    def agregar_combobox_personalizado(self, y, x, ancho, estado, listadesplegable):
+    def agregar_combobox_personalizado(self, y, x, ancho, listadesplegable, estado = "readonly"):
         """Método de la clase Cuadro. \n
         Permite agregar una lista desplegable al Frame creado con la Clase Cuadro."""
         
@@ -489,7 +489,6 @@ class Cuadro(Frame):
 
             elif row[0] == 'CXP':
                 
-                # En este caso row[3] debe ser una lista:
                 self.agregar_combobox_personalizado(row[1], row[2], row[3], row[4], row[5])
             
             elif row[0] == "SB":
