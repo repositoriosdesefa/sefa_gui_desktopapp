@@ -129,7 +129,7 @@ class Base_de_datos():
         self.worksheet.append_row(self.lista_de_datos_completos)
     
     #---------------------------------------------------------------------
-    def agregar_dato_generando_id(self, dato, tiempo):
+    def agregar_nuevo_codigo(self, dato, tiempo):
         """[...]"""
 
         tabla = self.generar_dataframe()
@@ -145,6 +145,30 @@ class Base_de_datos():
         self.datos_obligatorios = [self.codigo, str(tiempo), numero]
         dato_unico =  str(self.hoy.year) + "-" + str(numero) + "/" + dato
         self.lista_de_datos_completos = self.datos_obligatorios + [dato_unico]
+        self.worksheet.append_row(self.lista_de_datos_completos)
+
+    #---------------------------------------------------------------------
+    def agregar_codigo(self, dato, tiempo, dato_adicional = ""):
+        """[...]"""
+
+        tabla = self.generar_dataframe()
+        if len(tabla.index) == 0:
+            numero = 1
+        elif dt.datetime.strptime(tabla['F_CREACION'].tolist()[-1], "%Y-%m-%d %H:%M:%S.%f").year != self.hoy.year: 
+            numero = 1
+        else:
+            last = tabla['CORRELATIVO'].tolist()[-1]
+            numero = last + 1
+        
+        self.codigo = self.pestanna + "-" + str(self.hoy.year) + "-" + str(numero)
+        self.datos_obligatorios = [self.codigo, str(tiempo), numero]
+        dato_unico = dato
+        if dato_adicional == "":
+            self.lista_de_datos_completos = self.datos_obligatorios + [dato_unico]
+        else:
+            dato_2 = dato_adicional
+            self.lista_de_datos_completos = self.datos_obligatorios + [dato_unico] + [dato_2]
+            
         self.worksheet.append_row(self.lista_de_datos_completos)
 
 

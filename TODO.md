@@ -9,14 +9,20 @@
 - [x] Crear método de asociar
 - [x] Relacionar el ID interno con el ID del aplicativo
 - [x] Actualizar tabla de RELACIONES con su historial
-- [ ] Eliminar de la vitrina de búsqueda, docs ya asociados
-- [ ] Añadir vista de "No se han encontrados docs/extremos de acuerdo a los criterios seleccionados"
-- [ ] Búsqueda de problemas
-- [ ] Búsqueda por palabra clave
-- [ ] Búsqueda de macroproblemas
+- [x] Mejora del código de búsqueda
+- [x] Búsqueda por palabra clave
+- [x] Pantalla de Búsqueda de problemas
 - [x] Actualizar vitrina_busqueda con Tooltip
-- [ ] Eliminar frame con entries al "Limpiar"
-- [ ] Fortalecer método "volver" con "actualizar_vista"
+- [x] Eliminar frame con entries al "Limpiar"
+
+- [x] Necesario: Añadir vista de "No se han encontrados docs/extremos de acuerdo a los criterios seleccionados"
+- [x] Necesario: Al hacer click en volver, actualizar la pantalla con "actualizar_vista"
+- [ ] Necesario: Búsqueda de macroproblemas
+- [ ] Necesario: Búsqueda de administrados
+- [ ] Necesario: Pantalla de pendientes jefe 1 (Pantalla de búsqueda DE firmar con filtro)
+- [ ] Necesario: Pantalla de pendientes jefe 2 (Pantalla de búsqueda DR por asignar)
+
+- [ ] Eliminar de la vitrina de búsqueda, docs ya asociados 
 
 ## vista_dr
 - [x] Mostrar inicialmente la vitrina vacía
@@ -35,15 +41,21 @@
 - [x] Simplificación del uso de código/id de usuario/interno
 - [x] Replicar métodos para la clase de documentos recibidos
 - [x] Mover rejilla para facilitar el ingreso de información al administrativo
-- [ ] Agregar timestamp (tiempo para cada clase de objeto)
-- [ ] EP: Primer entry sea el código de problema
-- [ ] EP: Agregar botón con "Prioridad" y vista de puntaje
-- [ ] EP: Agregar vista de f_creación y f_actualización
-- [ ] Subframe de fecha de notificación y fecha de firma (Con botón).
+- [x] EP: Primer entry sea el código de problema
+- [x] EP: Agregar botón con "Prioridad" y vista de puntaje
+- [x] EP: Agregar vista de f_creación y f_actualización
+
+- [x] Necesario: Definir ID con número de oficio para problema
+- [x] Necesario: Crear método para la creación de ID extremos
+- [ ] Necesario: Lista desplegable condicionada para EFA y Ubicación 
+- [ ] Necesario: Subframe de fecha de notificación y fecha de firma (Con botón).
+- [ ] Necesario: Crear método para la asociación de más de 2 relaciones (transitividad)
+- [ ] Necesario: Pantalla de vista de macroproblemas
+
 - [ ] No permitir ingresar un código de interfaz (de usuario) igual (Mensaje de error)
+- [ ] Agregar timestamp (tiempo para cada clase de objeto)
 - [ ] Vista de extremos de problemas (Adecuar pantalla a 3 vitrina)
-- [ ] Crear método para la asociación de más de 2 relaciones (transitividad)
-- [ ] Vista de macroproblemas
+
   
 ## vsf
 - [x] Integrar a elementos_de_gui
