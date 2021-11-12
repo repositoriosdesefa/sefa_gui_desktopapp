@@ -45,8 +45,8 @@
 - [x] EP: Agregar botón con "Prioridad" y vista de puntaje
 - [x] EP: Agregar vista de f_creación y f_actualización
 
-- [ ] Necesario: Definir ID con número de oficio para problema
-- [ ] Necesario: Crear método para la creación de ID extremos
+- [x] Necesario: Definir ID con número de oficio para problema
+- [x] Necesario: Crear método para la creación de ID extremos
 - [ ] Necesario: Lista desplegable condicionada para EFA y Ubicación 
 - [ ] Necesario: Subframe de fecha de notificación y fecha de firma (Con botón).
 - [ ] Necesario: Crear método para la asociación de más de 2 relaciones (transitividad)
