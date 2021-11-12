@@ -19,7 +19,7 @@ letras_del_boton_cuando_pasa_cursor = '#000000'
 
 fondo_encabezados_de_tabla = '#0BC7E0'
 color_negro = '#000000'
-tipo_de_letra_tabla = 'helvetica 8'
+tipo_de_letra_tabla = 'helvetica 7'
 fondo_valores_de_tabla = '#ffffff'
 
 # TABLAS EP (Escenario)
