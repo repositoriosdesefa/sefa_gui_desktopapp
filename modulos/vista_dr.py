@@ -187,7 +187,7 @@ class Doc_recibidos_vista(Ventana):
         # II.2 Lista de EP
         tabla_de_ep_completa = b_ep.generar_dataframe()
         tabla_de_ep_id = tabla_de_ep_completa
-        self.tabla_de_ep = tabla_de_ep_id.drop(['REFERENCIA', 'EXTENSION', 'TIPO DE AFECTACION',
+        self.tabla_de_ep = tabla_de_ep_id.drop(['OCURRENCIA', 'EXTENSION', 'TIPO DE AFECTACION',
                                                 'PROVINCIA', 'DISTRITO', 'DESCRIPCION', 'TIPO DE UBICACION',
                                                 'CARACTERISTICA 1', 'CARACTERISTICA 2', 'TIPO CAUSA',
                                                 'CODIGO SINADA', 'ACTIVIDAD', 'FECHA_ULTIMO_MOV'], axis=1)
@@ -865,7 +865,7 @@ class Extremo_problemas_vista(Ventana):
             ('L', 0, 2, 'Departamento'),
             ('EL', 0, 3, 30, 1),
 
-            ('L', 0, 4, 'Referencia'),
+            ('L', 0, 4, 'Ocurrencia'),
             ('EL', 0, 5, 30, 1),
 
             ('L', 1, 0, 'Tipo de afectación'),

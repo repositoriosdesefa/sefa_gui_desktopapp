@@ -1115,7 +1115,7 @@ class Vitrina_busqueda(Frame):
                 text=row[1],
                 font=formato.tipo_de_letra_tabla,
                 fg = formato.color_negro,
-                width= 21,#se modifico 
+                width= 19,#se modifico estaba con 21 
                 height=1, 
                 relief='groove',
                 bg=formato.fondo_encabezados_de_tabla
@@ -1124,10 +1124,10 @@ class Vitrina_busqueda(Frame):
     
         opciones_label = Label(
             self.frame_dentro_del_canvas,
-            text='Opciones',
+            text='OPCIONES',
             font=formato.tipo_de_letra_tabla,
             fg = formato.color_negro,
-            width= 16, #se modifico 
+            width= 16, #se modifico
             height=1, 
             relief='groove',
             bg=formato.fondo_encabezados_de_tabla
@@ -1157,7 +1157,7 @@ class Vitrina_busqueda(Frame):
                         valores_subframe, 
                         text= texto_tabla_vista,
                         font=formato.tipo_de_letra_tabla,
-                        width= 21, 
+                        width= 19,#se modificó 
                         height = 2,
                         relief='groove',
                         bg= formato.fondo_valores_de_tabla,
@@ -1170,7 +1170,7 @@ class Vitrina_busqueda(Frame):
                         valores_subframe, 
                         text= row[1],
                         font=formato.tipo_de_letra_tabla,
-                        width= 21, 
+                        width= 19,#se modificó 
                         height = 2,
                         relief='groove',
                         bg= formato.fondo_valores_de_tabla,
