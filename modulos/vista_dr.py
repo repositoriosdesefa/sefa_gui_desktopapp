@@ -21,6 +21,10 @@ extension = list(set(tabla_parametros['EXTENSION CALCULADORA']))
 ubicacion = list(set(tabla_parametros['UBICACION CALCULADORA']))
 ocurrencia = list(set(tabla_parametros['OCURRENCIA CALCULADORA']))
 
+tabla_parametros_dep = tabla_parametros.loc[1:30,['DEPARTAMENTO', 'SIGLAS_DEPARTAMENTO']]
+departamento =  list(set(tabla_parametros_dep['DEPARTAMENTO']))
+
+tipo_afectacion = ('Agente contaminante', 'Extracción de recursos')
 tipo_ingreso = ('DIRECTO', 'DERIVACION-SUBDIRECCION', 
                 'DERIVACION-SUPERVISION', 'DERIVACION-SINADA')
 tipo_documento = ('OFICIO', 'MEMORANDO', 'CARTA', 'OFICIO CIRCULAR','MEMORANDO CIRCULAR', 'CARTA CIRCULAR',
@@ -56,6 +60,7 @@ b_de_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_DE')
 b_ep_cod = Base_de_datos(id_b_ospa, 'EXT_P')
 b_ep = Base_de_datos(id_b_ospa, 'EXT_PROBLEMA')
 b_ep_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_EP')
+
 
 
 # 2. Bases de datos complementarias
@@ -148,11 +153,11 @@ class Doc_recibidos_vista(Ventana):
 
         # I. Labels and Entries
         rejilla_dr = (
-            ('L', 0, 0, 'HT entrante'),
-            ('E', 0, 1),
+            ('L', 0, 0, 'Tipo de documento'),
+            ('CX', 0, 1, tipo_documento),
 
-            ('L', 0, 2, 'Vía de recepción'),
-            ('CX', 0, 3, tipo_ingreso),
+            ('L', 0, 2, 'N° de documento'),
+            ('E', 0, 3),
 
             ('L', 1, 0, 'Fecha de recepción OEFA'),
             ('D', 1, 1),
@@ -160,10 +165,10 @@ class Doc_recibidos_vista(Ventana):
             ('L', 1, 2, 'Fecha de recepción SEFA'),
             ('D', 1, 3),
 
-            ('L', 2, 0, 'Tipo de documento'),
-            ('CX', 2, 1, tipo_documento),
+            ('L', 2, 0, 'Vía de recepción'),
+            ('CX', 2, 1, tipo_ingreso),
 
-            ('L', 2, 2, 'N° de documento'),
+            ('L', 2, 2, 'HT de documento'),
             ('E', 2, 3),
 
             ('L', 3, 0, 'Asunto'),
@@ -272,7 +277,7 @@ class Doc_recibidos_vista(Ventana):
         tabla_de_codigo = tabla_codigo_entrada.generar_dataframe() # Tabla de códigos
         tabla_de_relacion = base_relacion.generar_dataframe() # Tabla de relación
         # Filtro la tabla para obtener el código interno 
-        tabla_de_codigo_filtrada = tabla_de_codigo[tabla_de_codigo['HT_ID']==cod_usuario]
+        tabla_de_codigo_filtrada = tabla_de_codigo[tabla_de_codigo['COD_DR']==cod_usuario]
         cod_interno = tabla_de_codigo_filtrada.iloc[0,0]
         # Filtro para obtener las relaciones activas
         tabla_relacion_activos = tabla_de_relacion[tabla_de_relacion['ESTADO']=="ACTIVO"]
@@ -315,14 +320,14 @@ class Doc_recibidos_vista(Ventana):
 
         else:
             # Comprobación de que no se ingresa un código de usuario repetido
-            ht = datos_ingresados[0]
-            valor_de_comprobacion = self.comprobar_id(b_dr_cod, ht) # Comprobar si el id de usuario ya existe
+            cod_dr_ingresado = datos_ingresados[0] + " " + datos_ingresados[0]
+            valor_de_comprobacion = self.comprobar_id(b_dr_cod, cod_dr_ingresado) # Comprobar si el id de usuario ya existe
        
         # Modifico o creo, según exista
         # Modificación
         if valor_de_comprobacion == True:
             # A partir del código comprobado
-            tabla_codigo_dr_filtrada = tabla_de_codigo_dr[tabla_de_codigo_dr['HT_ID']==cod_usuario_dr]
+            tabla_codigo_dr_filtrada = tabla_de_codigo_dr[tabla_de_codigo_dr['COD_DR']==cod_usuario_dr]
             cod_interno_dr = tabla_codigo_dr_filtrada.iloc[0,0]
 
             # Pestaña 1: Código Único
@@ -354,9 +359,9 @@ class Doc_recibidos_vista(Ventana):
             # Timestamp
             ahora = str(dt.datetime.now())
             # Pestaña 1: Código Único
-            ht = datos_ingresados[0]
+            cod_dr_ingresado = datos_ingresados[0] + " " + datos_ingresados[1]
             # Creo el código único
-            b_dr_cod.agregar_dato_generando_id(ht, ahora)
+            b_dr_cod.agregar_codigo(cod_dr_ingresado, ahora)
             # Descargo el código único
             lista_descargada_codigo = b_dr_cod.listar_datos_de_fila(ahora) # Se trae la info
         
@@ -383,7 +388,7 @@ class Doc_recibidos_vista(Ventana):
         texto_documento = 'Documento recibido: ' +  id_usuario
 
         lb1 = b_dr.listar_datos_de_fila(id_usuario)
-        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], 
+        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8],
                                 lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14]]
         
         self.desaparecer()
@@ -432,9 +437,9 @@ class Doc_recibidos_vista(Ventana):
         tabla_de_codigo_dr = b_dr_cod.generar_dataframe()
         tabla_de_codigo_de = b_de_cod.generar_dataframe()
         # Filtro las tablas para obtener el ID interno
-        tabla_codigo_dr_filtrada = tabla_de_codigo_dr[tabla_de_codigo_dr['HT_ID']==codigo_dr]
+        tabla_codigo_dr_filtrada = tabla_de_codigo_dr[tabla_de_codigo_dr['COD_DR']==codigo_dr]
         id_interno_dr = tabla_codigo_dr_filtrada.iloc[0,0]
-        tabla_codigo_de_filtrada = tabla_de_codigo_de[tabla_de_codigo_de['HT_ID']==codigo_de]
+        tabla_codigo_de_filtrada = tabla_de_codigo_de[tabla_de_codigo_de['COD_DE']==codigo_de]
         id_interno_de = tabla_codigo_de_filtrada.iloc[0,0]
         # Definición de ID de relación
         id_relacion_doc = id_interno_dr + "/" + id_interno_de
@@ -496,7 +501,7 @@ class Doc_recibidos_vista(Ventana):
                                 lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], lb1[12]]
         self.desaparecer()
         subframe = Extremo_problemas_vista(self, 650, 1150, texto_documento, nuevo=False, 
-                                        lista=lista_para_insertar, id_doc = id_usuario)
+                                        lista=lista_para_insertar, id_problema = id_usuario)
 
     #----------------------------------------------------------------------
     def eliminar_ep(self, x):
@@ -526,7 +531,7 @@ class Doc_emitidos_vista(Ventana):
 
         # I. Labels and Entries
         rejilla_de = (
-            ('L', 0, 0, 'HT de salida'),
+            ('L', 0, 0, 'HT de documento'),
             ('E', 0, 1),
 
             ('L', 0, 2, 'Categoría'),
@@ -639,7 +644,7 @@ class Doc_emitidos_vista(Ventana):
         tabla_de_codigo = tabla_codigo_entrada.generar_dataframe() # Tabla de códigos
         tabla_de_relacion = base_relacion.generar_dataframe() # Tabla de relación
         # Filtro la tabla para obtener el código interno 
-        tabla_de_codigo_filtrada = tabla_de_codigo[tabla_de_codigo['HT_ID']==cod_usuario]
+        tabla_de_codigo_filtrada = tabla_de_codigo[tabla_de_codigo['COD_DE']==cod_usuario]
         cod_interno = tabla_de_codigo_filtrada.iloc[0,0]
         # Filtro para obtener las relaciones activas
         tabla_relacion_activos = tabla_de_relacion[tabla_de_relacion['ESTADO']=="ACTIVO"]
@@ -688,7 +693,7 @@ class Doc_emitidos_vista(Ventana):
         # Modifico o creo, según exista
         if valor_de_comprobacion == True:
             # A partir del código comprobado
-            tabla_codigo_de_filtrada = tabla_de_codigo_de[tabla_de_codigo_de['HT_ID']==cod_usuario_de]
+            tabla_codigo_de_filtrada = tabla_de_codigo_de[tabla_de_codigo_de['COD_DE']==cod_usuario_de]
             cod_interno_de = tabla_codigo_de_filtrada.iloc[0,0]
 
             # Pestaña 1: Código Único
@@ -721,7 +726,7 @@ class Doc_emitidos_vista(Ventana):
             # Pestaña 1: Código Único
             ht = datos_ingresados[0]
             # Creo el código único
-            b_de_cod.agregar_dato_generando_id(ht, ahora)
+            b_de_cod.agregar_nuevo_codigo(ht, ahora)
             # Descargo el código único
             lista_descargada_codigo = b_de_cod.listar_datos_de_fila(ahora) # Se trae la info
         
@@ -814,9 +819,9 @@ class Doc_emitidos_vista(Ventana):
         tabla_de_codigo_dr = b_dr_cod.generar_dataframe()
         tabla_de_codigo_de = b_de_cod.generar_dataframe()
         # Filtro las tablas para obtener el ID interno
-        tabla_codigo_dr_filtrada = tabla_de_codigo_dr[tabla_de_codigo_dr['HT_ID']==codigo_dr]
+        tabla_codigo_dr_filtrada = tabla_de_codigo_dr[tabla_de_codigo_dr['COD_DR']==codigo_dr]
         id_interno_dr = tabla_codigo_dr_filtrada.iloc[0,0]
-        tabla_codigo_de_filtrada = tabla_de_codigo_de[tabla_de_codigo_de['HT_ID']==codigo_de]
+        tabla_codigo_de_filtrada = tabla_de_codigo_de[tabla_de_codigo_de['COD_DE']==codigo_de]
         id_interno_de = tabla_codigo_de_filtrada.iloc[0,0]
         # Definición de ID de relación
         id_relacion_doc = id_interno_dr + "/" + id_interno_de
@@ -858,83 +863,83 @@ class Extremo_problemas_vista(Ventana):
     """"""
     
     #----------------------------------------------------------------------
-    def __init__(self, *args, nuevo=True, lista=None, id_doc = None):
+    def __init__(self, *args, nuevo=True, lista=None, id_problema = None):
         """Constructor"""
 
         Ventana.__init__(self, *args)
         
         # 0. Almacenamos información heredada
         self.nuevo = nuevo
-        cod_problema = '' # Objeto vacío
 
         if self.nuevo != True: # En caso exista
             self.lista_para_insertar = lista
-            self.cod_usuario_ep = id_doc
-            cod_problema = lista[0]
+            self.id_problema = id_problema
+            lista_id_codigo = b_ep_cod.listar_datos_de_fila(self.id_problema) 
+            cod_problema = lista_id_codigo[3]
 
-        # I. Labels and Entries
-        rejilla_ep = (
-            ('L', 0, 0, 'Código de problema'),
-            ('L', 0, 1, str(cod_problema)),
+            # I. Labels and Entries
+            rejilla_ep = (
+                ('L', 0, 0, 'Código de problema'),
+                ('L', 0, 1, str(cod_problema)),
 
-            ('L', 0, 2, 'Departamento'),
-            ('EL', 0, 3, 30, 1),
+                ('L', 0, 2, 'Departamento'),
+                ('EL', 0, 3, 30, 1),
 
-            ('L', 0, 4, 'Ocurrencia'),
-            ('EL', 0, 5, 30, 1),
+                ('L', 0, 4, 'Ocurrencia'),
+                ('EL', 0, 5, 30, 1),
 
-            ('L', 1, 0, 'Componente ambiental'),
-            ('EL', 1, 1, 30, 1),
+                ('L', 1, 0, 'Componente ambiental'),
+                ('EL', 1, 1, 30, 1),
 
-            ('L', 1, 2, 'Provincia'),
-            ('EL', 1, 3, 30, 1),
+                ('L', 1, 2, 'Provincia'),
+                ('EL', 1, 3, 30, 1),
 
-            ('L', 1, 4, 'Descripción'),
-            ('STP', 1, 5, 28, 2),
+                ('L', 1, 4, 'Descripción'),
+                ('STP', 1, 5, 28, 2),
 
-            ('L', 2, 0, 'Tipo de afectación'),
-            ('EL', 2, 1, 30, 1),
+                ('L', 2, 0, 'Tipo de afectación'),
+                ('CXP', 2, 1, 27, tipo_afectacion, "readonly"),
 
-            ('L', 2, 2, 'Distrito'),
-            ('EL', 2, 3, 30, 1),
+                ('L', 2, 2, 'Distrito'),
+                ('EL', 2, 3, 30, 1),
 
-            ('L', 3, 0, 'Agente contaminante'),
-            ('EL', 3, 1, 30, 1),
+                ('L', 3, 0, 'Agente contaminante'),
+                ('CXP', 3, 1, 27, agente_conta, "readonly"),
 
-            ('L', 3, 2, 'Tipo de ubicación'),
-            ('EL', 3, 3, 30, 1),
+                ('L', 3, 2, 'Tipo de ubicación'),
+                ('CXP', 3, 3, 27, ubicacion, "readonly"),
 
-            ('L', 3, 4, 'EFA'),
-            ('EL', 3, 5, 30, 1),
+                ('L', 3, 4, 'EFA'),
+                ('CXP', 3, 5, 27, lista_efa, "readonly"),
 
-            ('L', 4, 0, 'Actividad'),
-            ('EL', 4, 1, 30, 1),
+                ('L', 4, 0, 'Actividad'),
+                ('CXP', 4, 1, 27, actividad_eco, "readonly"),
 
-            ('L', 4, 2, 'Extensión'),
-            ('EL', 4, 3, 30, 1),
-            
-            ('L', 4, 4, 'Estado'),
-            ('EL', 4, 5, 30, 1),
+                ('L', 4, 2, 'Extensión'),
+                ('CXP', 4, 3, 27, extension, "readonly"),
+                
+                ('L', 4, 4, 'Estado'),
+                ('EL', 4, 5, 30, 1),
 
-            ('L', 5, 0, 'Característica 1'),
-            ('EL', 5, 1, 30, 1),
+                ('L', 5, 0, 'Característica 1'),
+                ('EL', 5, 1, 30, 1),
 
-            ('L', 5, 2, 'Tipo de causa'),
-            ('EL', 5, 3, 30, 1),
+                ('L', 5, 2, 'Tipo de causa'),
+                ('EL', 5, 3, 30, 1),
 
-            ('L', 5, 4, 'Código SINADA'),
-            ('EL', 5, 5, 30, 1),
+                ('L', 5, 4, 'Código SINADA'),
+                ('EL', 5, 5, 30, 1),
 
-            ('L', 6, 0, 'Característica 2'),
-            ('EL', 6, 1, 30, 1),
+                ('L', 6, 0, 'Característica 2'),
+                ('EL', 6, 1, 30, 1),
 
-            ('L', 6, 2, '¿Es prioridad?'),
-            ('CX', 6, 3, si_no),
+                ('L', 6, 2, '¿Es prioridad?'),
+                ('CXP', 6, 3, 27, si_no, "readonly"),
 
-            ('L', 6, 4, 'Puntaje'),
-            ('EL', 6, 5, 30, 1)
+                ('L', 6, 4, 'Puntaje'),
+                ('EL', 6, 5, 30, 1)
 
-        )
+            )
 
         # Rejilla nuevo
         rejilla_ep_nuevo = (
@@ -942,13 +947,13 @@ class Extremo_problemas_vista(Ventana):
             #('L', 0, 1, str(cod_problema)),
 
             ('L', 0, 2, 'Departamento'),
-            ('EL', 0, 3, 30, 1),
+            ('CXP', 0, 3, 27, departamento, "readonly"),
 
             ('L', 0, 4, 'Ocurrencia'),
-            ('CXP', 0, 5, 27, "readonly", ocurrencia),
+            ('CXP', 0, 5, 27, ocurrencia, "readonly"),
 
             ('L', 1, 0, 'Componente ambiental'),
-            ('CXP', 1, 1, 27, "readonly", componente_amb),
+            ('CXP', 1, 1, 27, componente_amb, "readonly"),
 
             ('L', 1, 2, 'Provincia'),
             ('EL', 1, 3, 30, 1),
@@ -957,25 +962,25 @@ class Extremo_problemas_vista(Ventana):
             ('STP', 1, 5, 28, 2),
 
             ('L', 2, 0, 'Tipo de afectación'),
-            ('EL', 2, 1, 30, 1),
+            ('CXP', 2, 1, 27, tipo_afectacion, "readonly"),
 
             ('L', 2, 2, 'Distrito'),
             ('EL', 2, 3, 30, 1),
 
             ('L', 3, 0, 'Agente contaminante'),
-            ('CXP', 3, 1, 27, "readonly", agente_conta),
+            ('CXP', 3, 1, 27, agente_conta, "readonly"),
 
             ('L', 3, 2, 'Tipo de ubicación'),
-            ('CXP', 3, 3, 27, "readonly", ubicacion),
+            ('CXP', 3, 3, 27, ubicacion, "readonly"),
 
             ('L', 3, 4, 'EFA'),
-            ('CXP', 3, 5, 27, "readonly", lista_efa),
+            ('CXP', 3, 5, 27, lista_efa, "readonly"),
 
             ('L', 4, 0, 'Actividad'),
-            ('CXP', 4, 1, 27, "readonly", actividad_eco),
+            ('CXP', 4, 1, 27, actividad_eco, "readonly"),
 
             ('L', 4, 2, 'Extensión'),
-            ('CXP', 4, 3, 27, "readonly", extension),
+            ('CXP', 4, 3, 27, extension, "readonly"),
             
             ('L', 4, 4, 'Estado'),
             ('EL', 4, 5, 30, 1),
@@ -993,7 +998,7 @@ class Extremo_problemas_vista(Ventana):
             ('EL', 6, 1, 30, 1),
 
             ('L', 6, 2, '¿Es prioridad?'),
-            ('CXP', 6, 3, 27, "readonly", si_no)
+            ('CXP', 6, 3, 27, si_no, "readonly")
 
             #('L', 6, 4, 'Puntaje'),
             #('EL', 6, 5, 30, 1)
@@ -1048,9 +1053,7 @@ class Extremo_problemas_vista(Ventana):
         self.frame_vitrina_1 = Cuadro(self)
         # En caso exista precedente, se busca en la tabla de Documentos emitidos
         if self.nuevo != True:
-            self.generar_vitrina(self.frame_vitrina_1,
-                                 b_dr_cod, self.tabla_de_de, base_relacion_docs, 
-                                 "ID_DR", "ID_DE", self.ver_dr, self.eliminar_dr)
+            self.frame_vitrina_1.agregar_label(1, 2, '                  0 documentos recibidos asociados')
         else:
             self.frame_vitrina_1.agregar_label(1, 2, '                  0 documentos recibidos asociados')
 
@@ -1077,12 +1080,12 @@ class Extremo_problemas_vista(Ventana):
                         id_entrada, id_salida, funcion_ver, funcion_eliminar):
         """"""
         # Obtengo el código del usuario que heredo
-        cod_usuario = self.cod_usuario_dr
+        cod_usuario = self.id_problema
         # Genero las tablas para el filtrado 
         tabla_de_codigo = tabla_codigo_entrada.generar_dataframe() # Tabla de códigos
         tabla_de_relacion = base_relacion.generar_dataframe() # Tabla de relación
         # Filtro la tabla para obtener el código interno 
-        tabla_de_codigo_filtrada = tabla_de_codigo[tabla_de_codigo['HT_ID']==cod_usuario]
+        tabla_de_codigo_filtrada = tabla_de_codigo[tabla_de_codigo['COD_EP']==cod_usuario]
         cod_interno = tabla_de_codigo_filtrada.iloc[0,0]
         # Filtro para obtener las relaciones activas
         tabla_relacion_activos = tabla_de_relacion[tabla_de_relacion['ESTADO']=="ACTIVO"]
@@ -1116,23 +1119,23 @@ class Extremo_problemas_vista(Ventana):
         """"""
         datos_ingresados = self.frame_rejilla.obtener_lista_de_datos()
         # Genero la tablas de código de DE
-        tabla_de_codigo_ep = b_dr_cod.generar_dataframe()
+        tabla_de_codigo_ep = b_ep_cod.generar_dataframe()
         # Guardo el código de usuario que llega
         if self.nuevo != True:
             # En caso exista ID insertado en la rejilla
-            cod_usuario_ep = self.cod_usuario_ep
+            cod_usuario_ep = self.id_problema
             valor_de_comprobacion = self.comprobar_id(b_ep_cod, cod_usuario_ep)
 
         else:
             # Comprobación de que no se ingresa un código de usuario repetido
-            ht = datos_ingresados[0]
-            valor_de_comprobacion = self.comprobar_id(b_ep_cod, ht) # Comprobar si el id de usuario ya existe
+            combinatoria = datos_ingresados[0] + datos_ingresados[1] # Mejorar a comprobación de combinación
+            valor_de_comprobacion = self.comprobar_id(b_ep_cod, combinatoria) # Comprobar si el id de usuario ya existe
        
         # Modifico o creo, según exista
         # Modificación
         if valor_de_comprobacion == True:
             # A partir del código comprobado
-            tabla_codigo_ep_filtrada = tabla_de_codigo_ep[tabla_de_codigo_ep['EP_ID']==cod_usuario_ep]
+            tabla_codigo_ep_filtrada = tabla_de_codigo_ep[tabla_de_codigo_ep['COD_EP']==cod_usuario_ep]
             cod_interno_ep = tabla_codigo_ep_filtrada.iloc[0,0]
 
             # Pestaña 1: Código Único
@@ -1165,9 +1168,23 @@ class Extremo_problemas_vista(Ventana):
             ahora = str(dt.datetime.now())
             hora_de_creacion = str(ahora) # De lo creado en la pestaña 1
             # Pestaña 1: Código Único
-            ht = datos_ingresados[0]
+            departamento = datos_ingresados[0]
+            # Obtención de sigla de departamento
+            tabla_siglas_filtrada = tabla_parametros_dep[tabla_parametros_dep['DEPARTAMENTO']==departamento]
+            sigla_cod_interno = tabla_siglas_filtrada.iloc[0,1]
+            # Obtención de número de extremo
+            tabla_codigo_ep_filtrada = tabla_de_codigo_ep[tabla_de_codigo_ep['DEPARTAMENTO']==departamento]
+            numero_problemas = len(tabla_codigo_ep_filtrada.index) + 1
+            if numero_problemas < 10:
+                numero_codigo = "-00" + str(numero_problemas)
+            elif numero_problemas < 100:
+                numero_codigo = "-0" + str(numero_problemas)
+            else:
+                numero_codigo = "-" + str(numero_problemas)
+            
+            cod_interno_ep = sigla_cod_interno + numero_codigo
             # Creo el código único
-            b_ep_cod.agregar_dato_generando_id(ht, ahora)
+            b_ep_cod.agregar_codigo(cod_interno_ep, ahora, departamento)
             # Descargo el código único
             lista_descargada_codigo = b_ep_cod.listar_datos_de_fila(ahora) # Se trae la info
         
@@ -1186,20 +1203,21 @@ class Extremo_problemas_vista(Ventana):
         
             # Confirmación de registro
             messagebox.showinfo("¡Excelente!", "Se ha ingresado un nuevo registro")
-            self.actualizar_vista_dr(cod_usuario_ep) 
+            self.actualizar_vista_ep(cod_usuario_ep) 
     
     #----------------------------------------------------------------------
-    def actualizar_vista_dr(self, id_usuario):
+    def actualizar_vista_ep(self, id_usuario):
 
         texto_documento = 'Extremo de problema: ' +  id_usuario
 
-        lb1 = b_dr.listar_datos_de_fila(id_usuario)
-        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], 
-                                lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14]]
+        lb1 = b_ep.listar_datos_de_fila(id_usuario)
+        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], 
+                                lb1[8], lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], 
+                                lb1[14], lb1[15], lb1[16], lb1[17], lb1[18], lb1[19]]
         
         self.desaparecer()
         subframe = Extremo_problemas_vista(self, 650, 1150, texto_documento, 
-                                        nuevo=False, lista=lista_para_insertar, id_doc = id_usuario)
+                                        nuevo=False, lista=lista_para_insertar, id_problema = id_usuario)
     
     #----------------------------------------------------------------------
     def busqueda_de(self):
@@ -1243,9 +1261,9 @@ class Extremo_problemas_vista(Ventana):
         tabla_de_codigo_dr = b_dr_cod.generar_dataframe()
         tabla_de_codigo_de = b_de_cod.generar_dataframe()
         # Filtro las tablas para obtener el ID interno
-        tabla_codigo_dr_filtrada = tabla_de_codigo_dr[tabla_de_codigo_dr['HT_ID']==codigo_dr]
+        tabla_codigo_dr_filtrada = tabla_de_codigo_dr[tabla_de_codigo_dr['COD_DR']==codigo_dr]
         id_interno_dr = tabla_codigo_dr_filtrada.iloc[0,0]
-        tabla_codigo_de_filtrada = tabla_de_codigo_de[tabla_de_codigo_de['HT_ID']==codigo_de]
+        tabla_codigo_de_filtrada = tabla_de_codigo_de[tabla_de_codigo_de['COD_DE']==codigo_de]
         id_interno_de = tabla_codigo_de_filtrada.iloc[0,0]
         # Definición de ID de relación
         id_relacion_doc = id_interno_dr + "/" + id_interno_de
@@ -1334,9 +1352,9 @@ class Extremo_problemas_vista(Ventana):
         tabla_de_codigo_dr = b_dr_cod.generar_dataframe()
         tabla_de_codigo_de = b_de_cod.generar_dataframe()
         # Filtro las tablas para obtener el ID interno
-        tabla_codigo_dr_filtrada = tabla_de_codigo_dr[tabla_de_codigo_dr['HT_ID']==codigo_dr]
+        tabla_codigo_dr_filtrada = tabla_de_codigo_dr[tabla_de_codigo_dr['COD_DR']==codigo_dr]
         id_interno_dr = tabla_codigo_dr_filtrada.iloc[0,0]
-        tabla_codigo_de_filtrada = tabla_de_codigo_de[tabla_de_codigo_de['HT_ID']==codigo_de]
+        tabla_codigo_de_filtrada = tabla_de_codigo_de[tabla_de_codigo_de['COD_DE']==codigo_de]
         id_interno_de = tabla_codigo_de_filtrada.iloc[0,0]
         # Definición de ID de relación
         id_relacion_doc = id_interno_dr + "/" + id_interno_de
