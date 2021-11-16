@@ -53,8 +53,9 @@ class Doc_recibidos_busqueda(Ventana):
 
         # Generamos el dataframe a filtrar
         self.tabla_inicial = b_dr.generar_dataframe()
-        self.tabla_0 = self.tabla_inicial.rename(columns={'COD_DR':'NRO DOC','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_ENTRANTE':'HT INGRESO'})
-        self.tabla_drF = self.tabla_0.loc[0:99, ['NRO DOC','REMITENTE','HT INGRESO','FECHA INGRESO SEFA','INDICACION','ESPECIALISTA','FECHA ULTIMO MOV.','ASUNTO']]
+        self.tabla_0 = self.tabla_inicial.rename(columns={'COD_DR':'ID DOC RECIBIDO','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC'})
+        self.tabla_drF = self.tabla_0.loc[0:99, ['ID DOC RECIBIDO','FECHA INGRESO SEFA','REMITENTE','TIPO DOC','INDICACION','FECHA ULTIMO MOV.','ASUNTO']]
+
  
         # Información para las listas desplegables
         self.listatipodoc = list(set(self.tabla_0['TIPO DOC']))
@@ -211,8 +212,8 @@ class Doc_recibidos_busqueda(Ventana):
         codigode = self.cod_doc_de
 
         lb1 = b_de.listar_datos_de_fila(codigode)
-        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], 
-                                lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], lb1[12]]
+        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6]]
+        #,                       lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], lb1[12]]
         self.desaparecer()
         subframe = vista_dr.Doc_emitidos_vista(self, 650, 1150, 
                                                 nuevo=False, lista=lista_para_insertar, id_doc=codigode)
@@ -285,9 +286,8 @@ class Doc_recibidos_busqueda(Ventana):
                 base_relacion_d_hist.agregar_datos(datos_a_cargar_hist)
                 base_relacion_d_hist.cambiar_un_dato_de_una_fila(id_relacion_doc, 4, estado_a_sobreescribir)
                 messagebox.showinfo("¡Excelente!", "El registro ha sido asociado con éxito")
-        
-        
-
+    
+    #----------------------------------------------------------------------     
     def comprobar_id(self, base_codigo, id_usuario):
         """"""
         # Comprobar coincidencias
