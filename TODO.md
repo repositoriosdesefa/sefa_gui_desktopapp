@@ -14,7 +14,6 @@
 - [x] Pantalla de Búsqueda de problemas
 - [x] Actualizar vitrina_busqueda con Tooltip
 - [x] Eliminar frame con entries al "Limpiar"
-
 - [x] Necesario: Añadir vista de "No se han encontrados docs/extremos de acuerdo a los criterios seleccionados"
 - [x] Necesario: Al hacer click en volver, actualizar la pantalla con "actualizar_vista"
 - [x] Necesario: Búsqueda de macroproblemas
@@ -89,14 +88,15 @@
 - [x] Crear pantalla de extremo de problemas [Lucho]
 - [x] Crear pantalla de búsqueda de extremo de problema [Lucía]
 - [x] Crear tabla de relaciones entre documentos y extremos de problemas [Ambos]
+- [x] Pendientes por asignar (Perfil de jefe)
+- [x] Pendeintes por firmar (Perfil de jefe)
+- [x] Creación de pantallas de macroproblema
 - [ ] Crear pantalla de administrados [Lucho]
 - [ ] Crear pantalla de búsqueda de administrados [Lucía]
 - [ ] Creación de asignaciones pendientes Equipo 1
 - [ ] Creación de asignaciones pendientes Equipo 2
 - [ ] Creación de programaciones Equipo 2
-- [ ] Pendientes por asignar (Perfil de jefe)
-- [ ] Pendeintes por firmar (Perfil de jefe)
-- [ ] Creación de pantallas de macroproblema
+
 
 ## A mediano plazo
 - [ ] No permitir ingresar un código de interfaz (de usuario) igual (Mensaje de error)
