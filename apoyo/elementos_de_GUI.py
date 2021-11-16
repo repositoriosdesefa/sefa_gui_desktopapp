@@ -253,7 +253,13 @@ class Cuadro(Frame):
 
         self.y= y
         self.x= x
-        self.data = StringVar()
+
+        self.fila = str(y)
+        self.columna = str(x)
+
+        nombre_entry = "valor" + self.fila + self.columna 
+
+        self.data = StringVar(name=nombre_entry)
         self.entrada = Entry(self.z, textvariable=self.data, width= 42)
         self.entrada.grid(row= self.y, column=self.x, pady=4, padx=8)
         self.lista_de_objetos.append((self.entrada))
@@ -362,7 +368,7 @@ class Cuadro(Frame):
         self.y = y
         self.x = x
         self.listadesplegable = listadesplegable
-        self.combo = ttk.Combobox(self.z, state="readonly", width=39)
+        self.combo = ttk.Combobox(self.z, state="readonly", width=39, textvariable="vacio")
         self.combo.grid(row = self.y, column = self.x, pady=4, padx=8)
         self.combo["values"] = self.listadesplegable
         self.combo.set(' ')
@@ -385,6 +391,35 @@ class Cuadro(Frame):
         self.combo.set(' ')
         self.lista_de_objetos.append((self.combo))
         self.lista_de_datos.append((self.combo))
+    
+    #----------------------------------------------------------------------
+    def agregar_combobox_decisor(self, y, x, listadesplegable):
+        """Método de la clase Cuadro. \n
+        Permite agregar una lista desplegable al Frame creado con la Clase Cuadro."""
+        
+        self.y = y
+        self.x = x
+        self.listadesplegable = listadesplegable
+
+        self.valordecisor = StringVar(name="vacio")
+        self.valordecisor.trace("w", lambda name, index, mode, valor=self.valordecisor: self.cambio_valor(valor))
+
+        self.decisor = ttk.Combobox(self.z, state="readonly", width=39, textvariable= "vacio")
+        self.combo["values"] = self.listadesplegable
+
+        self.widget = DateEntry(self.z)
+        self.desplegable = ttk.Combobox(self.z, state="readonly")
+
+        self.existe = True
+        self.lastupdated = None
+
+        self.combo.grid(row = self.y, column = self.x, pady=4, padx=8)
+        
+        self.combo.set(' ')
+        self.lista_de_objetos.append((self.combo))
+        self.lista_de_datos.append((self.combo))
+
+        self.z.after(10, self.update)
 
     #----------------------------------------------------------------------
     def agregar_spinbox(self, y, x, inicio, fin, incremento, defecto):
@@ -424,6 +459,24 @@ class Cuadro(Frame):
         self.cal["state"] = "normal"
         self.lista_de_objetos.append((self.cal))
         self.lista_de_datos.append((self.cal))
+     
+    #----------------------------------------------------------------------
+    def cambio_valor(self, ultimo_valor):
+        self.lastupdated = str(ultimo_valor)
+
+    #----------------------------------------------------------------------
+    def actualizar(self):
+        if self.lastupdated != None:
+            if self.lastupdated == "vacio" and self.valordecisor.get() == "Si":
+                if self.widget == False:
+                    self.widget = DateEntry(self.root)
+
+            elif self.lastupdated == "vacio" and self.valordecisor.get() == "No":
+                self.height.destroy()
+                self.lastupdated = None
+                self.existe = False
+
+        self.after(10, self.actualizar)
 
     #----------------------------------------------------------------------
     def agregar_rejilla(self, rejilla):
