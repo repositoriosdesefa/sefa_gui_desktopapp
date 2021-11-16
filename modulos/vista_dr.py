@@ -91,7 +91,12 @@ class inicio_app_OSPA(Ventana):
         c1.agregar_button(7, 1, "EP", self.vista_ep)
         c1.agregar_button(7, 2, "BEP", self.busqueda_ep)
         c1.agregar_label(8, 1,' ')
-
+        c1.agregar_button(9, 1, "JPF", self.pendientes_jefe_firma)
+        c1.agregar_button(9, 2, "BMC", self.busqueda_mc)
+        c1.agregar_label(10, 1,' ')
+        c1.agregar_button(11, 1, "JPA", self.pendientes_jefe_asignar)
+        c1.agregar_button(11, 2, "BAD", self.busqueda_ad)
+        c1.agregar_label(12, 1,' ')
     #----------------------------------------------------------------------
     def vista_dr(self):
 
@@ -135,6 +140,37 @@ class inicio_app_OSPA(Ventana):
         # LargoxAncho
         SubFrame = busqueda_dr.Extremos(self, 600, 1300, 
                     "Búsqueda de extremos")
+     #----------------------------------------------------------------------
+    def busqueda_mc(self):
+        
+        self.desaparecer()
+        # LargoxAncho
+        SubFrame = busqueda_dr.Macroproblemas(self, 600, 1300, 
+                    "Búsqueda de macroproblemas")
+
+     #----------------------------------------------------------------------
+    def busqueda_ad(self):
+        
+        self.desaparecer()
+        # LargoxAncho
+        SubFrame = busqueda_dr.Administrados(self, 600, 1300, 
+                    "Búsqueda de administrados")
+
+     #----------------------------------------------------------------------
+    def pendientes_jefe_firma(self):
+        
+        self.desaparecer()
+        # LargoxAncho
+        SubFrame = busqueda_dr.Pendientes_jefe_firma(self, 600, 1300, 
+                    "Pendientes por firmar")
+
+     #----------------------------------------------------------------------
+    def pendientes_jefe_asignar(self):
+        
+        self.desaparecer()
+        # LargoxAncho
+        SubFrame = busqueda_dr.Pendientes_jefe_asignar(self, 600, 1300, 
+                    "Pendientes por firmar")
 
 class Doc_recibidos_vista(Ventana):
     """"""
