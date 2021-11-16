@@ -14,13 +14,12 @@
 - [x] Pantalla de Búsqueda de problemas
 - [x] Actualizar vitrina_busqueda con Tooltip
 - [x] Eliminar frame con entries al "Limpiar"
-
 - [x] Necesario: Añadir vista de "No se han encontrados docs/extremos de acuerdo a los criterios seleccionados"
 - [x] Necesario: Al hacer click en volver, actualizar la pantalla con "actualizar_vista"
-- [ ] Necesario: Búsqueda de macroproblemas
-- [ ] Necesario: Búsqueda de administrados
-- [ ] Necesario: Pantalla de pendientes jefe 1 (Pantalla de búsqueda DE firmar con filtro)
-- [ ] Necesario: Pantalla de pendientes jefe 2 (Pantalla de búsqueda DR por asignar)
+- [x] Necesario: Búsqueda de macroproblemas
+- [x] Necesario: Búsqueda de administrados
+- [x] Necesario: Pantalla de pendientes jefe 1 (Pantalla de búsqueda DE firmar con filtro)
+- [x] Necesario: Pantalla de pendientes jefe 2 (Pantalla de búsqueda DR por asignar)
 
 - [ ] Eliminar de la vitrina de búsqueda, docs ya asociados 
 
@@ -47,15 +46,12 @@
 
 - [x] Necesario: Definir ID con número de oficio para problema
 - [x] Necesario: Crear método para la creación de ID extremos
-- [ ] Necesario: Lista desplegable condicionada para EFA y Ubicación 
-- [ ] Necesario: Subframe de fecha de notificación y fecha de firma (Con botón).
-- [ ] Necesario: Crear método para la asociación de más de 2 relaciones (transitividad)
-- [ ] Necesario: Pantalla de vista de macroproblemas
+- [x] Necesario: Pantalla de vista de macroproblemas
 
-- [ ] No permitir ingresar un código de interfaz (de usuario) igual (Mensaje de error)
-- [ ] Agregar timestamp (tiempo para cada clase de objeto)
-- [ ] Vista de extremos de problemas (Adecuar pantalla a 3 vitrina)
+- [ ] Programar: Subframe de fecha de notificación y fecha de firma (Con botón). [Campo libre]
+- [ ] Programar: Crear método para la asociación de más de 2 relaciones (transitividad)
 
+- [ ] Investigar: Lista desplegable condicionada para EFA y Ubicación / Autocompletado
   
 ## vsf
 - [x] Integrar a elementos_de_gui
@@ -92,11 +88,17 @@
 - [x] Crear pantalla de extremo de problemas [Lucho]
 - [x] Crear pantalla de búsqueda de extremo de problema [Lucía]
 - [x] Crear tabla de relaciones entre documentos y extremos de problemas [Ambos]
+- [x] Pendientes por asignar (Perfil de jefe)
+- [x] Pendeintes por firmar (Perfil de jefe)
+- [x] Creación de pantallas de macroproblema
 - [ ] Crear pantalla de administrados [Lucho]
 - [ ] Crear pantalla de búsqueda de administrados [Lucía]
 - [ ] Creación de asignaciones pendientes Equipo 1
 - [ ] Creación de asignaciones pendientes Equipo 2
 - [ ] Creación de programaciones Equipo 2
-- [ ] Pendientes por asignar (Perfil de jefe)
-- [ ] Pendeintes por firmar (Perfil de jefe)
-- [ ] Creación de pantallas de macroproblema
+
+
+## A mediano plazo
+- [ ] No permitir ingresar un código de interfaz (de usuario) igual (Mensaje de error)
+- [ ] Agregar timestamp (tiempo para cada clase de objeto)
+- [ ] Vista de extremos de problemas (Adecuar pantalla a 3 vitrina)
