@@ -17,10 +17,10 @@
 
 - [x] Necesario: Añadir vista de "No se han encontrados docs/extremos de acuerdo a los criterios seleccionados"
 - [x] Necesario: Al hacer click en volver, actualizar la pantalla con "actualizar_vista"
-- [ ] Necesario: Búsqueda de macroproblemas
-- [ ] Necesario: Búsqueda de administrados
-- [ ] Necesario: Pantalla de pendientes jefe 1 (Pantalla de búsqueda DE firmar con filtro)
-- [ ] Necesario: Pantalla de pendientes jefe 2 (Pantalla de búsqueda DR por asignar)
+- [x] Necesario: Búsqueda de macroproblemas
+- [x] Necesario: Búsqueda de administrados
+- [x] Necesario: Pantalla de pendientes jefe 1 (Pantalla de búsqueda DE firmar con filtro)
+- [x] Necesario: Pantalla de pendientes jefe 2 (Pantalla de búsqueda DR por asignar)
 
 - [ ] Eliminar de la vitrina de búsqueda, docs ya asociados 
 
@@ -47,15 +47,12 @@
 
 - [x] Necesario: Definir ID con número de oficio para problema
 - [x] Necesario: Crear método para la creación de ID extremos
-- [ ] Crear método para la asociación de más de 2 relaciones (transitividad)
-- [ ] Necesario: Pantalla de vista de macroproblemas
-- [ ] Necesario: Lista desplegable condicionada para EFA y Ubicación 
-- [ ] Necesario: Subframe de fecha de notificación y fecha de firma (Con botón).
+- [x] Necesario: Pantalla de vista de macroproblemas
 
-- [ ] No permitir ingresar un código de interfaz (de usuario) igual (Mensaje de error)
-- [ ] Agregar timestamp (tiempo para cada clase de objeto)
-- [ ] Vista de extremos de problemas (Adecuar pantalla a 3 vitrina)
+- [ ] Programar: Subframe de fecha de notificación y fecha de firma (Con botón). [Campo libre]
+- [ ] Programar: Crear método para la asociación de más de 2 relaciones (transitividad)
 
+- [ ] Investigar: Lista desplegable condicionada para EFA y Ubicación / Autocompletado
   
 ## vsf
 - [x] Integrar a elementos_de_gui
@@ -100,3 +97,8 @@
 - [ ] Pendientes por asignar (Perfil de jefe)
 - [ ] Pendeintes por firmar (Perfil de jefe)
 - [ ] Creación de pantallas de macroproblema
+
+## A mediano plazo
+- [ ] No permitir ingresar un código de interfaz (de usuario) igual (Mensaje de error)
+- [ ] Agregar timestamp (tiempo para cada clase de objeto)
+- [ ] Vista de extremos de problemas (Adecuar pantalla a 3 vitrina)
