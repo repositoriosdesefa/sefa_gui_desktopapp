@@ -47,10 +47,10 @@
 
 - [x] Necesario: Definir ID con número de oficio para problema
 - [x] Necesario: Crear método para la creación de ID extremos
+- [ ] Crear método para la asociación de más de 2 relaciones (transitividad)
+- [ ] Necesario: Pantalla de vista de macroproblemas
 - [ ] Necesario: Lista desplegable condicionada para EFA y Ubicación 
 - [ ] Necesario: Subframe de fecha de notificación y fecha de firma (Con botón).
-- [ ] Necesario: Crear método para la asociación de más de 2 relaciones (transitividad)
-- [ ] Necesario: Pantalla de vista de macroproblemas
 
 - [ ] No permitir ingresar un código de interfaz (de usuario) igual (Mensaje de error)
 - [ ] Agregar timestamp (tiempo para cada clase de objeto)
