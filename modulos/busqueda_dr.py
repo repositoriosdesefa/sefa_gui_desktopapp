@@ -1,4 +1,4 @@
-from tkinter import messagebox
+from tkinter import Message, messagebox
 import datetime as dt
 
 from apoyo.elementos_de_GUI import Cuadro, Ventana, Vitrina_busqueda, Vitrina_busquedaep, Vitrina_pendientes_jefe_firma
@@ -13,6 +13,10 @@ id_b_ospa = '13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4'
 # 0. Tablas relacionales
 base_relacion_docs = Base_de_datos(id_b_ospa, 'RELACION_DOCS')
 base_relacion_d_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_RELACION_D')
+base_relacion_dr_ep =  Base_de_datos(id_b_ospa, 'RELACION_DR-EP')
+base_relacion_dr_ep_hist =  Base_de_datos(id_b_ospa, 'HISTORIAL_RELACION_DR-EP')
+base_relacion_de_ep =  Base_de_datos(id_b_ospa, 'RELACION_DE-EP')
+base_relacion_de_ep_hist =  Base_de_datos(id_b_ospa, 'HISTORIAL_RELACION_DE-EP')
 
 # 1. Bases de datos principales
 # Documentos recibidos
@@ -106,7 +110,7 @@ class Doc_recibidos_busqueda(Ventana):
 
         # Creando vitrina
         self.v1 = Vitrina_busqueda(self, self.tabla_drF, self.ver_dr, 
-                                   self.funcion_de_asociar, height=200, width=1070)
+                                   self.asociar_dr_de, height=200, width=1070)
     
     #----------------------------------------------------------------------
 
@@ -232,7 +236,7 @@ class Doc_recibidos_busqueda(Ventana):
                                                 lista=lista_para_insertar, id_doc = x)
 
     #----------------------------------------------------------------------
-    def funcion_de_asociar(self, x):
+    def asociar_dr_de(self, x):
         """"""
         self.x = x
         
@@ -373,7 +377,8 @@ class Doc_emitidos_busqueda(Ventana):
         self.frame_vitrina_1 = Cuadro(self)
 
         # Creando vitrina
-        self.vde1 = Vitrina_busqueda(self, self.tabla_drF, self.ver_de, self.funcion_de_asociar_de, height=200, width=1080)
+        self.vde1 = Vitrina_busqueda(self, self.tabla_drF, self.ver_de, 
+                                    self.asociar_de_dr, height=200, width=1080)
 
     #----------------------------------------------------------------------
 
@@ -511,13 +516,12 @@ class Doc_emitidos_busqueda(Ventana):
                                                 nuevo=False, lista=lista_para_insertar, id_doc=x)
 
     #----------------------------------------------------------------------
-    def funcion_de_asociar_de(self, x):
+    def asociar_de_dr(self, x):
         """"""
         self.x = x
 
         #OBTENER EL ID INTERNO DEL DOCUMENTO EMITIDO
-        self.bdee = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOC_EMITIDOS')
-        self.IDDE = self.bdee.listar_datos_de_fila(self.x)
+        self.IDDE = b_de.listar_datos_de_fila(self.x)
         self.IDDE_FINAL = self.IDDE[0]
 
         #OBTENER EL ID USUARIO DEL DOCUMENTO RECIBIDO
@@ -567,6 +571,25 @@ class Doc_emitidos_busqueda(Ventana):
                 base_relacion_d_hist.cambiar_un_dato_de_una_fila(id_relacion_doc, 4, estado_a_sobreescribir)
                 messagebox.showinfo("¡Excelente!", "El registro ha sido asociado con éxito")
         
+        # Asociación de extremos de problema de DR con DE
+        # 1. Obtengo la tabla de relación entre DE y EP
+        tabla_de_ep_de = base_relacion_de_ep.generar_dataframe()
+        # 2. Filtro las relaciones que tiene el DE
+        # Filtro para obtener las relaciones activas
+        tabla_relacion_activos = tabla_de_ep_de[tabla_de_ep_de['ESTADO']=="ACTIVO"]
+        # Con ese ID, filtro la tabla de relacion
+        tabla_relacion_filtrada = tabla_relacion_activos[tabla_relacion_activos['ID_DE']==self.IDDE_FINAL]
+        # 3. Obtengo el ID de los EP que están relacionados al DE
+        # Me quedo con el vector a filtrar en forma de lista
+        lista_ep = list(tabla_relacion_filtrada['ID_EP'].unique())
+        # 4. Concateno los ID de los EP relacionados al DE con el ID del DR
+        if len(lista_ep) > 0:
+            for indice in range(len(lista_ep)):
+                cod_relacion = self.IDDE_FINAL + "/" + lista_ep[indice]
+                datos_insertar = [cod_relacion, self.IDDE_FINAL, lista_ep[indice], 'ACTIVO', hora_de_modificacion] 
+                base_relacion_de_ep.agregar_datos(datos_insertar)
+        else:
+            messagebox.showinfo("¡Atención!", "El registro ha sido asociado con éxito")
         
 
     def comprobar_id(self, base_codigo, id_usuario):
