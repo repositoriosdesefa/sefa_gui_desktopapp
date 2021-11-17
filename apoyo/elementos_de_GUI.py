@@ -376,38 +376,7 @@ class Cuadro(Frame):
         self.lista_de_datos.append((self.combo))
 
     #----------------------------------------------------------------------
-    def agregar_combobox_2(self, y, x, listadesplegable):
-        """Método de la clase Cuadro. \n
-        Permite agregar una lista desplegable al Frame creado con la Clase Cuadro."""
-        
-        self.y = y
-        self.x = x
-        self.listadesplegable = listadesplegable
-        self.combo = ttk.Combobox(self.z, state="readonly", width=39)
-        self.combo.grid(row = self.y, column = self.x, pady=4, padx=8)
-        self.combo["values"] = self.listadesplegable
-        self.combo.set('')
-        self.lista_de_objetos.append((self.combo))
-        self.lista_de_datos.append((self.combo))
-
-
-    #----------------------------------------------------------------------
-    def agregar_combobox_editable(self, y, x, listadesplegable):
-        """Método de la clase Cuadro. \n
-        Permite agregar una lista desplegable al Frame creado con la Clase Cuadro."""
-        
-        self.y = y
-        self.x = x
-        self.listadesplegable = listadesplegable
-        self.combo = ttk.Combobox(self.z, width=39)
-        self.combo.grid(row = self.y, column = self.x, pady=4, padx=8)
-        self.combo["values"] = self.listadesplegable
-        self.combo.set('')
-        self.lista_de_objetos.append((self.combo))
-        self.lista_de_datos.append((self.combo))
-
-    #----------------------------------------------------------------------
-    def agregar_combobox_personalizado(self, y, x, ancho, listadesplegable, estado = "readonly"):
+    def agregar_combobox_personalizado(self, y, x, ancho, listadesplegable, predeterminado, estado = "readonly"):
         """Método de la clase Cuadro. \n
         Permite agregar una lista desplegable al Frame creado con la Clase Cuadro."""
         
@@ -419,12 +388,12 @@ class Cuadro(Frame):
         self.combo = ttk.Combobox(self.z, state=estado_definido, width=ancho_definido)
         self.combo.grid(row = self.y, column = self.x, pady=4, padx=8)
         self.combo["values"] = self.listadesplegable
-        self.combo.set(' ')
+        self.combo.set(predeterminado)
         self.lista_de_objetos.append((self.combo))
         self.lista_de_datos.append((self.combo))
     
     #----------------------------------------------------------------------
-    def agregar_combobox_decisor(self, y, x, listadesplegable):
+    def agregar_combobox_decisor(self, y, x, ancho, listadesplegable, posicion_ordinal):
         """Método de la clase Cuadro. \n
         Permite agregar una lista desplegable al Frame creado con la Clase Cuadro."""
         
@@ -432,23 +401,23 @@ class Cuadro(Frame):
         self.x = x
         self.listadesplegable = listadesplegable
 
-        self.valordecisor = StringVar(name="vacio")
-        self.valordecisor.trace("w", lambda name, index, mode, valor=self.valordecisor: self.cambio_valor(valor))
+        nombre_posicion = str(x) + "," + str(y)
+        numero_posicion = int(posicion_ordinal)
 
-        self.decisor = ttk.Combobox(self.z, state="readonly", width=39, textvariable= "vacio")
-        self.combo["values"] = self.listadesplegable
+        self.valordecisor = StringVar(name = nombre_posicion)
+        self.valordecisor.trace("w", lambda name, index, mode, valor=self.valordecisor: self.cambio_valor(valor, numero_posicion))
 
-        self.widget = DateEntry(self.z)
-        self.desplegable = ttk.Combobox(self.z, state="readonly")
+        self.decisor = ttk.Combobox(self.z, state="readonly", width=ancho, textvariable = nombre_posicion)
+        self.decisor["values"] = self.listadesplegable
 
-        self.existe = True
-        self.lastupdated = None
+        #self.existe = True
+        #self.lastupdated = None
 
-        self.combo.grid(row = self.y, column = self.x, pady=4, padx=8)
+        self.decisor.grid(row = self.y, column = self.x, pady=4, padx=8)
         
-        self.combo.set(' ')
-        self.lista_de_objetos.append((self.combo))
-        self.lista_de_datos.append((self.combo))
+        self.decisor.set('')
+        self.lista_de_objetos.append((self.decisor))
+        self.lista_de_datos.append((self.decisor))
 
         self.z.after(10, self.update)
 
@@ -492,13 +461,34 @@ class Cuadro(Frame):
         self.lista_de_datos.append((self.cal))
      
     #----------------------------------------------------------------------
-    def cambio_valor(self, ultimo_valor):
-        self.lastupdated = str(ultimo_valor)
+    def cambio_valor(self, ultimo_valor, posicion_ordinal):
+
+        self.ultimo_valor = str(ultimo_valor)
+        print(ultimo_valor)
+        tupla_interna = self.rejilla[posicion_ordinal]
+        print(tupla_interna)
+        #except TypeError:
+        #   tupla_interna = self.rejilla_actualizada[posicion_ordinal]
+        #    tupla_interna = ('CX', 8, 3, 'especialista')
+        #    print(tupla_interna)
+
+        lista_interna = list(tupla_interna)
+        lista_interna[3] = ('Si', 'No')
+
+        tupla_final = tuple(lista_interna)
+        print(tupla_final)
+
+        self.rejilla[posicion_ordinal] = tupla_final
+
+        datos_ingresados = self.obtener_lista_de_datos()
+        print(datos_ingresados[12])
+        self.agregar_rejilla(self.rejilla)
+        self.insertar_lista_de_datos(datos_ingresados)
 
     #----------------------------------------------------------------------
     def actualizar(self):
         if self.lastupdated != None:
-            if self.lastupdated == "vacio" and self.valordecisor.get() == "Si":
+            if self.lastupdated == "vacio" and self.valordecisor.get() == "PUNO":
                 if self.widget == False:
                     self.widget = DateEntry(self.root)
 
@@ -508,6 +498,7 @@ class Cuadro(Frame):
                 self.existe = False
 
         self.after(10, self.actualizar)
+        
 
     #----------------------------------------------------------------------
     def agregar_rejilla(self, rejilla):
@@ -571,18 +562,14 @@ class Cuadro(Frame):
                 # En este caso row[3] debe ser una lista:
                 self.agregar_combobox(row[1], row[2], row[3])
 
-            elif row[0] == 'CXX':
-                
-                # En este caso row[3] debe ser una lista:
-                self.agregar_combobox_2(row[1], row[2], row[3])
-
             elif row[0] == 'CXP':
                 
                 self.agregar_combobox_personalizado(row[1], row[2], row[3], row[4], row[5])
             
-            elif row[0] == 'CXE':
-
-                self.agregar_combobox_editable(row[1], row[2], row[3])
+            elif row[0] == 'CXD':
+                
+                # En este caso row[3] debe ser una lista:
+                self.agregar_combobox_decisor(row[1], row[2], row[3], row[4], row[5])
             
             elif row[0] == "SB":
 
