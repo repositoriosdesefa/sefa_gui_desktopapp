@@ -92,7 +92,7 @@
 - [x] Pendeintes por firmar (Perfil de jefe)
 - [x] Creación de pantallas de macroproblema
 - [ ] Crear pantalla de administrados [Lucho]
-- [ ] Crear pantalla de búsqueda de administrados [Lucía]
+- [x] Crear pantalla de búsqueda de administrados [Lucía]
 - [ ] Creación de asignaciones pendientes Equipo 1
 - [ ] Creación de asignaciones pendientes Equipo 2
 - [ ] Creación de programaciones Equipo 2
