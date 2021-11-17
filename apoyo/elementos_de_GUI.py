@@ -368,7 +368,7 @@ class Cuadro(Frame):
         self.y = y
         self.x = x
         self.listadesplegable = listadesplegable
-        self.combo = ttk.Combobox(self.z, state="readonly", width=39, textvariable="vacio")
+        self.combo = ttk.Combobox(self.z, state="readonly", width=39)
         self.combo.grid(row = self.y, column = self.x, pady=4, padx=8)
         self.combo["values"] = self.listadesplegable
         self.combo.set(' ')
@@ -516,7 +516,7 @@ class Cuadro(Frame):
 
         self.rejilla = rejilla
 
-        self.tabla = pd.DataFrame(list(self.rejilla))
+        self.tabla = pd.DataFrame(self.rejilla)
 
         for i,row in self.tabla.iterrows():
             
