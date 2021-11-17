@@ -49,7 +49,10 @@ marco_pedido = ('EFA', 'OEFA',
 # 0. Tablas relacionales
 base_relacion_docs = Base_de_datos(id_b_ospa, 'RELACION_DOCS')
 base_relacion_d_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_RELACION_D')
-base_relacion_ep_dr =  Base_de_datos(id_b_ospa, 'RELACION_DR-EP')
+base_relacion_dr_ep =  Base_de_datos(id_b_ospa, 'RELACION_DR-EP')
+base_relacion_dr_ep_hist =  Base_de_datos(id_b_ospa, 'HISTORIAL_RELACION_DR-EP')
+base_relacion_de_ep =  Base_de_datos(id_b_ospa, 'RELACION_DE-EP')
+base_relacion_de_ep_hist =  Base_de_datos(id_b_ospa, 'HISTORIAL_RELACION_DE-EP')
 # 1. Bases de datos principales
 # Documentos recibidos
 b_dr_cod = Base_de_datos(id_b_ospa, 'DOCS_R')
@@ -69,6 +72,7 @@ b_ep_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_EP')
 # 2. Bases de datos complementarias
 id_b_efa = '1pjHXiz15Zmw-49Nr4o1YdXJnddUX74n7Tbdf5SH7Lb0'
 b_efa = Base_de_datos(id_b_efa, 'Directorio')
+b_efa_inei = Base_de_datos(id_b_efa, 'ID_INEI')
 tabla_directorio = b_efa.generar_dataframe()
 lista_efa = list(set(tabla_directorio['Entidad u oficina']))
 
@@ -208,7 +212,7 @@ class Doc_recibidos_vista(Ventana):
             self.cod_usuario_dr = id_doc
 
         # I. Labels and Entries
-        rejilla_dr = (
+        rejilla_dr = [
             ('L', 0, 0, 'Tipo de documento'),
             ('CX', 0, 1, tipo_documento),
 
@@ -247,7 +251,7 @@ class Doc_recibidos_vista(Ventana):
 
             ('L', 7, 0, 'Respuesta'),
             ('CX', 7, 1, tipo_respuesta)
-        )
+        ]
 
         # II. Tablas en ventana
         # II.1 Lista de DE
@@ -319,7 +323,7 @@ class Doc_recibidos_vista(Ventana):
         self.frame_vitrina_2 = Cuadro(self)
         if self.nuevo != True:
             self.generar_vitrina(self.frame_vitrina_2,
-                                 b_dr_cod, self.tabla_de_ep, base_relacion_ep_dr, 
+                                 b_dr_cod, self.tabla_de_ep, base_relacion_dr_ep, 
                                  "ID_DR", "ID_EP", self.ver_ep, self.eliminar_ep)
         else:
             self.frame_vitrina_2.agregar_label(1, 2,'                  0 extremos de problemas asociados') 
@@ -500,7 +504,7 @@ class Doc_recibidos_vista(Ventana):
         # Se cambia dato en tabla de relación
         base_relacion_docs.cambiar_un_dato_de_una_fila(id_relacion_doc, 4,'ELIMINADO')
         # Elimino los frame para insertar el cuadro actualizado
-        self.boton_vitrina_2.eliminar_cuadro()
+        self.boton_vitrina_1.eliminar_cuadro()
         self.frame_vitrina_2.eliminar_cuadro()
 
         # Situo la ventana actualizada
@@ -516,8 +520,9 @@ class Doc_recibidos_vista(Ventana):
         self.boton_vitrina_2.agregar_titulo(0, 4,'                              ')
         self.frame_vitrina_2 = Cuadro(self) # Se vuelve a crear (Provisional)
         if self.nuevo != True:
-            # Provisional
-            self.frame_vitrina_2.agregar_label(1, 2,'                  0 extremos de problemas asociados') 
+            self.generar_vitrina(self.frame_vitrina_2,
+                                 b_dr_cod, self.tabla_de_ep, base_relacion_dr_ep, 
+                                 "ID_DR", "ID_EP", self.ver_ep, self.eliminar_ep)
         else:
             self.frame_vitrina_2.agregar_label(1, 2,'                  0 extremos de problemas asociados') 
 
@@ -586,7 +591,7 @@ class Doc_emitidos_vista(Ventana):
             self.cod_usuario_de = id_doc
 
         # I. Labels and Entries
-        rejilla_de = (
+        rejilla_de = [
             ('L', 0, 0, 'HT de documento'),
             ('E', 0, 1),
 
@@ -608,7 +613,7 @@ class Doc_emitidos_vista(Ventana):
             ('L', 3, 0, 'Detalle de requerimiento'),
             ('ST', 3, 1)
 
-        )
+        ]
 
 
         # II. Tablas en ventana
@@ -683,8 +688,9 @@ class Doc_emitidos_vista(Ventana):
         self.frame_vitrina_2 = Cuadro(self)
         # En caso exista precedente, se busca en la tabla de Documentos recibidos
         if self.nuevo != True:
-            self.frame_vitrina_2.agregar_label(1, 2, '                0 extremos de problemas asociados') # Provisional
-     
+            self.generar_vitrina(self.frame_vitrina_2,
+                                 b_de_cod, self.tabla_de_ep, base_relacion_de_ep, 
+                                 "ID_DE", "ID_EP", self.ver_ep, self.eliminar_ep)
         else:
             self.frame_vitrina_2.agregar_label(1, 2, '                  0 documentos recibidos asociados')
         
@@ -820,7 +826,23 @@ class Doc_emitidos_vista(Ventana):
     #----------------------------------------------------------------------
     def busqueda_ep(self):
         """"""
-        print("Búsqueda de extremo de problema")
+        
+        if self.nuevo != True:
+            # En caso exista un código insertado en la rejilla
+            cod_usuario_de = self.cod_usuario_de 
+            texto_pantalla = "Documento emitido que se asociará: " + cod_usuario_de
+            # Genero la nueva ventana
+            self.desaparecer()
+            SubFrame = busqueda_dr.Doc_recibidos_busqueda(self, 500, 1200, texto_pantalla,
+                                                           nuevo=False, id_doc = cod_usuario_de)
+
+        else:
+            # En caso fuera una nueva ventana
+            texto_pantalla = "Búsqueda de extremos de problemas"
+            # Genero la nueva ventana
+            self.desaparecer()
+            SubFrame = busqueda_dr.Extremos(self, 600, 1300, 
+                    "Búsqueda de extremos")
 
     #----------------------------------------------------------------------
     def ver_ep(self, x):
@@ -958,6 +980,23 @@ class Doc_emitidos_vista(Ventana):
 
         #self.after(10, self.actualizar)
         print("Actualización")
+    
+    #----------------------------------------------------------------------
+    def dependiente_1(self, valor_combobox_1):
+        # 1. Obtener dataframe con valores de Dpto, Prov, Distrito
+        tabla_valores_dependientes = b_efa_inei.generar_dataframe()
+        # 2. Filtrar la información
+        tabla_val_dep_filtrada = tabla_valores_dependientes[tabla_valores_dependientes['Departamento']==valor_combobox_1]
+        # 3. Seleccionar columna y convertirla en lista
+        valores_filtrados = list(set(tabla_val_dep_filtrada.loc[:,['Provincia']]))
+        print(valores_filtrados)
+        # 4. Valores filtrados pasan a ser parte del combobox siguiente 
+    
+    #---------------------------------------------------------------------
+    def cambiar_lista(self, rejilla_a_mod, posicion):
+        print("Hola")
+
+        
 
 class Extremo_problemas_vista(Ventana):
     """"""
@@ -978,7 +1017,7 @@ class Extremo_problemas_vista(Ventana):
             cod_problema = lista_id_codigo[3]
 
             # I. Labels and Entries
-            rejilla_ep = (
+            rejilla_ep = [
                 ('L', 0, 0, 'Código de problema'),
                 ('L', 0, 1, str(cod_problema)),
 
@@ -1039,10 +1078,10 @@ class Extremo_problemas_vista(Ventana):
                 ('L', 6, 4, 'Puntaje'),
                 ('EL', 6, 5, 30, 1)
 
-            )
+            ]
 
         # Rejilla nuevo
-        rejilla_ep_nuevo = (
+        rejilla_ep_nuevo = [
             #('L', 0, 0, 'Código de problema'),
             #('L', 0, 1, str(cod_problema)),
 
@@ -1103,7 +1142,7 @@ class Extremo_problemas_vista(Ventana):
             #('L', 6, 4, 'Puntaje'),
             #('EL', 6, 5, 30, 1)
 
-        )
+        ]
 
         # II. Tablas en ventana
         # II.1 Lista de DE
@@ -1498,7 +1537,7 @@ class Macroproblemas_vista(Ventana):
             self.cod_usuario_mp = id_mp
 
         # I. Labels and Entries
-        rejilla_mp = (
+        rejilla_mp = [
             ('L', 0, 0, 'Nombre del problema'),
             ('ST', 0, 1),
 
@@ -1510,7 +1549,7 @@ class Macroproblemas_vista(Ventana):
 
             ('L', 3, 0, 'Estado'),
             ('E', 3, 1)
-        )
+        ]
 
         # II. Tablas en ventana
         # II.1 Lista de DE
@@ -1554,7 +1593,7 @@ class Macroproblemas_vista(Ventana):
         self.frame_vitrina_1 = Cuadro(self)
         if self.nuevo != True:
             self.generar_vitrina(self.frame_vitrina_1,
-                                 b_dr_cod, self.tabla_de_ep, base_relacion_ep_dr, 
+                                 b_dr_cod, self.tabla_de_ep, base_relacion_dr_ep, 
                                  "ID_DR", "ID_EP", self.ver_ep, self.eliminar_ep)
         else:
             self.frame_vitrina_1.agregar_label(1, 2,'                  0 extremos de problemas asociados') 
