@@ -250,7 +250,13 @@ class Doc_recibidos_vista(Ventana):
             ('ST', 6, 1),
 
             ('L', 7, 0, 'Respuesta'),
-            ('CX', 7, 1, tipo_respuesta)
+            ('CX', 7, 1, tipo_respuesta),
+            
+            ('L', 8, 0, 'Departamento'),
+            ('CXD', 8, 1, 39, departamento, 29),
+
+            ('L', 8, 2, 'Provincia'),
+            ('CX', 8, 3, especialista)
         ]
 
         # II. Tablas en ventana
