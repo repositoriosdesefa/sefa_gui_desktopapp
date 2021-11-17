@@ -79,10 +79,10 @@ class Doc_recibidos_busqueda(Ventana):
             ('E', 0, 1),
 
             ('L', 1, 0, 'Tipo de documento'),
-            ('CXX', 1, 1, self.listatipodoc),
+            ('CXP', 1, 1, 39, self.listatipodoc, '', "readonly"),
 
             ('L', 0, 2, 'Remitente'),
-            ('CXE', 0, 3, self.listaremitente),
+            ('CXP', 0, 3, 39, self.listaremitente, '', "normal"),
 
             ('L', 1, 2, 'Número de doc'),
             ('E', 1, 3)
@@ -340,19 +340,19 @@ class Doc_emitidos_busqueda(Ventana):
         self.rejilla_de = (
 
             ('L', 0, 0, 'Categoría'),
-            ('CXX', 0, 1, self.listacategoria),
+            ('CXP', 0, 1, 39, self.listacategoria, '', "readonly"),
 
             ('L', 1, 0, 'Nro registro Siged'),
             ('E', 1, 1),
 
             ('L', 0, 2, 'Destinatario'),
-            ('CXE', 0, 3, self.listadestinatario),
+            ('CXP', 0, 3, 39, self.listadestinatario, '', "normal"),
 
             ('L', 1, 2, 'Estado'),
-            ('CXE', 1, 3, self.listaestado),
+            ('CXP', 1, 3, 39, self.listaestado, '', "normal"),
 
             ('L', 2, 0, 'Tipo de documento'),
-            ('CXX', 2, 1, self.listatipodocemit),
+            ('CXP', 2, 1, 39, self.listatipodocemit, '', "readonly"),
 
             ('L', 2, 2, 'Nro de documento'),
             ('E', 2, 3)
@@ -644,31 +644,31 @@ class Extremos(Ventana):
         self.rejilla_ep = (
 
             ('L', 0, 0, 'Agente contaminante'),
-            ('CXX', 0, 1, self.listaAG),
+            ('CXP', 0, 1, 39, self.listaAG, '', "normal"),
 
             ('L', 0, 2, 'Componente ambiental'),
-            ('CXX', 0, 3, self.listaCA),
+            ('CXP', 0, 3, 39, self.listaCA, '', "normal"),
 
             ('L', 0, 4, 'Actividad'),
-            ('CXX', 0, 5, self.listaACT),
+            ('CXP', 0, 5, 39, self.listaACT, '', "normal"),
 
             ('L', 1, 0, 'Departamento'),
-            ('CXX', 1, 1, self.listaDEPAR),
+            ('CXP', 1, 1, 39, self.listaDEPAR, '', "normal"),
 
             ('L', 1, 2, 'Provincia'),
-            ('CXX', 1, 3, self.listaPROV),
+            ('CXP', 1, 3, 39, self.listaPROV, '', "normal"),
 
             ('L', 1, 4, 'Distrito'),
-            ('CXX', 1, 5, self.listaDISTR),
+            ('CXP', 1, 5, 39, self.listaDISTR, '', "normal"),
 
             ('L', 2, 0, 'Tipo de ubicación'),
-            ('CXX', 2, 1, self.listaTIPOUBI),
+            ('CXP', 2, 1, 39, self.listaTIPOUBI, '', "normal"),
 
             ('L', 2, 2, 'Ocurrencia'),
-            ('CXX', 2, 3, self.listaOCURR),
+            ('CXP', 2, 3, 39, self.listaOCURR, '', "normal"),
 
             ('L', 2, 4, 'EFA'),
-            ('CXE', 2, 5, self.listaEFA),
+            ('CXP', 2, 5, 39, self.listaEFA, '', "readonly"),
 
             ('L', 3, 0, 'Palabra clave en descripción'),
             ('E', 3, 1)
@@ -1110,10 +1110,10 @@ class Administrados(Ventana):
         self.rejilla_ad = (
 
             ('L', 0, 0, 'Administrado'),
-            ('CXE', 0, 1, self.listaAD),
+            ('CXP', 0, 1, 39, self.listaAD, '', "normal"),
 
             ('L', 1, 0, 'Tipo'),
-            ('CXX', 1, 1, self.listaTIPO),
+            ('CXP', 1, 1, 39, self.listaTIPO, '', "normal"),
 
             ('L', 0, 2, 'DNI / RUC'),
             ('E', 0, 3),
@@ -1303,19 +1303,19 @@ class Pendientes_jefe_firma(Ventana):
         self.rejilla_pfirma = (
 
             ('L', 0, 0, 'Categoría'),
-            ('CXX', 0, 1, self.categoria),
+            ('CXP', 0, 1, 39, self.categoria, '', "normal"),
 
             ('L', 1, 0, 'Nro registro Siged'),
             ('E', 1, 1),
 
             ('L', 0, 2, 'Destinatario'),
-            ('CXE', 0, 3, self.destinatario),
+            ('CXP', 0, 3, self.destinatario),
 
             ('L', 1, 2, 'Especialista'),
-            ('CXE', 1, 3, self.especialista),
+            ('CXP', 1, 3, self.especialista),
 
             ('L', 2, 0, 'Tipo de documento'),
-            ('CXX', 2, 1, self.tipodocemitpfirma),
+            ('CXP', 2, 1, 39, self.tipodocemitpfirma),
 
             ('L', 2, 2, 'Nro de documento'),
             ('E', 2, 3)
