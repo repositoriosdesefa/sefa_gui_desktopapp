@@ -2,8 +2,8 @@ from tkinter import Tk
 
 #from modulos import logueo
 
-#from modulos.menus import  inicio_app_OSPA
-from modulos.vista_dr import inicio_app_OSPA
+from modulos.menus import  inicio_app_OSPA
+#from modulos.vista_dr import inicio_app_OSPA
 
 
 ########################################################################
