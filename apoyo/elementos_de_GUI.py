@@ -393,7 +393,7 @@ class Cuadro(Frame):
         self.lista_de_datos.append((self.combo))
     
     #----------------------------------------------------------------------
-    def agregar_combobox_decisor(self, y, x, ancho, listadesplegable, posicion_ordinal):
+    def agregar_combobox_decisor(self, y, x, ancho, listadesplegable, tabla_a_filtrar, nombre_columna, posicion_ordinal):
         """Método de la clase Cuadro. \n
         Permite agregar una lista desplegable al Frame creado con la Clase Cuadro."""
         
@@ -403,24 +403,40 @@ class Cuadro(Frame):
 
         nombre_posicion = str(x) + "," + str(y)
         numero_posicion = int(posicion_ordinal)
+        tabla = tabla_a_filtrar
+        columna_nombre = nombre_columna
 
-        self.valordecisor = StringVar(name = nombre_posicion)
-        self.valordecisor.trace("w", lambda name, index, mode, valor=self.valordecisor: self.cambio_valor(valor, numero_posicion))
-
-        self.decisor = ttk.Combobox(self.z, state="readonly", width=ancho, textvariable = nombre_posicion)
-        self.decisor["values"] = self.listadesplegable
-
-        #self.existe = True
-        #self.lastupdated = None
-
-        self.decisor.grid(row = self.y, column = self.x, pady=4, padx=8)
+        valordecisor = StringVar(name = nombre_posicion)
+        decisor = ttk.Combobox(self.z, state="readonly", width=ancho, textvariable = valordecisor)
+        valordecisor.trace("w", lambda name, index, mode, valor=valordecisor: self.cambio_valor(valor, decisor, numero_posicion, tabla, columna_nombre))
+    
+        decisor.set('')
+        decisor["values"] = self.listadesplegable
         
-        self.decisor.set('')
-        self.lista_de_objetos.append((self.decisor))
-        self.lista_de_datos.append((self.decisor))
+        #ultimovalor = None
+        #self.valordecisor = valordecisor
 
-        self.z.after(10, self.update)
+        decisor.grid(row = self.y, column = self.x, pady=4, padx=8)        
+        self.lista_de_objetos.append((decisor))
+        self.lista_de_datos.append((decisor))
 
+        #self.z.after(10, self.update)
+        
+        
+    #----------------------------------------------------------------------
+    def actualizar_widget(self, widget):
+        print("Hola")
+        #widget.bind("<<ComboboxSelected>>", self.dependencia)
+        #valor_ingresado = valor
+        #print(valor_ingresado)
+        #if valor_ingresado == "PUNO":
+        #    self.combo.config(value=('Si', 'No'))
+
+    #----------------------------------------------------------------------
+    def dependencia(self, e):
+        print(e)
+        #print(valor)
+    
     #----------------------------------------------------------------------
     def agregar_spinbox(self, y, x, inicio, fin, incremento, defecto):
         """Método de la clase Cuadro. \n
@@ -461,43 +477,47 @@ class Cuadro(Frame):
         self.lista_de_datos.append((self.cal))
      
     #----------------------------------------------------------------------
-    def cambio_valor(self, ultimo_valor, posicion_ordinal):
+    def cambio_valor(self, nombre_objeto, widget, posicion_ordinal, tabla, nombre_columna):
 
-        self.ultimo_valor = str(ultimo_valor)
+        ultimo_valor = str(nombre_objeto)
+        valor_ingresado = widget.get()
+        tabla_a_filtrar = tabla
+        nombre_col = nombre_columna
+        print(valor_ingresado)
         print(ultimo_valor)
-        tupla_interna = self.rejilla[posicion_ordinal]
-        print(tupla_interna)
-        #except TypeError:
-        #   tupla_interna = self.rejilla_actualizada[posicion_ordinal]
-        #    tupla_interna = ('CX', 8, 3, 'especialista')
-        #    print(tupla_interna)
+        #self.z.after(1000, self.update)
 
-        lista_interna = list(tupla_interna)
-        lista_interna[3] = ('Si', 'No')
+        #print(self.rejilla)
+        if valor_ingresado != '':
+            tupla_interna = self.rejilla[posicion_ordinal]
+            print(tupla_interna)
+            
+            # Obtengo la lista para modificar
+            lista_interna = list(tupla_interna)
+            tabla_filtrada = tabla_a_filtrar[tabla_a_filtrar[nombre_col]==valor_ingresado]
+            lista_validada = list(set(tabla_filtrada['Provincia']))
+            lista_interna[3] = lista_validada
+            tupla_final = tuple(lista_interna)
+            print(tupla_final)
 
-        tupla_final = tuple(lista_interna)
-        print(tupla_final)
-
-        self.rejilla[posicion_ordinal] = tupla_final
-
-        datos_ingresados = self.obtener_lista_de_datos()
-        print(datos_ingresados[12])
-        self.agregar_rejilla(self.rejilla)
-        self.insertar_lista_de_datos(datos_ingresados)
+            self.rejilla[posicion_ordinal] = tupla_final
+            self.actualizar_rejilla(self.rejilla)
+            
+        #datos_ingresados = self.obtener_lista_de_datos()
+        #print(datos_ingresados[12])
+        #self.agregar_rejilla(self.rejilla)
+        #self.insertar_lista_de_datos(datos_ingresados)
 
     #----------------------------------------------------------------------
-    def actualizar(self):
-        if self.lastupdated != None:
-            if self.lastupdated == "vacio" and self.valordecisor.get() == "PUNO":
-                if self.widget == False:
-                    self.widget = DateEntry(self.root)
+    def update(self):
+        print("Actualizar")
+        #if self.ultimo_valor != None:
+        #    print(self.valordecisor.get())
+        #    if self.valordecisor.get() == "PUNO":
+        #        print("prueba")
+        #        self.ultimovalor = None
 
-            elif self.lastupdated == "vacio" and self.valordecisor.get() == "No":
-                self.height.destroy()
-                self.lastupdated = None
-                self.existe = False
-
-        self.after(10, self.actualizar)
+        #self.z.after(10, self.update)
         
 
     #----------------------------------------------------------------------
@@ -561,6 +581,11 @@ class Cuadro(Frame):
                 
                 # En este caso row[3] debe ser una lista:
                 self.agregar_combobox(row[1], row[2], row[3])
+            
+            elif row[0] == 'CXR':
+                
+                # En este caso row[3] debe ser una lista:
+                self.agregar_combobox(row[1], row[2], row[3])
 
             elif row[0] == 'CXP':
                 
@@ -569,7 +594,7 @@ class Cuadro(Frame):
             elif row[0] == 'CXD':
                 
                 # En este caso row[3] debe ser una lista:
-                self.agregar_combobox_decisor(row[1], row[2], row[3], row[4], row[5])
+                self.agregar_combobox_decisor(row[1], row[2], row[3], row[4], row[5], row[6], row[7])
             
             elif row[0] == "SB":
 
@@ -583,6 +608,22 @@ class Cuadro(Frame):
 
                 print('Error, el valor de i[0] es {row[0]}')
 
+    #----------------------------------------------------------------------
+    def actualizar_rejilla(self, rejilla):
+        """Método de la clase Cuadro. \n
+        Permite utilizar una tupla de tuplas para incorporar diversos wingets al Frame creado con la Clase Cuadro."""
+
+        self.rejilla = rejilla
+
+        self.tabla = pd.DataFrame(self.rejilla)
+
+        for i,row in self.tabla.iterrows():
+            
+            if row[0] == 'CXR':
+                
+                # En este caso row[3] debe ser una lista:
+                self.agregar_combobox(row[1], row[2], row[3])
+    
     #----------------------------------------------------------------------
     def agregar_escenario(self, row, column, data_frame, funcion1, funcion2):
         """Método de la clase Cuadro. \n
