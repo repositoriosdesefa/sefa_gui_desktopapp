@@ -1347,7 +1347,7 @@ class Administrados(Ventana):
         """"""
         print("hola")
 
-class Pendientes_jefe_firma(Ventana):
+class Pendientes_jefe_firma(Doc_emitidos_busqueda):
     """"""
 
 #----------------------------------------------------------------------
@@ -1423,7 +1423,8 @@ class Pendientes_jefe_firma(Ventana):
         self.frame_vitrina_pfirma = Cuadro(self)
 
         # Creando vitrina
-        self.vpfirma = Vitrina_pendientes_jefe_firma(self, self.tabla_pfirmaF, self.ver_pfirma, self.funcion_de_asociar_pfirma, height=200, width=1050)
+        self.vpfirma = Vitrina_pendientes_jefe_firma(self, self.tabla_pfirmaF, 
+                                                    self.ver_de, self.funcion_de_asociar_pfirma, height=200, width=1050)
 
     #----------------------------------------------------------------------
 
@@ -1540,19 +1541,6 @@ class Pendientes_jefe_firma(Ventana):
         """"""
         self.desaparecer()
         self.ventana_anterior.aparecer()
-
-    #----------------------------------------------------------------------
-    def ver_pfirma(self, x):
-        """"""
-        self.x = x
-        texto_documento = 'Documento emitido: ' + x
-
-        lb1 = b_de.listar_datos_de_fila(self.x)
-        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], 
-                                lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], lb1[12]]
-        self.desaparecer()
-        subframe = vista_dr.Doc_emitidos_vista(self, 650, 1150, texto_documento, 
-                                                nuevo=False, lista=lista_para_insertar, id_doc=x)
 
     #----------------------------------------------------------------------
     def funcion_de_asociar_pfirma(self, x):
