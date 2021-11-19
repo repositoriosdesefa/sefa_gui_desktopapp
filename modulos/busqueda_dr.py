@@ -177,7 +177,7 @@ class Doc_recibidos_busqueda(Ventana):
 
     def Complementodr(self,filtro0):
 
-        tabla_filtro2 = filtro0.loc[:, ['NRO DOC','REMITENTE','HT INGRESO','FECHA INGRESO SEFA','INDICACION','ESPECIALISTA','FECHA ULTIMO MOV.','ASUNTO']]
+        tabla_filtro2 = filtro0.loc[:, ['NRO DOC','REMITENTE','FECHA INGRESO SEFA','INDICACION','ESPECIALISTA','FECHA ULTIMO MOV.','ASUNTO']]
         if len(tabla_filtro2.index) > 100:
             tabla_filtro3 = tabla_filtro2.head(100)
         else:
@@ -586,9 +586,9 @@ class Doc_emitidos_busqueda(Ventana):
         # 4. Concateno los ID de los EP relacionados al DE con el ID del DR
         if len(lista_ep) > 0:
             for indice in range(len(lista_ep)):
-                cod_relacion = self.IDDE_FINAL + "/" + lista_ep[indice]
-                datos_insertar = [cod_relacion, self.IDDE_FINAL, lista_ep[indice], 'ACTIVO', hora_de_modificacion] 
-                base_relacion_de_ep.agregar_datos(datos_insertar)
+                cod_relacion = id_interno_dr + "/" + lista_ep[indice]
+                datos_insertar = [cod_relacion, id_interno_dr, lista_ep[indice], 'ACTIVO', hora_de_modificacion] 
+                base_relacion_dr_ep.agregar_datos(datos_insertar)
         else:
             messagebox.showinfo("¡Atención!", "El registro ha sido asociado con éxito")
         
