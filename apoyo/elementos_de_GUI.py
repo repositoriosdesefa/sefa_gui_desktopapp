@@ -266,6 +266,19 @@ class Cuadro(Frame):
         self.lista_de_datos.append((self.data))
     
     #----------------------------------------------------------------------
+    def agregar_entry_2(self, y, x):
+        """Método de la clase Cuadro. \n
+        Permite agregar una entrada de texto al Frame creado con la Clase Cuadro."""
+
+        self.y= y
+        self.x= x
+        self.data = StringVar()
+        self.entrada = Entry(self.z, textvariable=self.data, width= 42)
+        self.entrada.grid(row= self.y, column=self.x, pady=4, padx=8)
+        self.lista_de_objetos.append((self.entrada))
+        self.lista_de_datos.append((self.data))
+
+    #----------------------------------------------------------------------
     def agregar_entry_personalizado(self, y, x, ancho, numero_de_columnas_unidas):
         """Método de la clase Cuadro. \n
         Permite agregar una entrada de texto grande al Frame creado con la Clase Cuadro."""
@@ -376,7 +389,24 @@ class Cuadro(Frame):
         self.lista_de_datos.append((self.combo))
 
     #----------------------------------------------------------------------
-    def agregar_combobox_personalizado(self, y, x, ancho, listadesplegable, predeterminado, estado = "readonly"):
+    def agregar_combobox_personalizado(self, y, x, ancho, listadesplegable, predeterminado, estado='readonly'):
+        """Método de la clase Cuadro. \n
+        Permite agregar una lista desplegable al Frame creado con la Clase Cuadro."""
+        
+        self.y = y
+        self.x = x
+        self.listadesplegable = listadesplegable
+        ancho_definido = int(ancho)
+        estado_definido = str(estado)
+        self.combo = ttk.Combobox(self.z, state=estado_definido, width=ancho_definido)
+        self.combo.grid(row = self.y, column = self.x, pady=4, padx=8)
+        self.combo["values"] = self.listadesplegable
+        self.combo.set(predeterminado)
+        self.lista_de_objetos.append((self.combo))
+        self.lista_de_datos.append((self.combo))
+
+    #----------------------------------------------------------------------
+    def agregar_combobox_editable(self, y, x, ancho, listadesplegable, predeterminado, estado='normal'):
         """Método de la clase Cuadro. \n
         Permite agregar una lista desplegable al Frame creado con la Clase Cuadro."""
         
@@ -450,7 +480,7 @@ class Cuadro(Frame):
         
         #ultimovalor = None
         #self.valordecisor = valordecisor
-
+        
         decisor.grid(row = self.y, column = self.x, pady=4, padx=8)        
         self.lista_de_objetos.append((decisor))
         self.lista_de_datos.append((decisor))
@@ -518,6 +548,7 @@ class Cuadro(Frame):
         valor_ingresado = widget.get()
         tabla_a_filtrar = tabla
         nombre_col = nombre_columna
+
         columna_filtrada_nombre = nombre_col_filtrada
         tipo_decisor = tipo_combo
         #print(valor_ingresado)
@@ -528,10 +559,12 @@ class Cuadro(Frame):
         if valor_ingresado != '' and tipo_decisor == "CXD1":
             tupla_interna = self.rejilla[posicion_ordinal]
             #print(tupla_interna)
+
             
             # Obtengo la lista para modificar
             lista_interna = list(tupla_interna)
             tabla_filtrada = tabla_a_filtrar[tabla_a_filtrar[nombre_col]==valor_ingresado]
+
             lista_validada = list(tabla_filtrada[columna_filtrada_nombre].unique())
             lista_validada_f = sorted(lista_validada, reverse = True)
             lista_interna[3] = lista_validada_f
@@ -545,7 +578,6 @@ class Cuadro(Frame):
         #print(datos_ingresados[12])
         #self.agregar_rejilla(self.rejilla)
         #self.insertar_lista_de_datos(datos_ingresados)
-        
 
     #----------------------------------------------------------------------
     def agregar_rejilla(self, rejilla):
@@ -578,6 +610,10 @@ class Cuadro(Frame):
             elif row[0] == 'E':
 
                 self.agregar_entry(row[1], row[2])
+
+            elif row[0] == 'EE':
+
+                self.agregar_entry_2(row[1], row[2])
             
             elif row[0] == 'EL':
 
@@ -617,6 +653,10 @@ class Cuadro(Frame):
             elif row[0] == 'CXP':
                 
                 self.agregar_combobox_personalizado(row[1], row[2], row[3], row[4], row[5])
+
+            elif row[0] == 'CXE':
+                
+                self.agregar_combobox_editable(row[1], row[2], row[3], row[4], row[5])
             
             elif row[0] == 'CXD1':
                 
@@ -626,6 +666,7 @@ class Cuadro(Frame):
             elif row[0] == 'CXD2':
                 
                 # En este caso row[3] debe ser una lista:
+
                 self.agregar_combobox_decisor_2(row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[0])
             
 

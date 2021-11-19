@@ -9,6 +9,8 @@ from modulos import busqueda_dr
 from apoyo.elementos_de_GUI import Cuadro, Ventana, Hovertip_Sefa, Vitrina_vista 
 from apoyo.manejo_de_bases import Base_de_datos
 import apoyo.datos_frecuentes as dfrec
+from modulos import menus
+
 
 # Prueba rama
 # Valores de lista desplegable
@@ -98,6 +100,11 @@ tabla_lista_efa = b_lista_efa.generar_dataframe()
 tabla_departamento_efa = tabla_lista_efa.loc[:, ['DEP_OSPA', 'PROV_DIST_OSPA']]
 departamento_ospa = list(tabla_lista_efa['DEP_OSPA'].unique())
 departamento_ospa_f = sorted(departamento_ospa)
+
+b_efa_inei = Base_de_datos(id_b_efa, 'ID_INEI')
+tabla_ubigeo_completo = b_efa_inei.generar_dataframe()
+tabla_ubigeo = tabla_ubigeo_completo.loc[:,['Departamento', 'Provincia']]
+departamento_inei = list(set(tabla_ubigeo['Departamento']))
 
 class inicio_app_OSPA(Ventana):
     """"""
@@ -318,7 +325,6 @@ class Doc_recibidos_vista(Ventana):
         f_boton = Cuadro(self)
         f_boton.agregar_button(0, 1, 'Guardar', self.enviar_dr)
         f_boton.agregar_button(0, 2, 'Inicio', self.inicio_app) # Botón provisional
-        
         # III.4 Frame de botón y títulos de vitrina 1
         self.boton_vitrina_1 = Cuadro(self)
         self.boton_vitrina_1.agregar_button(0, 0,'(+) Agregar', self.busqueda_de)
@@ -613,7 +619,7 @@ class Doc_recibidos_vista(Ventana):
         """"""
         self.desaparecer()
         # LargoxAncho
-        subFrame = inicio_app_OSPA(self, 400, 400, "Inicio")
+        subFrame = menus.inicio_app_OSPA(self, 400, 400, "Inicio")
 
 class Doc_emitidos_vista(Ventana):
     """"""
@@ -1011,7 +1017,7 @@ class Doc_emitidos_vista(Ventana):
         """"""
         self.desaparecer()
         # LargoxAncho
-        subFrame = inicio_app_OSPA(self, 400, 400, "Inicio")
+        subFrame = menus.inicio_app_OSPA(self, 400, 400, "Inicio")
     
     #----------------------------------------------------------------------
     def cambio_valor(self, ultimo_valor):
@@ -1563,7 +1569,7 @@ class Extremo_problemas_vista(Ventana):
         """"""
         self.desaparecer()
         # LargoxAncho
-        subFrame = inicio_app_OSPA(self, 400, 400, "Inicio")
+        subFrame = menus.inicio_app_OSPA(self, 400, 400, "Inicio")
 
 class Macroproblemas_vista(Ventana):
     """"""
@@ -1658,4 +1664,4 @@ class Macroproblemas_vista(Ventana):
         """"""
         self.desaparecer()
         # LargoxAncho
-        subFrame = inicio_app_OSPA(self, 400, 400, "Inicio")
+        subFrame = menus.inicio_app_OSPA(self, 400, 400, "Inicio")

@@ -19,14 +19,14 @@ class inicio_app_OSPA(Ventana):
         c1 = Cuadro(self)
         c1.agregar_label(0, 1, ' ')
         c1.agregar_imagen(1, 1,'Logo_OSPA.png',202,49)
-        c1.agregar_label(2, 1,' ')
-        c1.agregar_button(3, 1, "Jefe", self.inicio_jefe)
-        c1.agregar_label(4, 1,' ')
-        c1.agregar_button(5, 1, "Equipo Administrativo", self.inicio_adm)
-        c1.agregar_label(6, 1,' ')
-        c1.agregar_button(7, 1, "Equipo 1", self.inicio_e1)
-        c1.agregar_label(8, 1,' ')
-        c1.agregar_button(9, 1, "Equipo 2", self.inicio_e2)
+        c1.agregar_label(2, 1,'Jefe')
+        c1.agregar_button(3, 1, "Ir", self.inicio_jefe)
+        c1.agregar_label(4, 1,'Equipo Administrativo')
+        c1.agregar_button(5, 1, "Ir", self.inicio_adm)
+        c1.agregar_label(6, 1,'Equipo 1')
+        c1.agregar_button(7, 1, "Ir", self.inicio_e1)
+        c1.agregar_label(8, 1,'Equipo 2')
+        c1.agregar_button(9, 1, "Ir", self.inicio_e2)
         c1.agregar_label(10, 1,' ')
 
     #----------------------------------------------------------------------
@@ -68,42 +68,37 @@ class Menu_jefe(Ventana):
         c1 = Cuadro(self)
         c1.agregar_label(0, 1, ' ')
         c1.agregar_imagen(1, 1,'Logo_OSPA.png',202,49)
-        c1.agregar_label(2, 1,' ')
-        c1.agregar_button(3, 1, "Asignaciones pendientes", self.jefe_asig)
-        c1.agregar_label(4, 1,' ')
-        c1.agregar_button(5, 1, "Documentos por firmar", self.jefe_firma)
-        c1.agregar_label(6, 1,' ')
-        c1.agregar_button(7, 1, "Creación de macroproblema", self.vista_macro)
-        c1.agregar_label(8, 1,' ')
-        c1.agregar_button(9, 1, "Búsqueda", self.ver_menu_busquedas)
+        c1.agregar_label(2, 1,'Asignaciones pendientes')
+        c1.agregar_button(3, 1, "Ir", self.jefe_asig)
+        c1.agregar_label(4, 1,'Documentos por firmar')
+        c1.agregar_button(5, 1, "Ir", self.jefe_firma)
+        c1.agregar_label(6, 1,'Creación de macroproblema')
+        c1.agregar_button(7, 1, "Ir", self.vista_macro)
+        c1.agregar_label(8, 1,'Búsqueda')
+        c1.agregar_button(9, 1, "Ir", self.ver_menu_busquedas)
         c1.agregar_label(10, 1,' ')
+        c1.agregar_button(13, 2, "Volver", self.volver_Menu_jefe)
 
     #----------------------------------------------------------------------
     def jefe_asig(self):
         
-        print("Asignaciones pendientes")
-        # self.desaparecer()
+        self.desaparecer()
         # LargoxAncho
-        #SubFrame = busqueda_dr.Doc_emitidos_busqueda(self, 500, 1200, 
-        #            "Búsqueda de documentos emitidos")
+        SubFrame = busqueda_dr.Pendientes_jefe_asignar(self, 500, 1000, "Documentos pendientes de asignar")
     
     #----------------------------------------------------------------------
     def jefe_firma(self):
         
-        print("Documentos por firmar")
-        # self.desaparecer()
+        self.desaparecer()
         # LargoxAncho
-        #SubFrame = busqueda_dr.Doc_emitidos_busqueda(self, 500, 1200, 
-        #            "Búsqueda de documentos emitidos")
+        SubFrame = busqueda_dr.Pendientes_jefe_firma(self, 550, 1090, "Documentos pendientes de firma")
     
     #----------------------------------------------------------------------
     def vista_macro(self):
         
-        print("Creación de macroproblema")
-        # self.desaparecer()
+        self.desaparecer()
         # LargoxAncho
-        #SubFrame = busqueda_dr.Doc_emitidos_busqueda(self, 500, 1200, 
-        #            "Búsqueda de documentos emitidos")
+        SubFrame = vista_dr.Macroproblemas_vista(self, 550, 1090, "Documentos pendientes de firma")
 
     #----------------------------------------------------------------------
     def ver_menu_busquedas(self):
@@ -112,6 +107,13 @@ class Menu_jefe(Ventana):
         # LargoxAncho
         SubFrame = Menu_busquedas(self, 400, 400, 
                     "Búsquedas")
+
+    #----------------------------------------------------------------------
+
+    def volver_Menu_jefe(self):
+        """"""
+        self.desaparecer()
+        self.ventana_anterior.aparecer()
 
 class Menu_busquedas(Ventana):
     
@@ -124,22 +126,23 @@ class Menu_busquedas(Ventana):
         c1 = Cuadro(self)
         c1.agregar_label(0, 1, ' ')
         c1.agregar_imagen(1, 1,'Logo_OSPA.png',202,49)
-        c1.agregar_label(2, 1,' ')
-        c1.agregar_boton_grande(3, 1, "Búsqueda DR", self.busqueda_dr, 15, 2)
-        c1.agregar_label(4, 1,' ')
-        c1.agregar_boton_grande(5, 1, "Búsqueda DE", self.busqueda_de, 15, 2)
-        c1.agregar_label(6, 1,' ')
-        c1.agregar_boton_grande(7, 1, "Búsqueda de extremos", self.busqueda_ep, 20, 2)
-        c1.agregar_label(8, 1,' ')
-        c1.agregar_boton_grande(9, 1, "Búsqueda de macroproblemas", self.busqueda_mp, 25, 2)
+        c1.agregar_label(2, 1,'Búsqueda DR')
+        c1.agregar_button(3, 1, "Ir", self.busqueda_dr)
+        c1.agregar_label(4, 1,'Búsqueda DE')
+        c1.agregar_button(5, 1, "Ir", self.busqueda_de)
+        c1.agregar_label(6, 1,'Búsqueda de extremos')
+        c1.agregar_button(7, 1, "Ir", self.busqueda_ep)
+        c1.agregar_label(8, 1,'Búsqueda de macroproblemas')
+        c1.agregar_button(9, 1, "Ir", self.busqueda_mp)
         c1.agregar_label(10, 1,' ')
+        c1.agregar_button(13, 2, "Volver", self.volver_Menu_busquedas)
     
     #----------------------------------------------------------------------
     def busqueda_dr(self):
 
         self.desaparecer()
         # LargoxAncho
-        SubFrame = busqueda_dr.Doc_recibidos_busqueda(self, 400, 400,
+        SubFrame = busqueda_dr.Doc_recibidos_busqueda(self, 560, 1150,
                      "Búsqueda de documentos recibidos")
     
     #----------------------------------------------------------------------
@@ -147,26 +150,30 @@ class Menu_busquedas(Ventana):
 
         self.desaparecer()
         # LargoxAncho
-        SubFrame = busqueda_dr.Doc_emitidos_busqueda(self, 400, 400, 
+        SubFrame = busqueda_dr.Doc_emitidos_busqueda(self, 500, 1200, 
                     "Búsqueda de documentos emitidos")
     
     #----------------------------------------------------------------------
     def busqueda_ep(self):
         
-        print("Búsqueda de extremos de problema")
-        # self.desaparecer()
+        self.desaparecer()
         # LargoxAncho
-        #SubFrame = busqueda_dr.Doc_emitidos_busqueda(self, 500, 1200, 
-        #            "Búsqueda de documentos emitidos")
+        SubFrame = busqueda_dr.Extremos(self, 600, 1400, 
+                    "Búsqueda de extremos de problemas")
     
     #----------------------------------------------------------------------
     def busqueda_mp(self):
         
-        print("Búsqueda de macroproblemas")
-        # self.desaparecer()
+        self.desaparecer()
         # LargoxAncho
-        #SubFrame = busqueda_dr.Doc_emitidos_busqueda(self, 500, 1200, 
-        #            "Búsqueda de documentos emitidos")
+        SubFrame = busqueda_dr.Macroproblemas(self, 500, 1200, 
+                    "Búsqueda de macroproblemas")
+    #----------------------------------------------------------------------
+
+    def volver_Menu_busquedas(self):
+        """"""
+        self.desaparecer()
+        self.ventana_anterior.aparecer()
 
 class Menu_admin(Ventana):
     
@@ -179,11 +186,12 @@ class Menu_admin(Ventana):
         c1 = Cuadro(self)
         c1.agregar_label(0, 1, ' ')
         c1.agregar_imagen(1, 1,'Logo_OSPA.png',202,49)
-        c1.agregar_label(2, 1,' ')
-        c1.agregar_button(3, 1, "Registro de nuevo documento", self.vista_dr)
-        c1.agregar_label(4, 1,' ')
-        c1.agregar_button(5, 1, "Envío de reiterativo / OCI", self.vista_de)
+        c1.agregar_label(2, 1,'Registro de nuevo documento')
+        c1.agregar_button(3, 1, "Ir", self.vista_dr)
+        c1.agregar_label(4, 1,'Envío de reiterativo / OCI')
+        c1.agregar_button(5, 1, "Ir", self.Pendientes_reiterar)
         c1.agregar_label(6, 1,' ')
+        c1.agregar_button(9, 2, "Volver", self.volver_Menu_admin)
     
     #----------------------------------------------------------------------
     def vista_dr(self):
@@ -194,12 +202,18 @@ class Menu_admin(Ventana):
                     "Registra de un nuevo documento recibido")
 
     #----------------------------------------------------------------------
-    def vista_de(self):
+    def Pendientes_reiterar(self):
 
         self.desaparecer()
         # LargoxAncho
-        SubFrame = vista_dr.Doc_emitidos_vista(self, 650, 1150,
-                    "Registra de un nuevo documento recibido")
+        SubFrame = busqueda_dr.Pendientes_por_reiterar(self, 560, 1090, "Documentos pendientes de reiterar/comunicar al OCI")
+
+    #----------------------------------------------------------------------
+
+    def volver_Menu_admin(self):
+        """"""
+        self.desaparecer()
+        self.ventana_anterior.aparecer()
 
 class Inicio_eq1(Ventana):
     
@@ -212,29 +226,33 @@ class Inicio_eq1(Ventana):
         c1 = Cuadro(self)
         c1.agregar_label(0, 1, ' ')
         c1.agregar_imagen(1, 1,'Logo_OSPA.png',202,49)
-        c1.agregar_label(2, 1,' ')
-        c1.agregar_button(3, 1, "Asignaciones pendientes", self.pendientes_eq1)
-        c1.agregar_label(4, 1,' ')
-        c1.agregar_button(5, 1, "Creación de macroproblema", self.vista_mp)
+        c1.agregar_label(2, 1,'Asignaciones pendientes')
+        c1.agregar_button(3, 1, "Ir", self.pendientes_eq1)
+        c1.agregar_label(4, 1,'Creación de macroproblema')
+        c1.agregar_button(5, 1, "Ir", self.vista_mp)
         c1.agregar_label(6, 1,' ')
+        c1.agregar_button(9, 2, "Volver", self.volver_Inicio_eq1)
     
     #----------------------------------------------------------------------
     def pendientes_eq1(self):
 
-        print("Vista del Equipo 1")
-        # self.desaparecer()
+        self.desaparecer()
         # LargoxAncho
-        # SubFrame = vista_dr.Doc_recibidos_vista(self, 650, 1150, 
-        #            "Registra de un nuevo documento recibido")
+        SubFrame = busqueda_dr.Pendientes_eq1_trabajar(self, 500, 1000, "Documentos pendientes de trabajar - Equipo 1")
 
     #----------------------------------------------------------------------
     def vista_mp(self):
-
-        print("Creación de macroproblema")
-        # self.desaparecer()
+        
+        self.desaparecer()
         # LargoxAncho
-        #SubFrame = vista_dr.Doc_emitidos_vista(self, 650, 1150,
-        #            "Registra de un nuevo documento recibido")
+        SubFrame = vista_dr.Macroproblemas_vista(self, 650, 1050, "Registra un nuevo macroproblema")
+
+    #----------------------------------------------------------------------
+
+    def volver_Inicio_eq1(self):
+        """"""
+        self.desaparecer()
+        self.ventana_anterior.aparecer()
 
 class Inicio_eq2(Ventana):
     
@@ -247,15 +265,17 @@ class Inicio_eq2(Ventana):
         c1 = Cuadro(self)
         c1.agregar_label(0, 1, ' ')
         c1.agregar_imagen(1, 1,'Logo_OSPA.png',202,49)
-        c1.agregar_label(2, 1,' ')
-        c1.agregar_button(3, 1, "Seguimiento al problema", self.busqueda_ep)
-        c1.agregar_label(4, 1,' ')
-        c1.agregar_button(5, 1, "Calificación de respuesta", self.pendientes_eq2)
-        c1.agregar_label(6, 1,' ')
-        c1.agregar_button(7, 1, "Programaciones", self.pendientes_prog)
-        c1.agregar_label(8, 1,' ')
-        c1.agregar_button(9, 1, "Creación de macroproblema", self.vista_mp)
+        c1.agregar_label(2, 1,'Seguimiento al problema')
+        c1.agregar_button(3, 1, "Ir", self.busqueda_ep)
+        c1.agregar_label(4, 1,'Calificación de respuesta')
+        c1.agregar_button(5, 1, "Ir", self.pendientes_eq2)
+        c1.agregar_label(6, 1,'Programaciones')
+        c1.agregar_button(7, 1, "Ir", self.pendientes_prog)
+        c1.agregar_label(8, 1,'Creación de macroproblema')
+        c1.agregar_button(9, 1, "Ir", self.vista_mp)
         c1.agregar_label(10, 1,' ')
+        c1.agregar_button(13, 2, "Volver", self.volver_Inicio_eq2)
+
 
     #----------------------------------------------------------------------
     def pendientes_eq2(self):
@@ -292,3 +312,10 @@ class Inicio_eq2(Ventana):
         # LargoxAncho
         #SubFrame = vista_dr.Doc_emitidos_vista(self, 650, 1150,
         #            "Registra de un nuevo documento recibido")
+
+    #----------------------------------------------------------------------
+
+    def volver_Inicio_eq2(self):
+        """"""
+        self.desaparecer()
+        self.ventana_anterior.aparecer()
