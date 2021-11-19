@@ -9,6 +9,8 @@ from modulos import busqueda_dr
 from apoyo.elementos_de_GUI import Cuadro, Ventana, Hovertip_Sefa, Vitrina_vista 
 from apoyo.manejo_de_bases import Base_de_datos
 import apoyo.datos_frecuentes as dfrec
+from modulos import menus
+
 
 # Prueba rama
 # Valores de lista desplegable
@@ -72,9 +74,13 @@ b_ep_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_EP')
 # 2. Bases de datos complementarias
 id_b_efa = '1pjHXiz15Zmw-49Nr4o1YdXJnddUX74n7Tbdf5SH7Lb0'
 b_efa = Base_de_datos(id_b_efa, 'Directorio')
-b_efa_inei = Base_de_datos(id_b_efa, 'ID_INEI')
 tabla_directorio = b_efa.generar_dataframe()
 lista_efa = list(set(tabla_directorio['Entidad u oficina']))
+
+b_efa_inei = Base_de_datos(id_b_efa, 'ID_INEI')
+tabla_ubigeo_completo = b_efa_inei.generar_dataframe()
+tabla_ubigeo = tabla_ubigeo_completo.loc[:,['Departamento', 'Provincia']]
+departamento_inei = list(set(tabla_ubigeo['Departamento']))
 
 class inicio_app_OSPA(Ventana):
     """"""
@@ -253,10 +259,10 @@ class Doc_recibidos_vista(Ventana):
             ('CX', 7, 1, tipo_respuesta),
             
             ('L', 8, 0, 'Departamento'),
-            ('CXD', 8, 1, 39, departamento, 29),
+            ('CXD', 8, 1, 39, departamento_inei, tabla_ubigeo, 'Departamento', 29),
 
             ('L', 8, 2, 'Provincia'),
-            ('CX', 8, 3, especialista)
+            ('CXR', 8, 3, especialista)
         ]
 
         # II. Tablas en ventana
@@ -297,7 +303,6 @@ class Doc_recibidos_vista(Ventana):
         f_boton = Cuadro(self)
         f_boton.agregar_button(0, 1, 'Guardar', self.enviar_dr)
         f_boton.agregar_button(0, 2, 'Inicio', self.inicio_app) # Botón provisional
-        
         # III.4 Frame de botón y títulos de vitrina 1
         self.boton_vitrina_1 = Cuadro(self)
         self.boton_vitrina_1.agregar_button(0, 0,'(+) Agregar', self.busqueda_de)
@@ -580,7 +585,7 @@ class Doc_recibidos_vista(Ventana):
         """"""
         self.desaparecer()
         # LargoxAncho
-        subFrame = inicio_app_OSPA(self, 400, 400, "Inicio")
+        subFrame = menus.inicio_app_OSPA(self, 400, 400, "Inicio")
 
 class Doc_emitidos_vista(Ventana):
     """"""
@@ -961,7 +966,7 @@ class Doc_emitidos_vista(Ventana):
         """"""
         self.desaparecer()
         # LargoxAncho
-        subFrame = inicio_app_OSPA(self, 400, 400, "Inicio")
+        subFrame = menus.inicio_app_OSPA(self, 400, 400, "Inicio")
     
     #----------------------------------------------------------------------
     def cambio_valor(self, ultimo_valor):
@@ -994,7 +999,7 @@ class Doc_emitidos_vista(Ventana):
         # 2. Filtrar la información
         tabla_val_dep_filtrada = tabla_valores_dependientes[tabla_valores_dependientes['Departamento']==valor_combobox_1]
         # 3. Seleccionar columna y convertirla en lista
-        valores_filtrados = list(set(tabla_val_dep_filtrada.loc[:,['Provincia']]))
+        valores_filtrados = list(set(tabla_val_dep_filtrada.loc[:,['Provincia', 'Departamento']]))
         print(valores_filtrados)
         # 4. Valores filtrados pasan a ser parte del combobox siguiente 
     
@@ -1525,7 +1530,7 @@ class Extremo_problemas_vista(Ventana):
         """"""
         self.desaparecer()
         # LargoxAncho
-        subFrame = inicio_app_OSPA(self, 400, 400, "Inicio")
+        subFrame = menus.inicio_app_OSPA(self, 400, 400, "Inicio")
 
 class Macroproblemas_vista(Ventana):
     """"""
@@ -1620,4 +1625,4 @@ class Macroproblemas_vista(Ventana):
         """"""
         self.desaparecer()
         # LargoxAncho
-        subFrame = inicio_app_OSPA(self, 400, 400, "Inicio")
+        subFrame = menus.inicio_app_OSPA(self, 400, 400, "Inicio")
