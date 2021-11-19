@@ -520,14 +520,14 @@ class Cuadro(Frame):
         nombre_col = nombre_columna
         columna_filtrada_nombre = nombre_col_filtrada
         tipo_decisor = tipo_combo
-        print(valor_ingresado)
-        print(ultimo_valor)
+        #print(valor_ingresado)
+        #print(ultimo_valor)
         #self.z.after(1000, self.update)
 
         #print(self.rejilla)
         if valor_ingresado != '' and tipo_decisor == "CXD1":
             tupla_interna = self.rejilla[posicion_ordinal]
-            print(tupla_interna)
+            #print(tupla_interna)
             
             # Obtengo la lista para modificar
             lista_interna = list(tupla_interna)
@@ -536,7 +536,7 @@ class Cuadro(Frame):
             lista_validada_f = sorted(lista_validada, reverse = True)
             lista_interna[3] = lista_validada_f
             tupla_final = tuple(lista_interna)
-            print(tupla_final)
+            #print(tupla_final)
 
             self.rejilla[posicion_ordinal] = tupla_final
             self.actualizar_rejilla(self.rejilla)
@@ -545,17 +545,6 @@ class Cuadro(Frame):
         #print(datos_ingresados[12])
         #self.agregar_rejilla(self.rejilla)
         #self.insertar_lista_de_datos(datos_ingresados)
-
-    #----------------------------------------------------------------------
-    def update(self):
-        print("Actualizar")
-        #if self.ultimo_valor != None:
-        #    print(self.valordecisor.get())
-        #    if self.valordecisor.get() == "PUNO":
-        #        print("prueba")
-        #        self.ultimovalor = None
-
-        #self.z.after(10, self.update)
         
 
     #----------------------------------------------------------------------
@@ -672,6 +661,12 @@ class Cuadro(Frame):
                 
                 # En este caso row[3] debe ser una lista:
                 self.agregar_combobox(row[1], row[2], row[3])
+            
+            # Provisional para pantalla de extremos
+            elif row[0] == 'CXR' and row[1] == 1 and row[2] == 3:
+                
+                # En este caso row[3] debe ser una lista:
+                self.agregar_combobox_personalizado(row[1], row[2], 27, row[3], '', "readonly")
     
     #----------------------------------------------------------------------
     def agregar_escenario(self, row, column, data_frame, funcion1, funcion2):
