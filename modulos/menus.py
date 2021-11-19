@@ -238,7 +238,7 @@ class Inicio_eq1(Ventana):
 
         self.desaparecer()
         # LargoxAncho
-        SubFrame = busqueda_dr.Pendientes_eq1_trabajar(self, 500, 1000, "Documentos pendientes de trabajar - Equipo 1")
+        SubFrame = busqueda_dr.Pendientes_eq1_trabajar(self, 500, 1020, "Documentos pendientes de trabajar - Equipo 1")
 
     #----------------------------------------------------------------------
     def vista_mp(self):
@@ -280,38 +280,32 @@ class Inicio_eq2(Ventana):
     #----------------------------------------------------------------------
     def pendientes_eq2(self):
 
-        print("Vista de pendientes del Equipo 2")
-        # self.desaparecer()
+        self.desaparecer()
         # LargoxAncho
-        # SubFrame = vista_dr.Doc_recibidos_vista(self, 650, 1150, 
-        #            "Registra de un nuevo documento recibido")
+        SubFrame = busqueda_dr.Pendientes_eq2_calificarrpta(self, 580, 1300, 
+                    "Documentos pendientes de calificar respuesta - Equipo 2")
 
     #----------------------------------------------------------------------
     def pendientes_prog(self):
 
-        print("Vista de pendientes de programación")
-        # self.desaparecer()
+        self.desaparecer()
         # LargoxAncho
-        # SubFrame = vista_dr.Doc_recibidos_vista(self, 650, 1150, 
-        #            "Registra de un nuevo documento recibido")
-
+        SubFrame = busqueda_dr.Pendientes_eq2_programaciones(self, 600, 1400, 
+                    "Documentos pendientes de calificar respuesta - Equipo 2")
     #----------------------------------------------------------------------
     def busqueda_ep(self):
 
-        print("Búsqueda de extremo de problemas")
-        # self.desaparecer()
+        self.desaparecer()
         # LargoxAncho
-        # SubFrame = vista_dr.Doc_recibidos_vista(self, 650, 1150, 
-        #            "Registra de un nuevo documento recibido")
+        SubFrame = busqueda_dr.Extremos(self, 600, 1400, 
+                    "Búsqueda de extremos de problemas")
 
     #----------------------------------------------------------------------
     def vista_mp(self):
 
-        print("Creación de macroproblema")
-        # self.desaparecer()
+        self.desaparecer()
         # LargoxAncho
-        #SubFrame = vista_dr.Doc_emitidos_vista(self, 650, 1150,
-        #            "Registra de un nuevo documento recibido")
+        SubFrame = vista_dr.Macroproblemas_vista(self, 650, 1050, "Registra un nuevo macroproblema")
 
     #----------------------------------------------------------------------
 

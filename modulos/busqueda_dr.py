@@ -177,7 +177,7 @@ class Doc_recibidos_busqueda(Ventana):
 
     def Complementodr(self,filtro0):
 
-        tabla_filtro2 = filtro0.loc[:, ['NRO DOC','REMITENTE','FECHA INGRESO SEFA','INDICACION','ESPECIALISTA','FECHA ULTIMO MOV.','ASUNTO']]
+        tabla_filtro2 = filtro0.loc[:, ['NRO DOC','REMITENTE','HT INGRESO','FECHA INGRESO SEFA','INDICACION','ESPECIALISTA','FECHA ULTIMO MOV.','ASUNTO']]
         if len(tabla_filtro2.index) > 100:
             tabla_filtro3 = tabla_filtro2.head(100)
         else:
@@ -629,7 +629,7 @@ class Extremos(Ventana):
         self.listaACT = list(set(self.tabla_ep['ACTIVIDAD']))
         self.listaDEPAR = list(set(self.tabla_ep['DEPARTAMENTO']))
         self.listaPROV = list(set(self.tabla_ep['PROVINCIA']))
-        self.listaDISTR = list(set(self.tabla_ep['DISTRITO']))
+        #self.listaDISTR = list(set(self.tabla_ep['DISTRITO']))
         self.listaTIPOUBI = list(set(self.tabla_ep['TIPO DE UBICACION']))
         self.listaOCURR = list(set(self.tabla_ep['OCURRENCIA']))
         self.listaEFA = list(set(self.tabla_ep['EFA']))
@@ -659,8 +659,8 @@ class Extremos(Ventana):
             ('L', 1, 2, 'Provincia'),
             ('CXP', 1, 3, 39, self.listaPROV, '', "readonly"),
 
-            ('L', 1, 4, 'Distrito'),
-            ('CXP', 1, 5, 39, self.listaDISTR, '', "readonly"),
+            #('L', 1, 4, 'Distrito'),
+            #('CXP', 1, 5, 39, self.listaDISTR, '', "readonly"),
 
             ('L', 2, 0, 'Tipo de ubicación'),
             ('CXP', 2, 1, 39, self.listaTIPOUBI, '', "readonly"),
@@ -715,11 +715,11 @@ class Extremos(Ventana):
         self.ACTIVIDAD = self.listas_filtroep[2]
         self.DEPART = self.listas_filtroep[3]
         self.PROVI = self.listas_filtroep[4]
-        self.DISTR = self.listas_filtroep[5]
-        self.TIPOUBI = self.listas_filtroep[6]
-        self.OCURRE = self.listas_filtroep[7]
-        self.EFA = self.listas_filtroep[8]
-        self.CLAVE = self.listas_filtroep[9]
+        #self.DISTR = self.listas_filtroep[5]
+        self.TIPOUBI = self.listas_filtroep[5]
+        self.OCURRE = self.listas_filtroep[6]
+        self.EFA = self.listas_filtroep[7]
+        self.CLAVE = self.listas_filtroep[8]
 
         # Filtrando datos por palabras exactas
 
@@ -755,12 +755,12 @@ class Extremos(Ventana):
                 filtro
             filtro=filtro+"PROVINCIA=="+"'"+self.PROVI+"' "
 
-        if len(self.DISTR)>0 :
-            if len(filtro)>0 :
-                filtro = filtro+" & "
-            else:
-                filtro
-            filtro=filtro+"DISTRITO=="+"'"+self.DISTR+"' "
+        #if len(self.DISTR)>0 :
+        #   if len(filtro)>0 :
+        #        filtro = filtro+" & "
+        #    else:
+        #        filtro
+        #    filtro=filtro+"DISTRITO=="+"'"+self.DISTR+"' "
 
         if len(self.TIPOUBI)>0 :
             if len(filtro)>0 :
@@ -2160,7 +2160,7 @@ class Pendientes_eq1_trabajar(Ventana):
 
         # Creando vitrina 
         self.vpeq1t = Vitrina_pendientes_jefe_firma(self, self.tabla_peq1tF, self.ver_peq1t, 
-                                   self.funcion_de_asociar_peq1t, height=200, width=800)
+                                   self.funcion_de_asociar_peq1t, height=200, width=1000)
     
     #----------------------------------------------------------------------
 
@@ -2235,7 +2235,7 @@ class Pendientes_eq1_trabajar(Ventana):
             self.frame_vitrina_peq1t.eliminar_cuadro()
             self.frame_vitrina_peq1t = Cuadro(self)
             self.vpeq1t = Vitrina_pendientes_jefe_firma(self, tabla_filtro3, self.ver_peq1t, 
-                                   self.funcion_de_asociar_peq1t, height=200, width=800)
+                                   self.funcion_de_asociar_peq1t, height=200, width=1000)
         else:
             self.frame_vitrina_peq1t.eliminar_cuadro()
             self.frame_vitrina_peq1t = Cuadro(self)
@@ -2257,7 +2257,7 @@ class Pendientes_eq1_trabajar(Ventana):
         self.frame_vitrina_peq1t = Cuadro(self)
         # Creando vitrina
         self.vpeq1t = Vitrina_pendientes_jefe_firma(self, self.tabla_peq1tF, self.ver_peq1t, 
-                                   self.funcion_de_asociar_peq1t, height=200, width=800)
+                                   self.funcion_de_asociar_peq1t, height=200, width=1000)
 
     #----------------------------------------------------------------------
 
@@ -2284,3 +2284,394 @@ class Pendientes_eq1_trabajar(Ventana):
     def funcion_de_asociar_peq1t(self, x):
         """"""
         print('hola')
+
+class Pendientes_eq2_calificarrpta(Ventana):
+    """"""
+    #----------------------------------------------------------------------
+    def __init__(self, *args, nuevo=True, lista=None, id_doc = None):
+        """Constructor"""
+
+        Ventana.__init__(self, *args)
+
+        # Almacenamos información herededa
+        self.nuevo = nuevo
+        if self.nuevo != True: #en caso exista
+            self.id_usuario = lista
+            self.cod_doc_peq2t = id_doc
+
+        # Generamos el dataframe a filtrar
+        self.tabla_inicial0 = b_dr.generar_dataframe()
+        self.tabla_inicial1 = self.tabla_inicial0[self.tabla_inicial0['ESPECIALISTA']!='']
+        self.tabla_inicial2 = self.tabla_inicial1[self.tabla_inicial1['RESPUESTA']=='']
+        self.tabla_peq2t = self.tabla_inicial2.rename(columns={'COD_DR':'NRO DOC','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_ENTRANTE':'HT INGRESO'})
+        self.tabla_peq2tF = self.tabla_peq2t.loc[0:99, ['NRO DOC','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','FECHA ULTIMO MOV.','ESPECIALISTA','INDICACION','ASUNTO']]
+ 
+        # Información para las listas desplegables
+        self.peq2ttipodoc = list(set(self.tabla_peq2t['TIPO DOC']))
+        self.peq2tremitente = list(set(self.tabla_peq2t['REMITENTE']))
+        self.peq2tespecialista = list(set(self.tabla_peq2t['ESPECIALISTA']))
+
+        # Agregando logo del ospa a la ventana y título
+        self.peq2t0 = Cuadro(self)
+        self.peq2t0.agregar_label(0,0,' ')
+        self.peq2t0.agregar_imagen(1,0,'Logo_OSPA.png',202,49)
+        peq2t2 = Cuadro(self)
+        peq2t2.agregar_titulo(2, 0, 'Documentos pendientes de calificar respuesta - Equipo 2')
+
+        # Armando rejilla con los filtros
+        self.rejilla_peq2t = (
+
+            ('L', 0, 0, 'Nro registro Siged'),
+            ('EE', 0, 1),
+
+            ('L', 1, 0, 'Tipo de documento'),
+            ('CXP', 1, 1, 39, self.peq2ttipodoc, '', 'readonly'),
+
+            ('L', 0, 2, 'Remitente'),
+            ('CXE', 0, 3, 39, self.peq2tremitente, '', 'normal'),
+
+            ('L', 1, 2, 'Número de doc'),
+            ('EE', 1, 3),
+
+            ('L', 2, 0, 'Especialista'),
+            ('CXP', 2, 1, 39, self.peq2tespecialista, '', 'readonly')
+
+        )
+
+        # Agregando rejilla a la ventana
+        self.peq2t1 = Cuadro(self)
+        self.peq2t1.agregar_rejilla(self.rejilla_peq2t)
+
+        # Generando rejilla para botones
+        self.rejilla_peq2t2 = (
+            ('B', 5, 4, 'Buscar', self.Buscar_peq2t),
+            ('B', 5, 5, 'Limpiar', self.limpiar_peq2t),
+            ('B', 5, 6, 'Volver', self.volver_peq2t),
+            ('B', 5, 7, 'Inicio', self.inicio_app)
+        )
+        
+        # Agregando rejilla de botones a la ventana
+        self.peq2t15 = Cuadro(self)
+        self.peq2t15.agregar_rejilla(self.rejilla_peq2t2)
+
+        self.frame_vitrina_peq2t = Cuadro(self)
+
+        # Creando vitrina 
+        self.vpeq2t = Vitrina_pendientes_jefe_firma(self, self.tabla_peq2tF, self.ver_peq2t, 
+                                   self.funcion_de_asociar_peq2t, height=200, width=1080)
+    
+    #----------------------------------------------------------------------
+
+    def inicio_app(self):
+        """"""
+        self.desaparecer()
+        # LargoxAncho
+        subFrame = menus.inicio_app_OSPA(self, 400, 400, "Inicio")
+
+    #----------------------------------------------------------------------
+
+    def Buscar_peq2t(self):
+        """"""
+        # Obteniendo valores de la rejilla
+        self.listas_filtro_peq2t = self.peq2t1.obtener_lista_de_datos()
+        self.htpeq2t = self.listas_filtro_peq2t[0]
+        self.tipodocpeq2t = self.listas_filtro_peq2t[1]
+        self.remitentepeq2t = self.listas_filtro_peq2t[2]
+        self.nrodocpeq2t = self.listas_filtro_peq2t[3]
+        self.especialistapeq2t = self.listas_filtro_peq2t[4]
+
+        # Filtrando datos por palabras exactas
+
+        filtro=""
+        if len(self.tipodocpeq2t)>0 :
+            filtro="`TIPO DOC`=="+"'"+self.tipodocpeq2t+"' "
+
+        if len(self.especialistapeq2t)>0 :
+            if len(filtro)>0 :
+                filtro = filtro+" & "
+            else:
+                filtro
+            filtro=filtro+"ESPECIALISTA=="+"'"+self.especialistapeq2t+"' "
+        
+        self.mostrarDatospeq2t(filtro)
+
+    #----------------------------------------------------------------------  
+
+    def mostrarDatospeq2t(self, filtro):
+
+        self.filtro0 = self.tabla_peq2t
+        
+        if len(self.remitentepeq2t)>0: # Filtro por palabra clave
+            self.vpeq2t.Eliminar_vitrina()
+            self.filtro0 = self.tabla_peq2t[self.tabla_peq2t['REMITENTE'].str.contains(self.remitentepeq2t)]
+            self.Complementopeq2t(self.filtro0)
+
+        if len(self.nrodocpeq2t)>0: # Filtro por palabra clave
+            self.vpeq2t.Eliminar_vitrina()
+            self.filtro0['NRO DOC']=self.filtro0['NRO DOC'].apply(str)
+            self.filtro0 = self.filtro0[self.filtro0['NRO DOC'].str.contains(self.nrodocpeq2t)]
+            self.Complementopeq2t(self.filtro0)
+
+        if len(self.htpeq2t)>0: # Filtro por palabra clave
+            self.vpeq2t.Eliminar_vitrina()
+            self.filtro0['HT INGRESO']=self.filtro0['HT INGRESO'].apply(str)
+            self.filtro0 = self.filtro0[self.filtro0['HT INGRESO'].str.contains(self.htpeq2t)]
+            self.Complementopeq2t(self.filtro0)
+
+        if len(filtro)>0:
+
+            self.vpeq2t.Eliminar_vitrina()
+            self.filtro1 = self.filtro0.query(filtro)
+            self.Complementopeq2t(self.filtro1)
+
+        else:
+            self.vpeq2t.Eliminar_vitrina()
+            self.Complementopeq2t(self.filtro0)
+
+    #----------------------------------------------------------------------
+
+    def Complementopeq2t(self,filtro0):
+
+        tabla_filtro2 = filtro0.loc[:, ['NRO DOC','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','FECHA ULTIMO MOV.','ESPECIALISTA','INDICACION','ASUNTO']]
+        if len(tabla_filtro2.index) > 100:
+            tabla_filtro3 = tabla_filtro2.head(100)
+        else:
+            tabla_filtro3 = tabla_filtro2
+        if len(tabla_filtro3.index) > 0:
+            self.frame_vitrina_peq2t.eliminar_cuadro()
+            self.frame_vitrina_peq2t = Cuadro(self)
+            self.vpeq2t = Vitrina_pendientes_jefe_firma(self, tabla_filtro3, self.ver_peq2t, 
+                                   self.funcion_de_asociar_peq2t, height=200, width=1080)
+        else:
+            self.frame_vitrina_peq2t.eliminar_cuadro()
+            self.frame_vitrina_peq2t = Cuadro(self)
+            self.frame_vitrina_peq2t.agregar_label(1, 2, '                  0 documentos encontrados')
+
+    #----------------------------------------------------------------------
+    def limpiar_peq2t(self):
+        
+        # Eliminando campos
+        self.peq2t1.eliminar_cuadro()
+        self.vpeq2t.Eliminar_vitrina()
+        self.peq2t15.eliminar_cuadro()
+        self.frame_vitrina_peq2t.eliminar_cuadro()
+        # Agregando rejilla a la ventana
+        self.peq2t1 = Cuadro(self)
+        self.peq2t1.agregar_rejilla(self.rejilla_peq2t)
+        self.peq2t15 = Cuadro(self)
+        self.peq2t15.agregar_rejilla(self.rejilla_peq2t2)
+        self.frame_vitrina_peq2t = Cuadro(self)
+        # Creando vitrina
+        self.vpeq2t = Vitrina_pendientes_jefe_firma(self, self.tabla_peq2tF, self.ver_peq2t, 
+                                   self.funcion_de_asociar_peq2t, height=200, width=1080)
+
+    #----------------------------------------------------------------------
+
+    def volver_peq2t(self):
+        """"""
+        self.desaparecer()
+        self.ventana_anterior.aparecer()
+
+    #----------------------------------------------------------------------
+    def ver_peq2t(self, x):
+        """"""
+        self.x = x
+        texto_documento = 'Documento recibido: ' + x
+        #print(x)
+        lb1 = b_dr.listar_datos_de_fila(self.x)
+        # PARA EL CASO DE ESTA PANTALLA SOLO LLEVARA LOS DATOS INGRESADOS HASTA APORTE DEL DOC O ASUNTO (CAMPOS OBLIGATORIO)
+        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8]]
+        
+        self.desaparecer()
+        subframe = vista_dr.Doc_recibidos_vista(self, 650, 1150, texto_documento, nuevo=False, 
+                                                lista=lista_para_insertar, id_doc = x)
+
+    #----------------------------------------------------------------------
+    def funcion_de_asociar_peq2t(self, x):
+        """"""
+        print('hola')
+
+
+class Pendientes_eq2_programaciones(Ventana):
+    """"""
+    #----------------------------------------------------------------------
+    def __init__(self, *args, nuevo=True, lista=None, id_doc = None):
+        """Constructor"""
+
+        Ventana.__init__(self, *args)
+
+        # Almacenamos información herededa
+        self.nuevo = nuevo
+        if self.nuevo != True: #en caso exista
+            self.id_usuario = lista
+            self.cod_doc_peq2pr = id_doc
+
+        # Generamos el dataframe a filtrar
+        self.tabla_inicial0 = b_de.generar_dataframe()
+        self.tabla_inicial1 = self.tabla_inicial0[self.tabla_inicial0['CATEGORIA']=='Programación'] 
+        self.tabla_peq2pr = self.tabla_inicial1.rename(columns={'COD_DE':'DOC EMITIDO','FECHA_PROYECTO_FINAL':'FECHA ACCION','FECHA_FIRMA':'FECHA PROGRAMACION','TIPO_DOC':'TIPO DOC','ESTADO_DOCE':'ESTADO','SE_EMITIO':'¿SE EJECUTO?'})
+        self.tabla_peq2prF = self.tabla_peq2pr.loc[0:99, ['REMITENTE','FECHA ACCION','FECHA PROGRAMACION','ESPECIALISTA','ESTADO','¿SE EJECUTO?']]
+ 
+        # Información para las listas desplegables
+        self.peq2prremitente = list(set(self.tabla_peq2pr['REMITENTE']))
+        self.peq2prespecialista = list(set(self.tabla_peq2pr['ESPECIALISTA']))
+        self.peq2prestado = list(set(self.tabla_peq2pr['ESTADO']))
+
+        # Agregando logo del ospa a la ventana y título
+        self.peq2pr0 = Cuadro(self)
+        self.peq2pr0.agregar_label(0,0,' ')
+        self.peq2pr0.agregar_imagen(1,0,'Logo_OSPA.png',202,49)
+        peq2pr2 = Cuadro(self)
+        peq2pr2.agregar_titulo(2, 0, 'Revisión de programaciones')
+
+        # Armando rejilla con los filtros
+        self.rejilla_peq2pr = (
+
+            ('L', 0, 0, 'Remitente'),
+            ('CXE', 0, 1, 39, self.peq2prremitente, '', 'normal'),
+
+            ('L', 1, 0, 'Especialista'),
+            ('CXP', 1, 1, 39, self.peq2prespecialista, '', 'readonly'),
+
+            ('L', 0, 2, 'Estado'),
+            ('CXP', 0, 3, 39, self.peq2prestado, '', 'readonly')
+
+        )
+
+        # Agregando rejilla a la ventana
+        self.peq2pr1 = Cuadro(self)
+        self.peq2pr1.agregar_rejilla(self.rejilla_peq2pr)
+
+        # Generando rejilla para botones
+        self.rejilla_peq2pr2 = (
+            ('B', 5, 4, 'Buscar', self.Buscar_peq2pr),
+            ('B', 5, 5, 'Limpiar', self.limpiar_peq2pr),
+            ('B', 5, 6, 'Volver', self.volver_peq2pr),
+            ('B', 5, 7, 'Inicio', self.inicio_app)
+        )
+        
+        # Agregando rejilla de botones a la ventana
+        self.peq2pr15 = Cuadro(self)
+        self.peq2pr15.agregar_rejilla(self.rejilla_peq2pr2)
+
+        self.frame_vitrina_peq2pr = Cuadro(self)
+
+        # Creando vitrina 
+        self.vpeq2pr = Vitrina_pendientes_jefe_firma(self, self.tabla_peq2prF, self.ver_peq2pr, 
+                                   self.funcion_de_asociar_peq2pr, height=200, width=1090)
+    
+    #----------------------------------------------------------------------
+
+    def inicio_app(self):
+        """"""
+        self.desaparecer()
+        # LargoxAncho
+        subFrame = menus.inicio_app_OSPA(self, 400, 400, "Inicio")
+
+    #----------------------------------------------------------------------
+
+    def Buscar_peq2pr(self):
+        """"""
+        # Obteniendo valores de la rejilla
+        self.listas_filtro_peq2pr = self.peq2pr1.obtener_lista_de_datos()
+        self.remitentepeq2pr = self.listas_filtro_peq2pr[0]
+        self.especialistapeq2pr = self.listas_filtro_peq2pr[1]
+        self.estadopeq2pr = self.listas_filtro_peq2pr[2]
+
+        # Filtrando datos por palabras exactas
+
+        filtro=""
+        if len(self.especialistapeq2pr)>0 :
+            filtro="ESPECIALISTA=="+"'"+self.especialistapeq2pr+"' "
+
+        if len(self.estadopeq2pr)>0 :
+            if len(filtro)>0 :
+                filtro = filtro+" & "
+            else:
+                filtro
+            filtro=filtro+"ESTADO=="+"'"+self.estadopeq2pr+"' "
+        
+        self.mostrarDatospeq2pr(filtro)
+
+    #----------------------------------------------------------------------  
+
+    def mostrarDatospeq2pr(self, filtro):
+
+        self.filtro0 = self.tabla_peq2pr
+        
+        if len(self.remitentepeq2pr)>0: # Filtro por palabra clave
+            self.vpeq2pr.Eliminar_vitrina()
+            self.filtro0 = self.tabla_peq2pr[self.tabla_peq2pr['REMITENTE'].str.contains(self.remitentepeq2pr)]
+            self.Complementopeq2pr(self.filtro0)
+
+        if len(filtro)>0:
+
+            self.vpeq2pr.Eliminar_vitrina()
+            self.filtro1 = self.filtro0.query(filtro)
+            self.Complementopeq2pr(self.filtro1)
+
+        else:
+            self.vpeq2pr.Eliminar_vitrina()
+            self.Complementopeq2pr(self.filtro0)
+
+    #----------------------------------------------------------------------
+
+    def Complementopeq2pr(self,filtro0):
+
+        tabla_filtro2 = filtro0.loc[:, ['REMITENTE','FECHA ACCION','FECHA PROGRAMACION','ESPECIALISTA','ESTADO','¿SE EJECUTO?']]
+        if len(tabla_filtro2.index) > 100:
+            tabla_filtro3 = tabla_filtro2.head(100)
+        else:
+            tabla_filtro3 = tabla_filtro2
+        if len(tabla_filtro3.index) > 0:
+            self.frame_vitrina_peq2pr.eliminar_cuadro()
+            self.frame_vitrina_peq2pr = Cuadro(self)
+            self.vpeq2pr = Vitrina_pendientes_jefe_firma(self, tabla_filtro3, self.ver_peq2pr, 
+                                   self.funcion_de_asociar_peq2pr, height=200, width=1090)
+        else:
+            self.frame_vitrina_peq2pr.eliminar_cuadro()
+            self.frame_vitrina_peq2pr = Cuadro(self)
+            self.frame_vitrina_peq2pr.agregar_label(1, 2, '                  0 programaciones encontradas')
+
+    #----------------------------------------------------------------------
+    def limpiar_peq2pr(self):
+        
+        # Eliminando campos
+        self.peq2pr1.eliminar_cuadro()
+        self.vpeq2pr.Eliminar_vitrina()
+        self.peq2pr15.eliminar_cuadro()
+        self.frame_vitrina_peq2pr.eliminar_cuadro()
+        # Agregando rejilla a la ventana
+        self.peq2pr1 = Cuadro(self)
+        self.peq2pr1.agregar_rejilla(self.rejilla_peq2pr)
+        self.peq2pr15 = Cuadro(self)
+        self.peq2pr15.agregar_rejilla(self.rejilla_peq2pr2)
+        self.frame_vitrina_peq2pr = Cuadro(self)
+        # Creando vitrina
+        self.vpeq2pr = Vitrina_pendientes_jefe_firma(self, self.tabla_peq2prF, self.ver_peq2pr, 
+                                   self.funcion_de_asociar_peq2pr, height=200, width=1090)
+
+    #----------------------------------------------------------------------
+
+    def volver_peq2pr(self):
+        """"""
+        self.desaparecer()
+        self.ventana_anterior.aparecer()
+
+    #----------------------------------------------------------------------
+    def ver_peq2pr(self, x):
+        """"""
+        self.x = x
+        texto_documento = 'Documento emitido: ' + x
+
+        lb1 = b_de.listar_datos_de_fila(self.x)
+        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6]]
+        self.desaparecer()
+        subframe = vista_dr.Doc_emitidos_vista(self, 650, 1150, texto_documento, 
+                                                nuevo=False, lista=lista_para_insertar, id_doc=x)
+
+    #----------------------------------------------------------------------
+    def funcion_de_asociar_peq2pr(self, x):
+        """"""
+        print('hola')
+
