@@ -393,22 +393,25 @@ class Cuadro(Frame):
         self.lista_de_datos.append((self.combo))
     
     #----------------------------------------------------------------------
-    def agregar_combobox_decisor(self, y, x, ancho, listadesplegable, tabla_a_filtrar, nombre_columna, posicion_ordinal):
+    def agregar_combobox_decisor_1(self, y, x, listadesplegable, ancho, tabla_a_filtrar, nombre_columna, nombre_col_filtro, posicion_ordinal, tipo_combobox):
         """Método de la clase Cuadro. \n
         Permite agregar una lista desplegable al Frame creado con la Clase Cuadro."""
         
         self.y = y
         self.x = x
         self.listadesplegable = listadesplegable
+        tipo_decisor = tipo_combobox
 
+        ancho_combo = int(ancho)
         nombre_posicion = str(x) + "," + str(y)
         numero_posicion = int(posicion_ordinal)
         tabla = tabla_a_filtrar
         columna_nombre = nombre_columna
+        columna_filtrada_nombre = nombre_col_filtro
 
         valordecisor = StringVar(name = nombre_posicion)
-        decisor = ttk.Combobox(self.z, state="readonly", width=ancho, textvariable = valordecisor)
-        valordecisor.trace("w", lambda name, index, mode, valor=valordecisor: self.cambio_valor(valor, decisor, numero_posicion, tabla, columna_nombre))
+        decisor = ttk.Combobox(self.z, state="readonly", width=ancho_combo, textvariable = valordecisor)
+        valordecisor.trace("w", lambda name, index, mode, valor=valordecisor: self.cambio_valor(valor, decisor, numero_posicion, tabla, columna_nombre, columna_filtrada_nombre, tipo_decisor))
     
         decisor.set('')
         decisor["values"] = self.listadesplegable
@@ -421,7 +424,39 @@ class Cuadro(Frame):
         self.lista_de_datos.append((decisor))
 
         #self.z.after(10, self.update)
+
+        #----------------------------------------------------------------------
+    def agregar_combobox_decisor_2(self, y, x, listadesplegable, ancho, tabla_a_filtrar, nombre_columna, nombre_col_filtro, posicion_ordinal, tipo_combobox):
+        """Método de la clase Cuadro. \n
+        Permite agregar una lista desplegable al Frame creado con la Clase Cuadro."""
         
+        self.y = y
+        self.x = x
+        self.listadesplegable = listadesplegable
+
+        tipo_decisor = tipo_combobox
+        nombre_posicion = str(x) + "," + str(y)
+        numero_posicion = int(posicion_ordinal)
+        tabla = tabla_a_filtrar
+        columna_nombre = nombre_columna
+        columna_filtrada_nombre = nombre_col_filtro
+
+        valordecisor = StringVar(name = nombre_posicion)
+        decisor = ttk.Combobox(self.z, state="readonly", width=ancho, textvariable = valordecisor)
+        valordecisor.trace("w", lambda name, index, mode, valor=valordecisor: self.cambio_valor(valor, decisor, numero_posicion, tabla, columna_nombre, columna_filtrada_nombre, tipo_decisor))
+    
+        decisor.set('')
+        decisor["values"] = self.listadesplegable
+        
+        #ultimovalor = None
+        #self.valordecisor = valordecisor
+
+        decisor.grid(row = self.y, column = self.x, pady=4, padx=8)        
+        self.lista_de_objetos.append((decisor))
+        self.lista_de_datos.append((decisor))
+
+        #self.z.after(10, self.update)
+ 
         
     #----------------------------------------------------------------------
     def actualizar_widget(self, widget):
@@ -477,26 +512,29 @@ class Cuadro(Frame):
         self.lista_de_datos.append((self.cal))
      
     #----------------------------------------------------------------------
-    def cambio_valor(self, nombre_objeto, widget, posicion_ordinal, tabla, nombre_columna):
+    def cambio_valor(self, nombre_objeto, widget, posicion_ordinal, tabla, nombre_columna, nombre_col_filtrada, tipo_combo):
 
         ultimo_valor = str(nombre_objeto)
         valor_ingresado = widget.get()
         tabla_a_filtrar = tabla
         nombre_col = nombre_columna
+        columna_filtrada_nombre = nombre_col_filtrada
+        tipo_decisor = tipo_combo
         print(valor_ingresado)
         print(ultimo_valor)
         #self.z.after(1000, self.update)
 
         #print(self.rejilla)
-        if valor_ingresado != '':
+        if valor_ingresado != '' and tipo_decisor == "CXD1":
             tupla_interna = self.rejilla[posicion_ordinal]
             print(tupla_interna)
             
             # Obtengo la lista para modificar
             lista_interna = list(tupla_interna)
             tabla_filtrada = tabla_a_filtrar[tabla_a_filtrar[nombre_col]==valor_ingresado]
-            lista_validada = list(set(tabla_filtrada['Provincia']))
-            lista_interna[3] = lista_validada
+            lista_validada = list(tabla_filtrada[columna_filtrada_nombre].unique())
+            lista_validada_f = sorted(lista_validada, reverse = True)
+            lista_interna[3] = lista_validada_f
             tupla_final = tuple(lista_interna)
             print(tupla_final)
 
@@ -591,11 +629,17 @@ class Cuadro(Frame):
                 
                 self.agregar_combobox_personalizado(row[1], row[2], row[3], row[4], row[5])
             
-            elif row[0] == 'CXD':
+            elif row[0] == 'CXD1':
                 
                 # En este caso row[3] debe ser una lista:
-                self.agregar_combobox_decisor(row[1], row[2], row[3], row[4], row[5], row[6], row[7])
+                self.agregar_combobox_decisor_1(row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9])
             
+            elif row[0] == 'CXD2':
+                
+                # En este caso row[3] debe ser una lista:
+                self.agregar_combobox_decisor_2(row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[0])
+            
+
             elif row[0] == "SB":
 
                 self.agregar_spinbox(row[1], row[2], row[3], row[4], row[5], row[6])
@@ -619,7 +663,12 @@ class Cuadro(Frame):
 
         for i,row in self.tabla.iterrows():
             
-            if row[0] == 'CXR':
+            if row[0] == 'CXD2':
+                
+                # En este caso row[3] debe ser una lista:
+                self.agregar_combobox_decisor_2(row[1], row[2], row[3], row[4], row[5], row[6]. row[7], row[8], row[0])
+
+            elif row[0] == 'CXR':
                 
                 # En este caso row[3] debe ser una lista:
                 self.agregar_combobox(row[1], row[2], row[3])
