@@ -287,17 +287,15 @@ class Inicio_eq2(inicio_app_OSPA):
     #----------------------------------------------------------------------
     def pendientes_eq2(self):
 
-        print("Vista de pendientes del Equipo 2")
-        # self.desaparecer()
+        self.desaparecer()
         # LargoxAncho
-        # SubFrame = vista_dr.Doc_recibidos_vista(self, 650, 1150, 
-        #            "Registra de un nuevo documento recibido")
+        SubFrame = busqueda_dr.Pendientes_eq2_calificarrpta(self, 580, 1300, 
+                    "Documentos pendientes de calificar respuesta - Equipo 2")
 
     #----------------------------------------------------------------------
     def pendientes_prog(self):
 
-        print("Vista de pendientes de programación")
-        # self.desaparecer()
+        self.desaparecer()
         # LargoxAncho
         # SubFrame = vista_dr.Doc_recibidos_vista(self, 650, 1150, 
         #            "Registra de un nuevo documento recibido")
