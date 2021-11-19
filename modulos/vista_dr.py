@@ -25,8 +25,9 @@ ubicacion = list(set(tabla_parametros['UBICACION CALCULADORA']))
 ocurrencia = list(set(tabla_parametros['OCURRENCIA CALCULADORA']))
 
 tabla_parametros_dep = tabla_parametros.loc[1:30,['DEPARTAMENTO', 'SIGLAS_DEPARTAMENTO']]
-departamento =  list(set(tabla_parametros_dep['DEPARTAMENTO']))
+departamento =  list(tabla_parametros_dep['DEPARTAMENTO'].unique())
 
+combo_vacio = ()
 tipo_afectacion = ('Agente contaminante', 'Extracción de recursos')
 tipo_ingreso = ('DIRECTO', 'DERIVACION-SUBDIRECCION', 
                 'DERIVACION-SUPERVISION', 'DERIVACION-SINADA')
@@ -73,12 +74,25 @@ b_ep_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_EP')
 id_b_efa = '1pjHXiz15Zmw-49Nr4o1YdXJnddUX74n7Tbdf5SH7Lb0'
 b_efa = Base_de_datos(id_b_efa, 'Directorio')
 tabla_directorio = b_efa.generar_dataframe()
-lista_efa = list(set(tabla_directorio['Entidad u oficina']))
+lista_efa_dependiente = tabla_directorio.loc[:,['Tipo de entidad u oficina', 'EFA ABREVIADO', 'Departamento', 'Entidad u oficina', 'EFA_OSPA']]
+lista_tipo_efa = list(set(lista_efa_dependiente['Tipo de entidad u oficina']))
+lista_efa_abreviada = list(set(lista_efa_dependiente['EFA ABREVIADO']))
+lista_efa_ospa = list(lista_efa_dependiente['EFA_OSPA'].unique())
+lista_efa_ospa_f = sorted(lista_efa_ospa)
+lista_efa = list(lista_efa_dependiente['Entidad u oficina'].unique())
+lista_efa_f = sorted(lista_efa)
 
 b_efa_inei = Base_de_datos(id_b_efa, 'ID_INEI')
 tabla_ubigeo_completo = b_efa_inei.generar_dataframe()
 tabla_ubigeo = tabla_ubigeo_completo.loc[:,['Departamento', 'Provincia']]
 departamento_inei = list(set(tabla_ubigeo['Departamento']))
+
+id_lista_efa = "1ephi7hS0tHRQQq5nlkV141ZCY54FUfkw13EeKn310Y4"
+b_lista_efa = Base_de_datos(id_lista_efa, 'Lista de EFA')
+tabla_lista_efa = b_lista_efa.generar_dataframe()
+tabla_departamento_efa = tabla_lista_efa.loc[:, ['DEP_OSPA', 'PROV_DIST_OSPA']]
+departamento_ospa = list(tabla_lista_efa['DEP_OSPA'].unique())
+departamento_ospa_f = sorted(departamento_ospa)
 
 class inicio_app_OSPA(Ventana):
     """"""
@@ -238,29 +252,30 @@ class Doc_recibidos_vista(Ventana):
             ('L', 3, 0, 'Asunto'),
             ('EL', 3, 1, 112, 3),
 
-            ('L', 4, 0, 'Remitente'),
-            ('CX', 4, 1, lista_efa),
+            ('L', 4, 0, 'EFA Abreviado'),
+            ('CXD1', 4, 1, lista_efa_ospa_f, 39, lista_efa_dependiente, 'EFA_OSPA', 'Entidad u oficina', 17, 'CXD1'),
 
-            ('L', 4, 2, '¿Es respuesta?'),
-            ('CX', 4, 3, si_no),
+            ('L', 4, 2, 'Remitente'),
+            ('CXR', 4, 3, combo_vacio),
 
-            ('L', 5, 0, 'Indicación'),
-            ('CX', 5, 1, tipo_indicacion),
+            ('L', 5, 0, 'Remitente'),
+            ('CX', 5, 1, combo_vacio),
 
-            ('L', 5, 2, 'Especialista asignado'),
-            ('CX', 5, 3, especialista),
+            ('L', 5, 2, '¿Es respuesta?'),
+            ('CX', 5, 3, si_no),
 
-            ('L', 6, 0, 'Aporte del documento'),
-            ('ST', 6, 1),
+            ('L', 6, 0, 'Indicación'),
+            ('CX', 6, 1, tipo_indicacion),
 
-            ('L', 7, 0, 'Respuesta'),
-            ('CX', 7, 1, tipo_respuesta),
+            ('L', 6, 2, 'Especialista asignado'),
+            ('CX', 6, 3, especialista),
+
+            ('L', 7, 0, 'Aporte del documento'),
+            ('ST', 7, 1),
+
+            ('L', 8, 0, 'Respuesta'),
+            ('CX', 8, 1, tipo_respuesta)
             
-            ('L', 8, 0, 'Departamento'),
-            ('CXD', 8, 1, 39, departamento_inei, tabla_ubigeo, 'Departamento', 29),
-
-            ('L', 8, 2, 'Provincia'),
-            ('CXR', 8, 3, especialista)
         ]
 
         # II. Tablas en ventana
@@ -460,7 +475,7 @@ class Doc_recibidos_vista(Ventana):
 
         lb1 = b_dr.listar_datos_de_fila(id_usuario)
         lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8],
-                                lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14]]
+                                lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14], lb1[15], lb1[16]]
         
         self.desaparecer()
         subframe = Doc_recibidos_vista(self, 650, 1150, texto_documento, 
@@ -892,7 +907,7 @@ class Doc_emitidos_vista(Ventana):
 
         lb1 = b_dr.listar_datos_de_fila(id_usuario)
         lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], 
-                                lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14]]
+                                lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14], lb1[15], lb1[16]]
         
         self.desaparecer()
         subframe = Doc_recibidos_vista(self, 650, 1150, texto_documento, nuevo=False, 
@@ -1096,7 +1111,7 @@ class Extremo_problemas_vista(Ventana):
             #('L', 0, 1, str(cod_problema)),
 
             ('L', 0, 2, 'Departamento'),
-            ('CXP', 0, 3, 27, departamento, "readonly"),
+            ('CXD1', 0, 3, departamento_ospa_f, 27, tabla_departamento_efa, 'DEP_OSPA', 'PROV_DIST_OSPA', 7, 'CXD1'),
 
             ('L', 0, 4, 'Ocurrencia'),
             ('CXP', 0, 5, 27, ocurrencia, "readonly"),
@@ -1105,7 +1120,7 @@ class Extremo_problemas_vista(Ventana):
             ('CXP', 1, 1, 27, componente_amb, "readonly"),
 
             ('L', 1, 2, 'Provincia'),
-            ('EL', 1, 3, 30, 1),
+            ('CXR', 1, 3, combo_vacio),
 
             ('L', 1, 4, 'Descripción'),
             ('STP', 1, 5, 28, 2),
@@ -1485,7 +1500,7 @@ class Extremo_problemas_vista(Ventana):
 
         lb1 = b_dr.listar_datos_de_fila(id_usuario)
         lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], 
-                                lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14]]
+                                lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14], lb1[15], lb1[16]]
         
         self.desaparecer()
         subframe = Doc_recibidos_vista(self, 650, 1150, texto_documento, nuevo=False, 
