@@ -629,7 +629,7 @@ class Extremos(Ventana):
         self.listaACT = list(set(self.tabla_ep['ACTIVIDAD']))
         self.listaDEPAR = list(set(self.tabla_ep['DEPARTAMENTO']))
         self.listaPROV = list(set(self.tabla_ep['PROVINCIA']))
-        self.listaDISTR = list(set(self.tabla_ep['DISTRITO']))
+        #self.listaDISTR = list(set(self.tabla_ep['DISTRITO']))
         self.listaTIPOUBI = list(set(self.tabla_ep['TIPO DE UBICACION']))
         self.listaOCURR = list(set(self.tabla_ep['OCURRENCIA']))
         self.listaEFA = list(set(self.tabla_ep['EFA']))
