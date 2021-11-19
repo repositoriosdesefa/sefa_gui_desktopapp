@@ -28,7 +28,9 @@ tabla_parametros_dep = tabla_parametros.loc[1:30,['DEPARTAMENTO', 'SIGLAS_DEPART
 departamento =  list(tabla_parametros_dep['DEPARTAMENTO'].unique())
 
 combo_vacio = ()
-tipo_afectacion = ('Agente contaminante', 'Extracción de recursos')
+tipo_afectacion = ('AGENTE CONTAMINANTE', 'EXTRACCIÓN DE RECURSOS')
+estado_problemas = ('ABIERTA', 'CERRADO')
+tipo_causa = ('CAUSA DESCONOCIDA', 'CAUSA NATURAL', 'CAUSA HUMANA')
 tipo_ingreso = ('DIRECTO', 'DERIVACION-SUBDIRECCION', 
                 'DERIVACION-SUPERVISION', 'DERIVACION-SINADA')
 tipo_documento = ('OFICIO', 'MEMORANDO', 'CARTA', 'OFICIO CIRCULAR','MEMORANDO CIRCULAR', 'CARTA CIRCULAR',
@@ -67,6 +69,9 @@ b_de_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_DE')
 b_ep_cod = Base_de_datos(id_b_ospa, 'EXT_P')
 b_ep = Base_de_datos(id_b_ospa, 'EXT_PROBLEMA')
 b_ep_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_EP')
+# Macro problemas
+b_mp_cod = Base_de_datos(id_b_ospa, 'MC_P')
+b_mp = Base_de_datos(id_b_ospa, 'MACROPROBLEMA')
 
 
 
@@ -258,11 +263,11 @@ class Doc_recibidos_vista(Ventana):
             ('L', 4, 2, 'Remitente'),
             ('CXR', 4, 3, combo_vacio),
 
-            ('L', 5, 0, 'Remitente'),
-            ('CX', 5, 1, combo_vacio),
+            ('L', 5, 0, '¿Es respuesta?'),
+            ('CX', 5, 1, si_no),
 
-            ('L', 5, 2, '¿Es respuesta?'),
-            ('CX', 5, 3, si_no),
+            ('L', 5, 2, 'Respuesta'),
+            ('CX', 5, 3, tipo_respuesta),
 
             ('L', 6, 0, 'Indicación'),
             ('CX', 6, 1, tipo_indicacion),
@@ -271,10 +276,7 @@ class Doc_recibidos_vista(Ventana):
             ('CX', 6, 3, especialista),
 
             ('L', 7, 0, 'Aporte del documento'),
-            ('ST', 7, 1),
-
-            ('L', 8, 0, 'Respuesta'),
-            ('CX', 8, 1, tipo_respuesta)
+            ('ST', 7, 1)
             
         ]
 
@@ -291,7 +293,7 @@ class Doc_recibidos_vista(Ventana):
         tabla_de_ep_completa = b_ep.generar_dataframe()
         tabla_de_ep_id = tabla_de_ep_completa
         self.tabla_de_ep = tabla_de_ep_id.drop(['OCURRENCIA', 'EXTENSION', 'TIPO DE AFECTACION',
-                                                'PROVINCIA', 'DISTRITO', 'DESCRIPCION', 'TIPO DE UBICACION',
+                                                'PROVINCIA', 'DESCRIPCION', 'TIPO DE UBICACION',
                                                 'CARACTERISTICA 1', 'CARACTERISTICA 2', 'TIPO CAUSA',
                                                 'PRIORIDAD', 'PUNTAJE', 
                                                 'CODIGO SINADA', 'ACTIVIDAD', 'FECHA_ULTIMO_MOV'], axis=1)
@@ -487,7 +489,7 @@ class Doc_recibidos_vista(Ventana):
         if self.nuevo != True:
             # En caso exista un código insertado en la rejilla
             cod_usuario_dr = self.cod_usuario_dr 
-            texto_pantalla = "Documento emitido que se asociará: " + cod_usuario_dr
+            texto_pantalla = "Documento recibido que se asociará: " + cod_usuario_dr
             # Genero la nueva ventana
             self.desaparecer()
             SubFrame = busqueda_dr.Doc_emitidos_busqueda(self, 500, 1200, texto_pantalla,
@@ -504,8 +506,8 @@ class Doc_recibidos_vista(Ventana):
         texto_documento = 'Documento emitido: ' + id_usuario
 
         lb1 = b_de.listar_datos_de_fila(id_usuario)
-        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6]]
-                        #, lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], lb1[12]]
+        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], lb1[9]]
+                                # lb1[10], lb1[11], lb1[12]]
         self.desaparecer()
         subframe = Doc_emitidos_vista(self, 650, 1150, texto_documento, nuevo=False, 
                                         lista=lista_para_insertar, id_doc = id_usuario)
@@ -573,7 +575,19 @@ class Doc_recibidos_vista(Ventana):
     #----------------------------------------------------------------------
     def busqueda_ep(self):
         """"""
-        print("Pantalla de búsqueda de extremo de problemas")
+        if self.nuevo != True:
+            # En caso exista un código insertado en la rejilla
+            cod_usuario_dr = self.cod_usuario_dr 
+            texto_pantalla = "Documento recibido que se asociará: " + cod_usuario_dr
+            # Genero la nueva ventana
+            self.desaparecer()
+            SubFrame = busqueda_dr.Extremos(self, 500, 1200, texto_pantalla,
+                                                           nuevo=False, id_doc = cod_usuario_dr)
+
+        else:
+            # En caso no estuviera guardado la ficha
+            messagebox.showerror("¡Guardar!", "Antes de asociar un documento emitido, por favor guarde la información registrada")
+
     
     #----------------------------------------------------------------------
     def ver_ep(self, id_usuario):
@@ -581,9 +595,9 @@ class Doc_recibidos_vista(Ventana):
         texto_documento = 'Extremo de problema: ' + id_usuario
 
         lb1 = b_ep.listar_datos_de_fila(id_usuario)
-        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], 
+        lista_para_insertar = [lb1[1], lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], 
                                 lb1[8], lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], 
-                                lb1[14], lb1[15], lb1[16], lb1[17], lb1[18], lb1[19]]
+                                lb1[14], lb1[15], lb1[16], lb1[17]]
 
         self.desaparecer()
         subframe = Extremo_problemas_vista(self, 650, 1150, texto_documento, nuevo=False, 
@@ -636,7 +650,16 @@ class Doc_emitidos_vista(Ventana):
             ('CX', 2, 3, marco_pedido),
 
             ('L', 3, 0, 'Detalle de requerimiento'),
-            ('ST', 3, 1)
+            ('ST', 3, 1),
+
+            ('L', 4, 0, 'Fecha de proyecto'),
+            ('E', 4, 1), 
+
+            ('L', 4, 2, 'Fecha de firma'),
+            ('E', 4, 3), 
+
+            ('L', 5, 0, 'Fecha de notificación'),
+            ('E', 5, 1) 
 
         ]
 
@@ -644,7 +667,7 @@ class Doc_emitidos_vista(Ventana):
         # II. Tablas en ventana
         # II.1 Lista de DR
         tabla_de_dr = b_dr.generar_dataframe()
-        self.tabla_de_dr = tabla_de_dr.drop(['VIA_RECEPCION', 'HT_ENTRANTE',
+        self.tabla_de_dr = tabla_de_dr.drop(['VIA_RECEPCION', 'HT_ENTRANTE', 'EFA_CATEGORIA',
                                             'F_ING_OEFA', 'TIPO_DOC', 'ESPECIALISTA',
                                             'INDICACION', 'TIPO_RESPUESTA', 'RESPUESTA',
                                             'FECHA_ULTIMO_MOV', 'FECHA_ASIGNACION'], axis=1)
@@ -870,10 +893,18 @@ class Doc_emitidos_vista(Ventana):
                     "Búsqueda de extremos")
 
     #----------------------------------------------------------------------
-    def ver_ep(self, x):
+    def ver_ep(self, id_usuario):
         """"""
-        y = x + "Ver extremo de problema"
-        print(y)
+        texto_documento = 'Extremo de problema: ' + id_usuario
+
+        lb1 = b_ep.listar_datos_de_fila(id_usuario)
+        lista_para_insertar = [lb1[1], lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], 
+                                lb1[8], lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], 
+                                lb1[14], lb1[15], lb1[16], lb1[17]]
+
+        self.desaparecer()
+        subframe = Extremo_problemas_vista(self, 650, 1150, texto_documento, nuevo=False, 
+                                        lista=lista_para_insertar, id_problema = id_usuario)
 
     #----------------------------------------------------------------------
     def eliminar_ep(self, x):
@@ -1047,61 +1078,52 @@ class Extremo_problemas_vista(Ventana):
                 ('L', 0, 1, str(cod_problema)),
 
                 ('L', 0, 2, 'Departamento'),
-                ('EL', 0, 3, 30, 1),
+                ('CXD1', 0, 3, departamento_ospa_f, 27, tabla_departamento_efa, 'DEP_OSPA', 'PROV_DIST_OSPA', 7, 'CXD1'),
 
                 ('L', 0, 4, 'Ocurrencia'),
-                ('EL', 0, 5, 30, 1),
+                ('CXP', 0, 5, 27, ocurrencia, '', "readonly"),
 
                 ('L', 1, 0, 'Componente ambiental'),
-                ('EL', 1, 1, 30, 1),
+                ('CXP', 1, 1, 27, componente_amb, '', "readonly"),
 
-                ('L', 1, 2, 'Provincia'),
-                ('EL', 1, 3, 30, 1),
+                ('L', 1, 2, 'Provincia/Distrito'),
+                ('CXR', 1, 3, combo_vacio),
 
                 ('L', 1, 4, 'Descripción'),
                 ('STP', 1, 5, 28, 2),
 
                 ('L', 2, 0, 'Tipo de afectación'),
-                ('CXP', 2, 1, 27, tipo_afectacion, "readonly"),
+                ('CXP', 2, 1, 27, tipo_afectacion, '', "readonly"),
 
-                ('L', 2, 2, 'Distrito'),
-                ('EL', 2, 3, 30, 1),
+                ('L', 2, 2, 'Tipo de ubicación'),
+                ('CXP', 2, 3, 27, ubicacion, '', "readonly"),
 
                 ('L', 3, 0, 'Agente contaminante'),
-                ('CXP', 3, 1, 27, agente_conta, "readonly"),
+                ('CXP', 3, 1, 27, agente_conta, '', "readonly"),
 
-                ('L', 3, 2, 'Tipo de ubicación'),
-                ('CXP', 3, 3, 27, ubicacion, "readonly"),
+                ('L', 3, 2, 'Extensión'),
+                ('CXP', 3, 3, 27, extension, '', "readonly"),
 
                 ('L', 3, 4, 'EFA'),
-                ('CXP', 3, 5, 27, lista_efa, "readonly"),
+                ('CXP', 3, 5, 27, lista_efa, '', "readonly"),
 
                 ('L', 4, 0, 'Actividad'),
-                ('CXP', 4, 1, 27, actividad_eco, "readonly"),
+                ('CXP', 4, 1, 27, actividad_eco, '', "readonly"),
 
-                ('L', 4, 2, 'Extensión'),
-                ('CXP', 4, 3, 27, extension, "readonly"),
-                
+                ('L', 4, 2, 'Tipo de causa'),
+                ('CXP', 4, 3, 27, tipo_causa, '', "readonly"),
+            
                 ('L', 4, 4, 'Estado'),
-                ('EL', 4, 5, 30, 1),
+                ('CXP', 4, 5, 27, estado_problemas, '', "readonly"),
 
                 ('L', 5, 0, 'Característica 1'),
                 ('EL', 5, 1, 30, 1),
 
-                ('L', 5, 2, 'Tipo de causa'),
+                ('L', 5, 2, 'Característica 2'),
                 ('EL', 5, 3, 30, 1),
 
                 ('L', 5, 4, 'Código SINADA'),
-                ('EL', 5, 5, 30, 1),
-
-                ('L', 6, 0, 'Característica 2'),
-                ('EL', 6, 1, 30, 1),
-
-                ('L', 6, 2, '¿Es prioridad?'),
-                ('CXP', 6, 3, 27, si_no, "readonly"),
-
-                ('L', 6, 4, 'Puntaje'),
-                ('EL', 6, 5, 30, 1)
+                ('EL', 5, 5, 30, 1)
 
             ]
 
@@ -1114,55 +1136,52 @@ class Extremo_problemas_vista(Ventana):
             ('CXD1', 0, 3, departamento_ospa_f, 27, tabla_departamento_efa, 'DEP_OSPA', 'PROV_DIST_OSPA', 7, 'CXD1'),
 
             ('L', 0, 4, 'Ocurrencia'),
-            ('CXP', 0, 5, 27, ocurrencia, "readonly"),
+            ('CXP', 0, 5, 27, ocurrencia, '', "readonly"),
 
             ('L', 1, 0, 'Componente ambiental'),
-            ('CXP', 1, 1, 27, componente_amb, "readonly"),
+            ('CXP', 1, 1, 27, componente_amb, '', "readonly"),
 
-            ('L', 1, 2, 'Provincia'),
+            ('L', 1, 2, 'Provincia/Distrito'),
             ('CXR', 1, 3, combo_vacio),
 
             ('L', 1, 4, 'Descripción'),
             ('STP', 1, 5, 28, 2),
 
             ('L', 2, 0, 'Tipo de afectación'),
-            ('CXP', 2, 1, 27, tipo_afectacion, "readonly"),
+            ('CXP', 2, 1, 27, tipo_afectacion, '', "readonly"),
 
-            ('L', 2, 2, 'Distrito'),
-            ('EL', 2, 3, 30, 1),
+            ('L', 2, 2, 'Tipo de ubicación'),
+            ('CXP', 2, 3, 27, ubicacion, '', "readonly"),
 
             ('L', 3, 0, 'Agente contaminante'),
-            ('CXP', 3, 1, 27, agente_conta, "readonly"),
+            ('CXP', 3, 1, 27, agente_conta, '', "readonly"),
 
-            ('L', 3, 2, 'Tipo de ubicación'),
-            ('CXP', 3, 3, 27, ubicacion, "readonly"),
+            ('L', 3, 2, 'Extensión'),
+            ('CXP', 3, 3, 27, extension, '', "readonly"),
 
             ('L', 3, 4, 'EFA'),
-            ('CXP', 3, 5, 27, lista_efa, "readonly"),
+            ('CXP', 3, 5, 27, lista_efa, '', "readonly"),
 
             ('L', 4, 0, 'Actividad'),
-            ('CXP', 4, 1, 27, actividad_eco, "readonly"),
+            ('CXP', 4, 1, 27, actividad_eco, '', "readonly"),
 
-            ('L', 4, 2, 'Extensión'),
-            ('CXP', 4, 3, 27, extension, "readonly"),
+            ('L', 4, 2, 'Tipo de causa'),
+            ('CXP', 4, 3, 27, tipo_causa, '', "readonly"),
             
             ('L', 4, 4, 'Estado'),
-            ('EL', 4, 5, 30, 1),
+            ('CXP', 4, 5, 27, estado_problemas, 30, 1),
 
             ('L', 5, 0, 'Característica 1'),
             ('EL', 5, 1, 30, 1),
 
-            ('L', 5, 2, 'Tipo de causa'),
+            ('L', 5, 2, 'Característica 2'),
             ('EL', 5, 3, 30, 1),
 
             ('L', 5, 4, 'Código SINADA'),
-            ('EL', 5, 5, 30, 1),
+            ('EL', 5, 5, 30, 1)
 
-            ('L', 6, 0, 'Característica 2'),
-            ('EL', 6, 1, 30, 1),
-
-            ('L', 6, 2, '¿Es prioridad?'),
-            ('CXP', 6, 3, 27, si_no, "readonly")
+            #('L', 6, 2, '¿Es prioridad?'),
+            #('CXP', 6, 3, 27, si_no, ' ', "readonly")
 
             #('L', 6, 4, 'Puntaje'),
             #('EL', 6, 5, 30, 1)
@@ -1207,7 +1226,7 @@ class Extremo_problemas_vista(Ventana):
         
         # III.4 Frame de botón y títulos de vitrina 1
         self.boton_vitrina_1 = Cuadro(self)
-        self.boton_vitrina_1.agregar_button(0, 0,'(+) Agregar', self.busqueda_dr)
+        self.boton_vitrina_1.agregar_button(0, 0,'Buscar', self.busqueda_dr)
         self.boton_vitrina_1.agregar_titulo(0, 1,'                                                       ')
         self.boton_vitrina_1.agregar_titulo(0, 2, 'Documentos recibidos asociados')
         self.boton_vitrina_1.agregar_titulo(0, 3,'                              ')
@@ -1224,7 +1243,7 @@ class Extremo_problemas_vista(Ventana):
 
         # III.6 Frame de botón y títulos de vitrina 2
         self.boton_vitrina_2 = Cuadro(self)
-        self.boton_vitrina_2.agregar_button(0, 0,'(+) Agregar', self.busqueda_de)
+        self.boton_vitrina_2.agregar_button(0, 0,'Buscar', self.busqueda_de)
         self.boton_vitrina_2.agregar_titulo(0, 1,'                                                       ')
         self.boton_vitrina_2.agregar_titulo(0, 2, 'Documentos emitidos asociados')
         self.boton_vitrina_2.agregar_titulo(0, 3, '                              ')
@@ -1409,8 +1428,8 @@ class Extremo_problemas_vista(Ventana):
         texto_documento = 'Documento emitido: ' + id_usuario
 
         lb1 = b_de.listar_datos_de_fila(id_usuario)
-        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6]]
-                    #, lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], lb1[12]]
+        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], lb1[9]]
+                                # lb1[10], lb1[11], lb1[12]]
         self.desaparecer()
         subframe = Doc_emitidos_vista(self, 650, 1150, texto_documento, nuevo=False, 
                                         lista=lista_para_insertar, id_doc = id_usuario)
