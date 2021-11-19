@@ -5,30 +5,51 @@ from tkinter import ttk, messagebox
 from tkinter.constants import TRUE
 from tkcalendar import DateEntry
 
-from modulos import busqueda_dr
+from modulos import busqueda_dr, variables_globales
 from apoyo.elementos_de_GUI import Cuadro, Ventana, Hovertip_Sefa, Vitrina_vista 
 from apoyo.manejo_de_bases import Base_de_datos
 import apoyo.datos_frecuentes as dfrec
 from modulos import menus
 
+# 1. Bases
+b_dr = variables_globales.b_dr
+b_dr_cod = variables_globales.b_dr_cod
+b_dr_hist = variables_globales.b_dr_hist
+b_de = variables_globales.b_de
+b_de_cod = variables_globales.b_de_cod
+b_de_hist = variables_globales.b_de_hist
+b_ep = variables_globales.b_ep
+b_ep_cod = variables_globales.b_ep_cod
+b_ep_hist = variables_globales.b_ep_hist
 
-# Prueba rama
-# Valores de lista desplegable
-id_b_ospa = '13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4'
-id_parametros = '1NPg8Q0O_NqQ6bkRhy4ow17x2XJ08r6Ev3R6X80WmZ3c'
+base_relacion_docs = variables_globales.base_relacion_docs
+base_relacion_dr_ep = variables_globales.base_relacion_dr_ep
+base_relacion_de_ep = variables_globales.base_relacion_de_ep
+base_relacion_d_hist = variables_globales.base_relacion_d_hist
 
-base_parametros = Base_de_datos(id_parametros, 'PARAMETROS')
-tabla_parametros = base_parametros.generar_dataframe()
+# 2. Tablas
+tabla_directorio = variables_globales.tabla_directorio
+tabla_lista_efa = variables_globales.tabla_lista_efa
+
+# 3. Listas dependientes
+# 21. Lista de EFA
+lista_efa_dependiente = variables_globales.lista_efa_dependiente
+lista_efa_ospa = sorted(list(lista_efa_dependiente['EFA_OSPA'].unique()))
+# 3.2 Ubigeo
+tabla_departamento_efa = variables_globales.lista_efa_dependiente
+departamento_ospa = sorted(list(tabla_lista_efa['DEP_OSPA'].unique()))
+
+# 4. Parámetros
+# 4.1 Bases de datos
+tabla_parametros = variables_globales.tabla_parametros
+# 4.2 Desplegables en Drive
 agente_conta = list(set(tabla_parametros['AGENTE CALCULADORA']))
 componente_amb = list(set(tabla_parametros['COMPONENTE CALCULADORA']))
 actividad_eco = list(set(tabla_parametros['ACTIVIDAD CALCULADORA']))
 extension = list(set(tabla_parametros['EXTENSION CALCULADORA']))
 ubicacion = list(set(tabla_parametros['UBICACION CALCULADORA']))
 ocurrencia = list(set(tabla_parametros['OCURRENCIA CALCULADORA']))
-
-tabla_parametros_dep = tabla_parametros.loc[1:30,['DEPARTAMENTO', 'SIGLAS_DEPARTAMENTO']]
-departamento =  list(tabla_parametros_dep['DEPARTAMENTO'].unique())
-
+# 4.4 Desplegables en Local
 combo_vacio = ()
 tipo_afectacion = ('AGENTE CONTAMINANTE', 'EXTRACCIÓN DE RECURSOS')
 estado_problemas = ('ABIERTA', 'CERRADO')
@@ -49,184 +70,140 @@ categorias = ('Pedido de información', 'Pedido de información adicional', 'Ped
 marco_pedido = ('EFA', 'OEFA',
                 'Colaboración', 'Delegación', 'Conocimiento')
 
+# 5. Tablas resumen
+# 5.0 Relaciones
+tabla_relacion_dr_de = variables_globales.tabla_relacion_dr_de
+tabla_relacion_dr_ep = variables_globales.tabla_relacion_dr_ep
+tabla_relacion_de_ep = variables_globales.tabla_relacion_de_ep
+# 5.1 Documentos recibidos
+tabla_de_dr_cod = variables_globales.tabla_de_dr_cod
+tabla_de_dr_completa = variables_globales.tabla_de_dr_completa
+tabla_de_dr_resumen = tabla_de_dr_completa.drop(['VIA_RECEPCION', 'HT_ENTRANTE', 'EFA_CATEGORIA',
+                                            'F_ING_OEFA', 'TIPO_DOC', 'ESPECIALISTA',
+                                            'INDICACION', 'TIPO_RESPUESTA', 'RESPUESTA',
+                                            'FECHA_ULTIMO_MOV', 'FECHA_ASIGNACION'], axis=1)
+
+# 5.2 Documentos emitidos
+tabla_de_de_cod = variables_globales.tabla_de_de_cod
+tabla_de_de_completa = variables_globales.tabla_de_de_completa
+tabla_de_de_resumen =  tabla_de_de_completa.drop(['HT_SALIDA', 'COD_PROBLEMA', 'FECHA_PROYECTO_FINAL',
+                                                    'FECHA_FIRMA', 'TIPO_DOC', 'SE_EMITIO',
+                                                    'MARCO_PEDIDO', 'FECHA_ULTIMO_MOV', 'FECHA_ASIGNACION',
+                                                    'DOCUMENTO_ELABORADO', 'DOCUMENTO_FIRMADO', 'DOCUMENTO_NOTIFICADO',
+                                                    'PLAZO', 'ESTADO_DOCE', 'ESPECIALISTA'], axis=1)
+# 5.3 Extremos de problema
+tabla_de_ep_cod = variables_globales.tabla_de_ep_completa
+tabla_de_ep_completa = variables_globales.tabla_de_ep_completa
+tabla_de_ep_resumen = tabla_de_ep_completa.drop(['OCURRENCIA', 'EXTENSION', 'TIPO DE AFECTACION',
+                                                'PROVINCIA', 'DESCRIPCION', 'TIPO DE UBICACION',
+                                                'CARACTERISTICA 1', 'CARACTERISTICA 2', 'TIPO CAUSA',
+                                                'PRIORIDAD', 'PUNTAJE', 
+                                                'CODIGO SINADA', 'ACTIVIDAD', 'FECHA_ULTIMO_MOV'], axis=1)
 
 
-# 0. Tablas relacionales
-base_relacion_docs = Base_de_datos(id_b_ospa, 'RELACION_DOCS')
-base_relacion_d_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_RELACION_D')
-base_relacion_dr_ep =  Base_de_datos(id_b_ospa, 'RELACION_DR-EP')
-base_relacion_dr_ep_hist =  Base_de_datos(id_b_ospa, 'HISTORIAL_RELACION_DR-EP')
-base_relacion_de_ep =  Base_de_datos(id_b_ospa, 'RELACION_DE-EP')
-base_relacion_de_ep_hist =  Base_de_datos(id_b_ospa, 'HISTORIAL_RELACION_DE-EP')
-# 1. Bases de datos principales
-# Documentos recibidos
-b_dr_cod = Base_de_datos(id_b_ospa, 'DOCS_R')
-b_dr = Base_de_datos(id_b_ospa, 'DOC_RECIBIDOS')
-b_dr_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_DR')
-# Documentos emitidos
-b_de_cod = Base_de_datos(id_b_ospa, 'DOCS_E')
-b_de = Base_de_datos(id_b_ospa, 'DOC_EMITIDOS')
-b_de_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_DE')
-# Extremo de problemas
-b_ep_cod = Base_de_datos(id_b_ospa, 'EXT_P')
-b_ep = Base_de_datos(id_b_ospa, 'EXT_PROBLEMA')
-b_ep_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_EP')
-# Macro problemas
-b_mp_cod = Base_de_datos(id_b_ospa, 'MC_P')
-b_mp = Base_de_datos(id_b_ospa, 'MACROPROBLEMA')
+class funcionalidades_ospa(Ventana):
+  
+    #----------------------------------------------------------------------
+    def inicio_app(self):
+        """"""
+        self.desaparecer()
+        # LargoxAncho
+        subFrame = menus.inicio_app_OSPA(self, 400, 400, "Inicio")
+
+    #----------------------------------------------------------------------
+    def comprobar_id(self, base_codigo, id_usuario):
+        """"""
+        # Comprobar coincidencias
+        cantidad_de_coincidencias = base_codigo.contar_coincidencias(id_usuario)
+
+        if cantidad_de_coincidencias != 0:
+            return True
+        else:
+            return False
+    #----------------------------------------------------------------------
+    def generar_vitrina(self, frame_vitrina, codigo_frame,
+                        tabla_codigo_ficha, tabla_vista_vitrina, tabla_relacion, 
+                        id_entrada, id_salida, cod_salida, funcion_ver, funcion_eliminar):
+        """"""
+        # Obtengo el código del usuario que heredo
+        cod_usuario = codigo_frame
+        # Genero las tablas para el filtrado 
+        tabla_de_codigo = tabla_codigo_ficha 
+        tabla_de_relacion = tabla_relacion
+        # Filtro la tabla para obtener el código interno 
+        tabla_de_codigo_filtrada = tabla_de_codigo[tabla_de_codigo[cod_salida]==cod_usuario]
+        cod_interno = tabla_de_codigo_filtrada.iloc[0,0]
+        # Filtro para obtener las relaciones activas
+        tabla_relacion_activos = tabla_de_relacion[tabla_de_relacion['ESTADO']=="ACTIVO"]
+        # Con ese ID, filtro la tabla de relacion
+        tabla_relacion_filtrada = tabla_relacion_activos[tabla_relacion_activos[id_entrada]==cod_interno]
+        # Me quedo con el vector a filtrar en forma de lista
+        lista_dr = list(tabla_relacion_filtrada[id_salida].unique())
+        # Filtro la tabla de documentos recibidos
+        tabla_filtrada = tabla_vista_vitrina[tabla_vista_vitrina[id_salida].isin(lista_dr)]
+        # Tabla de documentos emitidos filtrada
+        tabla_vitrina = tabla_filtrada.drop([id_salida], axis=1)
+        if len(tabla_vitrina.index) > 0:
+            self.vitrina = Vitrina_vista(self, tabla_vitrina, funcion_ver, funcion_eliminar, 
+                                        height=80, width=1050) 
+        else:
+            frame_vitrina.agregar_label(1, 2, '                  0 documentos recibidos asociados')
+
+    #----------------------------------------------------------------------
+    def actualizar_vitrina(self, vitrina, frame_vitrina, codigo_frame,
+                            tabla_codigo_ficha, tabla_vista_vitrina, tabla_relacion, 
+                            id_entrada, id_salida, cod_salida, funcion_ver, funcion_eliminar):
+        """"""
+        vitrina.eliminar_vitrina()
+        # Generar vitrina de documentos recibidos asociados
+        self.generar_vitrina(frame_vitrina, codigo_frame,
+                            tabla_codigo_ficha, tabla_vista_vitrina, tabla_relacion, 
+                            id_entrada, id_salida, cod_salida, funcion_ver, funcion_eliminar)
 
 
+    #----------------------------------------------------------------------
+    def ver_dr(self, id_usuario):
+        """"""
+        texto_documento = 'Documento recibido: ' + id_usuario
 
-# 2. Bases de datos complementarias
-id_b_efa = '1pjHXiz15Zmw-49Nr4o1YdXJnddUX74n7Tbdf5SH7Lb0'
-b_efa = Base_de_datos(id_b_efa, 'Directorio')
-tabla_directorio = b_efa.generar_dataframe()
-lista_efa_dependiente = tabla_directorio.loc[:,['Tipo de entidad u oficina', 'EFA ABREVIADO', 'Departamento', 'Entidad u oficina', 'EFA_OSPA']]
-lista_tipo_efa = list(set(lista_efa_dependiente['Tipo de entidad u oficina']))
-lista_efa_abreviada = list(set(lista_efa_dependiente['EFA ABREVIADO']))
-lista_efa_ospa = list(lista_efa_dependiente['EFA_OSPA'].unique())
-lista_efa_ospa_f = sorted(lista_efa_ospa)
-lista_efa = list(lista_efa_dependiente['Entidad u oficina'].unique())
-lista_efa_f = sorted(lista_efa)
+        lb1 = b_dr.listar_datos_de_fila(id_usuario)
+        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], 
+                                lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14], lb1[15], lb1[16]]
+        
+        self.desaparecer()
+        subframe = Doc_recibidos_vista(self, 650, 1150, texto_documento, nuevo=False, 
+                                        lista=lista_para_insertar, id_doc = id_usuario)
 
-b_efa_inei = Base_de_datos(id_b_efa, 'ID_INEI')
-tabla_ubigeo_completo = b_efa_inei.generar_dataframe()
-tabla_ubigeo = tabla_ubigeo_completo.loc[:,['Departamento', 'Provincia']]
-departamento_inei = list(set(tabla_ubigeo['Departamento']))
+    #----------------------------------------------------------------------
+    def ver_de(self, id_usuario):
+        """"""
+        texto_documento = 'Documento emitido: ' + id_usuario
 
-id_lista_efa = "1ephi7hS0tHRQQq5nlkV141ZCY54FUfkw13EeKn310Y4"
-b_lista_efa = Base_de_datos(id_lista_efa, 'Lista de EFA')
-tabla_lista_efa = b_lista_efa.generar_dataframe()
-tabla_departamento_efa = tabla_lista_efa.loc[:, ['DEP_OSPA', 'PROV_DIST_OSPA']]
-departamento_ospa = list(tabla_lista_efa['DEP_OSPA'].unique())
-departamento_ospa_f = sorted(departamento_ospa)
-
-b_efa_inei = Base_de_datos(id_b_efa, 'ID_INEI')
-tabla_ubigeo_completo = b_efa_inei.generar_dataframe()
-tabla_ubigeo = tabla_ubigeo_completo.loc[:,['Departamento', 'Provincia']]
-departamento_inei = list(set(tabla_ubigeo['Departamento']))
-
-class inicio_app_OSPA(Ventana):
-    """"""
+        lb1 = b_de.listar_datos_de_fila(id_usuario)
+        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], lb1[9]]
+                                # lb1[10], lb1[11], lb1[12]]
+        self.desaparecer()
+        subframe = Doc_emitidos_vista(self, 650, 1150, texto_documento, nuevo=False, 
+                                        lista=lista_para_insertar, id_doc = id_usuario)
     
     #----------------------------------------------------------------------
-    def __init__(self, *args):
-        """Constructor"""
-        
-        Ventana.__init__(self, *args)
+    def ver_ep(self, id_usuario):
+        """"""
+        texto_documento = 'Extremo de problema: ' + id_usuario
 
-        c1 = Cuadro(self)
-        c1.agregar_label(0, 1, ' ')
-        c1.agregar_imagen(1, 2,'Logo_OSPA.png',202,49)
-        c1.agregar_label(2, 1,' ')
-        c1.agregar_button(3, 1, "DR", self.vista_dr)
-        c1.agregar_button(3, 2, "BDR", self.busqueda_dr)
-        c1.agregar_label(4, 1,' ')
-        c1.agregar_button(5, 1, "DE", self.vista_de)
-        c1.agregar_button(5, 2, "BDE", self.busqueda_de)
-        c1.agregar_label(6, 1,' ')
-        c1.agregar_button(7, 1, "EP", self.vista_ep)
-        c1.agregar_button(7, 2, "BEP", self.busqueda_ep)
-        c1.agregar_label(8, 1,' ')
-        c1.agregar_button(9, 1, "JPF", self.pendientes_jefe_firma)
-        c1.agregar_button(9, 2, "BMC", self.busqueda_mc)
-        c1.agregar_label(10, 1,' ')
-        c1.agregar_button(11, 1, "JPA", self.pendientes_jefe_asignar)
-        c1.agregar_button(11, 2, "BAD", self.busqueda_ad)
-        c1.agregar_label(12, 1,' ')
-
-    #----------------------------------------------------------------------
-    def vista_dr(self):
+        lb1 = b_ep.listar_datos_de_fila(id_usuario)
+        lista_para_insertar = [lb1[1], lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], 
+                                lb1[8], lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], 
+                                lb1[14], lb1[15], lb1[16], lb1[17]]
 
         self.desaparecer()
-        # LargoxAncho
-        SubFrame = Doc_recibidos_vista(self, 650, 1150, "Documentos recibidos")
-    
-    #----------------------------------------------------------------------
-    def busqueda_dr(self):
+        subframe = Extremo_problemas_vista(self, 650, 1150, texto_documento, nuevo=False, 
+                                        lista=lista_para_insertar, id_problema = id_usuario)
 
 
-        self.desaparecer()
-        # LargoxAncho
-        SubFrame = busqueda_dr.Doc_recibidos_busqueda(self, 500, 1200, "Búsqueda de documentos recibidos")
 
-    #----------------------------------------------------------------------
-    def vista_de(self):
 
-        self.desaparecer()
-        # LargoxAncho
-        SubFrame = Doc_emitidos_vista(self, 650, 1150, "Documentos emitidos")
-    
-    #----------------------------------------------------------------------
-    def busqueda_de(self):
-
-        self.desaparecer()
-        # LargoxAncho
-        SubFrame = busqueda_dr.Doc_emitidos_busqueda(self, 500, 1200, "Búsqueda de documentos emitidos")
-    
-    #----------------------------------------------------------------------
-    def vista_ep(self):
-
-        self.desaparecer()
-        # LargoxAncho
-        SubFrame = Extremo_problemas_vista(self, 650, 1150, "Extremo de problemas")
-     
-     #----------------------------------------------------------------------
-    def busqueda_ep(self):
-        
-        self.desaparecer()
-        # LargoxAncho
-        SubFrame = busqueda_dr.Extremos(self, 600, 1300, 
-                    "Búsqueda de extremos")
-    
-    #----------------------------------------------------------------------
-    def vista_mp(self):
-
-        self.desaparecer()
-        # LargoxAncho
-        SubFrame = Macroproblemas_vista(self, 650, 1150, "Extremo de problemas")
-     
-     #----------------------------------------------------------------------
-    def busqueda_mp(self):
-        
-        self.desaparecer()
-        # LargoxAncho
-        SubFrame = Macroproblemas_vista(self, 600, 1300, 
-                    "Búsqueda de extremos")
-
-     #----------------------------------------------------------------------
-    def busqueda_mc(self):
-        
-        self.desaparecer()
-        # LargoxAncho
-        SubFrame = busqueda_dr.Macroproblemas(self, 600, 1300, 
-                    "Búsqueda de macroproblemas")
-
-     #----------------------------------------------------------------------
-    def busqueda_ad(self):
-        
-        self.desaparecer()
-        # LargoxAncho
-        SubFrame = busqueda_dr.Administrados(self, 600, 1300, 
-                    "Búsqueda de administrados")
-
-     #----------------------------------------------------------------------
-    def pendientes_jefe_firma(self):
-        
-        self.desaparecer()
-        # LargoxAncho
-        SubFrame = busqueda_dr.Pendientes_jefe_firma(self, 600, 1300, 
-                    "Pendientes por firmar")
-
-     #----------------------------------------------------------------------
-    def pendientes_jefe_asignar(self):
-        
-        self.desaparecer()
-        # LargoxAncho
-        SubFrame = busqueda_dr.Pendientes_jefe_asignar(self, 600, 1300, 
-                    "Pendientes por firmar")
-
-class Doc_recibidos_vista(Ventana):
+class Doc_recibidos_vista(funcionalidades_ospa):
     """"""
     
     #----------------------------------------------------------------------
@@ -264,8 +241,8 @@ class Doc_recibidos_vista(Ventana):
             ('L', 3, 0, 'Asunto'),
             ('EL', 3, 1, 112, 3),
 
-            ('L', 4, 0, 'EFA Abreviado'),
-            ('CXD1', 4, 1, lista_efa_ospa_f, 39, lista_efa_dependiente, 'EFA_OSPA', 'Entidad u oficina', 17, 'CXD1'),
+            ('L', 4, 0, 'Categoria Remitente'),
+            ('CXD1', 4, 1, lista_efa_ospa, 39, lista_efa_dependiente, 'EFA_OSPA', 'Entidad u oficina', 17, 'CXD1'),
 
             ('L', 4, 2, 'Remitente'),
             ('CXR', 4, 3, combo_vacio),
@@ -289,21 +266,9 @@ class Doc_recibidos_vista(Ventana):
 
         # II. Tablas en ventana
         # II.1 Lista de DE
-        tabla_de_de_completa = b_de.generar_dataframe()
-        self.tabla_de_de =  tabla_de_de_completa.drop(['HT_SALIDA', 'COD_PROBLEMA', 'FECHA_PROYECTO_FINAL',
-                                                    'FECHA_FIRMA', 'TIPO_DOC', 'SE_EMITIO',
-                                                    'MARCO_PEDIDO', 'FECHA_ULTIMO_MOV', 'FECHA_ASIGNACION',
-                                                    'DOCUMENTO_ELABORADO', 'DOCUMENTO_FIRMADO', 'DOCUMENTO_NOTIFICADO',
-                                                    'PLAZO', 'ESTADO_DOCE', 'ESPECIALISTA'], axis=1)
-
+        self.tabla_de_de =  tabla_de_de_resumen
         # II.2 Lista de EP
-        tabla_de_ep_completa = b_ep.generar_dataframe()
-        tabla_de_ep_id = tabla_de_ep_completa
-        self.tabla_de_ep = tabla_de_ep_id.drop(['OCURRENCIA', 'EXTENSION', 'TIPO DE AFECTACION',
-                                                'PROVINCIA', 'DESCRIPCION', 'TIPO DE UBICACION',
-                                                'CARACTERISTICA 1', 'CARACTERISTICA 2', 'TIPO CAUSA',
-                                                'PRIORIDAD', 'PUNTAJE', 
-                                                'CODIGO SINADA', 'ACTIVIDAD', 'FECHA_ULTIMO_MOV'], axis=1)
+        self.tabla_de_ep = tabla_de_ep_resumen
         
         # III. Ubicaciones
         # III.1 Frame de Título
@@ -337,9 +302,9 @@ class Doc_recibidos_vista(Ventana):
         self.frame_vitrina_1 = Cuadro(self)
         # En caso exista precedente, se busca en la tabla de Documentos emitidos
         if self.nuevo != True:
-            self.generar_vitrina(self.frame_vitrina_1,
-                                 b_dr_cod, self.tabla_de_de, base_relacion_docs, 
-                                 "ID_DR", "ID_DE", self.ver_de, self.eliminar_de)
+            self.generar_vitrina(self.frame_vitrina_1, self.cod_usuario_dr,
+                                 tabla_de_dr_cod, self.tabla_de_de, tabla_relacion_dr_de, 
+                                 "ID_DR", "ID_DE", "COD_DR", self.ver_de, self.eliminar_de)
         else:
             self.frame_vitrina_1.agregar_label(1, 2, '                  0 documentos emitidos asociados')
 
@@ -355,51 +320,11 @@ class Doc_recibidos_vista(Ventana):
         # III.7 Frame de vitrina 2
         self.frame_vitrina_2 = Cuadro(self)
         if self.nuevo != True:
-            self.generar_vitrina(self.frame_vitrina_2,
-                                 b_dr_cod, self.tabla_de_ep, base_relacion_dr_ep, 
-                                 "ID_DR", "ID_EP", self.ver_ep, self.eliminar_ep)
+            self.generar_vitrina(self.frame_vitrina_2, self.cod_usuario_dr,
+                                 tabla_de_dr_cod, self.tabla_de_ep, tabla_relacion_dr_ep, 
+                                 "ID_DR", "ID_EP", "COD_DR", self.ver_ep, self.eliminar_ep)
         else:
             self.frame_vitrina_2.agregar_label(1, 2,'                  0 extremos de problemas asociados') 
-
-    #----------------------------------------------------------------------
-    def generar_vitrina(self, frame_vitrina,
-                        tabla_codigo_entrada, tabla_salida, base_relacion, 
-                        id_entrada, id_salida, funcion_ver, funcion_eliminar):
-        """"""
-        # Obtengo el código del usuario que heredo
-        cod_usuario = self.cod_usuario_dr
-        # Genero las tablas para el filtrado 
-        tabla_de_codigo = tabla_codigo_entrada.generar_dataframe() # Tabla de códigos
-        tabla_de_relacion = base_relacion.generar_dataframe() # Tabla de relación
-        # Filtro la tabla para obtener el código interno 
-        tabla_de_codigo_filtrada = tabla_de_codigo[tabla_de_codigo['COD_DR']==cod_usuario]
-        cod_interno = tabla_de_codigo_filtrada.iloc[0,0]
-        # Filtro para obtener las relaciones activas
-        tabla_relacion_activos = tabla_de_relacion[tabla_de_relacion['ESTADO']=="ACTIVO"]
-        # Con ese ID, filtro la tabla de relacion
-        tabla_relacion_filtrada = tabla_relacion_activos[tabla_relacion_activos[id_entrada]==cod_interno]
-        # Me quedo con el vector a filtrar en forma de lista
-        lista_dr = list(tabla_relacion_filtrada[id_salida].unique())
-        # Filtro la tabla de documentos recibidos
-        tabla_filtrada = tabla_salida[tabla_salida[id_salida].isin(lista_dr)]
-        # Tabla de documentos emitidos filtrada
-        tabla_vitrina = tabla_filtrada.drop([id_salida], axis=1)
-        if len(tabla_vitrina.index) > 0:
-            self.vitrina = Vitrina_vista(self, tabla_vitrina, funcion_ver, funcion_eliminar, 
-                                        height=80, width=1050) 
-        else:
-            frame_vitrina.agregar_label(1, 2, '                  0 documentos emitidos asociados')
-
-    #----------------------------------------------------------------------
-    def actualizar_vitrina(self, vitrina, frame_vitrina,
-                            tabla_codigo_entrada, tabla_salida, tabla_relacion, 
-                            id_entrada, id_salida, funcion_ver, funcion_eliminar):
-        """"""
-        vitrina.eliminar_vitrina()
-        # Generar vitrina de documentos recibidos asociados
-        self.generar_vitrina(frame_vitrina,
-                            tabla_codigo_entrada, tabla_salida, tabla_relacion, 
-                            id_entrada, id_salida, funcion_ver, funcion_eliminar)
 
     #----------------------------------------------------------------------
     def enviar_dr(self):
@@ -505,19 +430,6 @@ class Doc_recibidos_vista(Ventana):
             # En caso no estuviera guardado la ficha
             messagebox.showerror("¡Guardar!", "Antes de asociar un documento emitido, por favor guarde la información registrada")
 
-
-    #----------------------------------------------------------------------
-    def ver_de(self, id_usuario):
-        """"""
-        texto_documento = 'Documento emitido: ' + id_usuario
-
-        lb1 = b_de.listar_datos_de_fila(id_usuario)
-        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], lb1[9]]
-                                # lb1[10], lb1[11], lb1[12]]
-        self.desaparecer()
-        subframe = Doc_emitidos_vista(self, 650, 1150, texto_documento, nuevo=False, 
-                                        lista=lista_para_insertar, id_doc = id_usuario)
-
     #----------------------------------------------------------------------
     def eliminar_de(self, id_usuario_de):
         """"""
@@ -541,7 +453,7 @@ class Doc_recibidos_vista(Ventana):
         self.frame_vitrina_2.eliminar_cuadro()
 
         # Situo la ventana actualizada
-        self.actualizar_vitrina(self.vitrina, self.frame_vitrina_1,
+        self.actualizar_vitrina(self.vitrina, self.frame_vitrina_1, self.cod_usuario_dr,
                                 b_dr_cod, self.tabla_de_de, base_relacion_docs, 
                                 "ID_DR", "ID_DE", self.ver_de, self.eliminar_de)
         # Vuelvo a crear los cuadros luego de la vitrina 1
@@ -568,17 +480,6 @@ class Doc_recibidos_vista(Ventana):
         messagebox.showinfo("¡Documento emitido eliminado!", "El registro se ha desasociado correctamente")
     
     #----------------------------------------------------------------------
-    def comprobar_id(self, base_codigo, id_usuario):
-        """"""
-        # Comprobar coincidencias
-        cantidad_de_coincidencias = base_codigo.contar_coincidencias(id_usuario)
-
-        if cantidad_de_coincidencias != 0:
-            return True
-        else:
-            return False
-
-    #----------------------------------------------------------------------
     def busqueda_ep(self):
         """"""
         if self.nuevo != True:
@@ -594,34 +495,13 @@ class Doc_recibidos_vista(Ventana):
             # En caso no estuviera guardado la ficha
             messagebox.showerror("¡Guardar!", "Antes de asociar un documento emitido, por favor guarde la información registrada")
 
-    
-    #----------------------------------------------------------------------
-    def ver_ep(self, id_usuario):
-        """"""
-        texto_documento = 'Extremo de problema: ' + id_usuario
-
-        lb1 = b_ep.listar_datos_de_fila(id_usuario)
-        lista_para_insertar = [lb1[1], lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], 
-                                lb1[8], lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], 
-                                lb1[14], lb1[15], lb1[16], lb1[17]]
-
-        self.desaparecer()
-        subframe = Extremo_problemas_vista(self, 650, 1150, texto_documento, nuevo=False, 
-                                        lista=lista_para_insertar, id_problema = id_usuario)
-
     #----------------------------------------------------------------------
     def eliminar_ep(self, x):
         """"""
         print("Eliminar extremo de problema asociado")
     
-    #----------------------------------------------------------------------
-    def inicio_app(self):
-        """"""
-        self.desaparecer()
-        # LargoxAncho
-        subFrame = menus.inicio_app_OSPA(self, 400, 400, "Inicio")
 
-class Doc_emitidos_vista(Ventana):
+class Doc_emitidos_vista(funcionalidades_ospa):
     """"""
     #----------------------------------------------------------------------
     def __init__(self, *args, nuevo=True, lista=None, id_doc=None):
@@ -649,37 +529,35 @@ class Doc_emitidos_vista(Ventana):
             ('L', 1, 2, 'N° de documento'),
             ('E', 1, 3),
 
-            ('L', 2, 0, 'Destinatario'),
-            ('CX', 2, 1, lista_efa),
+            ('L', 2, 0, 'Categoría Destinatario'),
+            ('CXD1', 2, 1, lista_efa_ospa, 39, lista_efa_dependiente, 'EFA_OSPA', 'Entidad u oficina', 11, 'CXD1'),
 
-            ('L', 2, 2, 'Marco de pedido'),
-            ('CX', 2, 3, marco_pedido),
+            ('L', 2, 2, 'Destinatario'),
+            ('CXR', 2, 3, combo_vacio),
 
             ('L', 3, 0, 'Detalle de requerimiento'),
             ('ST', 3, 1),
 
-            ('L', 4, 0, 'Fecha de proyecto'),
-            ('E', 4, 1), 
+            ('L', 4, 0, 'Marco de pedido'),
+            ('CX', 4, 1, marco_pedido),
 
-            ('L', 4, 2, 'Fecha de firma'),
+            ('L', 4, 2, 'Fecha de elaboración proyecto'),
             ('E', 4, 3), 
 
-            ('L', 5, 0, 'Fecha de notificación'),
-            ('E', 5, 1) 
+            ('L', 5, 0, 'Fecha de firma'),
+            ('E', 5, 1), 
+
+            ('L', 5, 2, 'Fecha de notificación'),
+            ('E', 5, 3) 
 
         ]
 
 
         # II. Tablas en ventana
         # II.1 Lista de DR
-        tabla_de_dr = b_dr.generar_dataframe()
-        self.tabla_de_dr = tabla_de_dr.drop(['VIA_RECEPCION', 'HT_ENTRANTE', 'EFA_CATEGORIA',
-                                            'F_ING_OEFA', 'TIPO_DOC', 'ESPECIALISTA',
-                                            'INDICACION', 'TIPO_RESPUESTA', 'RESPUESTA',
-                                            'FECHA_ULTIMO_MOV', 'FECHA_ASIGNACION'], axis=1)
+        self.tabla_de_dr = tabla_de_dr_resumen
         # II.2 Lista de EP
-        tabla_de_ep = b_ep.generar_dataframe()
-        self.tabla_de_ep = tabla_de_ep.drop(['ID_EP'], axis=1)
+        self.tabla_de_ep = tabla_de_ep_resumen
 
         # III. Ubicaciones
         # III.1 Frame de Título
@@ -693,14 +571,6 @@ class Doc_emitidos_vista(Ventana):
         # III.2 Frame de rejilla
         self.frame_rejilla = Cuadro(self)
         self.frame_rejilla.agregar_rejilla(rejilla_de)
-
-        #self.frame_rejilla_decisores_fecha = Cuadro(self)
-        #self.valordecisor = StringVar(name="vacio")
-        #self.valordecisor.trace("w", lambda name, index, mode, valor=self.valordecisor: self.cambio_valor(valor))
-        #self.frame_rejilla_decisores_fecha.agregar_combobox(1,1, si_no)
-        #self.fecha = DateEntry(self.frame_rejilla_decisores_fecha)
-        #self.existe = True
-        #self.lastupdated = None
 
         # En caso exista precedente, se inserta en la rejilla
         if self.nuevo != True: 
@@ -723,9 +593,9 @@ class Doc_emitidos_vista(Ventana):
         self.frame_vitrina_1 = Cuadro(self)
         # En caso exista precedente, se busca en la tabla de Extremo de problemas
         if self.nuevo != True:
-            self.generar_vitrina(self.frame_vitrina_1,
-                                 b_de_cod, self.tabla_de_dr, base_relacion_docs, 
-                                 "ID_DE", "ID_DR", self.ver_dr, self.eliminar_dr)
+            self.generar_vitrina(self.frame_vitrina_1, self.cod_usuario_de,
+                                 tabla_de_de_cod, self.tabla_de_dr, tabla_relacion_dr_de, 
+                                 "ID_DE", "ID_DR", "COD_DE", self.ver_dr, self.eliminar_dr)
        # Etiqueta de 0 problemas asociados
         else:
             self.frame_vitrina_1.agregar_label(1, 2, '                0 extremos de problemas asociados')
@@ -742,53 +612,13 @@ class Doc_emitidos_vista(Ventana):
         self.frame_vitrina_2 = Cuadro(self)
         # En caso exista precedente, se busca en la tabla de Documentos recibidos
         if self.nuevo != True:
-            self.generar_vitrina(self.frame_vitrina_2,
-                                 b_de_cod, self.tabla_de_ep, base_relacion_de_ep, 
-                                 "ID_DE", "ID_EP", self.ver_ep, self.eliminar_ep)
+            self.generar_vitrina(self.frame_vitrina_2, self.cod_usuario_de,
+                                 tabla_de_de_cod, self.tabla_de_ep, tabla_relacion_de_ep, 
+                                 "ID_DE", "ID_EP", "COD_DE", self.ver_ep, self.eliminar_ep)
         else:
             self.frame_vitrina_2.agregar_label(1, 2, '                  0 documentos recibidos asociados')
         
         #self.after(10, self.update)
-
-    #----------------------------------------------------------------------
-    def generar_vitrina(self, frame_vitrina,
-                        tabla_codigo_entrada, tabla_salida, base_relacion, 
-                        id_entrada, id_salida, funcion_ver, funcion_eliminar):
-        """"""
-        # Obtengo el código del usuario que heredo
-        cod_usuario = self.cod_usuario_de
-        # Genero las tablas para el filtrado 
-        tabla_de_codigo = tabla_codigo_entrada.generar_dataframe() # Tabla de códigos
-        tabla_de_relacion = base_relacion.generar_dataframe() # Tabla de relación
-        # Filtro la tabla para obtener el código interno 
-        tabla_de_codigo_filtrada = tabla_de_codigo[tabla_de_codigo['COD_DE']==cod_usuario]
-        cod_interno = tabla_de_codigo_filtrada.iloc[0,0]
-        # Filtro para obtener las relaciones activas
-        tabla_relacion_activos = tabla_de_relacion[tabla_de_relacion['ESTADO']=="ACTIVO"]
-        # Con ese ID, filtro la tabla de relacion
-        tabla_relacion_filtrada = tabla_relacion_activos[tabla_relacion_activos[id_entrada]==cod_interno]
-        # Me quedo con el vector a filtrar en forma de lista
-        lista_dr = list(tabla_relacion_filtrada[id_salida].unique())
-        # Filtro la tabla de documentos recibidos
-        tabla_filtrada = tabla_salida[tabla_salida[id_salida].isin(lista_dr)]
-        # Tabla de documentos emitidos filtrada
-        tabla_vitrina = tabla_filtrada.drop([id_salida], axis=1)
-        if len(tabla_vitrina.index) > 0:
-            self.vitrina = Vitrina_vista(self, tabla_vitrina, funcion_ver, funcion_eliminar, 
-                                        height=80, width=1050) 
-        else:
-            frame_vitrina.agregar_label(1, 2, '                  0 documentos recibidos asociados')
-
-    #----------------------------------------------------------------------
-    def actualizar_vitrina(self, vitrina, frame_vitrina,
-                            tabla_codigo_entrada, tabla_salida, tabla_relacion, 
-                            id_entrada, id_salida, funcion_ver, funcion_eliminar):
-        """"""
-        vitrina.eliminar_vitrina()
-        # Generar vitrina de documentos recibidos asociados
-        self.generar_vitrina(frame_vitrina,
-                            tabla_codigo_entrada, tabla_salida, tabla_relacion, 
-                            id_entrada, id_salida, funcion_ver, funcion_eliminar)
 
     #----------------------------------------------------------------------
     def enviar_de(self):
@@ -899,20 +729,6 @@ class Doc_emitidos_vista(Ventana):
                     "Búsqueda de extremos")
 
     #----------------------------------------------------------------------
-    def ver_ep(self, id_usuario):
-        """"""
-        texto_documento = 'Extremo de problema: ' + id_usuario
-
-        lb1 = b_ep.listar_datos_de_fila(id_usuario)
-        lista_para_insertar = [lb1[1], lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], 
-                                lb1[8], lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], 
-                                lb1[14], lb1[15], lb1[16], lb1[17]]
-
-        self.desaparecer()
-        subframe = Extremo_problemas_vista(self, 650, 1150, texto_documento, nuevo=False, 
-                                        lista=lista_para_insertar, id_problema = id_usuario)
-
-    #----------------------------------------------------------------------
     def eliminar_ep(self, x):
         """"""
         y = x + "Eliminar extremo de problema"
@@ -938,19 +754,6 @@ class Doc_emitidos_vista(Ventana):
             SubFrame = busqueda_dr.Doc_recibidos_busqueda(self, 500, 1200, texto_pantalla)
 
     #----------------------------------------------------------------------
-    def ver_dr(self, id_usuario):
-        """"""
-        texto_documento = 'Documento recibido: ' + id_usuario
-
-        lb1 = b_dr.listar_datos_de_fila(id_usuario)
-        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], 
-                                lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14], lb1[15], lb1[16]]
-        
-        self.desaparecer()
-        subframe = Doc_recibidos_vista(self, 650, 1150, texto_documento, nuevo=False, 
-                                        lista=lista_para_insertar, id_doc = id_usuario)
-
-    #----------------------------------------------------------------------
     def eliminar_dr(self, id_usuario_dr):
         """"""
         # Obtengo los ID del usuario
@@ -973,7 +776,7 @@ class Doc_emitidos_vista(Ventana):
         self.frame_vitrina_2.eliminar_cuadro()
 
         # Le paso el frame de DR
-        self.actualizar_vitrina(self.vitrina, self.frame_vitrina_2, 
+        self.actualizar_vitrina(self.vitrina, self.frame_vitrina_2, self.cod_usuario_de,
                                 b_de_cod, self.tabla_de_dr, base_relacion_docs, 
                                 "ID_DE", "ID_DR", self.ver_dr, self.eliminar_dr)
         
@@ -1000,67 +803,9 @@ class Doc_emitidos_vista(Ventana):
 
         # Confirmación de eliminación de documento emitido
         messagebox.showinfo("¡Documento recibido eliminado!", "El registro se ha desasociado correctamente")
-    
-    #----------------------------------------------------------------------
-    def comprobar_id(self, base_codigo, id_usuario):
-        """"""
-        # Comprobar coincidencias
-        cantidad_de_coincidencias = base_codigo.contar_coincidencias(id_usuario)
-
-        if cantidad_de_coincidencias != 0:
-            return True
-        else:
-            return False
-    
-    #----------------------------------------------------------------------
-    def inicio_app(self):
-        """"""
-        self.desaparecer()
-        # LargoxAncho
-        subFrame = menus.inicio_app_OSPA(self, 400, 400, "Inicio")
-    
-    #----------------------------------------------------------------------
-    def cambio_valor(self, ultimo_valor):
-        print(ultimo_valor)
-        #self.lastupdated = str(ultimo_valor)
-    
-    #----------------------------------------------------------------------
-    def actualizar(self):
-        #if self.lastupdated != None:
-        #    if self.lastupdated == "vacio" and self.valordecisor.get() == "Si":
-        #        if self.existe == False:
-        #            self.fecha = DateEntry(self.frame_rejilla_decisores_fecha)
-        #        
-        #        self.fecha.grid(row = 1, column = 2, pady=4, padx=8)
-        #        self.fecha.update()
-        #        self.lastupdated = None
-
-        #    elif self.lastupdated == "vacio" and self.valordecisor.get() == "No":
-        #        self.fecha.destroy()
-        #        self.lastupdated = None
-        #        self.existe = False
-
-        #self.after(10, self.actualizar)
-        print("Actualización")
-    
-    #----------------------------------------------------------------------
-    def dependiente_1(self, valor_combobox_1):
-        # 1. Obtener dataframe con valores de Dpto, Prov, Distrito
-        tabla_valores_dependientes = b_efa_inei.generar_dataframe()
-        # 2. Filtrar la información
-        tabla_val_dep_filtrada = tabla_valores_dependientes[tabla_valores_dependientes['Departamento']==valor_combobox_1]
-        # 3. Seleccionar columna y convertirla en lista
-        valores_filtrados = list(set(tabla_val_dep_filtrada.loc[:,['Provincia', 'Departamento']]))
-        print(valores_filtrados)
-        # 4. Valores filtrados pasan a ser parte del combobox siguiente 
-    
-    #---------------------------------------------------------------------
-    def cambiar_lista(self, rejilla_a_mod, posicion):
-        print("Hola")
-
         
 
-class Extremo_problemas_vista(Ventana):
+class Extremo_problemas_vista(funcionalidades_ospa):
     """"""
     
     #----------------------------------------------------------------------
@@ -1084,7 +829,7 @@ class Extremo_problemas_vista(Ventana):
                 ('L', 0, 1, str(cod_problema)),
 
                 ('L', 0, 2, 'Departamento'),
-                ('CXD1', 0, 3, departamento_ospa_f, 27, tabla_departamento_efa, 'DEP_OSPA', 'PROV_DIST_OSPA', 7, 'CXD1'),
+                ('CXD1', 0, 3, departamento_ospa, 27, tabla_departamento_efa, 'DEP_OSPA', 'PROV_DIST_OSPA', 7, 'CXD1'),
 
                 ('L', 0, 4, 'Ocurrencia'),
                 ('CXP', 0, 5, 27, ocurrencia, '', "readonly"),
@@ -1111,7 +856,7 @@ class Extremo_problemas_vista(Ventana):
                 ('CXP', 3, 3, 27, extension, '', "readonly"),
 
                 ('L', 3, 4, 'EFA'),
-                ('CXP', 3, 5, 27, lista_efa, '', "readonly"),
+                ('CXP', 3, 5, 27, lista_efa_ospa, '', "readonly"),
 
                 ('L', 4, 0, 'Actividad'),
                 ('CXP', 4, 1, 27, actividad_eco, '', "readonly"),
@@ -1139,7 +884,7 @@ class Extremo_problemas_vista(Ventana):
             #('L', 0, 1, str(cod_problema)),
 
             ('L', 0, 2, 'Departamento'),
-            ('CXD1', 0, 3, departamento_ospa_f, 27, tabla_departamento_efa, 'DEP_OSPA', 'PROV_DIST_OSPA', 7, 'CXD1'),
+            ('CXD1', 0, 3, departamento_ospa, 27, tabla_departamento_efa, 'DEP_OSPA', 'PROV_DIST_OSPA', 7, 'CXD1'),
 
             ('L', 0, 4, 'Ocurrencia'),
             ('CXP', 0, 5, 27, ocurrencia, '', "readonly"),
@@ -1166,7 +911,7 @@ class Extremo_problemas_vista(Ventana):
             ('CXP', 3, 3, 27, extension, '', "readonly"),
 
             ('L', 3, 4, 'EFA'),
-            ('CXP', 3, 5, 27, lista_efa, '', "readonly"),
+            ('CXP', 3, 5, 27, lista_efa_ospa, '', "readonly"),
 
             ('L', 4, 0, 'Actividad'),
             ('CXP', 4, 1, 27, actividad_eco, '', "readonly"),
@@ -1195,17 +940,11 @@ class Extremo_problemas_vista(Ventana):
         ]
 
         # II. Tablas en ventana
-        # II.1 Lista de DE
-        tabla_de_de_completa = b_de.generar_dataframe()
-        self.tabla_de_de =  tabla_de_de_completa.drop(['HT_SALIDA', 'COD_PROBLEMA', 'FECHA_PROYECTO_FINAL',
-                                                    'FECHA_FIRMA', 'TIPO_DOC', 'SE_EMITIO',
-                                                    'MARCO_PEDIDO', 'FECHA_ULTIMO_MOV', 'FECHA_ASIGNACION',
-                                                    'PLAZO', 'ESTADO_DOCE', 'ESPECIALISTA'], axis=1)
+        # II.1 Lista de DR
+        self.tabla_de_dr = tabla_de_dr_resumen
 
-        # II.2 Lista de EP
-        tabla_de_ep_completa = b_ep.generar_dataframe()
-        tabla_de_ep_id = tabla_de_ep_completa
-        tabla_de_ep = tabla_de_ep_id.drop(['ID_EP'], axis=1)
+        # II.2 Lista de DE
+        self.tabla_de_de =  tabla_de_de_resumen
         
         # III. Ubicaciones
         # III.1 Frame de Título
@@ -1293,7 +1032,7 @@ class Extremo_problemas_vista(Ventana):
             frame_vitrina.agregar_label(1, 2, '                  0 documentos emitidos asociados')
 
     #----------------------------------------------------------------------
-    def actualizar_vitrina(self, vitrina, frame_vitrina,
+    def actualizar_vitrina(self, vitrina, frame_vitrina, 
                             tabla_codigo_entrada, tabla_salida, tabla_relacion, 
                             id_entrada, id_salida, funcion_ver, funcion_eliminar):
         """"""
@@ -1359,8 +1098,8 @@ class Extremo_problemas_vista(Ventana):
             # Pestaña 1: Código Único
             departamento = datos_ingresados[0]
             # Obtención de sigla de departamento
-            tabla_siglas_filtrada = tabla_parametros_dep[tabla_parametros_dep['DEPARTAMENTO']==departamento]
-            sigla_cod_interno = tabla_siglas_filtrada.iloc[0,1]
+            tabla_siglas_filtrada = tabla_parametros[tabla_parametros['DEPARTAMENTO']==departamento]
+            sigla_cod_interno = tabla_siglas_filtrada.iloc[0,['SIGLAS_DEPARTAMENTO']]
             # Obtención de número de extremo
             tabla_codigo_ep_filtrada = tabla_de_codigo_ep[tabla_de_codigo_ep['DEPARTAMENTO']==departamento]
             numero_problemas = len(tabla_codigo_ep_filtrada.index) + 1
@@ -1427,19 +1166,6 @@ class Extremo_problemas_vista(Ventana):
             self.desaparecer()
             SubFrame = busqueda_dr.Doc_emitidos_busqueda(self, 500, 1200, texto_pantalla)
 
-
-    #----------------------------------------------------------------------
-    def ver_de(self, id_usuario):
-        """"""
-        texto_documento = 'Documento emitido: ' + id_usuario
-
-        lb1 = b_de.listar_datos_de_fila(id_usuario)
-        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], lb1[9]]
-                                # lb1[10], lb1[11], lb1[12]]
-        self.desaparecer()
-        subframe = Doc_emitidos_vista(self, 650, 1150, texto_documento, nuevo=False, 
-                                        lista=lista_para_insertar, id_doc = id_usuario)
-
     #----------------------------------------------------------------------
     def eliminar_de(self, id_usuario_de):
         """"""
@@ -1487,17 +1213,6 @@ class Extremo_problemas_vista(Ventana):
         base_relacion_d_hist.agregar_datos(datos_a_cargar_hist)
         # Confirmación de eliminación de documento emitido
         messagebox.showinfo("¡Documento emitido eliminado!", "El registro se ha desasociado correctamente")
-    
-    #----------------------------------------------------------------------
-    def comprobar_id(self, base_codigo, id_usuario):
-        """"""
-        # Comprobar coincidencias
-        cantidad_de_coincidencias = base_codigo.contar_coincidencias(id_usuario)
-
-        if cantidad_de_coincidencias != 0:
-            return True
-        else:
-            return False
 
     #----------------------------------------------------------------------
     def busqueda_dr(self):
@@ -1517,19 +1232,6 @@ class Extremo_problemas_vista(Ventana):
             # Genero la nueva ventana
             self.desaparecer()
             SubFrame = busqueda_dr.Doc_recibidos_busqueda(self, 500, 1200, texto_pantalla)
-    
-    #----------------------------------------------------------------------
-    def ver_dr(self, id_usuario):
-        """"""
-        texto_documento = 'Documento recibido: ' + id_usuario
-
-        lb1 = b_dr.listar_datos_de_fila(id_usuario)
-        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], 
-                                lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14], lb1[15], lb1[16]]
-        
-        self.desaparecer()
-        subframe = Doc_recibidos_vista(self, 650, 1150, texto_documento, nuevo=False, 
-                                        lista=lista_para_insertar, id_doc = id_usuario)
 
     #----------------------------------------------------------------------
     def eliminar_dr(self, id_usuario_dr):
@@ -1562,16 +1264,8 @@ class Extremo_problemas_vista(Ventana):
 
         # Confirmación de eliminación de documento emitido
         messagebox.showinfo("¡Documento recibido eliminado!", "El registro se ha desasociado correctamente")
-    
-    
-    #----------------------------------------------------------------------
-    def inicio_app(self):
-        """"""
-        self.desaparecer()
-        # LargoxAncho
-        subFrame = menus.inicio_app_OSPA(self, 400, 400, "Inicio")
 
-class Macroproblemas_vista(Ventana):
+class Macroproblemas_vista(funcionalidades_ospa):
     """"""
     
     #----------------------------------------------------------------------
@@ -1606,7 +1300,7 @@ class Macroproblemas_vista(Ventana):
         tabla_de_ep_completa = b_ep.generar_dataframe()
         tabla_de_ep_id = tabla_de_ep_completa
         self.tabla_de_ep = tabla_de_ep_id.drop(['OCURRENCIA', 'EXTENSION', 'TIPO DE AFECTACION',
-                                                'PROVINCIA', 'DISTRITO', 'DESCRIPCION', 'TIPO DE UBICACION',
+                                                'PROVINCIA', 'DESCRIPCION', 'TIPO DE UBICACION',
                                                 'CARACTERISTICA 1', 'CARACTERISTICA 2', 'TIPO CAUSA',
                                                 'CODIGO SINADA', 'ACTIVIDAD', 'FECHA_ULTIMO_MOV'], axis=1)
         
@@ -1658,10 +1352,3 @@ class Macroproblemas_vista(Ventana):
     def eliminar_ep(self, x):
         """"""
         print("Eliminar extremo de problema asociado")
-    
-    #----------------------------------------------------------------------
-    def inicio_app(self):
-        """"""
-        self.desaparecer()
-        # LargoxAncho
-        subFrame = menus.inicio_app_OSPA(self, 400, 400, "Inicio")
