@@ -150,27 +150,24 @@ class Menu_busquedas(Ventana):
 
         self.desaparecer()
         # LargoxAncho
-        SubFrame = busqueda_dr.Doc_emitidos_busqueda(self, 560, 1080, 
+        SubFrame = busqueda_dr.Doc_emitidos_busqueda(self, 500, 1200, 
                     "Búsqueda de documentos emitidos")
     
     #----------------------------------------------------------------------
     def busqueda_ep(self):
         
-        print("Búsqueda de extremos de problema")
-        # self.desaparecer()
+        self.desaparecer()
         # LargoxAncho
-        #SubFrame = busqueda_dr.Doc_emitidos_busqueda(self, 500, 1200, 
-        #            "Búsqueda de documentos emitidos")
+        SubFrame = busqueda_dr.Extremos(self, 600, 1400, 
+                    "Búsqueda de extremos de problemas")
     
     #----------------------------------------------------------------------
     def busqueda_mp(self):
         
-        print("Búsqueda de macroproblemas")
-        # self.desaparecer()
+        self.desaparecer()
         # LargoxAncho
-        #SubFrame = busqueda_dr.Doc_emitidos_busqueda(self, 500, 1200, 
-        #            "Búsqueda de documentos emitidos")
-
+        SubFrame = busqueda_dr.Macroproblemas(self, 500, 1200, 
+                    "Búsqueda de macroproblemas")
     #----------------------------------------------------------------------
 
     def volver_Menu_busquedas(self):
@@ -192,7 +189,7 @@ class Menu_admin(Ventana):
         c1.agregar_label(2, 1,'Registro de nuevo documento')
         c1.agregar_button(3, 1, "Ir", self.vista_dr)
         c1.agregar_label(4, 1,'Envío de reiterativo / OCI')
-        c1.agregar_button(5, 1, "Ir", self.vista_de)
+        c1.agregar_button(5, 1, "Ir", self.Pendientes_reiterar)
         c1.agregar_label(6, 1,' ')
         c1.agregar_button(9, 2, "Volver", self.volver_Menu_admin)
     
@@ -205,12 +202,11 @@ class Menu_admin(Ventana):
                     "Registra de un nuevo documento recibido")
 
     #----------------------------------------------------------------------
-    def vista_de(self):
+    def Pendientes_reiterar(self):
 
         self.desaparecer()
         # LargoxAncho
-        SubFrame = vista_dr.Doc_emitidos_vista(self, 650, 1150,
-                    "Registra de un nuevo documento recibido")
+        SubFrame = busqueda_dr.Pendientes_por_reiterar(self, 560, 1090, "Documentos pendientes de reiterar/comunicar al OCI")
 
     #----------------------------------------------------------------------
 
@@ -240,20 +236,16 @@ class Inicio_eq1(Ventana):
     #----------------------------------------------------------------------
     def pendientes_eq1(self):
 
-        print("Vista del Equipo 1")
-        # self.desaparecer()
+        self.desaparecer()
         # LargoxAncho
-        # SubFrame = vista_dr.Doc_recibidos_vista(self, 650, 1150, 
-        #            "Registra de un nuevo documento recibido")
+        SubFrame = busqueda_dr.Pendientes_eq1_trabajar(self, 500, 1000, "Documentos pendientes de trabajar - Equipo 1")
 
     #----------------------------------------------------------------------
     def vista_mp(self):
-
-        print("Creación de macroproblema")
-        # self.desaparecer()
+        
+        self.desaparecer()
         # LargoxAncho
-        #SubFrame = vista_dr.Doc_emitidos_vista(self, 650, 1150,
-        #            "Registra de un nuevo documento recibido")
+        SubFrame = vista_dr.Macroproblemas_vista(self, 650, 1050, "Registra un nuevo macroproblema")
 
     #----------------------------------------------------------------------
 
