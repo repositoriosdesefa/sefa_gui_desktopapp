@@ -1,6 +1,22 @@
-# Pendientes
+# Pendientes a corto plazo
+## Generales
 - [x] Descargar Markdown all in one para Visual Code
-- [ ] Crear script de Menús intermedios
+- [x] Crear script de Menús intermedios
+- [ ] Crear método para actualizar información
+
+## Logueo y administracion
+- [x] Desarrollar GUI logueo2 Recuperar contrasena
+- [x] Desarrollar GUI logueo3 Cambiar contrasena
+- [x] Ajustar tamaños de pantalla de administracion
+- [x] Generar cuadros de dialogo en administracion (reemplazando los prints)
+- [x] Generar cuadros de dialogo en logueo (reemplazando los prints)
+
+## vsf
+- [x] Integrar a elementos_de_gui
+- [x] Ajustar el tamaño de la fila de la vitrina
+- [x] Cambiar el color del encabezado
+- [x] (Opcional) Tooltip sobre los textos (Texto con puntos suspensivos)
+- [x] Acondicionar tooltip para que funcione con el loop
 
 ## busqueda_dr
 - [x] Widget de fecha con predeterminado vacío (Observación)
@@ -21,7 +37,6 @@
 - [x] Necesario: Pantalla de pendientes jefe 1 (Pantalla de búsqueda DE firmar con filtro)
 - [x] Necesario: Pantalla de pendientes jefe 2 (Pantalla de búsqueda DR por asignar)
 
-- [ ] Eliminar de la vitrina de búsqueda, docs ya asociados 
 
 ## vista_dr
 - [x] Mostrar inicialmente la vitrina vacía
@@ -43,44 +58,15 @@
 - [x] EP: Primer entry sea el código de problema
 - [x] EP: Agregar botón con "Prioridad" y vista de puntaje
 - [x] EP: Agregar vista de f_creación y f_actualización
-
 - [x] Necesario: Definir ID con número de oficio para problema
 - [x] Necesario: Crear método para la creación de ID extremos
 - [x] Necesario: Pantalla de vista de macroproblemas
+- [x] Programar: Crear método para la asociación de más de 2 relaciones (transitividad)
+- [ ] Programar: Validación de fecha de notificación y fecha de firma (Con botón). [Campo libre]
 
-- [ ] Programar: Subframe de fecha de notificación y fecha de firma (Con botón). [Campo libre]
-- [ ] Programar: Crear método para la asociación de más de 2 relaciones (transitividad)
-
-- [ ] Investigar: Lista desplegable condicionada para EFA y Ubicación / Autocompletado
-  
-## vsf
-- [x] Integrar a elementos_de_gui
-- [x] Ajustar el tamaño de la fila de la vitrina
-- [x] Cambiar el color del encabezado
-- [x] (Opcional) Tooltip sobre los textos (Texto con puntos suspensivos)
-- [x] Acondicionar tooltip para que funcione con el loop
-
-## elementos_de_GUI
-- [ ] Agregar scrollframe en la ventana principal (Clase de Ventana)
-
-## Base de datos
-- [x] Armar tablas con datos reales para docs recibidos (Lucho)
-- [x] Armar tablas con datos reales para docs emitidos (Lucia)
-- [ ] Armar tablas con datos reales para problemas
-- [ ] Armar tablas con datos reales para macro-problemas 
-- [ ] Crear tablas de reiterativos y OCI
-- [ ] Revisión final de todas las tablas y comparación con las tablas actuales
-
-
-## logueo y administracion
-
-- [x] Desarrollar GUI logueo2 Recuperar contrasena
-- [x] Desarrollar GUI logueo3 Cambiar contrasena
-- [x] Ajustar tamaños de pantalla de administracion
-- [x] Generar cuadros de dialogo en administracion (reemplazando los prints)
-- [x] Generar cuadros de dialogo en logueo (reemplazando los prints)
-- [ ] Evaluar combinar los archivos administracion y logueo
-- [ ] (Para futuras versiones): Simplificar funciones con elementos comunes // Posible creación de la class Usuario. 
+## Retos
+- [ ] Investigar: Lista desplegable condicionada de tres niveles
+- [ ] Investigar: Eliminación de widgets de tipo de DateEntry o seteo como valor vacío
 
 ## Nuevas ventanas
 - [x] Creación de pantallas de menú
@@ -91,14 +77,29 @@
 - [x] Pendientes por asignar (Perfil de jefe)
 - [x] Pendeintes por firmar (Perfil de jefe)
 - [x] Creación de pantallas de macroproblema
-- [ ] Crear pantalla de administrados [Lucho]
 - [x] Crear pantalla de búsqueda de administrados [Lucía]
-- [ ] Creación de asignaciones pendientes Equipo 1
-- [ ] Creación de asignaciones pendientes Equipo 2
-- [ ] Creación de programaciones Equipo 2
+- [x] Creación de asignaciones pendientes Equipo 1
+- [x] Creación de asignaciones pendientes Equipo 2
+- [x] Creación de programaciones Equipo 2
+- [ ] Crear pantalla de administrados [Lucho]
 
 
 ## A mediano plazo
+## Migración de información
+- [x] Armar tablas con datos reales para docs recibidos (Lucho)
+- [x] Armar tablas con datos reales para docs emitidos (Lucia)
+- [ ] Armar tablas con datos reales para problemas
+- [ ] Armar tablas con datos reales para macro-problemas 
+- [ ] Crear tablas de reiterativos y OCI
+- [ ] Revisión final de todas las tablas y comparación con las tablas actuales
+### vista_dr
 - [ ] No permitir ingresar un código de interfaz (de usuario) igual (Mensaje de error)
 - [ ] Agregar timestamp (tiempo para cada clase de objeto)
-- [ ] Vista de extremos de problemas (Adecuar pantalla a 3 vitrina)
+- [ ] Vista de extremos de problemas (Scrollbar para visualizar vitrinas)
+
+### busqueda_dr
+- [ ] Eliminar de la vitrina de búsqueda, docs ya asociados 
+
+### Logueo y administración
+- [ ] Evaluar combinar los archivos administracion y logueo
+- [ ] (Para futuras versiones): Simplificar funciones con elementos comunes // Posible creación de la class Usuario. 
