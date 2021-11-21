@@ -11,7 +11,7 @@ oficina = None
 # 0. Tablas relacionales
 id_b_ospa = '13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4'
 base_relacion_docs = Base_de_datos(id_b_ospa, 'RELACION_DOCS')
-base_relacion_d_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_RELACION_D')
+base_relacion_docs_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_RELACION_D')
 base_relacion_dr_ep =  Base_de_datos(id_b_ospa, 'RELACION_DR-EP')
 base_relacion_dr_ep_hist =  Base_de_datos(id_b_ospa, 'HISTORIAL_RELACION_DR-EP')
 base_relacion_de_ep =  Base_de_datos(id_b_ospa, 'RELACION_DE-EP')
