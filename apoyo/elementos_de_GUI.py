@@ -74,6 +74,8 @@ class Cuadro(Frame):
         Frame.__init__(self)
         self.scrollable = scrollable
         self.window = window
+        self.rejilla_actualizada = False
+        self.valor_cambiado = False
 
         if self.scrollable == True:
             self.main_frame = Frame(window)
@@ -387,7 +389,7 @@ class Cuadro(Frame):
         self.combo.set(' ')
         self.lista_de_objetos.append((self.combo))
         self.lista_de_datos.append((self.combo))
-
+    
     #----------------------------------------------------------------------
     def agregar_combobox_personalizado(self, y, x, ancho, listadesplegable, predeterminado, estado='readonly'):
         """Método de la clase Cuadro. \n
@@ -423,85 +425,66 @@ class Cuadro(Frame):
         self.lista_de_datos.append((self.combo))
     
     #----------------------------------------------------------------------
-    def agregar_combobox_decisor_1(self, y, x, listadesplegable, ancho, tabla_a_filtrar, nombre_columna, nombre_col_filtro, posicion_ordinal, tipo_combobox):
+    def agregar_combobox_decisor_1(self, y, x, listadesplegable, ancho, 
+                                    tabla_a_filtrar, nombre_columna, nombre_col_filtro, 
+                                    posicion_ordinal_objeto,  posicion_ordinal_valor):
         """Método de la clase Cuadro. \n
         Permite agregar una lista desplegable al Frame creado con la Clase Cuadro."""
-        
+                
         self.y = y
         self.x = x
         self.listadesplegable = listadesplegable
-        tipo_decisor = tipo_combobox
 
         ancho_combo = int(ancho)
         nombre_posicion = str(x) + "," + str(y)
-        numero_posicion = int(posicion_ordinal)
+        numero_posicion = int( posicion_ordinal_objeto)
+        numero_valor =  int(posicion_ordinal_valor)
         tabla = tabla_a_filtrar
         columna_nombre = nombre_columna
         columna_filtrada_nombre = nombre_col_filtro
 
         valordecisor = StringVar(name = nombre_posicion)
         decisor = ttk.Combobox(self.z, state="readonly", width=ancho_combo, textvariable = valordecisor)
-        valordecisor.trace("w", lambda name, index, mode, valor=valordecisor: self.cambio_valor(valor, decisor, numero_posicion, tabla, columna_nombre, columna_filtrada_nombre, tipo_decisor))
-    
+        valordecisor.trace("w", lambda name, index, mode, 
+                            valor=valordecisor: self.cambio_valor(valor, decisor, numero_posicion, numero_valor,
+                                                                tabla, columna_nombre, columna_filtrada_nombre))
+
         decisor.set('')
         decisor["values"] = self.listadesplegable
-        
-        #ultimovalor = None
-        #self.valordecisor = valordecisor
 
         decisor.grid(row = self.y, column = self.x, pady=4, padx=8)        
         self.lista_de_objetos.append((decisor))
         self.lista_de_datos.append((decisor))
 
-        #self.z.after(10, self.update)
-
-        #----------------------------------------------------------------------
-    def agregar_combobox_decisor_2(self, y, x, listadesplegable, ancho, tabla_a_filtrar, nombre_columna, nombre_col_filtro, posicion_ordinal, tipo_combobox):
+    #----------------------------------------------------------------------
+    def agregar_combobox_resultado(self, y, x, listadesplegable, posicion_ordinal_objeto, posicion_ordinal_dato):
         """Método de la clase Cuadro. \n
         Permite agregar una lista desplegable al Frame creado con la Clase Cuadro."""
         
         self.y = y
         self.x = x
         self.listadesplegable = listadesplegable
+        self.combo = ttk.Combobox(self.z, state="readonly", width=39)
+        self.combo.grid(row = self.y, column = self.x, pady=4, padx=8)
+        self.combo["values"] = self.listadesplegable
+        self.combo.set('')
+        posicion_widget = int(posicion_ordinal_objeto)
+        posicion_valor = int(posicion_ordinal_dato)
 
-        tipo_decisor = tipo_combobox
-        nombre_posicion = str(x) + "," + str(y)
-        numero_posicion = int(posicion_ordinal)
-        tabla = tabla_a_filtrar
-        columna_nombre = nombre_columna
-        columna_filtrada_nombre = nombre_col_filtro
+        if self.rejilla_actualizada == True:
+            valor_anterior = self.informacion_a_introducir[posicion_ordinal_dato]
+            self.lista_de_objetos[posicion_widget] = self.combo
+            self.lista_de_datos[posicion_valor] = self.combo
+            if self.valor_cambiado == True:
+                self.combo.set('')
+            else:
+                self.combo.set(valor_anterior)
+            self.rejilla_actualizada = False
+        else:
+            self.combo.set('')
+            self.lista_de_objetos.append((self.combo))
+            self.lista_de_datos.append((self.combo))
 
-        valordecisor = StringVar(name = nombre_posicion)
-        decisor = ttk.Combobox(self.z, state="readonly", width=ancho, textvariable = valordecisor)
-        valordecisor.trace("w", lambda name, index, mode, valor=valordecisor: self.cambio_valor(valor, decisor, numero_posicion, tabla, columna_nombre, columna_filtrada_nombre, tipo_decisor))
-    
-        decisor.set('')
-        decisor["values"] = self.listadesplegable
-        
-        #ultimovalor = None
-        #self.valordecisor = valordecisor
-        
-        decisor.grid(row = self.y, column = self.x, pady=4, padx=8)        
-        self.lista_de_objetos.append((decisor))
-        self.lista_de_datos.append((decisor))
-
-        #self.z.after(10, self.update)
- 
-        
-    #----------------------------------------------------------------------
-    def actualizar_widget(self, widget):
-        print("Hola")
-        #widget.bind("<<ComboboxSelected>>", self.dependencia)
-        #valor_ingresado = valor
-        #print(valor_ingresado)
-        #if valor_ingresado == "PUNO":
-        #    self.combo.config(value=('Si', 'No'))
-
-    #----------------------------------------------------------------------
-    def dependencia(self, e):
-        print(e)
-        #print(valor)
-    
     #----------------------------------------------------------------------
     def agregar_spinbox(self, y, x, inicio, fin, incremento, defecto):
         """Método de la clase Cuadro. \n
@@ -542,43 +525,47 @@ class Cuadro(Frame):
         self.lista_de_datos.append((self.cal))
      
     #----------------------------------------------------------------------
-    def cambio_valor(self, nombre_objeto, widget, posicion_ordinal, tabla, nombre_columna, nombre_col_filtrada, tipo_combo):
-
+    def cambio_valor(self, nombre_objeto, widget, posicion_ordinal, posicion_valor,
+                    tabla, nombre_columna, nombre_col_filtrada):
+        
+        # Obtengo el valor del widget decisor
         ultimo_valor = str(nombre_objeto)
         valor_ingresado = widget.get()
+        # Se asume que el combobox decisor está una posición antes que el combo resultado
+        posicion_valor_decisor = posicion_valor - 1
+        
+        # Identifico si el valor ingresado ha cambiado
+        if self.rejilla_actualizada == True:
+            valor_insertado = self.informacion_a_introducir[posicion_valor_decisor]
+            # Identifico en caso haya una rejilla insertada si el valor se ha cambiado
+            if valor_ingresado != valor_insertado:
+                self.valor_cambiado = True
+        
+        # Parámetros para la validación
         tabla_a_filtrar = tabla
         nombre_col = nombre_columna
-
         columna_filtrada_nombre = nombre_col_filtrada
-        tipo_decisor = tipo_combo
-        #print(valor_ingresado)
-        #print(ultimo_valor)
-        #self.z.after(1000, self.update)
 
-        #print(self.rejilla)
-        if valor_ingresado != '' and tipo_decisor == "CXD1":
-            tupla_interna = self.rejilla[posicion_ordinal]
-            #print(tupla_interna)
-
-            
+        # Generación de lista validada
+        if self.valor_cambiado == True and valor_ingresado != '':
+            # Almaceno la rejilla actual
+            tupla_interna = self.rejilla[posicion_ordinal]            
             # Obtengo la lista para modificar
             lista_interna = list(tupla_interna)
+            # Filtro la tabla y realizo la validación
             tabla_filtrada = tabla_a_filtrar[tabla_a_filtrar[nombre_col]==valor_ingresado]
-
             lista_validada = list(tabla_filtrada[columna_filtrada_nombre].unique())
-            lista_validada_f = sorted(lista_validada, reverse = True)
+            # Obtengo y sitúo la lista validada
+            lista_validada_f = sorted(lista_validada)
             lista_interna[3] = lista_validada_f
-            tupla_final = tuple(lista_interna)
-            #print(tupla_final)
-
+            tupla_final = tuple(lista_interna) # Regresa a tupla
+            # Se inserta la rejilla en forma de tupla
             self.rejilla[posicion_ordinal] = tupla_final
+            # Se inserta el valor
+            self.lista_de_datos[posicion_valor] = valor_ingresado
+            self.rejilla_actualizada = True
             self.actualizar_rejilla(self.rejilla)
             
-        #datos_ingresados = self.obtener_lista_de_datos()
-        #print(datos_ingresados[12])
-        #self.agregar_rejilla(self.rejilla)
-        #self.insertar_lista_de_datos(datos_ingresados)
-
     #----------------------------------------------------------------------
     def agregar_rejilla(self, rejilla):
         """Método de la clase Cuadro. \n
@@ -693,22 +680,14 @@ class Cuadro(Frame):
 
         for i,row in self.tabla.iterrows():
             
-            if row[0] == 'CXD2':
-                
+            if row[0] == 'CXR':
                 # En este caso row[3] debe ser una lista:
-                self.agregar_combobox_decisor_2(row[1], row[2], row[3], row[4], row[5], row[6]. row[7], row[8], row[0])
+                self.agregar_combobox_resultado(row[1], row[2], row[3], row[4], row[5])
+        
+        # Una vez actualizada la rejilla, se detiene la actualización
+        self.rejilla_actualizada = False
+        
 
-            elif row[0] == 'CXR':
-                
-                # En este caso row[3] debe ser una lista:
-                self.agregar_combobox(row[1], row[2], row[3])
-            
-            # Provisional para pantalla de extremos
-            elif row[0] == 'CXR' and row[1] == 1 and row[2] == 3:
-                
-                # En este caso row[3] debe ser una lista:
-                self.agregar_combobox_personalizado(row[1], row[2], 27, row[3], '', "readonly")
-    
     #----------------------------------------------------------------------
     def agregar_escenario(self, row, column, data_frame, funcion1, funcion2):
         """Método de la clase Cuadro. \n
@@ -888,10 +867,11 @@ class Cuadro(Frame):
         """"""
         
         self.informacion_a_introducir = informacion_a_introducir
-
         self.lista = self.lista_de_datos
+
         df_listas = list(zip(self.informacion_a_introducir, self.lista))
         tabla_listas = pd.DataFrame(df_listas)
+
         for i, row in tabla_listas.iterrows():
             try:
                 row[1].set(row[0])
@@ -904,6 +884,8 @@ class Cuadro(Frame):
                     row[1].set_date(row[0])
             else:
                 row[1].set(row[0])
+        
+        self.rejilla_actualizada = True
 
     #----------------------------------------------------------------------
     def eliminar_cuadro(self):
