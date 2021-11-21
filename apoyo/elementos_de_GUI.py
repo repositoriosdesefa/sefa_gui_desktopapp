@@ -88,7 +88,7 @@ class Cuadro(Frame):
 
         else:
             # Frame que contiene objetos:
-            self.z = Frame(window)
+            self.z = Frame(self.window)
             self.z.pack()
 
         self.lista_de_objetos = []
@@ -1248,6 +1248,16 @@ class Vitrina_vista(Frame):
         """"""
         self.main_frame.destroy()
         self.main_frame = Frame(self.window)
+    
+    #----------------------------------------------------------------------
+    def eliminar_posible_vitrina(self):
+        """"""
+        try:
+            self.eliminar_vitrina()
+        except AttributeError:
+            pass
+        else: 
+            self.eliminar_vitrina() 
 
 # VII. Vitrina Búsqueda
 class Vitrina_busqueda(Frame):
