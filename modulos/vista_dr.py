@@ -283,10 +283,10 @@ class Doc_recibidos_vista(funcionalidades_ospa):
             ('EL', 3, 1, 112, 3),
 
             ('L', 4, 0, 'Categoria Remitente'),
-            ('CXD1', 4, 1, lista_efa_ospa, 39, lista_efa_dependiente, 'EFA_OSPA', 'Entidad u oficina', 17, 'CXD1'),
+            ('CXD1', 4, 1, lista_efa_ospa, 39, lista_efa_dependiente, 'EFA_OSPA', 'Entidad u oficina', 17, 8),
 
             ('L', 4, 2, 'Remitente'),
-            ('CXR', 4, 3, combo_vacio),
+            ('CXR', 4, 3, combo_vacio, 17, 8),
 
             ('L', 5, 0, '¿Es respuesta?'),
             ('CX', 5, 1, si_no),
@@ -330,6 +330,7 @@ class Doc_recibidos_vista(funcionalidades_ospa):
         if self.nuevo == False: # Estamos en una ficha creada
             self.tabla_de_dr_cod = b_dr_cod.generar_dataframe()
             self.tabla_relacion_dr_de = base_relacion_docs.generar_dataframe()
+            self.tabla_relacion_dr_ep = base_relacion_dr_ep.generar_dataframe()
             self.cod_usuario_dr = id_objeto
             self.lista_para_insertar = lista
             self.frame_rejilla.insertar_lista_de_datos(self.lista_para_insertar)
@@ -602,7 +603,7 @@ class Doc_emitidos_vista(funcionalidades_ospa):
             ('E', 1, 3),
 
             ('L', 2, 0, 'Categoría Destinatario'),
-            ('CXD1', 2, 1, lista_efa_ospa, 39, lista_efa_dependiente, 'EFA_OSPA', 'Entidad u oficina', 11, 'CXD1'),
+            ('CXD1', 2, 1, lista_efa_ospa, 39, lista_efa_dependiente, 'EFA_OSPA', 'Entidad u oficina', 11),
 
             ('L', 2, 2, 'Destinatario'),
             ('CXR', 2, 3, combo_vacio),
