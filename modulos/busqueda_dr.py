@@ -234,7 +234,7 @@ class Doc_recibidos_busqueda(Ventana):
         
         self.desaparecer()
         subframe = vista_dr.Doc_recibidos_vista(self, 650, 1150, texto_documento, nuevo=False, 
-                                                lista=lista_para_insertar, id_doc = x)
+                                                lista=lista_para_insertar, id_objeto = x)
 
     #----------------------------------------------------------------------
     def asociar_dr_de(self, x):
@@ -497,11 +497,11 @@ class Doc_emitidos_busqueda(Ventana):
         codigodr = self.cod_doc_dr
 
         lb1 = b_dr.listar_datos_de_fila(codigodr)
-        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], 
-                                lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], lb1[12]]
+        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], 
+                                lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14], lb1[15], lb1[16]]
         self.desaparecer()
         subframe = vista_dr.Doc_recibidos_vista(self, 650, 1150, 
-                                                nuevo=False, lista=lista_para_insertar, id_doc=codigodr)
+                                                nuevo=False, lista=lista_para_insertar, id_objeto =codigodr)
 
     #----------------------------------------------------------------------
     def ver_de(self, x):
@@ -514,7 +514,7 @@ class Doc_emitidos_busqueda(Ventana):
                                 lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], lb1[12]]
         self.desaparecer()
         subframe = vista_dr.Doc_emitidos_vista(self, 650, 1150, texto_documento, 
-                                                nuevo=False, lista=lista_para_insertar, id_doc=x)
+                                                nuevo=False, lista=lista_para_insertar, id_objeto = x)
 
     #----------------------------------------------------------------------
     def asociar_de_dr(self, x):
