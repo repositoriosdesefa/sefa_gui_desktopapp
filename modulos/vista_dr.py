@@ -25,7 +25,7 @@ b_ep_hist = variables_globales.b_ep_hist
 base_relacion_docs = variables_globales.base_relacion_docs
 base_relacion_dr_ep = variables_globales.base_relacion_dr_ep
 base_relacion_de_ep = variables_globales.base_relacion_de_ep
-base_relacion_d_hist = variables_globales.base_relacion_d_hist
+base_relacion_docs_hist = variables_globales.base_relacion_docs_hist
 base_relacion_dr_ep_hist = variables_globales.base_relacion_dr_ep_hist
 
 # 2. Tablas
@@ -106,6 +106,11 @@ class funcionalidades_ospa(Ventana):
     #----------------------------------------------------------------------
     def __init__(self, *args, nuevo=True, lista=None, id_objeto = None):
         """Constructor"""
+        
+        # Objetos de clase
+        self.nuevo = nuevo
+        self.lista = lista
+        self.id_objeto = id_objeto
 
     #----------------------------------------------------------------------
     def inicio_app(self):
@@ -168,7 +173,7 @@ class funcionalidades_ospa(Ventana):
                 frame_vitrina.agregar_label(1, 2, '                  0 documentos recibidos asociados')
         else:
             frame_vitrina.agregar_label(1, 2, '                  0 documentos recibidos asociados')
-
+    
     #----------------------------------------------------------------------
     def ver_dr(self, id_usuario):
         """"""
@@ -182,18 +187,6 @@ class funcionalidades_ospa(Ventana):
         subframe = Doc_recibidos_vista(self, 650, 1150, texto_documento, nuevo=False, 
                                         lista=lista_para_insertar, id_objeto = id_usuario)
 
-    #----------------------------------------------------------------------
-    def ver_de(self, id_usuario):
-        """"""
-        texto_documento = 'Documento emitido: ' + id_usuario
-
-        lb1 = b_de.listar_datos_de_fila(id_usuario)
-        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], lb1[9]]
-                                # lb1[10], lb1[11], lb1[12]]
-        self.desaparecer()
-        subframe = Doc_emitidos_vista(self, 650, 1150, texto_documento, nuevo=False, 
-                                        lista=lista_para_insertar, id_objeto = id_usuario)
-    
     #----------------------------------------------------------------------
     def busqueda_de(self):
         """"""
@@ -210,6 +203,17 @@ class funcionalidades_ospa(Ventana):
             # En caso no estuviera guardado la ficha
             messagebox.showerror("¡Guardar!", "Antes de asociar un documento emitido, por favor guarde la información registrada")
 
+    #----------------------------------------------------------------------
+    def ver_de(self, id_usuario):
+        """"""
+        texto_documento = 'Documento emitido: ' + id_usuario
+
+        lb1 = b_de.listar_datos_de_fila(id_usuario)
+        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], lb1[9]]
+                                # lb1[10], lb1[11], lb1[12]]
+        self.desaparecer()
+        subframe = Doc_emitidos_vista(self, 650, 1150, texto_documento, nuevo=False, 
+                                        lista=lista_para_insertar, id_objeto = id_usuario)
     
     #----------------------------------------------------------------------
     def ver_ep(self, id_usuario):
@@ -241,8 +245,43 @@ class funcionalidades_ospa(Ventana):
             # En caso no estuviera guardado la ficha
             messagebox.showerror("¡Guardar!", "Antes de asociar un documento emitido, por favor guarde la información registrada")
 
+    #----------------------------------------------------------------------
+    def eliminar_objeto(self, cod_objeto_clase, cod_entrada, cod_objeto_a_eliminar, cod_salida, 
+                        tabla_objeto_clase, tabla_a_objeto_a_eliminar, 
+                        base_relacion_objetos, base_relacion_hist):
+        """"""
+        # Objeto de Frame
+        codigo_objeto = cod_objeto_clase
+        cod_objeto = cod_entrada
+        tabla_objeto = tabla_objeto_clase
+        # Objeto de vitrina
+        codigo_a_eliminar = cod_objeto_a_eliminar
+        cod_a_eliminar = cod_salida
+        # Base de relación
+        b_relacion_objetos = base_relacion_objetos
 
+        # Filtro las tablas para obtener el ID interno
+        tabla_codigo_objeto_filtrada = tabla_objeto[tabla_objeto[cod_objeto]==codigo_objeto]
+        id_interno_objeto_clase = tabla_codigo_objeto_filtrada.iloc[0,0] # ID de frame
+        tabla_codigo_a_eliminar = tabla_a_objeto_a_eliminar[tabla_a_objeto_a_eliminar[cod_a_eliminar]==codigo_a_eliminar]
+        id_interno_objeto_a_eliminar = tabla_codigo_a_eliminar.iloc[0,0] # ID de vitrina
+        
+        # ID de relación
+        if cod_objeto == "COD_DR":
+            id_relacion_objetos = id_interno_objeto_clase + "/" + id_interno_objeto_a_eliminar
+        else:
+            id_relacion_objetos = id_interno_objeto_clase + "/" + id_interno_objeto_a_eliminar
+            print("Probar otra forma")
+        # Se cambia dato en tabla de relación
+        b_relacion_objetos.cambiar_un_dato_de_una_fila(id_relacion_objetos, 4,'ELIMINADO')
 
+        # Actualización de historial
+        datos_modificados = base_relacion_objetos.listar_datos_de_fila(id_relacion_objetos)
+        hora = str(dt.datetime.now())
+        datos_a_cargar_hist = datos_modificados + [hora]
+        base_relacion_hist.agregar_datos(datos_a_cargar_hist)
+        # Confirmación de eliminación de documento emitido
+        messagebox.showinfo("¡Documento emitido eliminado!", "El registro se ha desasociado correctamente")
 
 
 class Doc_recibidos_vista(funcionalidades_ospa):
@@ -304,7 +343,7 @@ class Doc_recibidos_vista(funcionalidades_ospa):
             ('ST', 7, 1)
             
         ]
-        
+
         # Tablas para vitrina
         # 0. Tablas de código de DR
         self.tabla_de_dr_cod = tabla_de_dr_cod
@@ -349,12 +388,12 @@ class Doc_recibidos_vista(funcionalidades_ospa):
                             self.cod_usuario_dr, self.tabla_de_dr_cod, 
                             self.tabla_de_de, self.tabla_relacion_dr_de, 
                             "ID_DR", "ID_DE", "COD_DR", 
-                            self.ver_de, self.eliminar_de)
+                            self.ver_de, self.eliminar_de_y_actualizar)
         # Almaceno la vitrina generada
         try: # Pruebo si se generó una vitrina
             self.vitrina_1 = self.vitrina
         except AttributeError:
-            pass # En caso no se haya generado, no almaceno nada
+            self.vitrina_1 = None # En caso no se haya generado, no almaceno nada
         else:
             # Almaceno si se generó
             self.vitrina_1 = self.vitrina
@@ -368,12 +407,12 @@ class Doc_recibidos_vista(funcionalidades_ospa):
                             self.cod_usuario_dr, self.tabla_de_dr_cod, 
                             self.tabla_de_ep, self.tabla_relacion_dr_ep, 
                             "ID_DR", "ID_EP", "COD_DR", 
-                            self.ver_ep, self.eliminar_ep)
+                            self.ver_ep, self.eliminar_ep_y_actualizar)
         # Almaceno la vitrina generada
         try: # Pruebo si se generó una vitrina
             self.vitrina_2 = self.vitrina
         except AttributeError:
-            pass # En caso no se haya generado, no almaceno nada
+            self.vitrina_1 = None  # En caso no se haya generado, no almaceno nada
         else:
             # Almaceno si se generó
             self.vitrina_2 = self.vitrina
@@ -457,26 +496,18 @@ class Doc_recibidos_vista(funcionalidades_ospa):
                 self.ver_dr(cod_usuario_dr) 
     
     #----------------------------------------------------------------------
-    def actualizar_vitrinas(self):
+    def actualizar_vitrinas_dr(self):
         # 0. Elimino el último frame
         self.frame_vitrina_2.eliminar_cuadro()
-        try:
-            self.vitrina_2.eliminar_vitrina()
-        except AttributeError:
-            pass
-        else: 
-            self.vitrina_2.eliminar_vitrina()
-
+        if self.vitrina_2 != None:
+            self.vitrina_2.eliminar_posible_vitrina()
 
         # I. Situo las ventanas actualizadas
         # I.1 Ventana de documentos emitidos
-        self.frame_vitrina_1.eliminar_cuadro()
-        try:  
-            self.vitrina_1.eliminar_vitrina()
-        except AttributeError:
-            pass
-        else:
-            self.vitrina_1.eliminar_vitrina()
+        self.frame_vitrina_1.eliminar_cuadro() 
+        if self.vitrina_1 != None:
+            self.vitrina_1.eliminar_posible_vitrina()
+
         self.generar_vitrina(self.nuevo, 
                              self.frame_vitrina_1,
                              '(+) Agregar', self.busqueda_de,
@@ -484,12 +515,12 @@ class Doc_recibidos_vista(funcionalidades_ospa):
                              self.cod_usuario_dr, self.tabla_de_dr_cod, 
                              self.tabla_de_de, self.tabla_relacion_dr_de, 
                              "ID_DR", "ID_DE", "COD_DR", 
-                             self.ver_de, self.eliminar_de)
+                             self.ver_de, self.eliminar_de_y_actualizar)
         # Almaceno la vitrina generada
         try: # Pruebo si se generó una vitrina
             self.vitrina_1 = self.vitrina
         except AttributeError:
-            pass # En caso no se haya generado, no almaceno nada
+            self.vitrina_1 = None # En caso no se haya generado, no almaceno nada
         else:
             # Almaceno si se generó
             self.vitrina_1 = self.vitrina
@@ -503,75 +534,42 @@ class Doc_recibidos_vista(funcionalidades_ospa):
                              self.cod_usuario_dr, self.tabla_de_dr_cod, 
                              self.tabla_de_ep, self.tabla_relacion_dr_ep, 
                              "ID_DR", "ID_EP", "COD_DR", 
-                             self.ver_ep, self.eliminar_ep)
+                             self.ver_ep, self.eliminar_ep_y_actualizar)
         # Almaceno la vitrina generada
         try: # Pruebo si se generó una vitrina
             self.vitrina_2 = self.vitrina
         except AttributeError:
-            pass # En caso no se haya generado, no almaceno nada
+            self.vitrina_1 = None  # En caso no se haya generado, no almaceno nada
         else:
             # Almaceno si se generó
             self.vitrina_2 = self.vitrina
     
     #----------------------------------------------------------------------
-    def eliminar_de(self, id_usuario_de):
+    def eliminar_de_y_actualizar(self, id_objeto):
         """"""
-        # Obtengo los ID del usuario
-        codigo_de = id_usuario_de
-        codigo_dr = self.cod_usuario_dr
-        # Filtro las tablas para obtener el ID interno
-        tabla_codigo_dr_filtrada = self.tabla_de_dr_cod[self.tabla_de_dr_cod['COD_DR']==codigo_dr]
-        id_interno_dr = tabla_codigo_dr_filtrada.iloc[0,0]
-        tabla_codigo_de_filtrada = tabla_de_de_cod[tabla_de_de_cod['COD_DE']==codigo_de]
-        id_interno_de = tabla_codigo_de_filtrada.iloc[0,0]
-        # Definición de ID de relación
-        id_relacion_doc = id_interno_dr + "/" + id_interno_de
-        # Se cambia dato en tabla de relación
-        base_relacion_docs.cambiar_un_dato_de_una_fila(id_relacion_doc, 4,'ELIMINADO')
+        # Se elimina el DE
+        self.eliminar_objeto(self.cod_usuario_dr, "COD_DR", id_objeto, "COD_DE",
+                            self.tabla_de_dr_cod, tabla_de_de_cod, 
+                            base_relacion_docs, base_relacion_docs_hist)
+        
         # Se actualiza tabla de relaciones
         self.tabla_relacion_dr_de = base_relacion_docs.generar_dataframe()
-
         # Se actualiza la vista de vitrinas
-        self.actualizar_vitrinas()
+        self.actualizar_vitrinas_dr()
 
-        # Actualización de historial
-        datos_modificados = base_relacion_docs.listar_datos_de_fila(id_relacion_doc)
-        hora = str(dt.datetime.now())
-        datos_a_cargar_hist = datos_modificados + [hora]
-        base_relacion_d_hist.agregar_datos(datos_a_cargar_hist)
-        # Confirmación de eliminación de documento emitido
-        messagebox.showinfo("¡Documento emitido eliminado!", "El registro se ha desasociado correctamente")
-    
     #----------------------------------------------------------------------
-    def eliminar_ep(self, id_usuario_ep):
+    def eliminar_ep_y_actualizar(self, id_objeto):
         """"""
-        # Obtengo los ID del usuario
-        codigo_ep = id_usuario_ep
-        codigo_dr = self.cod_usuario_dr
-        # Filtro las tablas para obtener el ID interno
-        tabla_codigo_dr_filtrada = self.tabla_de_dr_cod[self.tabla_de_dr_cod['COD_DR']==codigo_dr]
-        id_interno_dr = tabla_codigo_dr_filtrada.iloc[0,0]
-        tabla_codigo_de_filtrada = tabla_de_ep_cod[tabla_de_ep_cod['COD_EP']==codigo_ep]
-        id_interno_ep = tabla_codigo_de_filtrada.iloc[0,0]
-        # Definición de ID de relación
-        id_relacion_doc = id_interno_dr + "/" + id_interno_ep
-        # Se cambia dato en tabla de relación
-        base_relacion_dr_ep.cambiar_un_dato_de_una_fila(id_relacion_doc, 4,'ELIMINADO')
+        # Se elimina el DE
+        self.eliminar_objeto(self.cod_usuario_dr, "COD_DR", id_objeto, "COD_EP",
+                            self.tabla_de_dr_cod, tabla_de_ep_cod, 
+                            base_relacion_dr_ep, base_relacion_dr_ep_hist)
+        
         # Se actualiza tabla de relaciones
         self.tabla_relacion_dr_ep = base_relacion_dr_ep.generar_dataframe()
-
         # Se actualiza la vista de vitrinas
-        self.actualizar_vitrinas()
+        self.actualizar_vitrinas_dr()
 
-        # Actualización de historial
-        datos_modificados = base_relacion_dr_ep.listar_datos_de_fila(id_relacion_doc)
-        hora = str(dt.datetime.now())
-        datos_a_cargar_hist = datos_modificados + [hora]
-        base_relacion_dr_ep_hist.agregar_datos(datos_a_cargar_hist)
-        # Confirmación de eliminación de documento emitido
-        messagebox.showinfo("¡Extremo de problema eliminado!", "El extremo se ha desasociado correctamente")
-    
-    
 
 class Doc_emitidos_vista(funcionalidades_ospa):
     """"""
@@ -579,7 +577,7 @@ class Doc_emitidos_vista(funcionalidades_ospa):
     def __init__(self, *args, nuevo=True, lista=None, id_objeto = None):
         """Constructor"""
 
-        Ventana.__init__(self, *args)
+        funcionalidades_ospa.__init__(self, *args)
 
         # 0. Almacenamos información heredada
         self.nuevo = nuevo
