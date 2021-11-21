@@ -57,7 +57,6 @@ class Ventana(Toplevel):
     #----------------------------------------------------------------------
     def destruir(self):
         """"""
-
         self.destroy()
         
 
@@ -67,15 +66,16 @@ class Cuadro(Frame):
     """"""
     
     #----------------------------------------------------------------------
-    def __init__(self, window, scrollable=FALSE):
+    def __init__(self, window, scrollable = False):
         """Constructor especial de la clase Cuadro.\n
         Permite generar objetos Frame con opción de agregar scrollbar. 
         Posee métodos que permiten incorporar otros wingets de Tkinter."""
 
         Frame.__init__(self)
         self.scrollable = scrollable
-        
-        if self.scrollable:
+        self.window = window
+
+        if self.scrollable == True:
             self.main_frame = Frame(window)
             self.main_frame.pack(side="top", fill="both", expand=True)
             self.scrollframe = ScrollFrame(self.main_frame, height=50, width=50)
@@ -908,12 +908,15 @@ class Cuadro(Frame):
     #----------------------------------------------------------------------
     def eliminar_cuadro(self):
         """"""
-
         if self.scrollable:
-            self.main_frame.destroy()
-        
+            self.main_frame.destroy() 
+            self.z = Frame(self.scrollframe.viewPort)
+            self.z.pack(side="top", fill="both", expand=True)  
         else:
             self.z.destroy()
+            self.z = Frame(self.window)
+            self.z.pack()
+
 
 # III. MenuSefa
 class MenuSefa():
@@ -922,7 +925,7 @@ class MenuSefa():
     def __init__(self, window):
         """Constructor"""
         
-        version = f'Usted está utilizando la versión 0.0 del aplicativo \n jojojo'
+        version = f'Usted está utilizando la versión 0.0 del aplicativo'
         
         menubar = Menu(window)
         window.config(menu=menubar)
@@ -942,10 +945,6 @@ class MenuSefa():
 
         menubar.add_cascade(label="Archivo", menu=filemenu)
         menubar.add_cascade(label="Ayuda", menu=helpmenu)
-    
-        
-
-
 
     #----------------------------------------------------------------------
     def lanzar_msj_manual(self):
@@ -1081,7 +1080,7 @@ class VerticalScrolledFrame:
 class Vitrina_vista(Frame):
     """"""
     #----------------------------------------------------------------------
-    def __init__(self, window, tabla, funcion1, funcion2, height=100, width=1600):
+    def __init__(self, window, tabla, funcion1, funcion2, height = 100, width = 1600):
         """Constructor"""
 
         self.window = window
@@ -1266,6 +1265,7 @@ class Vitrina_vista(Frame):
     def eliminar_vitrina(self):
         """"""
         self.main_frame.destroy()
+        self.main_frame = Frame(self.window)
 
 # VII. Vitrina Búsqueda
 class Vitrina_busqueda(Frame):
