@@ -474,6 +474,19 @@ class Doc_emitidos_busqueda(Ventana):
             self.frame_vitrina_1.agregar_label(1, 2, '                  0 documentos encontrados')
 
     #----------------------------------------------------------------------
+    def ver_de(self, id_usuario):
+        """"""
+        texto_documento = 'Documento emitido: ' + id_usuario
+
+        lb1 = b_de.listar_datos_de_fila(id_usuario)
+        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], lb1[9]]
+                                # lb1[10], lb1[11], lb1[12]]
+        self.desaparecer()
+        subframe = vista_dr.Doc_emitidos_vista(self, 650, 1150, texto_documento, nuevo=False, 
+                                        lista=lista_para_insertar, id_objeto = id_usuario)
+    
+
+    #----------------------------------------------------------------------
 
     def limpiar_de(self):
 
@@ -489,7 +502,7 @@ class Doc_emitidos_busqueda(Ventana):
         self.cde15.agregar_rejilla(self.rejilla_bde)
         self.frame_vitrina_1 = Cuadro(self)
         # Creando vitrina
-        self.vde1 = Vitrina_busqueda(self, self.tabla_drF, self.ver_de, self.asociar_de_dr, height=200, width=1080)
+        self.vde1 = Vitrina_busqueda(self, self.tabla_drF, self.asociar_de_dr, self.asociar_de_dr, height=200, width=1080)
 
     #----------------------------------------------------------------------
 
@@ -497,25 +510,20 @@ class Doc_emitidos_busqueda(Ventana):
         """"""
         codigodr = self.cod_doc_dr
 
-        lb1 = b_dr.listar_datos_de_fila(codigodr)
-        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], 
-                                lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14], lb1[15], lb1[16]]
-        self.desaparecer()
-        subframe = vista_dr.Doc_recibidos_vista(self, 650, 1150, 
-                                                nuevo=False, lista=lista_para_insertar, id_objeto =codigodr)
+        self.ver_dr(codigodr)
 
     #----------------------------------------------------------------------
-    def ver_de(self, x):
+    def ver_dr(self, id_usuario):
         """"""
-        self.x = x
-        texto_documento = 'Documento emitido: ' + x
+        texto_documento = 'Documento recibido: ' + id_usuario
 
-        lb1 = b_de.listar_datos_de_fila(self.x)
-        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], 
-                                lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], lb1[12]]
+        lb1 = b_dr.listar_datos_de_fila(id_usuario)
+        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], 
+                                lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14], lb1[15], lb1[16]]
+        
         self.desaparecer()
-        subframe = vista_dr.Doc_emitidos_vista(self, 650, 1150, texto_documento, 
-                                                nuevo=False, lista=lista_para_insertar, id_objeto = x)
+        subframe = vista_dr.Doc_recibidos_vista(self, 650, 1150, texto_documento, nuevo=False, 
+                                        lista=lista_para_insertar, id_objeto = id_usuario)
 
     #----------------------------------------------------------------------
     def asociar_de_dr(self, x):
@@ -593,7 +601,7 @@ class Doc_emitidos_busqueda(Ventana):
         else:
             messagebox.showinfo("¡Atención!", "El registro ha sido asociado con éxito")
         
-
+    #----------------------------------------------------------------------
     def comprobar_id(self, base_codigo, id_usuario):
         """"""
         # Comprobar coincidencias
