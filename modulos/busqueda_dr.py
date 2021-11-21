@@ -228,9 +228,10 @@ class Doc_recibidos_busqueda(Ventana):
         """"""
         self.x = x
         texto_documento = 'Documento recibido: ' + x
-        #print(x)
+
         lb1 = b_dr.listar_datos_de_fila(self.x)
-        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], lb1[11], lb1[12], lb1[13]]
+        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], 
+                                lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14], lb1[15], lb1[16]]
         
         self.desaparecer()
         subframe = vista_dr.Doc_recibidos_vista(self, 650, 1150, texto_documento, nuevo=False, 
@@ -694,7 +695,8 @@ class Extremos(Ventana):
         self.frame_vitrina_ep = Cuadro(self)
 
         # Creando vitrina
-        self.vep = Vitrina_busquedaep(self, self.tabla_deF, self.ver_ep, self.asociar_dr_de_ep, height=200, width=1230)
+        self.vep = Vitrina_busquedaep(self, self.tabla_deF, self.ver_ep, 
+                                     self.asociar_dr_de_ep, height=200, width=1230)
 
 #----------------------------------------------------------------------
 
@@ -866,8 +868,8 @@ class Extremos(Ventana):
         self.x = x
 
         #OBTENER EL ID INTERNO DEL DOCUMENTO EMITIDO
-        self.IDDE = b_de.listar_datos_de_fila(self.x)
-        self.IDDE_FINAL = self.IDDE[0]
+        self.IDEP = b_ep.listar_datos_de_fila(self.x)
+        self.IDEP_FINAL = self.IDEP[0]
 
         #OBTENER EL ID USUARIO DEL DOCUMENTO RECIBIDO
         codigodr = self.cod_doc_dr
@@ -877,14 +879,14 @@ class Extremos(Ventana):
         id_interno_dr = tabla_codigo_de_filtrada.iloc[0,0]
 
         # Definición de ID de relación
-        id_relacion_doc = id_interno_dr + "/" +  self.IDDE_FINAL
+        id_relacion_doc = id_interno_dr + "/" +  self.IDEP
 
         # BUSCAR COINCIDENCIAS
-        valor_repetido = self.comprobar_id(base_relacion_docs, id_relacion_doc)
+        valor_repetido = self.comprobar_id(base_relacion_dr_ep, id_relacion_doc)
 
         # BUSCAR ESTADO DE ID RELACION SI EXISTE
         if valor_repetido != False:  # si hay coincidencias de ese id_relacion_doc
-            tabla_de_relaciones = base_relacion_docs.generar_dataframe()
+            tabla_de_relaciones = base_relacion_dr_ep.generar_dataframe()
             tabla_relaciones_filtrada = tabla_de_relaciones[tabla_de_relaciones['ID_DOCS_R'] == id_relacion_doc]
             estado_rela = tabla_relaciones_filtrada.iloc[0,3]
 
@@ -892,20 +894,17 @@ class Extremos(Ventana):
 
         if valor_repetido != True:
             
-            # GUARDAR RELACION
-            b0 = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'RELACION_DOCS')
-
             # Pestaña 1: Código Único
-            datos_insertar = [id_relacion_doc,id_interno_dr, self.IDDE_FINAL,'ACTIVO',hora_de_modificacion]
-            b0.agregar_datos(datos_insertar)
-            datos_a_cargar_hist = [id_relacion_doc, id_interno_dr, self.IDDE_FINAL,'ACTIVO',hora_de_modificacion,hora_de_modificacion]
+            datos_insertar = [id_relacion_doc, id_interno_dr, self.IDEP_FINAL,'ACTIVO',hora_de_modificacion]
+            base_relacion_dr_ep.agregar_datos(datos_insertar)
+            datos_a_cargar_hist = [id_relacion_doc, id_interno_dr, self.IDEP_FINAL,'ACTIVO',hora_de_modificacion,hora_de_modificacion]
             base_relacion_d_hist.agregar_datos(datos_a_cargar_hist)
             messagebox.showinfo("¡Excelente!", "El registro ha sido asociado con éxito")
         else:
             if estado_rela == 'ACTIVO':
                 messagebox.showinfo("Error", "Ya se encuentra asociado")
             else:
-                datos_iniciales = base_relacion_docs.listar_datos_de_fila(id_relacion_doc)
+                datos_iniciales = base_relacion_dr_ep.listar_datos_de_fila(id_relacion_doc)
                 hora = str(dt.datetime.now())
                 datos_a_cargar_hist = datos_iniciales + [hora]
                 estado_a_sobreescribir = 'ACTIVO'
@@ -915,26 +914,6 @@ class Extremos(Ventana):
                 base_relacion_d_hist.agregar_datos(datos_a_cargar_hist)
                 base_relacion_d_hist.cambiar_un_dato_de_una_fila(id_relacion_doc, 4, estado_a_sobreescribir)
                 messagebox.showinfo("¡Excelente!", "El registro ha sido asociado con éxito")
-        
-        # Asociación de extremos de problema de DR con DE
-        # 1. Obtengo la tabla de relación entre DE y EP
-        tabla_de_ep_de = base_relacion_de_ep.generar_dataframe()
-        # 2. Filtro las relaciones que tiene el DE
-        # Filtro para obtener las relaciones activas
-        tabla_relacion_activos = tabla_de_ep_de[tabla_de_ep_de['ESTADO']=="ACTIVO"]
-        # Con ese ID, filtro la tabla de relacion
-        tabla_relacion_filtrada = tabla_relacion_activos[tabla_relacion_activos['ID_DE']==self.IDDE_FINAL]
-        # 3. Obtengo el ID de los EP que están relacionados al DE
-        # Me quedo con el vector a filtrar en forma de lista
-        lista_ep = list(tabla_relacion_filtrada['ID_EP'].unique())
-        # 4. Concateno los ID de los EP relacionados al DE con el ID del DR
-        if len(lista_ep) > 0:
-            for indice in range(len(lista_ep)):
-                cod_relacion = self.IDDE_FINAL + "/" + lista_ep[indice]
-                datos_insertar = [cod_relacion, self.IDDE_FINAL, lista_ep[indice], 'ACTIVO', hora_de_modificacion] 
-                base_relacion_de_ep.agregar_datos(datos_insertar)
-        else:
-            messagebox.showinfo("¡Atención!", "El registro ha sido asociado con éxito")
         
 
     def comprobar_id(self, base_codigo, id_usuario):
