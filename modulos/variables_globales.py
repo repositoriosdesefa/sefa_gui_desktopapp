@@ -101,7 +101,7 @@ tabla_de_dr_resumen = tabla_de_dr_completa.drop(['VIA_RECEPCION', 'HT_ENTRANTE',
 tabla_de_de_cod = b_de_cod.generar_dataframe()
 tabla_de_de_completa = b_de.generar_dataframe()
 tabla_de_de_resumen =  tabla_de_de_completa.drop(['HT_SALIDA', 'COD_PROBLEMA', 'FECHA_PROYECTO_FINAL',
-                                                    'FECHA_FIRMA', 'TIPO_DOC', 'SE_EMITIO',
+                                                    'FECHA_FIRMA', 'TIPO_DOC', 'CATEGORIA_DESTINATARIO',
                                                     'MARCO_PEDIDO', 'FECHA_ULTIMO_MOV', 'FECHA_ASIGNACION',
                                                     'DOCUMENTO_ELABORADO', 'DOCUMENTO_FIRMADO', 'DOCUMENTO_NOTIFICADO',
                                                     'PLAZO', 'ESTADO_DOCE', 'ESPECIALISTA'], axis=1)
