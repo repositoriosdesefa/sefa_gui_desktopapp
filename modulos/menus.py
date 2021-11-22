@@ -2,7 +2,7 @@ import datetime as dt
 
 from tkinter import messagebox
 
-from modulos import busqueda_dr, vista_dr
+from modulos import ventanas_busqueda, ventanas_vista
 from apoyo.elementos_de_GUI import Cuadro, Ventana, Hovertip_Sefa, Vitrina_vista 
 from apoyo.manejo_de_bases import Base_de_datos
 import apoyo.datos_frecuentes as dfrec
@@ -18,14 +18,14 @@ class ventanas_ospa(Ventana):
         
         self.desaparecer()
         # LargoxAncho
-        SubFrame = vista_dr.Doc_recibidos_vista(self, 550, 1090, "Registro Documento Recibido")
+        SubFrame = ventanas_vista.Doc_recibidos_vista(self, 550, 1090, "Registro Documento Recibido")
 
     #----------------------------------------------------------------------
     def busqueda_dr(self):
 
         self.desaparecer()
         # LargoxAncho
-        SubFrame = busqueda_dr.Doc_recibidos_busqueda(self, 560, 1150,
+        SubFrame = ventanas_busqueda.Doc_recibidos_busqueda(self, 560, 1150,
                      "Búsqueda de documentos recibidos")
      
     #----------------------------------------------------------------------
@@ -33,14 +33,14 @@ class ventanas_ospa(Ventana):
         
         self.desaparecer()
         # LargoxAncho
-        SubFrame = vista_dr.Doc_emitidos_vista(self, 550, 1090, "Registro Documento Emitido")
+        SubFrame = ventanas_vista.Doc_emitidos_vista(self, 550, 1090, "Registro Documento Emitido")
     
     #----------------------------------------------------------------------
     def busqueda_de(self):
 
         self.desaparecer()
         # LargoxAncho
-        SubFrame = busqueda_dr.Doc_emitidos_busqueda(self, 500, 1200, 
+        SubFrame = ventanas_busqueda.Doc_emitidos_busqueda(self, 500, 1200, 
                     "Búsqueda de documentos emitidos")
     
     #----------------------------------------------------------------------
@@ -48,7 +48,7 @@ class ventanas_ospa(Ventana):
         
         self.desaparecer()
         # LargoxAncho
-        SubFrame = vista_dr.Extremo_problemas_vista(self, 550, 1090, "Registro Extremo de Problema")
+        SubFrame = ventanas_vista.Extremo_problemas_vista(self, 550, 1090, "Registro Extremo de Problema")
     
     
     #----------------------------------------------------------------------
@@ -56,7 +56,7 @@ class ventanas_ospa(Ventana):
         
         self.desaparecer()
         # LargoxAncho
-        SubFrame = busqueda_dr.Extremos(self, 600, 1400, 
+        SubFrame = ventanas_busqueda.Extremos(self, 600, 1400, 
                     "Búsqueda de extremos de problemas")
     
     #----------------------------------------------------------------------
@@ -64,14 +64,14 @@ class ventanas_ospa(Ventana):
         
         self.desaparecer()
         # LargoxAncho
-        SubFrame = vista_dr.Macroproblemas_vista(self, 550, 1090, "Creación de macroproblemas")
+        SubFrame = ventanas_vista.Macroproblemas_vista(self, 550, 1090, "Creación de macroproblemas")
     
     #----------------------------------------------------------------------
     def busqueda_mp(self):
         
         self.desaparecer()
         # LargoxAncho
-        SubFrame = busqueda_dr.Macroproblemas(self, 500, 1200, 
+        SubFrame = ventanas_busqueda.Macroproblemas(self, 500, 1200, 
                     "Búsqueda de macroproblemas")
 
 
@@ -160,14 +160,14 @@ class Menu_jefe(inicio_app_OSPA):
         
         self.desaparecer()
         # LargoxAncho
-        SubFrame = busqueda_dr.Pendientes_jefe_asignar(self, 500, 1000, "Documentos pendientes de asignar")
+        SubFrame = ventanas_busqueda.Pendientes_jefe_asignar(self, 500, 1000, "Documentos pendientes de asignar")
     
     #----------------------------------------------------------------------
     def jefe_firma(self):
         
         self.desaparecer()
         # LargoxAncho
-        SubFrame = busqueda_dr.Pendientes_jefe_firma(self, 550, 1090, "Documentos pendientes de firma")
+        SubFrame = ventanas_busqueda.Pendientes_jefe_firma(self, 550, 1090, "Documentos pendientes de firma")
     
     #----------------------------------------------------------------------
     def ver_menu_busquedas(self):
@@ -224,7 +224,7 @@ class Menu_admin(inicio_app_OSPA):
 
         self.desaparecer()
         # LargoxAncho
-        SubFrame = vista_dr.Doc_recibidos_vista(self, 650, 1150, 
+        SubFrame = ventanas_vista.Doc_recibidos_vista(self, 650, 1150, 
                     "Registra de un nuevo documento recibido")
 
     #----------------------------------------------------------------------
@@ -232,7 +232,7 @@ class Menu_admin(inicio_app_OSPA):
 
         self.desaparecer()
         # LargoxAncho
-        SubFrame = busqueda_dr.Pendientes_por_reiterar(self, 560, 1090, "Documentos pendientes de reiterar/comunicar al OCI")
+        SubFrame = ventanas_busqueda.Pendientes_por_reiterar(self, 560, 1090, "Documentos pendientes de reiterar/comunicar al OCI")
 
 
 class Inicio_eq1(inicio_app_OSPA):
@@ -258,7 +258,7 @@ class Inicio_eq1(inicio_app_OSPA):
 
         self.desaparecer()
         # LargoxAncho
-        SubFrame = busqueda_dr.Doc_recibidos_busqueda(self, 500, 1000, "Documentos pendientes de trabajar - Equipo 1")
+        SubFrame = ventanas_busqueda.Doc_recibidos_busqueda(self, 500, 1000, "Documentos pendientes de trabajar - Equipo 1")
 
 
 class Inicio_eq2(inicio_app_OSPA):
@@ -289,7 +289,7 @@ class Inicio_eq2(inicio_app_OSPA):
 
         self.desaparecer()
         # LargoxAncho
-        SubFrame = busqueda_dr.Pendientes_eq2_calificarrpta(self, 580, 1300, 
+        SubFrame = ventanas_busqueda.Pendientes_eq2_calificarrpta(self, 580, 1300, 
                     "Documentos pendientes de calificar respuesta - Equipo 2")
 
     #----------------------------------------------------------------------
@@ -297,5 +297,5 @@ class Inicio_eq2(inicio_app_OSPA):
 
         self.desaparecer()
         # LargoxAncho
-        # SubFrame = vista_dr.Doc_recibidos_vista(self, 650, 1150, 
+        # SubFrame = ventanas_vista.Doc_recibidos_vista(self, 650, 1150, 
         #            "Registra de un nuevo documento recibido")
