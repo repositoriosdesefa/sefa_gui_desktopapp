@@ -247,6 +247,15 @@ class Cuadro(Frame):
         self.imagen_label = Label(self.z, image=self.imagen)
         self.imagen_label.grid(row = self.y, column = self.x)
         self.lista_de_objetos.append((self.imagen_label))
+    
+    #----------------------------------------------------------------------
+    def agregar_encabezado(self, titulo):
+        """"""
+        self.agregar_imagen(0,0,'Logo_OSPA.png',202,49)
+        self.agregar_titulo(0,1,'                             ')
+        self.agregar_titulo(0,2,titulo)
+        self.agregar_titulo(0,3,'                             ')
+        self.agregar_titulo(0,4,'                             ')
 
     #----------------------------------------------------------------------
     def agregar_entry(self, y, x):
@@ -452,7 +461,9 @@ class Cuadro(Frame):
         decisor.set('')
         decisor["values"] = self.listadesplegable
 
-        decisor.grid(row = self.y, column = self.x, pady=4, padx=8)        
+        decisor.grid(row = self.y, column = self.x, pady=4, padx=8)  
+
+        # Sitúo el combobox decisor      
         self.lista_de_objetos.append((decisor))
         self.lista_de_datos.append((decisor))
 
@@ -472,18 +483,23 @@ class Cuadro(Frame):
         posicion_valor = int(posicion_ordinal_dato)
 
         if self.rejilla_actualizada == True:
-            valor_anterior = self.informacion_a_introducir[posicion_ordinal_dato]
-            self.lista_de_objetos[posicion_widget] = self.combo
-            self.lista_de_datos[posicion_valor] = self.combo
+            # Pruebo en caso ya haya información introducida
+            try:
+                valor_anterior = self.informacion_a_introducir[posicion_ordinal_dato]
+            except AttributeError:
+                valor_anterior = ''
+            else:
+                valor_anterior = self.informacion_a_introducir[posicion_ordinal_dato]
+            # Caso especial al cambiar el valor
             if self.valor_cambiado == True:
                 self.combo.set('')
             else:
                 self.combo.set(valor_anterior)
-            self.rejilla_actualizada = False
         else:
             self.combo.set('')
-            self.lista_de_objetos.append((self.combo))
-            self.lista_de_datos.append((self.combo))
+        
+        self.lista_de_objetos[posicion_widget] = self.combo
+        self.lista_de_datos[posicion_valor] = self.combo
 
     #----------------------------------------------------------------------
     def agregar_spinbox(self, y, x, inicio, fin, incremento, defecto):
@@ -547,7 +563,7 @@ class Cuadro(Frame):
         columna_filtrada_nombre = nombre_col_filtrada
 
         # Generación de lista validada
-        if self.valor_cambiado == True and valor_ingresado != '':
+        if self.valor_cambiado == True or valor_ingresado != '':
             # Almaceno la rejilla actual
             tupla_interna = self.rejilla[posicion_ordinal]            
             # Obtengo la lista para modificar
@@ -858,6 +874,8 @@ class Cuadro(Frame):
                 self.lista_output.append(str(fecha.strftime("%d/%m/%Y")))
             elif type(i).__name__ == 'ScrolledText':
                 self.lista_output.append(i.get("1.0", "end-1c"))
+            elif type(i).__name__ == 'str': # Caso especial de combo resultado
+                self.lista_output.append(i)
             else:
                 self.lista_output.append(i.get())
         return self.lista_output
@@ -1248,7 +1266,7 @@ class Vitrina_vista(Frame):
         """"""
         self.main_frame.destroy()
         self.main_frame = Frame(self.window)
-    
+
     #----------------------------------------------------------------------
     def eliminar_posible_vitrina(self):
         """"""
@@ -1258,6 +1276,7 @@ class Vitrina_vista(Frame):
             pass
         else: 
             self.eliminar_vitrina() 
+    
 
 # VII. Vitrina Búsqueda
 class Vitrina_busqueda(Frame):
