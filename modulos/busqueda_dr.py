@@ -45,7 +45,7 @@ b_efa = Base_de_datos(id_b_efa, 'Directorio')
 class Doc_recibidos_busqueda(Ventana):
     """"""
     #----------------------------------------------------------------------
-    def __init__(self, *args, nuevo=True, lista=None, id_doc = None):
+    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None):
         """Constructor"""
 
         Ventana.__init__(self, *args)
