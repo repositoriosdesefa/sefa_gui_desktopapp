@@ -62,7 +62,13 @@
 - [x] Necesario: Crear método para la creación de ID extremos
 - [x] Necesario: Pantalla de vista de macroproblemas
 - [x] Programar: Crear método para la asociación de más de 2 relaciones (transitividad)
+- [x] Programar: Simplificación y abstracción de método de generar vitrina
+- [x] Programar: Simplificación de método de actualización de vitrinas en vista
+- [x] Programar: Simplificación y abstracción de método de eliminar objeto
+- [ ] Programar: Simplificación y abstracción de títulos y botones principales en Frame
+- [ ] Programar: Simplificación y abstracción de método de agregar objeto
 - [ ] Programar: Validación de fecha de notificación y fecha de firma (Con botón). [Campo libre]
+
 
 ## Retos
 - [ ] Investigar: Lista desplegable condicionada de tres niveles
