@@ -21,6 +21,7 @@ class Ventana(Toplevel):
         """Constructor especial de la clase Ventana.\n
         Sirve para generar nuevas ventanas en una desktop app"""
 
+        self.scrollable = True
         self.ventana_anterior = ventana_anterior
         Toplevel.__init__(self)
         self.alto = alto
@@ -35,6 +36,15 @@ class Ventana(Toplevel):
         self.iconbitmap('images/S_de_Sefa.ico')
         self.title(self.titulo)
         self.config(background= formato.fondo)
+
+        #if self.scrollable == True:
+        #    self.main_frame = Frame(ventana_anterior)
+        #    self.main_frame.pack(side="top", fill="both", expand=True)
+        #    self.scrollframe = ScrollFrame(self.main_frame, height=50, width=50)
+        #    self.scrollframe.pack(side="top", fill=None, expand=False)
+            # Frame que contiene objetos:
+        #    self.z = Frame(self.scrollframe.viewPort)
+        #    self.z.pack(side="top", fill="both", expand=True)
 
     #----------------------------------------------------------------------
     def desaparecer(self):
@@ -59,7 +69,118 @@ class Ventana(Toplevel):
         """"""
         self.destroy()
         
+# IV. ScrollFrame
 
+class ScrollFrame(Frame):
+
+    #----------------------------------------------------------------------
+    def __init__(self, parent, **kwargs):
+        """Constructor"""
+
+        super().__init__(parent, **kwargs)
+        
+        self.canvas = Canvas(self, borderwidth=1, background=formato.fondo)
+        self.viewPort = Frame(self.canvas, background=formato.fondo)
+
+        self.vsb = Scrollbar(self, orient="vertical", command=self.canvas.yview)
+        self.hsb = Scrollbar(self, orient="horizontal", command=self.canvas.xview)
+        self.canvas.configure(yscrollcommand=self.vsb.set, xscrollcommand=self.hsb.set)
+
+        self.hsb.pack(side="bottom", fill="x")
+        self.vsb.pack(side="right", fill="y")
+        self.canvas.pack(side="left", fill="both", expand=True)
+
+        self.canvas_window = self.canvas.create_window((0,0), window=self.viewPort, anchor="nw", tags="self.viewPort")
+
+        self.viewPort.bind("<Configure>", self.onFrameConfigure)
+        self.canvas.bind("<Configure>", self.onCanvasConfigure)
+
+        self.onFrameConfigure(None)
+
+    #----------------------------------------------------------------------
+    def onFrameConfigure(self, event):                                              
+        '''Reset the scroll region to encompass the inner frame'''
+        
+        self.canvas.configure(scrollregion=self.canvas.bbox("all"))
+
+    #----------------------------------------------------------------------
+    def onCanvasConfigure(self, event):
+        '''Reset the canvas window to encompass inner frame when required'''
+        
+        if (event.widget.winfo_width() != event.width) and (event.widget.winfo_height()  != event.height):
+            canvas_width, canvas_height = event.width, event.height
+            self.canvas.itemconfig(self.canvas_window, width = canvas_width, height = canvas_height)
+
+# V. Vertical Scrolled Frame
+class VerticalScrolledFrame:
+    """
+    From: https://gist.github.com/novel-yet-trivial/3eddfce704db3082e38c84664fc1fdf8
+    A vertically scrolled Frame that can be treated like any other Frame
+    ie it needs a master and layout and it can be a master.
+    :width:, :height:, :bg: are passed to the underlying Canvas
+    :bg: and all other keyword arguments are passed to the inner Frame
+    note that a widget layed out in this frame will have a self.master 3 layers deep,
+    (outer Frame, Canvas, inner Frame) so 
+    if you subclass this there is no built in way for the children to access it.
+    You need to provide the controller separately.
+    """
+    def __init__(self, master, **kwargs):
+        width = kwargs.pop('width', None)
+        height = kwargs.pop('height', None)
+        bg = kwargs.pop('bg', kwargs.pop('background', None))
+        self.outer = Frame(master, **kwargs)
+
+        self.vsb = tk.Scrollbar(self.outer, orient=tk.VERTICAL)
+        self.vsb.pack(fill=tk.Y, side=tk.RIGHT)
+        self.canvas = tk.Canvas(self.outer, highlightthickness=0, width=width, height=height, bg=bg)
+        self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        self.canvas['yscrollcommand'] = self.vsb.set
+        # mouse scroll does not seem to work with just "bind"; You have
+        # to use "bind_all". Therefore to use multiple windows you have
+        # to bind_all in the current widget
+        self.canvas.bind("<Enter>", self._bind_mouse)
+        self.canvas.bind("<Leave>", self._unbind_mouse)
+        self.vsb['command'] = self.canvas.yview
+
+        self.inner = tk.Frame(self.canvas, bg=bg)
+        # pack the inner Frame into the Canvas with the topleft corner 4 pixels offset
+        self.canvas.create_window(4, 4, window=self.inner, anchor='nw')
+        self.inner.bind("<Configure>", self._on_frame_configure)
+
+        self.outer_attr = set(dir(tk.Widget))
+
+    def __getattr__(self, item):
+        if item in self.outer_attr:
+            # geometry attributes etc (eg pack, destroy, tkraise) are passed on to self.outer
+            return getattr(self.outer, item)
+        else:
+            # all other attributes (_w, children, etc) are passed to self.inner
+            return getattr(self.inner, item)
+
+    def _on_frame_configure(self, event=None):
+        x1, y1, x2, y2 = self.canvas.bbox("all")
+        height = self.canvas.winfo_height()
+        self.canvas.config(scrollregion = (0,0, x2, max(y2, height)))
+
+    def _bind_mouse(self, event=None):
+        self.canvas.bind_all("<4>", self._on_mousewheel)
+        self.canvas.bind_all("<5>", self._on_mousewheel)
+        self.canvas.bind_all("<MouseWheel>", self._on_mousewheel)
+
+    def _unbind_mouse(self, event=None):
+        self.canvas.unbind_all("<4>")
+        self.canvas.unbind_all("<5>")
+        self.canvas.unbind_all("<MouseWheel>")
+
+    def _on_mousewheel(self, event):
+        """Linux uses event.num; Windows / Mac uses event.delta"""
+        if event.num == 4 or event.delta > 0:
+            self.canvas.yview_scroll(-1, "units" )
+        elif event.num == 5 or event.delta < 0:
+            self.canvas.yview_scroll(1, "units" )
+
+    def __str__(self):
+        return str(self.outer)
 # II. Clase Cuadro
 
 class Cuadro(Frame):
@@ -962,119 +1083,6 @@ class MenuSefa():
         info_completa = info1 + espacio + info2
         messagebox.showinfo('Información sobre este aplicativo', info_completa)
 
-
-# IV. ScrollFrame
-
-class ScrollFrame(Frame):
-
-    #----------------------------------------------------------------------
-    def __init__(self, parent, **kwargs):
-        """Constructor"""
-
-        super().__init__(parent, **kwargs)
-        
-        self.canvas = Canvas(self, borderwidth=1, background=formato.fondo)
-        self.viewPort = Frame(self.canvas, background=formato.fondo)
-
-        self.vsb = Scrollbar(self, orient="vertical", command=self.canvas.yview)
-        self.hsb = Scrollbar(self, orient="horizontal", command=self.canvas.xview)
-        self.canvas.configure(yscrollcommand=self.vsb.set, xscrollcommand=self.hsb.set)
-
-        self.hsb.pack(side="bottom", fill="x")
-        self.vsb.pack(side="right", fill="y")
-        self.canvas.pack(side="left", fill="both", expand=True)
-
-        self.canvas_window = self.canvas.create_window((0,0), window=self.viewPort, anchor="nw", tags="self.viewPort")
-
-        self.viewPort.bind("<Configure>", self.onFrameConfigure)
-        self.canvas.bind("<Configure>", self.onCanvasConfigure)
-
-        self.onFrameConfigure(None)
-
-    #----------------------------------------------------------------------
-    def onFrameConfigure(self, event):                                              
-        '''Reset the scroll region to encompass the inner frame'''
-        
-        self.canvas.configure(scrollregion=self.canvas.bbox("all"))
-
-    #----------------------------------------------------------------------
-    def onCanvasConfigure(self, event):
-        '''Reset the canvas window to encompass inner frame when required'''
-        
-        if (event.widget.winfo_width() != event.width) and (event.widget.winfo_height()  != event.height):
-            canvas_width, canvas_height = event.width, event.height
-            self.canvas.itemconfig(self.canvas_window, width = canvas_width, height = canvas_height)
-
-# V. Vertical Scrolled Frame
-class VerticalScrolledFrame:
-    """
-    From: https://gist.github.com/novel-yet-trivial/3eddfce704db3082e38c84664fc1fdf8
-    A vertically scrolled Frame that can be treated like any other Frame
-    ie it needs a master and layout and it can be a master.
-    :width:, :height:, :bg: are passed to the underlying Canvas
-    :bg: and all other keyword arguments are passed to the inner Frame
-    note that a widget layed out in this frame will have a self.master 3 layers deep,
-    (outer Frame, Canvas, inner Frame) so 
-    if you subclass this there is no built in way for the children to access it.
-    You need to provide the controller separately.
-    """
-    def __init__(self, master, **kwargs):
-        width = kwargs.pop('width', None)
-        height = kwargs.pop('height', None)
-        bg = kwargs.pop('bg', kwargs.pop('background', None))
-        self.outer = Frame(master, **kwargs)
-
-        self.vsb = tk.Scrollbar(self.outer, orient=tk.VERTICAL)
-        self.vsb.pack(fill=tk.Y, side=tk.RIGHT)
-        self.canvas = tk.Canvas(self.outer, highlightthickness=0, width=width, height=height, bg=bg)
-        self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        self.canvas['yscrollcommand'] = self.vsb.set
-        # mouse scroll does not seem to work with just "bind"; You have
-        # to use "bind_all". Therefore to use multiple windows you have
-        # to bind_all in the current widget
-        self.canvas.bind("<Enter>", self._bind_mouse)
-        self.canvas.bind("<Leave>", self._unbind_mouse)
-        self.vsb['command'] = self.canvas.yview
-
-        self.inner = tk.Frame(self.canvas, bg=bg)
-        # pack the inner Frame into the Canvas with the topleft corner 4 pixels offset
-        self.canvas.create_window(4, 4, window=self.inner, anchor='nw')
-        self.inner.bind("<Configure>", self._on_frame_configure)
-
-        self.outer_attr = set(dir(tk.Widget))
-
-    def __getattr__(self, item):
-        if item in self.outer_attr:
-            # geometry attributes etc (eg pack, destroy, tkraise) are passed on to self.outer
-            return getattr(self.outer, item)
-        else:
-            # all other attributes (_w, children, etc) are passed to self.inner
-            return getattr(self.inner, item)
-
-    def _on_frame_configure(self, event=None):
-        x1, y1, x2, y2 = self.canvas.bbox("all")
-        height = self.canvas.winfo_height()
-        self.canvas.config(scrollregion = (0,0, x2, max(y2, height)))
-
-    def _bind_mouse(self, event=None):
-        self.canvas.bind_all("<4>", self._on_mousewheel)
-        self.canvas.bind_all("<5>", self._on_mousewheel)
-        self.canvas.bind_all("<MouseWheel>", self._on_mousewheel)
-
-    def _unbind_mouse(self, event=None):
-        self.canvas.unbind_all("<4>")
-        self.canvas.unbind_all("<5>")
-        self.canvas.unbind_all("<MouseWheel>")
-
-    def _on_mousewheel(self, event):
-        """Linux uses event.num; Windows / Mac uses event.delta"""
-        if event.num == 4 or event.delta > 0:
-            self.canvas.yview_scroll(-1, "units" )
-        elif event.num == 5 or event.delta < 0:
-            self.canvas.yview_scroll(1, "units" )
-
-    def __str__(self):
-        return str(self.outer)
 
 # VI. Vitrina Vista
 class Vitrina_vista(Frame):

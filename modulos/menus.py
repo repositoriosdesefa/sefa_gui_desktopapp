@@ -85,7 +85,7 @@ class inicio_app_OSPA(ventanas_ospa):
         
         Ventana.__init__(self, *args)
 
-        c1 = Cuadro(self)
+        c1 = Cuadro(self, scrollable=True)
         c1.agregar_label(0, 1, ' ')
         c1.agregar_imagen(1, 1,'Logo_OSPA.png',202,49)
         c1.agregar_label(2, 1,'Jefe')
