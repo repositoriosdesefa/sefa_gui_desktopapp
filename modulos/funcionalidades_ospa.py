@@ -15,7 +15,8 @@ b_de_hist = variables_globales.b_de_hist
 b_ep = variables_globales.b_ep
 b_ep_cod = variables_globales.b_ep_cod
 b_ep_hist = variables_globales.b_ep_hist
-
+# 2. Tablas
+tabla_parametros = variables_globales.tabla_parametros
 
 class funcionalidades_ospa(Ventana):
     #----------------------------------------------------------------------
@@ -41,37 +42,45 @@ class funcionalidades_ospa(Ventana):
                         funcion_ver):
         """"""
         
-        # Obtengo los datos ingresados
+         #----------------------------------------------------------------------
+    def guardar_objeto(self, rejilla_datos, 
+                        cod_objeto_clase, cod_entrada, tabla_objeto_clase,
+                        base_codigo_objeto, base_objeto_clase, base_objeto_clase_hist,
+                        funcion_ver):
+        """"""
+        
+        # 0. Obtengo los datos ingresados
+	    # 0.1 Datos de rejilla
         rejilla_frame = rejilla_datos
         datos_ingresados = rejilla_frame.obtener_lista_de_datos()
-            
-        # Objeto de Frame
+        # 0.2 Parámetros de objeto
         codigo_objeto = cod_objeto_clase
         cod_objeto = cod_entrada
         tabla_objeto = tabla_objeto_clase
         base_objeto = base_objeto_clase
         base_objeto_hist = base_objeto_clase_hist
         base_cod_objeto = base_codigo_objeto
-
-        # Genero la tablas de código de DE
         tabla_objeto_clase = base_objeto.generar_dataframe()
-        # Guardo el código de usuario que llega
+        ahora = str(dt.datetime.now())
+	
+	    # A. Existe un código en la rejilla
         if self.nuevo == False:
-            # En caso exista ID insertado en la rejilla
-            valor_de_comprobacion = self.comprobar_id(base_codigo_objeto, codigo_objeto)
-            if valor_de_comprobacion == True: # En caso se esté intentando ingresar un documento existente
-                # A partir del código comprobado
-                tabla_codigo_objeto_filtrada = tabla_objeto[tabla_objeto[cod_objeto]==codigo_objeto]
-                id_interno_objeto_clase = tabla_codigo_objeto_filtrada.iloc[0,0]
+            # Pestaña 1: Obtengo el ID interno a partir del código de usuario
+            tabla_codigo_objeto_filtrada = tabla_objeto[tabla_objeto[cod_objeto]==codigo_objeto]
+            id_interno_objeto_clase = tabla_codigo_objeto_filtrada.iloc[0,0]
+            # Obtengo los datos ingresados
+            lista_descargada_codigo = base_objeto.listar_datos_de_fila(id_interno_objeto_clase)
+            cod_objeto_clase = lista_descargada_codigo[3]
+            correlativo = lista_descargada_codigo[2]
 
-                # Pestaña 1: Código Único
-                # Obtengo los datos ingresados
-                lista_descargada_codigo = base_objeto.listar_datos_de_fila(id_interno_objeto_clase) # Se trae la info   
-                # Obtengo el ID interno
-                cod_objeto_clase = lista_descargada_codigo[3]
+            if cod_entrada == "COD_DR":
                 nuevo_cod_objeto_clase = datos_ingresados[0] + " " + datos_ingresados[1]
+            elif cod_entrada == "COD_DR":
+                nuevo_cod_objeto_clase = correlativo + "/" + cod_objeto_clase
+            else:
+                nuevo_cod_objeto_clase = datos_ingresados[0] 
                 # Actualizo las tablas en la web
-                hora_de_modificacion = str(dt.datetime.now())
+                hora_de_modificacion = ahora
                 # Se actualiza código interno
                 base_objeto.cambiar_un_dato_de_una_fila(cod_objeto_clase, 4, nuevo_cod_objeto_clase)
 
@@ -88,26 +97,48 @@ class funcionalidades_ospa(Ventana):
                 # Mensaje
                 messagebox.showinfo("¡Excelente!", "Se ha actualizado el registro")
                 funcion_ver(nuevo_cod_objeto_clase)
+
+	    # B. Es un código nuevo
         else:
-            # Timestamp
-            ahora = str(dt.datetime.now())
             # Caso especial para DR
             if cod_entrada =="COD_DR":
                 cod_objeto_ingresado = datos_ingresados[0] + " " + datos_ingresados[1]
             else:
                 cod_objeto_ingresado = datos_ingresados[0]
-            
+
             # Comprobación de que no se ingresa un código de usuario repetido
             valor_de_comprobacion = self.comprobar_id(base_codigo_objeto, cod_objeto_ingresado) # Comprobar si el id de usuario ya existe
+
             if valor_de_comprobacion == True: # Verifico que lo ingresado no exista
                 messagebox.showerror("Error", "Este documento ya existe")
+
             else:
                 # Pestaña 1: Código Único
                 # Creo el código único
-                if cod_entrada =="COD_DR":
+                if cod_entrada == "COD_DR":
+                    base_cod_objeto.agregar_codigo(cod_objeto_ingresado, ahora)
+                elif cod_entrada == "COD_EP":
+                    departamento = datos_ingresados[6]
+                    print(departamento)
+	                # Obtención de sigla de departamento
+                    #tabla_siglas_filtrada = tabla_parametros[tabla_parametros['DEP_OSPA']==departamento]
+                    sigla_cod_interno = "CUS"
+                    #sigla_cod_interno = tabla_siglas_filtrada.iloc[0,['SIGLAS_DEPARTAMENTO']]
+		            # Obtención de número de extremo
+                    tabla_objeto_clase = base_cod_objeto.generar_dataframe()
+                    tabla_codigo_ep_filtrada = tabla_objeto_clase[tabla_objeto_clase['DEPARTAMENTO']==departamento]
+                    numero_problemas = len(tabla_codigo_ep_filtrada.index) + 1
+                    if numero_problemas < 10:
+                        numero_codigo = "-00" + str(numero_problemas)
+                    elif numero_problemas < 100:
+                        numero_codigo = "-0" + str(numero_problemas)
+                    else:
+        	            numero_codigo = "-" + str(numero_problemas)
+                    cod_objeto_ingresado = sigla_cod_interno + numero_codigo
                     base_cod_objeto.agregar_codigo(cod_objeto_ingresado, ahora)
                 else:
                     base_cod_objeto.agregar_nuevo_codigo(cod_objeto_ingresado, ahora)
+
                 # Descargo el código único
                 lista_descargada_codigo = base_cod_objeto.listar_datos_de_fila(ahora) # Se trae la info
         

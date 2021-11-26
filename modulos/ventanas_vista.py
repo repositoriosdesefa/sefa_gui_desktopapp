@@ -651,7 +651,7 @@ class Extremo_problemas_vista(funcionalidades_ospa):
         
         # Agregamos el objeto
         self.guardar_objeto(self.frame_rejilla,
-                            self.cod_usuario_ep, "COD_EP", self.tabla_de_ep_cod, 
+                            self.cod_usuario_ep, "COD_EP", self.tabla_de_ep_cod,
                             b_ep_cod, b_ep, b_ep_hist, self.ver_ep)
         # Actualización de tabla de código y visualización
         self.tabla_de_ep_cod = b_ep_cod.generar_dataframe()
