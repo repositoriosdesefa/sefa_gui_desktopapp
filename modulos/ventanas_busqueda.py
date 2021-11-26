@@ -607,16 +607,9 @@ class Doc_emitidos_busqueda(Ventana):
 
             # BUSCAR COINCIDENCIAS
             valor_repetido = self.comprobar_id(base_relacion_docs, id_relacion_doc)
+            hora_de_modificacion = str(dt.datetime.now())
 
-            # BUSCAR ESTADO DE ID RELACION SI EXISTE
-            if valor_repetido != False:  # si hay coincidencias de ese id_relacion_doc
-                tabla_de_relaciones = base_relacion_docs.generar_dataframe()
-                tabla_relaciones_filtrada = tabla_de_relaciones[tabla_de_relaciones['ID_DOCS_R'] == id_relacion_doc]
-                estado_rela = tabla_relaciones_filtrada.iloc[0,3]
-
-                hora_de_modificacion = str(dt.datetime.now())
-
-            if valor_repetido != True:
+            if valor_repetido == False:
             
                 # GUARDAR RELACION
                 b0 = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'RELACION_DOCS')
@@ -629,6 +622,11 @@ class Doc_emitidos_busqueda(Ventana):
                 messagebox.showinfo("¡Excelente!", "El registro ha sido asociado con éxito")
                 
             else:
+                # BUSCAR ESTADO DE ID RELACION SI EXISTE
+                tabla_de_relaciones = base_relacion_docs.generar_dataframe()
+                tabla_relaciones_filtrada = tabla_de_relaciones[tabla_de_relaciones['ID_DOCS_R'] == id_relacion_doc]
+                estado_rela = tabla_relaciones_filtrada.iloc[0,3]
+                
                 if estado_rela == 'ACTIVO':
                     messagebox.showinfo("Error", "Ya se encuentra asociado")
                 else:
