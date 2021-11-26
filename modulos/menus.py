@@ -149,7 +149,7 @@ class Menu_jefe(inicio_app_OSPA):
         c1.agregar_label(4, 1,'Documentos por firmar')
         c1.agregar_button(5, 1, "Ir", self.jefe_firma)
         c1.agregar_label(6, 1,'Creación de extremo de problema')
-        c1.agregar_button(7, 1, "Ir", self.nuevo_mp)
+        c1.agregar_button(7, 1, "Ir", self.nuevo_ep)
         c1.agregar_label(8, 1,'Búsqueda')
         c1.agregar_button(9, 1, "Ir", self.ver_menu_busquedas)
         c1.agregar_label(10, 1,' ')
