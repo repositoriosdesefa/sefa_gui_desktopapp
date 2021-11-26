@@ -15,7 +15,8 @@ b_de_hist = variables_globales.b_de_hist
 b_ep = variables_globales.b_ep
 b_ep_cod = variables_globales.b_ep_cod
 b_ep_hist = variables_globales.b_ep_hist
-
+# 2. Tablas
+tabla_parametros = variables_globales.tabla_parametros
 
 class funcionalidades_ospa(Ventana):
     #----------------------------------------------------------------------
@@ -25,7 +26,7 @@ class funcionalidades_ospa(Ventana):
         # Objetos de clase
         self.nuevo = nuevo
         self.lista = lista
-        self.id_objeto = id_objeto
+        self.id_objeto_ingresado = id_objeto
 
     #----------------------------------------------------------------------
     def inicio_app(self):
@@ -41,37 +42,45 @@ class funcionalidades_ospa(Ventana):
                         funcion_ver):
         """"""
         
-        # Obtengo los datos ingresados
+         #----------------------------------------------------------------------
+    def guardar_objeto(self, rejilla_datos, 
+                        cod_objeto_clase, cod_entrada, tabla_objeto_clase,
+                        base_codigo_objeto, base_objeto_clase, base_objeto_clase_hist,
+                        funcion_ver):
+        """"""
+        
+        # 0. Obtengo los datos ingresados
+	    # 0.1 Datos de rejilla
         rejilla_frame = rejilla_datos
         datos_ingresados = rejilla_frame.obtener_lista_de_datos()
-            
-        # Objeto de Frame
+        # 0.2 Parámetros de objeto
         codigo_objeto = cod_objeto_clase
         cod_objeto = cod_entrada
         tabla_objeto = tabla_objeto_clase
         base_objeto = base_objeto_clase
         base_objeto_hist = base_objeto_clase_hist
         base_cod_objeto = base_codigo_objeto
-
-        # Genero la tablas de código de DE
         tabla_objeto_clase = base_objeto.generar_dataframe()
-        # Guardo el código de usuario que llega
+        ahora = str(dt.datetime.now())
+	
+	    # A. Existe un código en la rejilla
         if self.nuevo == False:
-            # En caso exista ID insertado en la rejilla
-            valor_de_comprobacion = self.comprobar_id(base_codigo_objeto, codigo_objeto)
-            if valor_de_comprobacion == True: # En caso se esté intentando ingresar un documento existente
-                # A partir del código comprobado
-                tabla_codigo_objeto_filtrada = tabla_objeto[tabla_objeto[cod_objeto]==codigo_objeto]
-                id_interno_objeto_clase = tabla_codigo_objeto_filtrada.iloc[0,0]
+            # Pestaña 1: Obtengo el ID interno a partir del código de usuario
+            tabla_codigo_objeto_filtrada = tabla_objeto[tabla_objeto[cod_objeto]==codigo_objeto]
+            id_interno_objeto_clase = tabla_codigo_objeto_filtrada.iloc[0,0]
+            # Obtengo los datos ingresados
+            lista_descargada_codigo = base_objeto.listar_datos_de_fila(id_interno_objeto_clase)
+            cod_objeto_clase = lista_descargada_codigo[3]
+            correlativo = lista_descargada_codigo[2]
 
-                # Pestaña 1: Código Único
-                # Obtengo los datos ingresados
-                lista_descargada_codigo = base_objeto.listar_datos_de_fila(id_interno_objeto_clase) # Se trae la info   
-                # Obtengo el ID interno
-                cod_objeto_clase = lista_descargada_codigo[3]
+            if cod_entrada == "COD_DR":
                 nuevo_cod_objeto_clase = datos_ingresados[0] + " " + datos_ingresados[1]
+            elif cod_entrada == "COD_DR":
+                nuevo_cod_objeto_clase = correlativo + "/" + cod_objeto_clase
+            else:
+                nuevo_cod_objeto_clase = datos_ingresados[0] 
                 # Actualizo las tablas en la web
-                hora_de_modificacion = str(dt.datetime.now())
+                hora_de_modificacion = ahora
                 # Se actualiza código interno
                 base_objeto.cambiar_un_dato_de_una_fila(cod_objeto_clase, 4, nuevo_cod_objeto_clase)
 
@@ -88,22 +97,48 @@ class funcionalidades_ospa(Ventana):
                 # Mensaje
                 messagebox.showinfo("¡Excelente!", "Se ha actualizado el registro")
                 funcion_ver(nuevo_cod_objeto_clase)
+
+	    # B. Es un código nuevo
         else:
             # Caso especial para DR
             if cod_entrada =="COD_DR":
                 cod_objeto_ingresado = datos_ingresados[0] + " " + datos_ingresados[1]
             else:
                 cod_objeto_ingresado = datos_ingresados[0]
+
             # Comprobación de que no se ingresa un código de usuario repetido
             valor_de_comprobacion = self.comprobar_id(base_codigo_objeto, cod_objeto_ingresado) # Comprobar si el id de usuario ya existe
+
             if valor_de_comprobacion == True: # Verifico que lo ingresado no exista
                 messagebox.showerror("Error", "Este documento ya existe")
+
             else:
-                # Timestamp
-                ahora = str(dt.datetime.now())
                 # Pestaña 1: Código Único
                 # Creo el código único
-                base_cod_objeto.agregar_codigo(cod_objeto_ingresado, ahora)
+                if cod_entrada == "COD_DR":
+                    base_cod_objeto.agregar_codigo(cod_objeto_ingresado, ahora)
+                elif cod_entrada == "COD_EP":
+                    departamento = datos_ingresados[6]
+                    print(departamento)
+	                # Obtención de sigla de departamento
+                    #tabla_siglas_filtrada = tabla_parametros[tabla_parametros['DEP_OSPA']==departamento]
+                    sigla_cod_interno = "CUS"
+                    #sigla_cod_interno = tabla_siglas_filtrada.iloc[0,['SIGLAS_DEPARTAMENTO']]
+		            # Obtención de número de extremo
+                    tabla_objeto_clase = base_cod_objeto.generar_dataframe()
+                    tabla_codigo_ep_filtrada = tabla_objeto_clase[tabla_objeto_clase['DEPARTAMENTO']==departamento]
+                    numero_problemas = len(tabla_codigo_ep_filtrada.index) + 1
+                    if numero_problemas < 10:
+                        numero_codigo = "-00" + str(numero_problemas)
+                    elif numero_problemas < 100:
+                        numero_codigo = "-0" + str(numero_problemas)
+                    else:
+        	            numero_codigo = "-" + str(numero_problemas)
+                    cod_objeto_ingresado = sigla_cod_interno + numero_codigo
+                    base_cod_objeto.agregar_codigo(cod_objeto_ingresado, ahora)
+                else:
+                    base_cod_objeto.agregar_nuevo_codigo(cod_objeto_ingresado, ahora)
+
                 # Descargo el código único
                 lista_descargada_codigo = base_cod_objeto.listar_datos_de_fila(ahora) # Se trae la info
         
@@ -150,11 +185,11 @@ class funcionalidades_ospa(Ventana):
         # ID de relación
         if cod_objeto == "COD_DR":
             id_relacion_objetos = id_interno_objeto_clase + "/" + id_interno_objeto_a_eliminar
-        elif cod_objeto == "COD_DE":
+        elif cod_objeto == "COD_DE" and cod_salida == "COD_DR":
             id_relacion_objetos = id_interno_objeto_a_eliminar + "/" + id_interno_objeto_clase
-        else:
+        elif cod_objeto == "COD_DE" and cod_salida == "COD_EP":
             id_relacion_objetos = id_interno_objeto_clase + "/" + id_interno_objeto_a_eliminar
-            print("Probar otra forma")
+            print(id_relacion_objetos)
         # Se cambia dato en tabla de relación
         b_relacion_objetos.cambiar_un_dato_de_una_fila(id_relacion_objetos, 4,'ELIMINADO')
 
@@ -218,42 +253,44 @@ class funcionalidades_ospa(Ventana):
     def busqueda_dr(self):
         """"""
         if self.nuevo != True:
-            # En caso exista un código insertado en la rejilla
-            cod_usuario_de = self.cod_usuario_de 
-            texto_pantalla = "Documento recibido que se asociará: " + cod_usuario_de
+
+            id_objeto_ingresado = self.id_objeto_ingresado
+            texto_pantalla = "Documento recibido que se asociará: " + id_objeto_ingresado
+
             # Genero la nueva ventana
             self.desaparecer()
             SubFrame = ventanas_busqueda.Doc_recibidos_busqueda(self, 500, 1200, texto_pantalla,
-                                                           nuevo=False, id_doc = cod_usuario_de)
+                                                                nuevo=False, id_objeto = id_objeto_ingresado)
 
         else:
             # En caso no estuviera guardado la ficha
             messagebox.showerror("¡Guardar!", "Antes de asociar un documento emitido, por favor guarde la información registrada")
  
     #----------------------------------------------------------------------
-    def ver_dr(self, id_usuario):
+    def ver_dr(self, id_objeto_ingresado):
         """"""
-        texto_documento = 'Documento recibido: ' + id_usuario
+        texto_documento = 'Documento recibido: ' + id_objeto_ingresado
 
-        lb1 = b_dr.listar_datos_de_fila(id_usuario)
+        lb1 = b_dr.listar_datos_de_fila(id_objeto_ingresado)
         lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], 
                                 lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14], lb1[15], lb1[16]]
         
         self.desaparecer()
         subframe = ventanas_vista.Doc_recibidos_vista(self, 650, 1150, texto_documento, nuevo=False, 
-                                                    lista=lista_para_insertar, id_objeto = id_usuario)
+                                                    lista=lista_para_insertar, id_objeto = id_objeto_ingresado)
 
    #----------------------------------------------------------------------
     def busqueda_de(self):
         """"""
-        if self.nuevo != True:
-            # En caso exista un código insertado en la rejilla
-            cod_usuario_dr = self.cod_usuario_dr 
-            texto_pantalla = "Documento recibido que se asociará: " + cod_usuario_dr
+        if self.nuevo != True: 
+
+            id_objeto_ingresado = self.id_objeto_ingresado
+            texto_pantalla = "Documento recibido que se asociará: " + id_objeto_ingresado
+
             # Genero la nueva ventana
             self.desaparecer()
             SubFrame = ventanas_busqueda.Doc_emitidos_busqueda(self, 500, 1200, texto_pantalla,
-                                                           nuevo=False, id_doc = cod_usuario_dr)
+                                                           nuevo=False, id_objeto = id_objeto_ingresado)
 
         else:
             # En caso no estuviera guardado la ficha
@@ -290,12 +327,13 @@ class funcionalidades_ospa(Ventana):
         """"""
         if self.nuevo != True:
             # En caso exista un código insertado en la rejilla
-            cod_usuario_dr = self.cod_usuario_dr 
-            texto_pantalla = "Documento recibido que se asociará: " + cod_usuario_dr
+            id_objeto_ingresado = self.id_objeto_ingresado
+            texto_pantalla = "Documento recibido que se asociará: " + id_objeto_ingresado
+
             # Genero la nueva ventana
             self.desaparecer()
             SubFrame = ventanas_busqueda.Extremos(self, 500, 1200, texto_pantalla,
-                                                           nuevo=False, id_doc = cod_usuario_dr)
+                                                           nuevo=False, id_objeto = id_objeto_ingresado)
 
         else:
             # En caso no estuviera guardado la ficha

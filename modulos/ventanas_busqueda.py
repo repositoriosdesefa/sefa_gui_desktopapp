@@ -4,8 +4,7 @@ import pandas as pd
 from apoyo.elementos_de_GUI import Cuadro, Ventana, Vitrina_busqueda, Vitrina_busquedaep, Vitrina_pendientes_jefe_firma
 from apoyo.manejo_de_bases import Base_de_datos
 import apoyo.datos_frecuentes as dfrec
-from modulos import ventanas_vista
-from modulos import menus
+from modulos import ventanas_vista, variables_globales, menus
 
 # BASES DE DATOS:
 #----------------------------------------------------------------------
@@ -43,6 +42,15 @@ b_efa = Base_de_datos(id_b_efa, 'Directorio')
 
 # relacion macroproblema con extremos
 b_relacion_mc_ep = Base_de_datos(id_b_ospa, 'RELACION_MC-EP')
+
+base_relacion_docs = variables_globales.base_relacion_docs
+base_relacion_dr_ep = variables_globales.base_relacion_dr_ep
+base_relacion_de_ep = variables_globales.base_relacion_de_ep
+
+base_relacion_docs_hist = variables_globales.base_relacion_docs_hist
+base_relacion_dr_ep_hist = variables_globales.base_relacion_dr_ep_hist
+base_relacion_de_ep_hist = variables_globales.base_relacion_de_ep_hist
+
 
 #----------------------------------------------------------------------
 
@@ -304,6 +312,27 @@ class Doc_recibidos_busqueda(Ventana):
                     base_relacion_d_hist.agregar_datos(datos_a_cargar_hist)
                     base_relacion_d_hist.cambiar_un_dato_de_una_fila(id_relacion_doc, 4, estado_a_sobreescribir)
                     messagebox.showinfo("¡Excelente!", "El registro ha sido asociado con éxito")
+                    
+        # Asociación de extremos de problema de DR con DE
+        # 1. Obtengo la tabla de relación entre DE y EP
+        tabla_de_dr_ep = base_relacion_dr_ep.generar_dataframe()
+        # 2. Filtro las relaciones que tiene el DE
+        # Filtro para obtener las relaciones activas
+        tabla_relacion_activos = tabla_de_dr_ep[tabla_de_dr_ep['ESTADO']=="ACTIVO"]
+        # Con ese ID, filtro la tabla de relacion
+        tabla_relacion_filtrada = tabla_relacion_activos[tabla_relacion_activos['ID_DR']==self.IDDR_FINAL]
+        # 3. Obtengo el ID de los EP que están relacionados al DE
+        # Me quedo con el vector a filtrar en forma de lista
+        lista_ep = list(tabla_relacion_filtrada['ID_EP'].unique())
+        # 4. Concateno los ID de los EP relacionados al DE con el ID del DR
+        if len(lista_ep) > 0:
+            for indice in range(len(lista_ep)):
+                cod_relacion = id_interno_de + "/" + lista_ep[indice]
+                datos_insertar = [cod_relacion, id_interno_de, lista_ep[indice], 'ACTIVO', hora_de_modificacion] 
+                base_relacion_de_ep.agregar_datos(datos_insertar)
+        else:
+            messagebox.showinfo("¡Atención!", "El registro ha sido asociado con éxito")
+        
     
     #----------------------------------------------------------------------     
     def comprobar_id(self, base_codigo, id_usuario):
@@ -320,7 +349,7 @@ class Doc_emitidos_busqueda(Ventana):
     """"""
     
     #----------------------------------------------------------------------
-    def __init__(self, *args, nuevo=True, lista=None, id_doc = None):
+    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None):
         """Constructor"""
 
         Ventana.__init__(self, *args)
@@ -329,7 +358,7 @@ class Doc_emitidos_busqueda(Ventana):
         self.nuevo = nuevo
         if self.nuevo != True: #en caso exista
             self.id_usuario = lista
-            self.cod_doc_dr = id_doc
+            self.cod_doc_dr = id_objeto
 
         # Generamos el dataframe a filtrar
         self.tabla_inicial = b_de.generar_dataframe()
@@ -598,6 +627,7 @@ class Doc_emitidos_busqueda(Ventana):
                 datos_a_cargar_hist = [id_relacion_doc, id_interno_dr, self.IDDE_FINAL,'ACTIVO',hora_de_modificacion,hora_de_modificacion]
                 base_relacion_d_hist.agregar_datos(datos_a_cargar_hist)
                 messagebox.showinfo("¡Excelente!", "El registro ha sido asociado con éxito")
+                
             else:
                 if estado_rela == 'ACTIVO':
                     messagebox.showinfo("Error", "Ya se encuentra asociado")
@@ -612,26 +642,7 @@ class Doc_emitidos_busqueda(Ventana):
                     base_relacion_d_hist.agregar_datos(datos_a_cargar_hist)
                     base_relacion_d_hist.cambiar_un_dato_de_una_fila(id_relacion_doc, 4, estado_a_sobreescribir)
                     messagebox.showinfo("¡Excelente!", "El registro ha sido asociado con éxito")
-        
-            # Asociación de extremos de problema de DR con DE
-            # 1. Obtengo la tabla de relación entre DE y EP
-            tabla_de_ep_de = base_relacion_de_ep.generar_dataframe()
-            # 2. Filtro las relaciones que tiene el DE
-            # Filtro para obtener las relaciones activas
-            tabla_relacion_activos = tabla_de_ep_de[tabla_de_ep_de['ESTADO']=="ACTIVO"]
-            # Con ese ID, filtro la tabla de relacion
-            tabla_relacion_filtrada = tabla_relacion_activos[tabla_relacion_activos['ID_DE']==self.IDDE_FINAL]
-            # 3. Obtengo el ID de los EP que están relacionados al DE
-            # Me quedo con el vector a filtrar en forma de lista
-            lista_ep = list(tabla_relacion_filtrada['ID_EP'].unique())
-            # 4. Concateno los ID de los EP relacionados al DE con el ID del DR
-            if len(lista_ep) > 0:
-                for indice in range(len(lista_ep)):
-                    cod_relacion = id_interno_dr + "/" + lista_ep[indice]
-                    datos_insertar = [cod_relacion, id_interno_dr, lista_ep[indice], 'ACTIVO', hora_de_modificacion] 
-                    base_relacion_dr_ep.agregar_datos(datos_insertar)
-            else:
-                messagebox.showinfo("¡Atención!", "El registro ha sido asociado con éxito")
+            
         
     #----------------------------------------------------------------------
     def comprobar_id(self, base_codigo, id_usuario):
@@ -648,7 +659,7 @@ class Extremos(Ventana):
     """"""
     
     #----------------------------------------------------------------------
-    def __init__(self, *args, nuevo=True, lista=None, id_doc = None):
+    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None):
         """Constructor"""
 
         Ventana.__init__(self, *args)
@@ -657,7 +668,7 @@ class Extremos(Ventana):
         self.nuevo = nuevo
         if self.nuevo != True: #en caso exista
             self.id_usuario = lista
-            self.cod_doc_dr = id_doc
+            self.cod_doc_dr = id_objeto
         
         # Renombramos los encabezados
         self.ep = b_ep.generar_dataframe()
@@ -947,9 +958,9 @@ class Extremos(Ventana):
         #                        lb1[14], lb1[15], lb1[16], lb1[17], lb1[18], lb1[19]]
         
         #self.desaparecer()
-
         #subframe = ventanas_vista.Extremo_problemas_vista(self, 650, 1150, texto_documento, 
         #                                nuevo=False, lista=lista_para_insertar, id_problema = x)
+
 
     #----------------------------------------------------------------------
     def asociar_dr_de_ep(self, x):
@@ -1025,7 +1036,7 @@ class Macroproblemas(Ventana):
     """"""
     
     #----------------------------------------------------------------------
-    def __init__(self, *args, nuevo=True, lista=None, id_doc = None):
+    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None):
         """Constructor"""
 
         Ventana.__init__(self, *args)
@@ -1034,7 +1045,7 @@ class Macroproblemas(Ventana):
         self.nuevo = nuevo
         if self.nuevo != True: #en caso exista
             self.id_usuario = lista
-            self.cod_doc_mc = id_doc
+            self.cod_doc_mc = id_objeto
         
         # Renombramos los encabezados
         self.mc = b_mc.generar_dataframe()
@@ -1225,6 +1236,7 @@ class Macroproblemas(Ventana):
     #----------------------------------------------------------------------
     def ver_mc(self, x):
         """"""
+        
         self.x = x
 
         #OBTENER EL ID INTERNO DEL DOCUMENTO EMITIDO
@@ -1246,7 +1258,7 @@ class Administrados(Ventana):
     """"""
     
     #----------------------------------------------------------------------
-    def __init__(self, *args, nuevo=True, lista=None, id_doc = None):
+    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None):
         """Constructor"""
 
         Ventana.__init__(self, *args)
@@ -1255,7 +1267,7 @@ class Administrados(Ventana):
         self.nuevo = nuevo
         if self.nuevo != True: #en caso exista
             self.id_usuario = lista
-            self.cod_doc_ad = id_doc
+            self.cod_doc_ad = id_objeto
         
         # Renombramos los encabezados
         self.ad = b_ad.generar_dataframe()
@@ -1424,7 +1436,7 @@ class Administrados(Ventana):
                                 #lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], lb1[12]]
         #self.desaparecer()
         #subframe = ventanas_vista.Doc_emitidos_vista(self, 650, 1150, texto_documento, 
-                                 #               nuevo=False, lista=lista_para_insertar, id_doc=x)
+                                 #               nuevo=False, lista=lista_para_insertar, id_objeto=x)
 
     #----------------------------------------------------------------------
     def funcion_de_asociar_ad(self, x):
@@ -1435,7 +1447,7 @@ class Pendientes_jefe_firma(Doc_emitidos_busqueda):
     """"""
 
 #----------------------------------------------------------------------
-    def __init__(self, *args, nuevo=True, lista=None, id_doc = None):
+    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None):
         """Constructor"""
 
         Ventana.__init__(self, *args)
@@ -1444,7 +1456,7 @@ class Pendientes_jefe_firma(Doc_emitidos_busqueda):
         self.nuevo = nuevo
         if self.nuevo != True: #en caso exista
             self.id_usuario = lista
-            self.cod_doc_dr = id_doc
+            self.cod_doc_dr = id_objeto
 
         # Generamos el dataframe a filtrar
         self.tabla_inicial = b_de.generar_dataframe()
@@ -1647,7 +1659,7 @@ class Pendientes_jefe_firma(Doc_emitidos_busqueda):
 class Pendientes_jefe_asignar(Ventana):
     """"""
     #----------------------------------------------------------------------
-    def __init__(self, *args, nuevo=True, lista=None, id_doc = None):
+    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None):
         """Constructor"""
 
         Ventana.__init__(self, *args)
@@ -1656,7 +1668,7 @@ class Pendientes_jefe_asignar(Ventana):
         self.nuevo = nuevo
         if self.nuevo != True: #en caso exista
             self.id_usuario = lista
-            self.cod_doc_jpa = id_doc
+            self.cod_doc_jpa = id_objeto
 
         # Generamos el dataframe a filtrar
         self.tabla_inicial0 = b_dr.generar_dataframe()
@@ -1844,7 +1856,7 @@ class Pendientes_jefe_asignar(Ventana):
 class Pendientes_por_reiterar(Ventana):
     """"""
     #----------------------------------------------------------------------
-    def __init__(self, *args, nuevo=True, lista=None, id_doc = None):
+    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None):
         """Constructor"""
 
         Ventana.__init__(self, *args)
@@ -1853,7 +1865,7 @@ class Pendientes_por_reiterar(Ventana):
         self.nuevo = nuevo
         if self.nuevo != True: #en caso exista
             self.id_usuario = lista
-            self.cod_doc_ppr = id_doc
+            self.cod_doc_ppr = id_objeto
 
         # Generamos el dataframe a filtrar
         self.tabla_inicial0 = b_de.generar_dataframe()
@@ -2043,7 +2055,7 @@ class Pendientes_por_reiterar(Ventana):
                                 lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], lb1[12]]
         self.desaparecer()
         subframe = ventanas_vista.Doc_emitidos_vista(self, 650, 1150, texto_documento, 
-                                                nuevo=False, lista=lista_para_insertar, id_doc=x)
+                                                nuevo=False, lista=lista_para_insertar, id_objeto=x)
 
     #----------------------------------------------------------------------
     def funcion_de_asociar_ppr(self, x):
@@ -2117,7 +2129,7 @@ class Pendientes_por_reiterar(Ventana):
 class Pendientes_eq1_trabajar(Ventana):
     """"""
     #----------------------------------------------------------------------
-    def __init__(self, *args, nuevo=True, lista=None, id_doc = None):
+    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None):
         """Constructor"""
 
         Ventana.__init__(self, *args)
@@ -2126,7 +2138,7 @@ class Pendientes_eq1_trabajar(Ventana):
         self.nuevo = nuevo
         if self.nuevo != True: #en caso exista
             self.id_usuario = lista
-            self.cod_doc_peq1t = id_doc
+            self.cod_doc_peq1t = id_objeto
 
         # Generamos el dataframe a filtrar
         self.tabla_inicial0 = b_dr.generar_dataframe()
@@ -2300,7 +2312,7 @@ class Pendientes_eq1_trabajar(Ventana):
         
         self.desaparecer()
         subframe = ventanas_vista.Doc_recibidos_vista(self, 650, 1150, texto_documento, nuevo=False, 
-                                                lista=lista_para_insertar, id_doc = x)
+                                                lista=lista_para_insertar, id_objeto = x)
 
     #----------------------------------------------------------------------
     def funcion_de_asociar_peq1t(self, x):
@@ -2310,7 +2322,7 @@ class Pendientes_eq1_trabajar(Ventana):
 class Pendientes_eq2_calificarrpta(Ventana):
     """"""
     #----------------------------------------------------------------------
-    def __init__(self, *args, nuevo=True, lista=None, id_doc = None):
+    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None):
         """Constructor"""
 
         Ventana.__init__(self, *args)
@@ -2319,7 +2331,7 @@ class Pendientes_eq2_calificarrpta(Ventana):
         self.nuevo = nuevo
         if self.nuevo != True: #en caso exista
             self.id_usuario = lista
-            self.cod_doc_peq2t = id_doc
+            self.cod_doc_peq2t = id_objeto
 
         # Generamos el dataframe a filtrar
         self.tabla_inicial0 = b_dr.generar_dataframe()
@@ -2517,7 +2529,7 @@ class Pendientes_eq2_calificarrpta(Ventana):
 class Pendientes_eq2_programaciones(Ventana):
     """"""
     #----------------------------------------------------------------------
-    def __init__(self, *args, nuevo=True, lista=None, id_doc = None):
+    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None):
         """Constructor"""
 
         Ventana.__init__(self, *args)
@@ -2526,7 +2538,7 @@ class Pendientes_eq2_programaciones(Ventana):
         self.nuevo = nuevo
         if self.nuevo != True: #en caso exista
             self.id_usuario = lista
-            self.cod_doc_peq2pr = id_doc
+            self.cod_doc_peq2pr = id_objeto
 
         # Generamos el dataframe a filtrar
         self.tabla_inicial0 = b_de.generar_dataframe()
@@ -2690,7 +2702,7 @@ class Pendientes_eq2_programaciones(Ventana):
         lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6]]
         self.desaparecer()
         subframe = ventanas_vista.Doc_emitidos_vista(self, 650, 1150, texto_documento, 
-                                                nuevo=False, lista=lista_para_insertar, id_doc=x)
+                                                nuevo=False, lista=lista_para_insertar, id_objeto=x)
 
     #----------------------------------------------------------------------
     def funcion_de_asociar_peq2pr(self, x):

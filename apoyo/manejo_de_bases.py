@@ -143,7 +143,7 @@ class Base_de_datos():
         
         self.codigo = self.pestanna + "-" + str(self.hoy.year) + "-" + str(numero)
         self.datos_obligatorios = [self.codigo, str(tiempo), numero]
-        dato_unico =  str(self.hoy.year) + "-" + str(numero) + "/" + dato
+        dato_unico =  str(numero) + "/" + dato
         self.lista_de_datos_completos = self.datos_obligatorios + [dato_unico]
         self.worksheet.append_row(self.lista_de_datos_completos)
 
