@@ -1473,14 +1473,14 @@ class Vitrina_busquedaep(Frame):
     """"""
 
     #----------------------------------------------------------------------
-    def __init__(self, window, tabla, funcion1, funcion2, height=100, width=1600):
+    def __init__(self, window, tabla, funcion1, funcion2, funcion3, height=100, width=1600):
         """Constructor"""
 
         self.window = window
         self.tabla = tabla
         self.funcion1 = funcion1
         self.funcion2 = funcion2
-        #self.funcion3 = funcion3
+        self.funcion3 = funcion3
         self.height = height
         self.width = width
         
@@ -1658,7 +1658,7 @@ class Vitrina_busquedaep(Frame):
                 bg=formato.boton_sin_que_pase_cursor_macro
             )
             boton_macroproblema.grid(row=0, column=len(lista_de_valores)+3)
-            boton_macroproblema.bind("<Button-1>",lambda e,argumento=argumento:self.funcion2(argumento))
+            boton_macroproblema.bind("<Button-1>",lambda e,argumento=argumento:self.funcion3(argumento))
             self.Efecto_de_boton_macro(boton_macroproblema)
 
     #----------------------------------------------------------------------
