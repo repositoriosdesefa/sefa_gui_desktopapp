@@ -320,7 +320,7 @@ class funcionalidades_ospa(Ventana):
 
         self.desaparecer()
         subframe = ventanas_vista.Extremo_problemas_vista(self, 650, 1150, texto_documento, nuevo=False, 
-                                        lista=lista_para_insertar, id_problema = id_usuario)
+                                        lista=lista_para_insertar, id_objeto = id_usuario)
     
     #----------------------------------------------------------------------
     def busqueda_ep(self):

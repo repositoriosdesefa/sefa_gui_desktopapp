@@ -148,8 +148,8 @@ class Menu_jefe(inicio_app_OSPA):
         c1.agregar_button(3, 1, "Ir", self.jefe_asig)
         c1.agregar_label(4, 1,'Documentos por firmar')
         c1.agregar_button(5, 1, "Ir", self.jefe_firma)
-        c1.agregar_label(6, 1,'Creación de extremo de problema')
-        c1.agregar_button(7, 1, "Ir", self.nuevo_ep)
+        c1.agregar_label(6, 1,'Creación de macroproblema')
+        c1.agregar_button(7, 1, "Ir", self.nuevo_mp)
         c1.agregar_label(8, 1,'Búsqueda')
         c1.agregar_button(9, 1, "Ir", self.ver_menu_busquedas)
         c1.agregar_label(10, 1,' ')
@@ -258,7 +258,7 @@ class Inicio_eq1(inicio_app_OSPA):
 
         self.desaparecer()
         # LargoxAncho
-        SubFrame = ventanas_busqueda.Doc_recibidos_busqueda(self, 500, 1000, "Documentos pendientes de trabajar - Equipo 1")
+        SubFrame = ventanas_busqueda.Pendientes_eq1_trabajar(self, 560, 1150, "Documentos pendientes de trabajar")
 
 
 class Inicio_eq2(inicio_app_OSPA):
@@ -278,8 +278,8 @@ class Inicio_eq2(inicio_app_OSPA):
         c1.agregar_button(5, 1, "Ir", self.pendientes_eq2)
         c1.agregar_label(6, 1,'Programaciones')
         c1.agregar_button(7, 1, "Ir", self.pendientes_prog)
-        c1.agregar_label(8, 1,'Creación de extremo de problema')
-        c1.agregar_button(9, 1, "Ir", self.nuevo_ep)
+        c1.agregar_label(8, 1,'Creación de macroproblema')
+        c1.agregar_button(9, 1, "Ir", self.nuevo_mp)
         c1.agregar_label(10, 1,' ')
         c1.agregar_button(13, 2, "Volver", self.volver_anterior)
 
@@ -290,12 +290,13 @@ class Inicio_eq2(inicio_app_OSPA):
         self.desaparecer()
         # LargoxAncho
         SubFrame = ventanas_busqueda.Pendientes_eq2_calificarrpta(self, 580, 1300, 
-                    "Documentos pendientes de calificar respuesta - Equipo 2")
+                    "Documentos pendientes de calificar respuesta")
 
     #----------------------------------------------------------------------
     def pendientes_prog(self):
 
         self.desaparecer()
         # LargoxAncho
-        SubFrame = ventanas_vista.Doc_emitidos_vista(self, 650, 1150, 
-                                    "Registra de un nuevo documento recibido")
+        SubFrame = ventanas_busqueda.Pendientes_eq2_programaciones(self, 580, 1300, 
+                    "Programaciones")
+

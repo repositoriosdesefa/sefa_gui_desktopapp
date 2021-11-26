@@ -560,14 +560,14 @@ class Doc_emitidos_busqueda(Ventana):
         if self.nuevo == True:
             self.volver()
         else:
-            codigode = self.cod_doc_dr
+            codigodr = self.cod_doc_dr
 
-            lb1 = b_de.listar_datos_de_fila(codigode)
-            lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6]]
-            #,                       lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], lb1[12]]
+            lb1 = b_dr.listar_datos_de_fila(codigodr)
+            lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], 
+                                lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14], lb1[15], lb1[16]]
             self.desaparecer()
             subframe = ventanas_vista.Doc_emitidos_vista(self, 650, 1150, 
-                                                nuevo=False, lista=lista_para_insertar, id_objeto=codigode)
+                                                nuevo=False, lista=lista_para_insertar, id_objeto=codigodr)
 
     #----------------------------------------------------------------------
     def ver_dr(self, id_usuario):
@@ -1458,8 +1458,8 @@ class Pendientes_jefe_firma(Doc_emitidos_busqueda):
 
         # Generamos el dataframe a filtrar
         self.tabla_inicial = b_de.generar_dataframe()
-        self.tabla_inicial = self.tabla_inicial[self.tabla_inicial['FECHA_FIRMA']=='']
-        self.tabla_0_pfirma = self.tabla_inicial.rename(columns={'COD_DE':'DOC EMITIDO','DETALLE_REQUERIMIENTO':'DETALLE','ESTADO_DOCE':'ESTADO','NUM_DOC':'NRO DOCUMENTO','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_SALIDA':'HT SALIDA','FECHA_FIRMA':'FECHA FIRMA','FECHA_NOTIFICACION':'FECHA NOTIFICACION','FECHA_PROYECTO_FINAL':'FECHA PROYECTO'})
+        self.tabla_inicial1 = self.tabla_inicial.query("FECHA_FIRMA=='' or FECHA_FIRMA==' '")
+        self.tabla_0_pfirma = self.tabla_inicial1.rename(columns={'COD_DE':'DOC EMITIDO','DETALLE_REQUERIMIENTO':'DETALLE','ESTADO_DOCE':'ESTADO','NUM_DOC':'NRO DOCUMENTO','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_SALIDA':'HT SALIDA','FECHA_FIRMA':'FECHA FIRMA','FECHA_NOTIFICACION':'FECHA NOTIFICACION','FECHA_PROYECTO_FINAL':'FECHA PROYECTO'})
         self.tabla_pfirmaF = self.tabla_0_pfirma.loc[0:99, ['DOC EMITIDO','DESTINATARIO','HT SALIDA','ESPECIALISTA','FECHA PROYECTO','CATEGORIA','DETALLE']]
  
         # Información para las listas desplegables
@@ -1671,7 +1671,7 @@ class Pendientes_jefe_asignar(Ventana):
         # Generamos el dataframe a filtrar
         self.tabla_inicial0 = b_dr.generar_dataframe()
         self.tabla_inicial1 = self.tabla_inicial0[self.tabla_inicial0['TIPO_RESPUESTA']!='Si']
-        self.tabla_inicial2 = self.tabla_inicial1[self.tabla_inicial1['ESPECIALISTA']=='']
+        self.tabla_inicial2 = self.tabla_inicial1.query("ESPECIALISTA=='' or ESPECIALISTA==' '")
         #self.tabla_inicial2['F_ING_SEFA'] = pd.to_datetime(self.tabla_inicial2['F_ING_SEFA'], dayfirst=True)
         #self.tabla_inicial = self.tabla_inicial2.sort_values(["F_ING_SEFA"])
         self.tabla_jpa = self.tabla_inicial2.rename(columns={'COD_DR':'NRO DOC','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_ENTRANTE':'HT INGRESO'})
@@ -1969,7 +1969,7 @@ class Pendientes_por_reiterar(Ventana):
         self.filtro0 = self.tabla_ppr
         
         if len(self.htppr)>0: # Filtro por palabra clave
-            self.vprr.Eliminar_vitrina()
+            self.vppr.Eliminar_vitrina()
             self.filtro0['HT SALIDA']=self.filtro0['HT SALIDA'].apply(str)
             self.filtro0 = self.filtro0[self.filtro0['HT SALIDA'].str.contains(self.htppr)]
             self.Complementoppr(self.filtro0)
@@ -2140,13 +2140,13 @@ class Pendientes_eq1_trabajar(Ventana):
 
         # Generamos el dataframe a filtrar
         self.tabla_inicial0 = b_dr.generar_dataframe()
-        self.tabla_inicial1 = self.tabla_inicial0[self.tabla_inicial0['ESPECIALISTA']!='']
+        self.tabla_inicial1 = self.tabla_inicial0.query("ESPECIALISTA=='' or ESPECIALISTA==' '")
         self.tabla_peq1t = self.tabla_inicial1.rename(columns={'COD_DR':'NRO DOC','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_ENTRANTE':'HT INGRESO'})
         self.tabla_peq1tF = self.tabla_peq1t.loc[0:99, ['NRO DOC','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','FECHA ULTIMO MOV.','INDICACION','ASUNTO']]
  
         # Información para las listas desplegables
-        self.peq1ttipodoc = list(set(self.tabla_peq1tF['TIPO DOC']))
-        self.peq1tremitente = list(set(self.tabla_peq1tF['REMITENTE']))
+        self.peq1ttipodoc = list(set(self.tabla_peq1t['TIPO DOC']))
+        self.peq1tremitente = list(set(self.tabla_peq1t['REMITENTE']))
 
         # Agregando logo del ospa a la ventana y título
         self.peq1t0 = Cuadro(self)
@@ -2192,7 +2192,7 @@ class Pendientes_eq1_trabajar(Ventana):
 
         # Creando vitrina 
         self.vpeq1t = Vitrina_pendientes_jefe_firma(self, self.tabla_peq1tF, self.ver_peq1t, 
-                                   self.funcion_de_asociar_peq1t, height=200, width=1000)
+                                   self.funcion_de_asociar_peq1t, height=200, width=1080)
     
     #----------------------------------------------------------------------
 
@@ -2267,7 +2267,7 @@ class Pendientes_eq1_trabajar(Ventana):
             self.frame_vitrina_peq1t.eliminar_cuadro()
             self.frame_vitrina_peq1t = Cuadro(self)
             self.vpeq1t = Vitrina_pendientes_jefe_firma(self, tabla_filtro3, self.ver_peq1t, 
-                                   self.funcion_de_asociar_peq1t, height=200, width=1000)
+                                   self.funcion_de_asociar_peq1t, height=200, width=1080)
         else:
             self.frame_vitrina_peq1t.eliminar_cuadro()
             self.frame_vitrina_peq1t = Cuadro(self)
@@ -2289,7 +2289,7 @@ class Pendientes_eq1_trabajar(Ventana):
         self.frame_vitrina_peq1t = Cuadro(self)
         # Creando vitrina
         self.vpeq1t = Vitrina_pendientes_jefe_firma(self, self.tabla_peq1tF, self.ver_peq1t, 
-                                   self.funcion_de_asociar_peq1t, height=200, width=1000)
+                                   self.funcion_de_asociar_peq1t, height=200, width=1080)
 
     #----------------------------------------------------------------------
 
@@ -2333,8 +2333,8 @@ class Pendientes_eq2_calificarrpta(Ventana):
 
         # Generamos el dataframe a filtrar
         self.tabla_inicial0 = b_dr.generar_dataframe()
-        self.tabla_inicial1 = self.tabla_inicial0[self.tabla_inicial0['ESPECIALISTA']!='']
-        self.tabla_inicial2 = self.tabla_inicial1[self.tabla_inicial1['RESPUESTA']=='']
+        self.tabla_inicial1 = self.tabla_inicial0.query("TIPO_RESPUESTA=='Si'")
+        self.tabla_inicial2 = self.tabla_inicial1.query("RESPUESTA=='' or RESPUESTA==' '")
         self.tabla_peq2t = self.tabla_inicial2.rename(columns={'COD_DR':'NRO DOC','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_ENTRANTE':'HT INGRESO'})
         self.tabla_peq2tF = self.tabla_peq2t.loc[0:99, ['NRO DOC','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','FECHA ULTIMO MOV.','ESPECIALISTA','INDICACION','ASUNTO']]
  
@@ -2348,7 +2348,7 @@ class Pendientes_eq2_calificarrpta(Ventana):
         self.peq2t0.agregar_label(0,0,' ')
         self.peq2t0.agregar_imagen(1,0,'Logo_OSPA.png',202,49)
         peq2t2 = Cuadro(self)
-        peq2t2.agregar_titulo(2, 0, 'Documentos pendientes de calificar respuesta - Equipo 2')
+        peq2t2.agregar_titulo(2, 0, 'Documentos pendientes de calificar respuesta')
 
         # Armando rejilla con los filtros
         self.rejilla_peq2t = (
@@ -2390,7 +2390,7 @@ class Pendientes_eq2_calificarrpta(Ventana):
 
         # Creando vitrina 
         self.vpeq2t = Vitrina_pendientes_jefe_firma(self, self.tabla_peq2tF, self.ver_peq2t, 
-                                   self.funcion_de_asociar_peq2t, height=200, width=1080)
+                                   self.funcion_de_asociar_peq2t, height=200, width=1150)
     
     #----------------------------------------------------------------------
 
@@ -2473,7 +2473,7 @@ class Pendientes_eq2_calificarrpta(Ventana):
             self.frame_vitrina_peq2t.eliminar_cuadro()
             self.frame_vitrina_peq2t = Cuadro(self)
             self.vpeq2t = Vitrina_pendientes_jefe_firma(self, tabla_filtro3, self.ver_peq2t, 
-                                   self.funcion_de_asociar_peq2t, height=200, width=1080)
+                                   self.funcion_de_asociar_peq2t, height=200, width=1150)
         else:
             self.frame_vitrina_peq2t.eliminar_cuadro()
             self.frame_vitrina_peq2t = Cuadro(self)
@@ -2495,7 +2495,7 @@ class Pendientes_eq2_calificarrpta(Ventana):
         self.frame_vitrina_peq2t = Cuadro(self)
         # Creando vitrina
         self.vpeq2t = Vitrina_pendientes_jefe_firma(self, self.tabla_peq2tF, self.ver_peq2t, 
-                                   self.funcion_de_asociar_peq2t, height=200, width=1080)
+                                   self.funcion_de_asociar_peq2t, height=200, width=1250)
 
     #----------------------------------------------------------------------
 
@@ -2512,11 +2512,12 @@ class Pendientes_eq2_calificarrpta(Ventana):
         #print(x)
         lb1 = b_dr.listar_datos_de_fila(self.x)
         # PARA EL CASO DE ESTA PANTALLA SOLO LLEVARA LOS DATOS INGRESADOS HASTA APORTE DEL DOC O ASUNTO (CAMPOS OBLIGATORIO)
-        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8]]
+        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], 
+                                lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14], lb1[15], lb1[16]]
         
         self.desaparecer()
         subframe = ventanas_vista.Doc_recibidos_vista(self, 650, 1150, texto_documento, nuevo=False, 
-                                                lista=lista_para_insertar, id_doc = x)
+                                                    lista=lista_para_insertar, id_objeto = x)
 
     #----------------------------------------------------------------------
     def funcion_de_asociar_peq2t(self, x):
@@ -2541,11 +2542,11 @@ class Pendientes_eq2_programaciones(Ventana):
         # Generamos el dataframe a filtrar
         self.tabla_inicial0 = b_de.generar_dataframe()
         self.tabla_inicial1 = self.tabla_inicial0[self.tabla_inicial0['CATEGORIA']=='Programación'] 
-        self.tabla_peq2pr = self.tabla_inicial1.rename(columns={'COD_DE':'DOC EMITIDO','FECHA_PROYECTO_FINAL':'FECHA ACCION','FECHA_FIRMA':'FECHA PROGRAMACION','TIPO_DOC':'TIPO DOC','ESTADO_DOCE':'ESTADO','SE_EMITIO':'¿SE EJECUTO?'})
-        self.tabla_peq2prF = self.tabla_peq2pr.loc[0:99, ['REMITENTE','FECHA ACCION','FECHA PROGRAMACION','ESPECIALISTA','ESTADO','¿SE EJECUTO?']]
+        self.tabla_peq2pr = self.tabla_inicial1.rename(columns={'COD_DE':'DOC EMITIDO','FECHA_PROYECTO_FINAL':'FECHA ACCION','FECHA_FIRMA':'FECHA PROGRAMACION','TIPO_DOC':'TIPO DOC','ESTADO_DOCE':'ESTADO','DOCUMENTO_ELABORADO':'¿SE EJECUTO?'})
+        self.tabla_peq2prF = self.tabla_peq2pr.loc[0:99, ['DESTINATARIO','FECHA ACCION','FECHA PROGRAMACION','ESPECIALISTA','ESTADO','¿SE EJECUTO?']]
  
         # Información para las listas desplegables
-        self.peq2prremitente = list(set(self.tabla_peq2pr['REMITENTE']))
+        self.peq2prremitente = list(set(self.tabla_peq2pr['DESTINATARIO']))
         self.peq2prespecialista = list(set(self.tabla_peq2pr['ESPECIALISTA']))
         self.peq2prestado = list(set(self.tabla_peq2pr['ESTADO']))
 
@@ -2590,7 +2591,7 @@ class Pendientes_eq2_programaciones(Ventana):
 
         # Creando vitrina 
         self.vpeq2pr = Vitrina_pendientes_jefe_firma(self, self.tabla_peq2prF, self.ver_peq2pr, 
-                                   self.funcion_de_asociar_peq2pr, height=200, width=1090)
+                                   self.funcion_de_asociar_peq2pr, height=200, width=1250)
     
     #----------------------------------------------------------------------
 
@@ -2633,7 +2634,7 @@ class Pendientes_eq2_programaciones(Ventana):
         
         if len(self.remitentepeq2pr)>0: # Filtro por palabra clave
             self.vpeq2pr.Eliminar_vitrina()
-            self.filtro0 = self.tabla_peq2pr[self.tabla_peq2pr['REMITENTE'].str.contains(self.remitentepeq2pr)]
+            self.filtro0 = self.tabla_peq2pr[self.tabla_peq2pr['DESTINATARIO'].str.contains(self.remitentepeq2pr)]
             self.Complementopeq2pr(self.filtro0)
 
         if len(filtro)>0:
@@ -2650,7 +2651,7 @@ class Pendientes_eq2_programaciones(Ventana):
 
     def Complementopeq2pr(self,filtro0):
 
-        tabla_filtro2 = filtro0.loc[:, ['REMITENTE','FECHA ACCION','FECHA PROGRAMACION','ESPECIALISTA','ESTADO','¿SE EJECUTO?']]
+        tabla_filtro2 = filtro0.loc[:, ['DESTINATARIO','FECHA ACCION','FECHA PROGRAMACION','ESPECIALISTA','ESTADO','¿SE EJECUTO?']]
         if len(tabla_filtro2.index) > 100:
             tabla_filtro3 = tabla_filtro2.head(100)
         else:
@@ -2681,7 +2682,7 @@ class Pendientes_eq2_programaciones(Ventana):
         self.frame_vitrina_peq2pr = Cuadro(self)
         # Creando vitrina
         self.vpeq2pr = Vitrina_pendientes_jefe_firma(self, self.tabla_peq2prF, self.ver_peq2pr, 
-                                   self.funcion_de_asociar_peq2pr, height=200, width=1090)
+                                   self.funcion_de_asociar_peq2pr, height=200, width=1250)
 
     #----------------------------------------------------------------------
 

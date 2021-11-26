@@ -1590,7 +1590,7 @@ class Vitrina_busquedaep(Frame):
                         text= row[1],
                         font=formato.tipo_de_letra_tabla,
                         width= 18,#se modificó 
-                        height = 2,
+                        height = 3,
                         relief='groove',
                         bg= formato.fondo_valores_de_tabla,
                         wraplength=125, 
