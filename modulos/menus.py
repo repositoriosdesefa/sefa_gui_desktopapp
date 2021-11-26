@@ -279,7 +279,7 @@ class Inicio_eq2(inicio_app_OSPA):
         c1.agregar_label(6, 1,'Programaciones')
         c1.agregar_button(7, 1, "Ir", self.pendientes_prog)
         c1.agregar_label(8, 1,'Creación de extremo de problema')
-        c1.agregar_button(9, 1, "Ir", self.nuevo_mp)
+        c1.agregar_button(9, 1, "Ir", self.nuevo_ep)
         c1.agregar_label(10, 1,' ')
         c1.agregar_button(13, 2, "Volver", self.volver_anterior)
 
@@ -297,5 +297,5 @@ class Inicio_eq2(inicio_app_OSPA):
 
         self.desaparecer()
         # LargoxAncho
-        # SubFrame = ventanas_vista.Doc_recibidos_vista(self, 650, 1150, 
-        #            "Registra de un nuevo documento recibido")
+        SubFrame = ventanas_vista.Doc_emitidos_vista(self, 650, 1150, 
+                                    "Registra de un nuevo documento recibido")

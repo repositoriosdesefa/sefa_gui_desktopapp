@@ -25,7 +25,7 @@ class funcionalidades_ospa(Ventana):
         # Objetos de clase
         self.nuevo = nuevo
         self.lista = lista
-        self.id_objeto = id_objeto
+        self.id_objeto_ingresado = id_objeto
 
     #----------------------------------------------------------------------
     def inicio_app(self):
@@ -89,21 +89,25 @@ class funcionalidades_ospa(Ventana):
                 messagebox.showinfo("¡Excelente!", "Se ha actualizado el registro")
                 funcion_ver(nuevo_cod_objeto_clase)
         else:
+            # Timestamp
+            ahora = str(dt.datetime.now())
             # Caso especial para DR
             if cod_entrada =="COD_DR":
                 cod_objeto_ingresado = datos_ingresados[0] + " " + datos_ingresados[1]
             else:
                 cod_objeto_ingresado = datos_ingresados[0]
+            
             # Comprobación de que no se ingresa un código de usuario repetido
             valor_de_comprobacion = self.comprobar_id(base_codigo_objeto, cod_objeto_ingresado) # Comprobar si el id de usuario ya existe
             if valor_de_comprobacion == True: # Verifico que lo ingresado no exista
                 messagebox.showerror("Error", "Este documento ya existe")
             else:
-                # Timestamp
-                ahora = str(dt.datetime.now())
                 # Pestaña 1: Código Único
                 # Creo el código único
-                base_cod_objeto.agregar_codigo(cod_objeto_ingresado, ahora)
+                if cod_entrada =="COD_DR":
+                    base_cod_objeto.agregar_codigo(cod_objeto_ingresado, ahora)
+                else:
+                    base_cod_objeto.agregar_nuevo_codigo(cod_objeto_ingresado, ahora)
                 # Descargo el código único
                 lista_descargada_codigo = base_cod_objeto.listar_datos_de_fila(ahora) # Se trae la info
         
@@ -150,11 +154,11 @@ class funcionalidades_ospa(Ventana):
         # ID de relación
         if cod_objeto == "COD_DR":
             id_relacion_objetos = id_interno_objeto_clase + "/" + id_interno_objeto_a_eliminar
-        elif cod_objeto == "COD_DE":
+        elif cod_objeto == "COD_DE" and cod_salida == "COD_DR":
             id_relacion_objetos = id_interno_objeto_a_eliminar + "/" + id_interno_objeto_clase
-        else:
+        elif cod_objeto == "COD_DE" and cod_salida == "COD_EP":
             id_relacion_objetos = id_interno_objeto_clase + "/" + id_interno_objeto_a_eliminar
-            print("Probar otra forma")
+            print(id_relacion_objetos)
         # Se cambia dato en tabla de relación
         b_relacion_objetos.cambiar_un_dato_de_una_fila(id_relacion_objetos, 4,'ELIMINADO')
 
@@ -218,42 +222,44 @@ class funcionalidades_ospa(Ventana):
     def busqueda_dr(self):
         """"""
         if self.nuevo != True:
-            # En caso exista un código insertado en la rejilla
-            cod_usuario_de = self.cod_usuario_de 
-            texto_pantalla = "Documento recibido que se asociará: " + cod_usuario_de
+
+            id_objeto_ingresado = self.id_objeto_ingresado
+            texto_pantalla = "Documento recibido que se asociará: " + id_objeto_ingresado
+
             # Genero la nueva ventana
             self.desaparecer()
             SubFrame = ventanas_busqueda.Doc_recibidos_busqueda(self, 500, 1200, texto_pantalla,
-                                                           nuevo=False, id_doc = cod_usuario_de)
+                                                                nuevo=False, id_objeto = id_objeto_ingresado)
 
         else:
             # En caso no estuviera guardado la ficha
             messagebox.showerror("¡Guardar!", "Antes de asociar un documento emitido, por favor guarde la información registrada")
  
     #----------------------------------------------------------------------
-    def ver_dr(self, id_usuario):
+    def ver_dr(self, id_objeto_ingresado):
         """"""
-        texto_documento = 'Documento recibido: ' + id_usuario
+        texto_documento = 'Documento recibido: ' + id_objeto_ingresado
 
-        lb1 = b_dr.listar_datos_de_fila(id_usuario)
+        lb1 = b_dr.listar_datos_de_fila(id_objeto_ingresado)
         lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], 
                                 lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14], lb1[15], lb1[16]]
         
         self.desaparecer()
         subframe = ventanas_vista.Doc_recibidos_vista(self, 650, 1150, texto_documento, nuevo=False, 
-                                                    lista=lista_para_insertar, id_objeto = id_usuario)
+                                                    lista=lista_para_insertar, id_objeto = id_objeto_ingresado)
 
    #----------------------------------------------------------------------
     def busqueda_de(self):
         """"""
-        if self.nuevo != True:
-            # En caso exista un código insertado en la rejilla
-            cod_usuario_dr = self.cod_usuario_dr 
-            texto_pantalla = "Documento recibido que se asociará: " + cod_usuario_dr
+        if self.nuevo != True: 
+
+            id_objeto_ingresado = self.id_objeto_ingresado
+            texto_pantalla = "Documento recibido que se asociará: " + id_objeto_ingresado
+
             # Genero la nueva ventana
             self.desaparecer()
             SubFrame = ventanas_busqueda.Doc_emitidos_busqueda(self, 500, 1200, texto_pantalla,
-                                                           nuevo=False, id_doc = cod_usuario_dr)
+                                                           nuevo=False, id_objeto = id_objeto_ingresado)
 
         else:
             # En caso no estuviera guardado la ficha
@@ -290,12 +296,13 @@ class funcionalidades_ospa(Ventana):
         """"""
         if self.nuevo != True:
             # En caso exista un código insertado en la rejilla
-            cod_usuario_dr = self.cod_usuario_dr 
-            texto_pantalla = "Documento recibido que se asociará: " + cod_usuario_dr
+            id_objeto_ingresado = self.id_objeto_ingresado
+            texto_pantalla = "Documento recibido que se asociará: " + id_objeto_ingresado
+
             # Genero la nueva ventana
             self.desaparecer()
             SubFrame = ventanas_busqueda.Extremos(self, 500, 1200, texto_pantalla,
-                                                           nuevo=False, id_doc = cod_usuario_dr)
+                                                           nuevo=False, id_objeto = id_objeto_ingresado)
 
         else:
             # En caso no estuviera guardado la ficha
