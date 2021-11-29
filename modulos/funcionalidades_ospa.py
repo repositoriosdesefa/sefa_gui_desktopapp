@@ -34,13 +34,6 @@ class funcionalidades_ospa(Ventana):
         self.desaparecer()
         # LargoxAncho
         subFrame = menus.inicio_app_OSPA(self, 400, 400, "Inicio")
-
-    #----------------------------------------------------------------------
-    def guardar_objeto(self, rejilla_datos, 
-                        cod_objeto_clase, cod_entrada, tabla_objeto_clase,
-                        base_codigo_objeto, base_objeto_clase, base_objeto_clase_hist,
-                        funcion_ver):
-        """"""
         
          #----------------------------------------------------------------------
     def guardar_objeto(self, rejilla_datos, 
@@ -79,24 +72,25 @@ class funcionalidades_ospa(Ventana):
                 nuevo_cod_objeto_clase = correlativo + "/" + cod_objeto_clase
             else:
                 nuevo_cod_objeto_clase = datos_ingresados[0] 
-                # Actualizo las tablas en la web
-                hora_de_modificacion = ahora
-                # Se actualiza código interno
-                base_objeto.cambiar_un_dato_de_una_fila(cod_objeto_clase, 4, nuevo_cod_objeto_clase)
-
-                # Pestaña 2:       
-                # Cambio los datos de una fila
-                # Código interno del aplicativo + Código del usuario del DR + Hora de modificación
-                lista_a_sobreescribir = [id_interno_objeto_clase] + [nuevo_cod_objeto_clase] + datos_ingresados + [hora_de_modificacion]
-                base_objeto.cambiar_los_datos_de_una_fila(nuevo_cod_objeto_clase, lista_a_sobreescribir) # Se sobreescribe la información
             
-                # Pestaña 3
-                lista_historial = lista_a_sobreescribir
-                base_objeto_hist.agregar_datos(lista_historial) # Se sube la info
+            # Actualizo las tablas en la web
+            hora_de_modificacion = ahora
+            # Se actualiza código interno
+            base_objeto.cambiar_un_dato_de_una_fila(cod_objeto_clase, 4, nuevo_cod_objeto_clase)
 
-                # Mensaje
-                messagebox.showinfo("¡Excelente!", "Se ha actualizado el registro")
-                funcion_ver(nuevo_cod_objeto_clase)
+            # Pestaña 2:       
+            # Cambio los datos de una fila
+            # Código interno del aplicativo + Código del usuario del DR + Hora de modificación
+            lista_a_sobreescribir = [id_interno_objeto_clase] + [nuevo_cod_objeto_clase] + datos_ingresados + [hora_de_modificacion]
+            base_objeto.cambiar_los_datos_de_una_fila(nuevo_cod_objeto_clase, lista_a_sobreescribir) # Se sobreescribe la información
+            
+            # Pestaña 3
+            lista_historial = lista_a_sobreescribir
+            base_objeto_hist.agregar_datos(lista_historial) # Se sube la info
+
+            # Mensaje
+            messagebox.showinfo("¡Excelente!", "Se ha actualizado el registro")
+            funcion_ver(nuevo_cod_objeto_clase)
 
 	    # B. Es un código nuevo
         else:
@@ -118,7 +112,7 @@ class funcionalidades_ospa(Ventana):
                 if cod_entrada == "COD_DR":
                     base_cod_objeto.agregar_codigo(cod_objeto_ingresado, ahora)
                 elif cod_entrada == "COD_EP":
-                    departamento = datos_ingresados[6]
+                    departamento = datos_ingresados[2]
                     print(departamento)
 	                # Obtención de sigla de departamento
                     #tabla_siglas_filtrada = tabla_parametros[tabla_parametros['DEP_OSPA']==departamento]
@@ -189,7 +183,10 @@ class funcionalidades_ospa(Ventana):
             id_relacion_objetos = id_interno_objeto_a_eliminar + "/" + id_interno_objeto_clase
         elif cod_objeto == "COD_DE" and cod_salida == "COD_EP":
             id_relacion_objetos = id_interno_objeto_clase + "/" + id_interno_objeto_a_eliminar
-            print(id_relacion_objetos)
+        elif cod_objeto == "COD_EP":
+            id_relacion_objetos = id_interno_objeto_a_eliminar + "/" + id_interno_objeto_clase
+        else:
+            id_relacion_objetos = id_interno_objeto_clase + "/" + id_interno_objeto_a_eliminar
         # Se cambia dato en tabla de relación
         b_relacion_objetos.cambiar_un_dato_de_una_fila(id_relacion_objetos, 4,'ELIMINADO')
 
@@ -316,7 +313,7 @@ class funcionalidades_ospa(Ventana):
         lb1 = b_ep.listar_datos_de_fila(id_usuario)
         lista_para_insertar = [lb1[1], lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], 
                                 lb1[8], lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], 
-                                lb1[14], lb1[15], lb1[16], lb1[17]]
+                                lb1[14], lb1[15]]
 
         self.desaparecer()
         subframe = ventanas_vista.Extremo_problemas_vista(self, 650, 1150, texto_documento, nuevo=False, 
