@@ -563,56 +563,9 @@ class Extremo_problemas_vista(funcionalidades_ospa):
                 ('L', 0, 4, 'Tipo de afectación'),
                 ('CXP', 0, 5, 27, tipo_afectacion, '', "readonly"),
 
-                ('L', 1, 0, 'Categoria EFA'),
-                ('CXD1', 1, 1, lista_efa_ospa, 24, lista_efa_dependiente, 'EFA_OSPA', 'Entidad u oficina', 9, 4),
-            
-                ('L', 1, 2, 'EFA'),
-                ('CXR', 1 , 3, combo_vacio, 9, 4),
-
-                ('L', 1, 4, 'Descripción'),
-                ('STP', 1, 5, 28, 2),
-
-                ('L', 2, 0, 'Departamento'),
-                ('CXD1', 2, 1, departamento_ospa, 24, tabla_departamento_efa, 'DEP_OSPA', 'PROV_DIST_OSPA', 15, 7),
-
-                ('L', 2, 2, 'Provincia/Distrito'),
-                ('CXR', 2, 3, combo_vacio, 15, 7),
-
-                #('L', 2, 2, 'Tipo de ubicación'),
-                #('CXP', 2, 3, 27, ubicacion, '', "readonly"),
-
-                ('L', 3, 0, 'Agente contaminante'),
-                ('CXP', 3, 1, 27, agente_conta, '', "readonly"),
-
-                ('L', 3, 2, 'Extensión'),
-                ('CXP', 3, 3, 27, extension, '', "readonly"),
-
-                ('L', 3, 4, 'Ocurrencia'),
-                ('CXP', 3, 5, 27, ocurrencia, '', "readonly"),
-
-                ('L', 4, 0, 'Actividad'),
-                ('CXP', 4, 1, 27, actividad_eco, '', "readonly"),
-
-                ('L', 4, 2, 'Tipo de causa'),
-                ('CXP', 4, 3, 27, tipo_causa, '', "readonly"),
-            
-                ('L', 4, 4, 'Estado'),
-                ('CXP', 4, 5, 27, estado_problemas, 30, 1),
-
-                ('L', 5, 0, 'Característica 1'),
-                ('EL', 5, 1, 30, 1),
-
-                ('L', 5, 2, 'Característica 2'),
-                ('EL', 5, 3, 30, 1),
-
-                ('L', 5, 4, 'Código SINADA'),
-                ('EL', 5, 5, 30, 1)
-
-                #('L', 6, 2, '¿Es prioridad?'),
-                #('CXP', 6, 3, 27, si_no, ' ', "readonly")
-
-                #('L', 6, 4, 'Puntaje'),
-                #('EL', 6, 5, 30, 1)
+                ('L', 1, 0, 'Departamento'),
+                ('CXDEP3', 1, 1, 27, tabla_lista_efa, 
+                'DEPARTAMENTO ', 'Provincia', 'PROVINCIA ', 'Distrito', 'DISTRITO ')
 
             ]
             # Se inserta rejilla nueva
