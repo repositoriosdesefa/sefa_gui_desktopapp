@@ -583,6 +583,8 @@ class Doc_emitidos_busqueda(Ventana):
         else:
             codigodr = self.cod_id_objeto
 
+            texto_pantalla = "Documento recibido: " + codigodr
+
             lb1 = b_dr.listar_datos_de_fila(codigodr)
             lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], 
                                 lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14], lb1[15], lb1[16]]
@@ -617,7 +619,7 @@ class Doc_emitidos_busqueda(Ventana):
             self.IDDE_FINAL = self.IDDE[0]
 
             #OBTENER EL ID USUARIO DEL DOCUMENTO RECIBIDO
-            codigodr = self.cod_doc_dr
+            codigodr = self.cod_id_objeto
             # OBTENER EL ID INTERNO DEL DOCUMENTO RECIBIDO
             tabla_de_codigo_dr = b_dr.generar_dataframe()
             tabla_codigo_de_filtrada = tabla_de_codigo_dr[tabla_de_codigo_dr.COD_DR == codigodr]
