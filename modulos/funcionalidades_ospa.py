@@ -378,3 +378,4 @@ class funcionalidades_ospa(Ventana):
             return True
         else:
             return False
+

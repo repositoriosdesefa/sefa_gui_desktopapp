@@ -11,6 +11,7 @@ from PIL import Image, ImageTk
 import tkinter as tk
 from idlelib.tooltip import Hovertip
 
+
 # Modificación de la clase DateEntry
 class DateEntry(DateEntry):
     def get_date(self):
@@ -73,6 +74,7 @@ class Ventana(Toplevel):
         """Constructor especial de la clase Ventana.\n
         Sirve para generar nuevas ventanas en una desktop app"""
 
+        self.scrollable = True
         self.ventana_anterior = ventana_anterior
         Toplevel.__init__(self)
         self.alto = alto
@@ -87,6 +89,15 @@ class Ventana(Toplevel):
         self.iconbitmap('images/S_de_Sefa.ico')
         self.title(self.titulo)
         self.config(background= formato.fondo)
+
+        #if self.scrollable == True:
+        #    self.main_frame = Frame(ventana_anterior)
+        #    self.main_frame.pack(side="top", fill="both", expand=True)
+        #    self.scrollframe = ScrollFrame(self.main_frame, height=50, width=50)
+        #    self.scrollframe.pack(side="top", fill=None, expand=False)
+            # Frame que contiene objetos:
+        #    self.z = Frame(self.scrollframe.viewPort)
+        #    self.z.pack(side="top", fill="both", expand=True)
 
     #----------------------------------------------------------------------
     def desaparecer(self):
@@ -222,6 +233,7 @@ class VerticalScrolledFrame:
 
     def __str__(self):
         return str(self.outer)
+
 
 # V. Clase Cuadro
 class Cuadro(Frame):
@@ -757,25 +769,33 @@ class Cuadro(Frame):
         self.lista_de_datos.append((self.spin_box))
 
     #----------------------------------------------------------------------
+
     def agregar_dateentry(self, y, x):
         """Método de la clase Cuadro. \n
         Permite agregar una entrada de calendario al Frame creado con la Clase Cuadro."""
 
         # Recordar que es importante utilizar: pyinstaller --hidden-import babel.numbers myscript.py
         # Ver: https://tkcalendar.readthedocs.io/en/stable/howtos.html 
-        
+
         self.y = y
         self.x = x
 
+        self.cal = DateEntry(self.z, width=39, background='darkblue', foreground='white', borderwidth=1, locale='en_US', date_pattern='dd/mm/yyyy') # Creación
+        self.cal.delete(0, "end") # Esta línea hace que el winget empiece vacío (también serviría para un botón que limpie)
+        #self.cal.grid(row=0, column=0) # Posicionamiento
+
+        self.dato = self.cal.get_date() # Si no se ha seleccionado una fecha, saldrá un espacio vacío.
+        print(self.dato)
         # No es necesario crear un StringVar()
-        self.cal = DateEntry(self.z, width=39, background='darkblue',
-                            foreground='white', borderwidth=1)
+        #self.cal = DateEntry(self.z, width=39, background='darkblue',
+        #                    foreground='white', borderwidth=1)
         
         self.cal.grid(row = self.y, column = self.x, pady=4, padx=8)
         #self.cal.set_date()
-        self.cal["state"] = "normal"
+        #self.cal["state"] = "normal"
         self.lista_de_objetos.append((self.cal))
-        self.lista_de_datos.append((self.cal))
+        self.lista_de_datos.append((self.dato))
+
      
     #----------------------------------------------------------------------
     def agregar_dateentry_editable(self, y, x):
@@ -1125,13 +1145,16 @@ class Cuadro(Frame):
             return self.lista[n].get("1.0", "end-1c")
         else:
             return self.lista[n].get()
-    
+
+ 
     #----------------------------------------------------------------------
     def obtener_lista_de_datos(self):
         """"""
 
         self.lista = self.lista_de_datos
         self.lista_output = []
+
+
         for i in self.lista:
             if type(i).__name__ == 'DateEntry':
                 fecha = i.get_date()
@@ -1150,7 +1173,6 @@ class Cuadro(Frame):
     #----------------------------------------------------------------------
     def insertar_lista_de_datos(self, informacion_a_introducir):
         """"""
-        
         self.informacion_a_introducir = informacion_a_introducir
         self.lista = self.lista_de_datos
 
@@ -1163,7 +1185,7 @@ class Cuadro(Frame):
             except AttributeError:
                 try:
                     datetime.datetime.strptime(str(row[0]), '%d/%m/%Y')
-                except ValueError: 
+                except ValueError:
                     row[1].insert(INSERT, str(row[0]))
                 else:
                     row[1].set_date(row[0])
@@ -1171,7 +1193,7 @@ class Cuadro(Frame):
                 row[1].set(row[0])
         
         self.rejilla_actualizada = True
-
+            
     #----------------------------------------------------------------------
     def eliminar_cuadro(self):
         """"""

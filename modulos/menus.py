@@ -40,7 +40,7 @@ class ventanas_ospa(Ventana):
 
         self.desaparecer()
         # LargoxAncho
-        SubFrame = ventanas_busqueda.Doc_emitidos_busqueda(self, 500, 1200, 
+        SubFrame = ventanas_busqueda.Doc_emitidos_busqueda(self, 550, 1300, 
                     "Búsqueda de documentos emitidos")
     
     #----------------------------------------------------------------------
@@ -85,7 +85,7 @@ class inicio_app_OSPA(ventanas_ospa):
         
         Ventana.__init__(self, *args)
 
-        c1 = Cuadro(self)
+        c1 = Cuadro(self, scrollable=True)
         c1.agregar_label(0, 1, ' ')
         c1.agregar_imagen(1, 1,'Logo_OSPA.png',202,49)
         c1.agregar_label(2, 1,'Jefe')
@@ -167,7 +167,7 @@ class Menu_jefe(inicio_app_OSPA):
         
         self.desaparecer()
         # LargoxAncho
-        SubFrame = ventanas_busqueda.Pendientes_jefe_firma(self, 550, 1090, "Documentos pendientes de firma")
+        SubFrame = ventanas_busqueda.Pendientes_jefe_firma(self, 550, 1300, "Documentos pendientes de firma")
     
     #----------------------------------------------------------------------
     def ver_menu_busquedas(self):
