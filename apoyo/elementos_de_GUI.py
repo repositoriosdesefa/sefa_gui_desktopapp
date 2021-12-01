@@ -34,21 +34,21 @@ class MenuSefa():
         menubar = Menu(window)
         window.config(menu=menubar)
 
-        filemenu = Menu(menubar, tearoff=0)
-        filemenu.add_command(label="Inicio")
-        filemenu.add_command(label="Cerrar sesión")
-        filemenu.add_separator()
-        filemenu.add_command(label="Salir", command=window.quit)
+        #filemenu = Menu(menubar, tearoff=0)
+        #filemenu.add_command(label="Inicio")
+        #filemenu.add_command(label="Cerrar sesión")
+        #filemenu.add_separator()
+        #filemenu.add_command(label="Salir", command=window.quit)
 
-        helpmenu = Menu(menubar, tearoff=0)
-        helpmenu.add_command(label="Manual", command=self.lanzar_msj_manual)
-        helpmenu.add_separator()
-        helpmenu.add_command(label="Acerca de...", command=self.lanzar_msj_acerca_de)
+        #helpmenu = Menu(menubar, tearoff=0)
+        #helpmenu.add_command(label="Manual", command=self.lanzar_msj_manual)
+        #helpmenu.add_separator()
+        #helpmenu.add_command(label="Acerca de...", command=self.lanzar_msj_acerca_de)
 
         # Añadir "Archivo" y "Ayuda" a la barra de Menu
 
-        menubar.add_cascade(label="Archivo", menu=filemenu)
-        menubar.add_cascade(label="Ayuda", menu=helpmenu)
+        #menubar.add_cascade(label="Archivo", menu=filemenu)
+        #menubar.add_cascade(label="Ayuda", menu=helpmenu)
 
     #----------------------------------------------------------------------
     def lanzar_msj_manual(self):
