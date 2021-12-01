@@ -1079,8 +1079,8 @@ class Macroproblemas(funcionalidades_ospa):
         else:
             self.mc = self.mc[self.mc.ID_MP.isin(self.listamc)]
 
-        self.tabla_mp = self.mc.rename(columns={'ID_MP':'ID MACROPROBLEMA','COD_MP':'COD. MACROPROBLEMA','NOMBRE_DEL_PROBLEMA':'NOMBRE PROBLEMA','FECHA_DE_CREACION':'FECHA CREACION'})
-        self.tabla_mpF = self.tabla_mp.loc[0:99, ['ID MACROPROBLEMA','COD. MACROPROBLEMA','FECHA CREACION','NOMBRE PROBLEMA','ESTADO','DESCRIPCION']]
+        self.tabla_mp = self.mc.rename(columns={'COD_MP':'COD. MACROPROBLEMA','NOMBRE_DEL_PROBLEMA':'NOMBRE PROBLEMA','FECHA_DE_CREACION':'FECHA CREACION'})
+        self.tabla_mpF = self.tabla_mp.loc[0:99, ['COD. MACROPROBLEMA','FECHA CREACION','NOMBRE PROBLEMA','ESTADO','DESCRIPCION']]
         
         # Listas para desplegables
         #self.listaTC = list(set(self.tabla_mp['TIPO CAUSA']))
@@ -1254,13 +1254,20 @@ class Macroproblemas(funcionalidades_ospa):
         self.x = x
 
         #OBTENER EL ID INTERNO DEL DOCUMENTO EMITIDO
-        self.IDEX = b_ep.listar_datos_de_fila(self.x)
-        self.IDEX_FINAL = self.IDEX[0]
+        lb1 = b_mp.listar_datos_de_fila(self.x)
+        self.IDEX_FINAL = lb1[0]
 
-        self.mc_ep = b_relacion_mp_ep.generar_dataframe()
-        tabla_macroproblema_filtrada = self.mc_ep[self.mc_ep['ID_EP'] == self.IDEX_FINAL]
-        codigo_mp = tabla_macroproblema_filtrada.iloc[0,2]
-        print(codigo_mp)
+        texto_documento = "Macroproblema: " + str(x)
+        lista_para_insertar = [lb1[2],lb1[3], lb1[4]]
+
+        #self.mc_ep = b_relacion_mp_ep.generar_dataframe()
+        #tabla_macroproblema_filtrada = self.mc_ep[self.mc_ep['ID_EP'] == self.IDEX_FINAL]
+        #codigo_mp = tabla_macroproblema_filtrada.iloc[0,2]
+        #print(codigo_mp)
+
+        self.desaparecer()
+        subframe = ventanas_vista.Macroproblemas_vista(self, 650, 1150, texto_documento, nuevo=False, 
+                                                        lista = lista_para_insertar, id_objeto = x)
     
 
     #----------------------------------------------------------------------

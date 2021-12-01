@@ -756,6 +756,12 @@ class Macroproblemas_vista(funcionalidades_ospa):
         # III.2 Frame de rejillas
         self.frame_rejilla = Cuadro(self)
         self.frame_rejilla.agregar_rejilla(rejilla_mp)
+        if self.nuevo == False: # Estamos en una ficha creada
+            self.tabla_de_mp_cod = b_mp_cod.generar_dataframe()
+            self.tabla_relacion_mp_ep = base_relacion_mp_ep.generar_dataframe()
+            self.cod_usuario_mp = id_objeto
+            self.lista_para_insertar = lista
+            self.frame_rejilla.insertar_lista_de_datos(self.lista_para_insertar)
 
         # III.3 Frame de botón de rejilla
         f_boton = Cuadro(self)
@@ -776,7 +782,7 @@ class Macroproblemas_vista(funcionalidades_ospa):
         
         
     #----------------------------------------------------------------------
-    def guardar_y_actualizar_mp(self, x):
+    def guardar_y_actualizar_mp(self):
         """"""
         # Agregamos el objeto
         self.guardar_objeto(self.frame_rejilla,
