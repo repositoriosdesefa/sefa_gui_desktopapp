@@ -41,7 +41,7 @@ id_b_efa = '1pjHXiz15Zmw-49Nr4o1YdXJnddUX74n7Tbdf5SH7Lb0'
 b_efa = Base_de_datos(id_b_efa, 'Directorio')
 
 # relacion macroproblema con extremos
-b_relacion_mc_ep = Base_de_datos(id_b_ospa, 'RELACION_MC-EP')
+b_relacion_mc_ep = Base_de_datos(id_b_ospa, 'RELACION_MP-EP')
 
 base_relacion_docs = variables_globales.base_relacion_docs
 base_relacion_dr_ep = variables_globales.base_relacion_dr_ep
@@ -529,8 +529,8 @@ class Doc_emitidos_busqueda(Ventana):
         texto_documento = 'Documento emitido: ' + id_usuario
 
         lb1 = b_de.listar_datos_de_fila(id_usuario)
-        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], lb1[9]]
-                                # lb1[10], lb1[11], lb1[12]]
+        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], 
+                                lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], lb1[12]]
         self.desaparecer()
         subframe = ventanas_vista.Doc_emitidos_vista(self, 650, 1150, texto_documento, nuevo=False, 
                                         lista=lista_para_insertar, id_objeto = id_usuario)
@@ -935,11 +935,12 @@ class Extremos(Ventana):
         texto_documento = 'Extremo de problema: ' + x
 
         lb1 = b_ep.listar_datos_de_fila(x)
-        lista_para_insertar = [lb1[1], lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], 
-                                lb1[8], lb1[9], lb1[10], lb1[11], lb1[12], lb1[13]]
+        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], 
+                                lb1[8], lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], 
+                                lb1[14], lb1[15], lb1[16], lb1[17], lb1[18], lb1[19], lb1[20]]
         self.desaparecer()
 
-        subframe = ventanas_vista.Extremo_problemas_vista(self, 650, 1150, texto_documento, 
+        subframe = ventanas_vista.Extremo_problemas_vista(self, 750, 1350, texto_documento, 
                                         nuevo=False, lista=lista_para_insertar, id_objeto = x)
 
     #----------------------------------------------------------------------
@@ -1046,8 +1047,8 @@ class Macroproblemas(Ventana):
         
         # Renombramos los encabezados
         self.mc = b_mc.generar_dataframe()
-        self.tabla_mc = self.mc.rename(columns={'ID_MC':'ID MACROPROBLEMA','COD_MC':'COD. MACROPROBLEMA','NOMBRE_DEL_PROBLEMA':'NOMBRE PROBLEMA','TIPO_DE_CAUSA':'TIPO CAUSA','TIPO_DE_AFECTACION':'TIPO AFECTACION','FECHA_DE_CREACION':'FECHA CREACION'})
-        self.tabla_mcF = self.tabla_mc.loc[0:99, ['ID MACROPROBLEMA','COD. MACROPROBLEMA','FECHA CREACION','NOMBRE PROBLEMA','TIPO CAUSA','TIPO AFECTACION','ESTADO','DESCRIPCION']]
+        self.tabla_mc = self.mc.rename(columns={'ID_MP':'ID MACROPROBLEMA','COD_MP':'COD. MACROPROBLEMA','NOMBRE_DEL_PROBLEMA':'NOMBRE PROBLEMA','FECHA_DE_CREACION':'FECHA CREACION'})
+        self.tabla_mcF = self.tabla_mc.loc[0:99, ['ID MACROPROBLEMA','COD. MACROPROBLEMA','FECHA CREACION','NOMBRE PROBLEMA','ESTADO','DESCRIPCION']]
         
         # Listas para desplegables
         self.listaTC = list(set(self.tabla_mc['TIPO CAUSA']))
