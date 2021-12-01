@@ -65,14 +65,12 @@
 - [x] Programar: Simplificación y abstracción de método de generar vitrina
 - [x] Programar: Simplificación de método de actualización de vitrinas en vista
 - [x] Programar: Simplificación y abstracción de método de eliminar objeto
-- [ ] Programar: Simplificación y abstracción de títulos y botones principales en Frame
-- [ ] Programar: Simplificación y abstracción de método de agregar objeto
-- [ ] Programar: Validación de fecha de notificación y fecha de firma (Con botón). [Campo libre]
-
+- [x] Programar: Simplificación y abstracción de títulos y botones principales en Frame
+- [x] Programar: Simplificación y abstracción de método de agregar objeto
 
 ## Retos
-- [ ] Investigar: Lista desplegable condicionada de tres niveles
-- [ ] Investigar: Eliminación de widgets de tipo de DateEntry o seteo como valor vacío
+- [x] Investigar: Lista desplegable condicionada de tres niveles
+- [x] Investigar: Eliminación de widgets de tipo de DateEntry o seteo como valor vacío
 
 ## Nuevas ventanas
 - [x] Creación de pantallas de menú
