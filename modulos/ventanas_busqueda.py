@@ -240,7 +240,7 @@ class Doc_recibidos_busqueda(Ventana):
         if self.nuevo == True:
             self.volver()
         else:
-            codigode = self.cod_doc_de
+            codigode = self.cod_id_objeto
 
             lb1 = b_de.listar_datos_de_fila(codigode)
             lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6]]
@@ -278,7 +278,7 @@ class Doc_recibidos_busqueda(Ventana):
             self.IDDR_FINAL = self.IDDR[0]
 
             #OBTENER EL ID USUARIO DEL DOCUMENTO EMITIDO
-            codigode = self.cod_doc_de
+            codigode = self.cod_id_objeto
             # OBTENER EL ID INTERNO DEL DOCUMENTO EMITIDO
             tabla_de_codigo_de = b_de.generar_dataframe()
             tabla_codigo_de_filtrada = tabla_de_codigo_de[tabla_de_codigo_de.COD_DE == codigode]
@@ -369,7 +369,7 @@ class Doc_emitidos_busqueda(Ventana):
         self.nuevo = nuevo
         if self.nuevo != True: #en caso exista
             self.id_usuario = lista
-            self.cod_doc_de = id_objeto
+            self.cod_id_objeto = id_objeto
 
         # Generamos el dataframe a filtrar
         self.tabla_inicial = b_de.generar_dataframe()
@@ -581,7 +581,7 @@ class Doc_emitidos_busqueda(Ventana):
         if self.nuevo == True:
             self.volver()
         else:
-            codigodr = self.cod_doc_de
+            codigodr = self.cod_id_objeto
 
             lb1 = b_dr.listar_datos_de_fila(codigodr)
             lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], 
