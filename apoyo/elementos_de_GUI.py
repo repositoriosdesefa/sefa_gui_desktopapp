@@ -780,22 +780,18 @@ class Cuadro(Frame):
         self.y = y
         self.x = x
 
-        self.cal = DateEntry(self.z, width=39, background='darkblue', foreground='white', borderwidth=1, locale='en_US', date_pattern='dd/mm/yyyy') # Creación
-        self.cal.delete(0, "end") # Esta línea hace que el winget empiece vacío (también serviría para un botón que limpie)
-        #self.cal.grid(row=0, column=0) # Posicionamiento
+        self.y = y
+        self.x = x
 
-        self.dato = self.cal.get_date() # Si no se ha seleccionado una fecha, saldrá un espacio vacío.
-        print(self.dato)
         # No es necesario crear un StringVar()
-        #self.cal = DateEntry(self.z, width=39, background='darkblue',
-        #                    foreground='white', borderwidth=1)
+        self.cal = DateEntry(self.z, width=39, background='darkblue',
+                            foreground='white', borderwidth=1)
         
         self.cal.grid(row = self.y, column = self.x, pady=4, padx=8)
         #self.cal.set_date()
-        #self.cal["state"] = "normal"
+        self.cal["state"] = "normal"
         self.lista_de_objetos.append((self.cal))
-        self.lista_de_datos.append((self.dato))
-
+        self.lista_de_datos.append((self.cal))
      
     #----------------------------------------------------------------------
     def agregar_dateentry_editable(self, y, x):
