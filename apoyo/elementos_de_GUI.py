@@ -11,6 +11,14 @@ from PIL import Image, ImageTk
 import tkinter as tk
 from idlelib.tooltip import Hovertip
 
+# Modificación de la clase DateEntry
+class DateEntry(DateEntry):
+    def get_date(self):
+        if not self.get():
+            return '' # Aquí colocamos lo que queremos que salga cuando no se haya asignado una fecha.
+        self._validate_date()
+        return self.parse_date(self.get())
+
 # Elementos de Gui by DG, LR & LE
 
 # I. MenuSefa
@@ -672,57 +680,63 @@ class Cuadro(Frame):
         self.y_3 = y
         self.x_3 = int(x + 4)
 
-        self.tabla_dependiente = tabla
-        self.lista_inicial =  list(set(tabla[columna_1]))
+        tabla_dependiente = tabla
+        lista_inicial =  list(set(tabla[columna_1]))
 
-        self.primer_dato = StringVar()
-        self.segundo_dato = StringVar()
-        self.tercer_dato = StringVar()
+        primer_dato = StringVar()
+        segundo_dato = StringVar()
+        tercer_dato = StringVar()
 
-        self.combo_1 = ttk.Combobox(self.z, textvariable = self.primer_dato, state="readonly", width=ancho_widget)
-        self.combo_2 = ttk.Combobox(self.z, textvariable = self.segundo_dato, state="readonly", width=ancho_widget)
-        self.combo_3 = ttk.Combobox(self.z, textvariable = self.tercer_dato, state="readonly", width=ancho_widget)
+        combo_1 = ttk.Combobox(self.z, textvariable = primer_dato, state="readonly", width=ancho_widget)
+        combo_2 = ttk.Combobox(self.z, textvariable = segundo_dato, state="readonly", width=ancho_widget)
+        combo_3 = ttk.Combobox(self.z, textvariable = tercer_dato, state="readonly", width=ancho_widget)
 
-        self.combo_1["values"] = self.lista_inicial 
+        combo_1["values"] = lista_inicial
+        combo_1.bind("<<ComboboxSelected>>", lambda a, valor = primer_dato: self.filtrar_primera(valor, tabla_dependiente, combo_1, columna_1, combo_2, columna_2, combo_3))
+        combo_2.bind("<<ComboboxSelected>>", lambda a, valor = segundo_dato: self.filtrar_segunda(valor, tabla_dependiente,  combo_2, columna_2, combo_3, columna_3))
 
-        self.combo_1.bind("<<ComboboxSelected>>", lambda a, valor = self.primer_dato: self.filtrar_primera(valor, columna_1, columna_2))
-        self.combo_2.bind("<<ComboboxSelected>>", lambda a, valor = self.segundo_dato: self.filtrar_segunda(valor, columna_2, columna_3))
+        combo_1.grid(row = self.y, column = self.x, pady=4, padx=8)
+        combo_2.grid(row = self.y_2, column = self.x_2, pady=4, padx=8)
+        combo_3.grid(row = self.y_3, column = self.x_3, pady=4, padx=8)
 
-        self.combo_1.grid(row = self.y, column = self.x, pady=4, padx=8)
-        self.combo_2.grid(row = self.y_2, column = self.x_2, pady=4, padx=8)
-        self.combo_3.grid(row = self.y_3, column = self.x_3, pady=4, padx=8)
+        combo_1.set('')
+        combo_2.set('')
+        combo_3.set('')
 
-        self.combo_1.set('')
-        self.combo_2.set('')
-        self.combo_3.set('')
-
-        self.lista_de_objetos.append((self.combo_1))
+        self.lista_de_objetos.append((combo_1))
         self.agregar_label(y, int(x+1), etiqueta_2)
-        self.lista_de_objetos.append((self.combo_2))
+        self.lista_de_objetos.append((combo_2))
         self.agregar_label(y, int(x+3), etiqueta_3)
-        self.lista_de_objetos.append((self.combo_3))
+        self.lista_de_objetos.append((combo_3))
 
-        self.lista_de_datos.append((self.combo_1))
-        self.lista_de_datos.append((self.combo_2))
-        self.lista_de_datos.append((self.combo_3))
+        self.lista_de_datos.append((combo_1))
+        self.lista_de_datos.append((combo_2))
+        self.lista_de_datos.append((combo_3))
     
     #----------------------------------------------------------------------
-    def filtrar_primera(self, valor,  primera_columna, segunda_columna, *args):
-        p = self.primer_dato.get() # Toma el dato del objeto Stringvar.
-        tabla_filtro = self.tabla_dependiente[primera_columna] == p # Genera un filtro para la tabla del excel con el dato seleccionado
-        nueva_tabla = self.tabla_dependiente[tabla_filtro] # Aplica el filtro de la línea anterior.
+    def filtrar_primera(self, valor,  tabla_dependiente, combo_1, primera_columna, combo_2, segunda_columna, combo_3, *args):
+        p = combo_1.get()  # Toma el dato del objeto Stringvar.
+        if (p in self.lista_de_datos)==False:
+            combo_2.set('') # En el caso se elija algo diferente a lo que inicialmente estaba
+            combo_3.set('')
+
+        tabla_filtro = tabla_dependiente[primera_columna] == p # Genera un filtro para la tabla del excel con el dato seleccionado
+        nueva_tabla = tabla_dependiente[tabla_filtro] # Aplica el filtro de la línea anterior.
         segunda = list(set(nueva_tabla[segunda_columna])) # Genera la lista del siguiente combobox.
         segunda.sort() # Ordena la lista...
-        self.combo_2.config(values=segunda) # Aplica la lista generada al siguiente combobox.
+        combo_2.config(values=segunda) # Aplica la lista generada al siguiente combobox.
     
     #----------------------------------------------------------------------
-    def filtrar_segunda(self, valor, segunda_columna, tercera_columna, *args):
-        s = self.segundo_dato.get()
-        tabla_filtro = self.tabla_dependiente[segunda_columna] == s
-        nueva_tabla = self.tabla_dependiente[tabla_filtro]
+    def filtrar_segunda(self, valor, tabla_dependiente, combo_2, segunda_columna, combo_3, tercera_columna, *args):
+        s = combo_2.get()
+        if (s in self.lista_de_datos)==False:
+            combo_3.set('')
+
+        tabla_filtro = tabla_dependiente[segunda_columna] == s
+        nueva_tabla = tabla_dependiente[tabla_filtro]
         tercera = list(set(nueva_tabla[tercera_columna]))
         tercera.sort()
-        self.combo_3.config(values=tercera)
+        combo_3.config(values=tercera)
         
     #----------------------------------------------------------------------
     def agregar_spinbox(self, y, x, inicio, fin, incremento, defecto):
@@ -763,6 +777,29 @@ class Cuadro(Frame):
         self.lista_de_objetos.append((self.cal))
         self.lista_de_datos.append((self.cal))
      
+    #----------------------------------------------------------------------
+    def agregar_dateentry_editable(self, y, x):
+        """Método de la clase Cuadro. \n
+        Permite agregar una entrada de calendario al Frame creado con la Clase Cuadro."""
+
+        # Recordar que es importante utilizar: pyinstaller --hidden-import babel.numbers myscript.py
+        # Ver: https://tkcalendar.readthedocs.io/en/stable/howtos.html 
+        
+        self.y = y
+        self.x = x
+
+        # No es necesario crear un StringVar()
+        cal = DateEntry(self.z, width=39, background='darkblue',
+                            foreground='white', borderwidth=1)
+        
+        cal.grid(row = self.y, column = self.x, pady=4, padx=8)
+        cal.delete(0, "end")
+        cal.configure(validate = "none")
+        #cal["state"] = "normal"
+        self.lista_de_objetos.append((cal))
+        self.lista_de_datos.append((cal))
+     
+    
     #----------------------------------------------------------------------
     def cambio_valor(self, nombre_objeto, widget, posicion_ordinal, posicion_valor,
                     tabla, nombre_columna, nombre_col_filtrada):
@@ -903,6 +940,10 @@ class Cuadro(Frame):
             elif row[0] == 'D':
 
                 self.agregar_dateentry(row[1], row[2])
+            
+            elif row[0] == 'DE':
+
+                self.agregar_dateentry_editable(row[1], row[2])
 
             else:
 
@@ -1094,7 +1135,10 @@ class Cuadro(Frame):
         for i in self.lista:
             if type(i).__name__ == 'DateEntry':
                 fecha = i.get_date()
-                self.lista_output.append(str(fecha.strftime("%d/%m/%Y")))
+                if type(fecha).__name__ == 'str':
+                     self.lista_output.append(fecha)
+                else:
+                    self.lista_output.append(str(fecha.strftime("%d/%m/%Y")))
             elif type(i).__name__ == 'ScrolledText':
                 self.lista_output.append(i.get("1.0", "end-1c"))
             elif type(i).__name__ == 'str': # Caso especial de combo resultado
