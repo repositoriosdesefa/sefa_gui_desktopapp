@@ -16,6 +16,10 @@ base_relacion_dr_ep =  Base_de_datos(id_b_ospa, 'RELACION_DR-EP')
 base_relacion_dr_ep_hist =  Base_de_datos(id_b_ospa, 'HISTORIAL_RELACION_DR-EP')
 base_relacion_de_ep =  Base_de_datos(id_b_ospa, 'RELACION_DE-EP')
 base_relacion_de_ep_hist =  Base_de_datos(id_b_ospa, 'HISTORIAL_RELACION_DE-EP')
+base_relacion_mp_ep =  Base_de_datos(id_b_ospa, 'RELACION_MP-EP')
+base_relacion_mp_ep_hist =  Base_de_datos(id_b_ospa, 'HISTORIAL_RELACION_MP-EP')
+base_parametros_dep = Base_de_datos(id_b_ospa, 'PARAMETROS')
+tabla_parametros_dep = base_parametros_dep.generar_dataframe()
 # 1. Bases de datos principales
 # Documentos recibidos
 b_dr_cod = Base_de_datos(id_b_ospa, 'DOCS_R')
@@ -32,12 +36,15 @@ b_ep_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_EP')
 # Macro problemas
 b_mp_cod = Base_de_datos(id_b_ospa, 'MC_P')
 b_mp = Base_de_datos(id_b_ospa, 'MACROPROBLEMA')
+b_mp_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_MP')
 
 # 2. Bases de datos complementarias
 # 2.1 Directorio de Oficinas
 id_b_efa = '1pjHXiz15Zmw-49Nr4o1YdXJnddUX74n7Tbdf5SH7Lb0'
 b_efa = Base_de_datos(id_b_efa, 'Directorio')
 tabla_directorio = b_efa.generar_dataframe()
+tabla_directorio_efa = tabla_directorio[tabla_directorio['TIPO_OFICINA']!="OTRO"]
+tabla_directorio_efa_final = tabla_directorio_efa[tabla_directorio_efa['Tipo de entidad u oficina']!="T_EFA_DIR"]
 # 2.1 Ubigeo
 id_lista_efa = "1ephi7hS0tHRQQq5nlkV141ZCY54FUfkw13EeKn310Y4"
 b_lista_efa = Base_de_datos(id_lista_efa, 'Lista de EFA')
@@ -56,6 +63,8 @@ departamento_ospa = sorted(list(tabla_lista_efa['DEP_OSPA'].unique()))
 id_parametros = '1NPg8Q0O_NqQ6bkRhy4ow17x2XJ08r6Ev3R6X80WmZ3c'
 base_parametros = Base_de_datos(id_parametros, 'PARAMETROS')
 tabla_parametros = base_parametros.generar_dataframe()
+base_parametros_act = Base_de_datos(id_parametros, 'Datos de actividad')
+tabla_parametros_act = base_parametros_act.generar_dataframe()
 # 4.2 Desplegables en Drive
 agente_conta = list(set(tabla_parametros['AGENTE CALCULADORA']))
 componente_amb = list(set(tabla_parametros['COMPONENTE CALCULADORA']))
@@ -89,6 +98,7 @@ marco_pedido = ('EFA', 'OEFA',
 tabla_relacion_dr_de = base_relacion_docs.generar_dataframe()
 tabla_relacion_dr_ep = base_relacion_dr_ep.generar_dataframe()
 tabla_relacion_de_ep = base_relacion_de_ep.generar_dataframe()
+tabla_relacion_mp_ep = base_relacion_mp_ep.generar_dataframe()
 # 5.1 Documentos recibidos
 tabla_de_dr_cod = b_dr_cod.generar_dataframe()
 tabla_de_dr_completa = b_dr.generar_dataframe()
@@ -109,8 +119,13 @@ tabla_de_de_resumen =  tabla_de_de_completa.drop(['HT_SALIDA', 'FECHA_PROYECTO_F
 tabla_de_ep_cod = b_ep_cod.generar_dataframe()
 tabla_de_ep_completa = b_ep.generar_dataframe()
 tabla_de_ep_resumen = tabla_de_ep_completa.drop(['OCURRENCIA', 'EXTENSION', 'TIPO DE AFECTACION',
-                                                'PROVINCIA', 'DESCRIPCION', 'TIPO DE UBICACION',
+                                                'PROVINCIA', 'DESCRIPCION', 'TIPO DE UBICACION', 'DISTRITO', 
+                                                'TIPO_EFA', 'CATEGORIA_EFA',
                                                 'CARACTERISTICA 1', 'CARACTERISTICA 2', 'TIPO CAUSA',
                                                 'PRIORIDAD', 'PUNTAJE', 
                                                 'CODIGO SINADA', 'ACTIVIDAD', 'FECHA_ULTIMO_MOV'], axis=1)
 
+# 5.4 Macroproblemas
+tabla_de_mp_cod = b_mp_cod.generar_dataframe()
+tabla_de_mp_completa = b_mp.generar_dataframe()
+tabla_de_mp_resumen = tabla_de_mp_completa.drop(['FECHA_DE_CREACION', 'FECHA_ULTIMO_MOV'], axis=1)
