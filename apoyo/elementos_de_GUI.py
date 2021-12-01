@@ -11,6 +11,7 @@ from PIL import Image, ImageTk
 import tkinter as tk
 from idlelib.tooltip import Hovertip
 
+
 # Elementos de Gui by DG, LR & LE
 
 # I. Clave ventana
@@ -182,6 +183,15 @@ class VerticalScrolledFrame:
     def __str__(self):
         return str(self.outer)
 # II. Clase Cuadro
+
+#----------------------------------------------------------------------
+
+class DateEntry(DateEntry):
+    def get_date(self):
+        if not self.get():
+            return '' # Aquí colocamos lo que queremos que salga cuando no se haya asignado una fecha.
+        self._validate_date()
+        return self.parse_date(self.get())
 
 class Cuadro(Frame):
     """"""
@@ -641,25 +651,33 @@ class Cuadro(Frame):
         self.lista_de_datos.append((self.spin_box))
 
     #----------------------------------------------------------------------
+
     def agregar_dateentry(self, y, x):
         """Método de la clase Cuadro. \n
         Permite agregar una entrada de calendario al Frame creado con la Clase Cuadro."""
 
         # Recordar que es importante utilizar: pyinstaller --hidden-import babel.numbers myscript.py
         # Ver: https://tkcalendar.readthedocs.io/en/stable/howtos.html 
-        
+
         self.y = y
         self.x = x
 
+        self.cal = DateEntry(self.z, width=39, background='darkblue', foreground='white', borderwidth=1, locale='en_US', date_pattern='dd/mm/yyyy') # Creación
+        self.cal.delete(0, "end") # Esta línea hace que el winget empiece vacío (también serviría para un botón que limpie)
+        #self.cal.grid(row=0, column=0) # Posicionamiento
+
+        self.dato = self.cal.get_date() # Si no se ha seleccionado una fecha, saldrá un espacio vacío.
+        print(self.dato)
         # No es necesario crear un StringVar()
-        self.cal = DateEntry(self.z, width=39, background='darkblue',
-                            foreground='white', borderwidth=1)
+        #self.cal = DateEntry(self.z, width=39, background='darkblue',
+        #                    foreground='white', borderwidth=1)
         
         self.cal.grid(row = self.y, column = self.x, pady=4, padx=8)
         #self.cal.set_date()
-        self.cal["state"] = "normal"
+        #self.cal["state"] = "normal"
         self.lista_de_objetos.append((self.cal))
-        self.lista_de_datos.append((self.cal))
+        self.lista_de_datos.append((self.dato))
+
      
     #----------------------------------------------------------------------
     def cambio_valor(self, nombre_objeto, widget, posicion_ordinal, posicion_valor,
@@ -982,17 +1000,25 @@ class Cuadro(Frame):
             return self.lista[n].get("1.0", "end-1c")
         else:
             return self.lista[n].get()
-    
+
+ 
     #----------------------------------------------------------------------
     def obtener_lista_de_datos(self):
         """"""
 
         self.lista = self.lista_de_datos
         self.lista_output = []
+
+
         for i in self.lista:
             if type(i).__name__ == 'DateEntry':
                 fecha = i.get_date()
-                self.lista_output.append(str(fecha.strftime("%d/%m/%Y")))
+                try:
+                    datetime.datetime.strptime(str(fecha), '%d/%m/%Y')
+                except ValueError:
+                    self.lista_output.append(fecha)
+                else:
+                    self.lista_output.append(str(fecha.strftime("%d/%m/%Y")))
             elif type(i).__name__ == 'ScrolledText':
                 self.lista_output.append(i.get("1.0", "end-1c"))
             elif type(i).__name__ == 'str': # Caso especial de combo resultado
@@ -1004,7 +1030,6 @@ class Cuadro(Frame):
     #----------------------------------------------------------------------
     def insertar_lista_de_datos(self, informacion_a_introducir):
         """"""
-        
         self.informacion_a_introducir = informacion_a_introducir
         self.lista = self.lista_de_datos
 
@@ -1017,7 +1042,7 @@ class Cuadro(Frame):
             except AttributeError:
                 try:
                     datetime.datetime.strptime(str(row[0]), '%d/%m/%Y')
-                except ValueError: 
+                except ValueError:
                     row[1].insert(INSERT, str(row[0]))
                 else:
                     row[1].set_date(row[0])
@@ -1025,7 +1050,7 @@ class Cuadro(Frame):
                 row[1].set(row[0])
         
         self.rejilla_actualizada = True
-
+            
     #----------------------------------------------------------------------
     def eliminar_cuadro(self):
         """"""

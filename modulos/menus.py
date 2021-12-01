@@ -40,7 +40,7 @@ class ventanas_ospa(Ventana):
 
         self.desaparecer()
         # LargoxAncho
-        SubFrame = ventanas_busqueda.Doc_emitidos_busqueda(self, 500, 1200, 
+        SubFrame = ventanas_busqueda.Doc_emitidos_busqueda(self, 550, 1300, 
                     "Búsqueda de documentos emitidos")
     
     #----------------------------------------------------------------------
@@ -167,7 +167,7 @@ class Menu_jefe(inicio_app_OSPA):
         
         self.desaparecer()
         # LargoxAncho
-        SubFrame = ventanas_busqueda.Pendientes_jefe_firma(self, 550, 1090, "Documentos pendientes de firma")
+        SubFrame = ventanas_busqueda.Pendientes_jefe_firma(self, 550, 1300, "Documentos pendientes de firma")
     
     #----------------------------------------------------------------------
     def ver_menu_busquedas(self):

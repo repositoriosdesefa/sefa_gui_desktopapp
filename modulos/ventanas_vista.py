@@ -275,9 +275,6 @@ class Doc_recibidos_vista(funcionalidades_ospa):
                                             "ID_DR", "ID_EP", "COD_DR", 
                                             self.ver_ep, self.eliminar_ep_y_actualizar)
     
-
-
-
 class Doc_emitidos_vista(funcionalidades_ospa):
     """"""
     #----------------------------------------------------------------------
