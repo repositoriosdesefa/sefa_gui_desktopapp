@@ -15,8 +15,12 @@ b_de_hist = variables_globales.b_de_hist
 b_ep = variables_globales.b_ep
 b_ep_cod = variables_globales.b_ep_cod
 b_ep_hist = variables_globales.b_ep_hist
+b_mp = variables_globales.b_mp
+b_mp_cod = variables_globales.b_mp_cod
+b_mp_hist = variables_globales.b_mp_hist
 # 2. Tablas
 tabla_parametros = variables_globales.tabla_parametros
+tabla_parametros_dep = variables_globales.tabla_parametros_dep
 
 class funcionalidades_ospa(Ventana):
     #----------------------------------------------------------------------
@@ -34,13 +38,6 @@ class funcionalidades_ospa(Ventana):
         self.desaparecer()
         # LargoxAncho
         subFrame = menus.inicio_app_OSPA(self, 400, 400, "Inicio")
-
-    #----------------------------------------------------------------------
-    def guardar_objeto(self, rejilla_datos, 
-                        cod_objeto_clase, cod_entrada, tabla_objeto_clase,
-                        base_codigo_objeto, base_objeto_clase, base_objeto_clase_hist,
-                        funcion_ver):
-        """"""
         
          #----------------------------------------------------------------------
     def guardar_objeto(self, rejilla_datos, 
@@ -69,34 +66,35 @@ class funcionalidades_ospa(Ventana):
             tabla_codigo_objeto_filtrada = tabla_objeto[tabla_objeto[cod_objeto]==codigo_objeto]
             id_interno_objeto_clase = tabla_codigo_objeto_filtrada.iloc[0,0]
             # Obtengo los datos ingresados
-            lista_descargada_codigo = base_objeto.listar_datos_de_fila(id_interno_objeto_clase)
+            lista_descargada_codigo = base_cod_objeto.listar_datos_de_fila(id_interno_objeto_clase)
             cod_objeto_clase = lista_descargada_codigo[3]
             correlativo = lista_descargada_codigo[2]
 
             if cod_entrada == "COD_DR":
                 nuevo_cod_objeto_clase = datos_ingresados[0] + " " + datos_ingresados[1]
-            elif cod_entrada == "COD_DR":
-                nuevo_cod_objeto_clase = correlativo + "/" + cod_objeto_clase
+            elif cod_entrada == "COD_DE":
+                nuevo_cod_objeto_clase = correlativo + "/" + datos_ingresados[0]
             else:
-                nuevo_cod_objeto_clase = datos_ingresados[0] 
-                # Actualizo las tablas en la web
-                hora_de_modificacion = ahora
-                # Se actualiza código interno
-                base_objeto.cambiar_un_dato_de_una_fila(cod_objeto_clase, 4, nuevo_cod_objeto_clase)
-
-                # Pestaña 2:       
-                # Cambio los datos de una fila
-                # Código interno del aplicativo + Código del usuario del DR + Hora de modificación
-                lista_a_sobreescribir = [id_interno_objeto_clase] + [nuevo_cod_objeto_clase] + datos_ingresados + [hora_de_modificacion]
-                base_objeto.cambiar_los_datos_de_una_fila(nuevo_cod_objeto_clase, lista_a_sobreescribir) # Se sobreescribe la información
+                nuevo_cod_objeto_clase = lista_descargada_codigo[3]
             
-                # Pestaña 3
-                lista_historial = lista_a_sobreescribir
-                base_objeto_hist.agregar_datos(lista_historial) # Se sube la info
+            # Actualizo las tablas en la web
+            hora_de_modificacion = ahora
+            # Se actualiza código interno
+            base_objeto.cambiar_un_dato_de_una_fila(cod_objeto_clase, 4, nuevo_cod_objeto_clase)
 
-                # Mensaje
-                messagebox.showinfo("¡Excelente!", "Se ha actualizado el registro")
-                funcion_ver(nuevo_cod_objeto_clase)
+            # Pestaña 2:       
+            # Cambio los datos de una fila
+            # Código interno del aplicativo + Código del usuario del DR + Hora de modificación
+            lista_a_sobreescribir = [id_interno_objeto_clase] + [nuevo_cod_objeto_clase] + datos_ingresados + [hora_de_modificacion]
+            base_objeto.cambiar_los_datos_de_una_fila(nuevo_cod_objeto_clase, lista_a_sobreescribir) # Se sobreescribe la información
+            
+            # Pestaña 3
+            lista_historial = lista_a_sobreescribir
+            base_objeto_hist.agregar_datos(lista_historial) # Se sube la info
+
+            # Mensaje
+            messagebox.showinfo("¡Excelente!", "Se ha actualizado el registro")
+            funcion_ver(nuevo_cod_objeto_clase)
 
 	    # B. Es un código nuevo
         else:
@@ -118,12 +116,10 @@ class funcionalidades_ospa(Ventana):
                 if cod_entrada == "COD_DR":
                     base_cod_objeto.agregar_codigo(cod_objeto_ingresado, ahora)
                 elif cod_entrada == "COD_EP":
-                    departamento = datos_ingresados[6]
-                    print(departamento)
+                    departamento = datos_ingresados[2]
 	                # Obtención de sigla de departamento
-                    #tabla_siglas_filtrada = tabla_parametros[tabla_parametros['DEP_OSPA']==departamento]
-                    sigla_cod_interno = "CUS"
-                    #sigla_cod_interno = tabla_siglas_filtrada.iloc[0,['SIGLAS_DEPARTAMENTO']]
+                    tabla_siglas_filtrada = tabla_parametros_dep[tabla_parametros_dep['DEPARTAMENTO']==departamento]
+                    sigla_cod_interno = tabla_siglas_filtrada.iloc[0,1]
 		            # Obtención de número de extremo
                     tabla_objeto_clase = base_cod_objeto.generar_dataframe()
                     tabla_codigo_ep_filtrada = tabla_objeto_clase[tabla_objeto_clase['DEPARTAMENTO']==departamento]
@@ -135,7 +131,7 @@ class funcionalidades_ospa(Ventana):
                     else:
         	            numero_codigo = "-" + str(numero_problemas)
                     cod_objeto_ingresado = sigla_cod_interno + numero_codigo
-                    base_cod_objeto.agregar_codigo(cod_objeto_ingresado, ahora)
+                    base_cod_objeto.agregar_codigo(cod_objeto_ingresado, ahora, departamento)
                 else:
                     base_cod_objeto.agregar_nuevo_codigo(cod_objeto_ingresado, ahora)
 
@@ -146,7 +142,7 @@ class funcionalidades_ospa(Ventana):
                 # Obtengo el ID interno
                 id_objeto = lista_descargada_codigo[0]
                 cod_objeto = lista_descargada_codigo[3]
-                # Creo el vector a subir
+                # Creo el vector a subir 
                 lista_a_cargar = [id_objeto] + [cod_objeto] + datos_ingresados + [ahora]
                 base_objeto.agregar_datos(lista_a_cargar) # Se sube la info
 
@@ -189,7 +185,10 @@ class funcionalidades_ospa(Ventana):
             id_relacion_objetos = id_interno_objeto_a_eliminar + "/" + id_interno_objeto_clase
         elif cod_objeto == "COD_DE" and cod_salida == "COD_EP":
             id_relacion_objetos = id_interno_objeto_clase + "/" + id_interno_objeto_a_eliminar
-            print(id_relacion_objetos)
+        elif cod_objeto == "COD_EP":
+            id_relacion_objetos = id_interno_objeto_a_eliminar + "/" + id_interno_objeto_clase
+        else:
+            id_relacion_objetos = id_interno_objeto_clase + "/" + id_interno_objeto_a_eliminar
         # Se cambia dato en tabla de relación
         b_relacion_objetos.cambiar_un_dato_de_una_fila(id_relacion_objetos, 4,'ELIMINADO')
 
@@ -234,9 +233,9 @@ class funcionalidades_ospa(Ventana):
             # Con ese ID, filtro la tabla de relacion
             tabla_relacion_filtrada = tabla_relacion_activos[tabla_relacion_activos[id_entrada]==cod_interno]
             # Me quedo con el vector a filtrar en forma de lista
-            lista_dr = list(tabla_relacion_filtrada[id_salida].unique())
+            lista_objetos = list(tabla_relacion_filtrada[id_salida].unique())
             # Filtro la tabla de documentos recibidos
-            tabla_filtrada = tabla_vista_vitrina[tabla_vista_vitrina[id_salida].isin(lista_dr)]
+            tabla_filtrada = tabla_vista_vitrina[tabla_vista_vitrina[id_salida].isin(lista_objetos)]
             # Tabla de documentos emitidos filtrada
             tabla_vitrina = tabla_filtrada.drop([id_salida], axis=1)
             if len(tabla_vitrina.index) > 0:
@@ -302,33 +301,51 @@ class funcionalidades_ospa(Ventana):
         texto_documento = 'Documento emitido: ' + id_usuario
 
         lb1 = b_de.listar_datos_de_fila(id_usuario)
-        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], lb1[9]]
-                                # lb1[10], lb1[11], lb1[12]]
+        lista_para_insertar = [lb1[2], lb1[3], lb1[4], lb1[5], lb1[6], 
+                                lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], lb1[12]]
         self.desaparecer()
         subframe = ventanas_vista.Doc_emitidos_vista(self, 650, 1150, texto_documento, nuevo=False, 
-                                        lista=lista_para_insertar, id_objeto = id_usuario)
-    
-    #----------------------------------------------------------------------
-    def ver_ep(self, id_usuario):
-        """"""
-        texto_documento = 'Extremo de problema: ' + id_usuario
-
-        lb1 = b_ep.listar_datos_de_fila(id_usuario)
-        lista_para_insertar = [lb1[1], lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], 
-                                lb1[8], lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], 
-                                lb1[14], lb1[15], lb1[16], lb1[17]]
-
-        self.desaparecer()
-        subframe = ventanas_vista.Extremo_problemas_vista(self, 650, 1150, texto_documento, nuevo=False, 
                                         lista=lista_para_insertar, id_objeto = id_usuario)
     
     #----------------------------------------------------------------------
     def busqueda_ep(self):
         """"""
         if self.nuevo != True:
+
+            id_objeto_ingresado = self.id_objeto_ingresado
+            texto_pantalla = "Extremo de problema que se asociará: " + id_objeto_ingresado
+
+            # Genero la nueva ventana
+            self.desaparecer()
+            SubFrame = ventanas_busqueda.Doc_recibidos_busqueda(self, 500, 1200, texto_pantalla,
+                                                                nuevo=False, id_objeto = id_objeto_ingresado)
+
+        else:
+            # En caso no estuviera guardado la ficha
+            messagebox.showerror("¡Guardar!", "Antes de asociar un documento emitido, por favor guarde la información registrada")
+ 
+
+    #----------------------------------------------------------------------
+    def ver_ep(self, id_usuario):
+        """"""
+        texto_documento = 'Extremo de problema: ' + id_usuario
+
+        lb1 = b_ep.listar_datos_de_fila(id_usuario)
+        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], 
+                                lb1[8], lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], 
+                                lb1[14], lb1[15], lb1[16], lb1[17], lb1[18], lb1[19], lb1[20]]
+
+        self.desaparecer()
+        subframe = ventanas_vista.Extremo_problemas_vista(self, 650, 1150, texto_documento, nuevo=False, 
+                                        lista=lista_para_insertar, id_objeto = id_usuario)
+    
+    #----------------------------------------------------------------------
+    def busqueda_mp(self):
+        """"""
+        if self.nuevo != True:
             # En caso exista un código insertado en la rejilla
             id_objeto_ingresado = self.id_objeto_ingresado
-            texto_pantalla = "Documento recibido que se asociará: " + id_objeto_ingresado
+            texto_pantalla = "Macroproblema que se asociará: " + id_objeto_ingresado
 
             # Genero la nueva ventana
             self.desaparecer()
@@ -339,6 +356,18 @@ class funcionalidades_ospa(Ventana):
             # En caso no estuviera guardado la ficha
             messagebox.showerror("¡Guardar!", "Antes de asociar un documento emitido, por favor guarde la información registrada")
 
+    #----------------------------------------------------------------------
+    def ver_mp(self, id_usuario):
+        """"""
+        texto_documento = 'Macroproblema: ' + id_usuario
+
+        lb1 = b_mp.listar_datos_de_fila(id_usuario)
+        lista_para_insertar = [lb1[2],lb1[3], lb1[4]]
+
+        self.desaparecer()
+        subframe = ventanas_vista.Extremo_problemas_vista(self, 650, 1150, texto_documento, nuevo=False, 
+                                        lista=lista_para_insertar, id_objeto = id_usuario)
+    
     #----------------------------------------------------------------------
     def comprobar_id(self, base_codigo, id_usuario):
         """"""

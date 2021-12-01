@@ -12,9 +12,61 @@ import tkinter as tk
 from idlelib.tooltip import Hovertip
 
 
+# Modificación de la clase DateEntry
+class DateEntry(DateEntry):
+    def get_date(self):
+        if not self.get():
+            return '' # Aquí colocamos lo que queremos que salga cuando no se haya asignado una fecha.
+        self._validate_date()
+        return self.parse_date(self.get())
+
 # Elementos de Gui by DG, LR & LE
 
-# I. Clave ventana
+# I. MenuSefa
+class MenuSefa():
+
+    #----------------------------------------------------------------------
+    def __init__(self, window):
+        """Constructor"""
+        
+        version = f'Usted está utilizando la versión 0.0 del aplicativo'
+        
+        menubar = Menu(window)
+        window.config(menu=menubar)
+
+        filemenu = Menu(menubar, tearoff=0)
+        filemenu.add_command(label="Inicio")
+        filemenu.add_command(label="Cerrar sesión")
+        filemenu.add_separator()
+        filemenu.add_command(label="Salir", command=window.quit)
+
+        helpmenu = Menu(menubar, tearoff=0)
+        helpmenu.add_command(label="Manual", command=self.lanzar_msj_manual)
+        helpmenu.add_separator()
+        helpmenu.add_command(label="Acerca de...", command=self.lanzar_msj_acerca_de)
+
+        # Añadir "Archivo" y "Ayuda" a la barra de Menu
+
+        menubar.add_cascade(label="Archivo", menu=filemenu)
+        menubar.add_cascade(label="Ayuda", menu=helpmenu)
+
+    #----------------------------------------------------------------------
+    def lanzar_msj_manual(self):
+        """"""
+
+        messagebox.showinfo('Manual de usuario', 'Pronto incorporaremos un manual de usuario que estará disponible desde esta opción.')
+    
+    #----------------------------------------------------------------------
+    def lanzar_msj_acerca_de(self):
+        """"""
+
+        info1 = 'Esta herramienta ha sido elaborada por el equipo de proyectos de Sefa.\n'
+        espacio = ' \n'
+        info2 = 'Usted está utilizando la versión 0.0'
+        info_completa = info1 + espacio + info2
+        messagebox.showinfo('Información sobre este aplicativo', info_completa)
+
+# II. Clase ventana
 class Ventana(Toplevel):
     """"""
     #----------------------------------------------------------------------
@@ -71,7 +123,6 @@ class Ventana(Toplevel):
         self.destroy()
         
 # IV. ScrollFrame
-
 class ScrollFrame(Frame):
 
     #----------------------------------------------------------------------
@@ -182,17 +233,9 @@ class VerticalScrolledFrame:
 
     def __str__(self):
         return str(self.outer)
-# II. Clase Cuadro
 
-#----------------------------------------------------------------------
 
-class DateEntry(DateEntry):
-    def get_date(self):
-        if not self.get():
-            return '' # Aquí colocamos lo que queremos que salga cuando no se haya asignado una fecha.
-        self._validate_date()
-        return self.parse_date(self.get())
-
+# V. Clase Cuadro
 class Cuadro(Frame):
     """"""
     
@@ -633,6 +676,81 @@ class Cuadro(Frame):
         self.lista_de_datos[posicion_valor] = self.combo
 
     #----------------------------------------------------------------------
+    def agregar_combobox_dependiente_3(self, y, x, ancho, tabla, 
+                                        columna_1, etiqueta_2, columna_2, etiqueta_3, columna_3):
+        """Método de la clase Cuadro. \n
+        Permite agregar una lista desplegable al Frame creado con la Clase Cuadro."""
+        
+        ancho_widget = int(ancho)
+
+        self.y = y
+        self.x = x
+
+        self.y_2 = y
+        self.x_2 = int(x + 2)
+
+        self.y_3 = y
+        self.x_3 = int(x + 4)
+
+        tabla_dependiente = tabla
+        lista_inicial =  list(set(tabla[columna_1]))
+
+        primer_dato = StringVar()
+        segundo_dato = StringVar()
+        tercer_dato = StringVar()
+
+        combo_1 = ttk.Combobox(self.z, textvariable = primer_dato, state="readonly", width=ancho_widget)
+        combo_2 = ttk.Combobox(self.z, textvariable = segundo_dato, state="readonly", width=ancho_widget)
+        combo_3 = ttk.Combobox(self.z, textvariable = tercer_dato, state="readonly", width=ancho_widget)
+
+        combo_1["values"] = lista_inicial
+        combo_1.bind("<<ComboboxSelected>>", lambda a, valor = primer_dato: self.filtrar_primera(valor, tabla_dependiente, combo_1, columna_1, combo_2, columna_2, combo_3))
+        combo_2.bind("<<ComboboxSelected>>", lambda a, valor = segundo_dato: self.filtrar_segunda(valor, tabla_dependiente,  combo_2, columna_2, combo_3, columna_3))
+
+        combo_1.grid(row = self.y, column = self.x, pady=4, padx=8)
+        combo_2.grid(row = self.y_2, column = self.x_2, pady=4, padx=8)
+        combo_3.grid(row = self.y_3, column = self.x_3, pady=4, padx=8)
+
+        combo_1.set('')
+        combo_2.set('')
+        combo_3.set('')
+
+        self.lista_de_objetos.append((combo_1))
+        self.agregar_label(y, int(x+1), etiqueta_2)
+        self.lista_de_objetos.append((combo_2))
+        self.agregar_label(y, int(x+3), etiqueta_3)
+        self.lista_de_objetos.append((combo_3))
+
+        self.lista_de_datos.append((combo_1))
+        self.lista_de_datos.append((combo_2))
+        self.lista_de_datos.append((combo_3))
+    
+    #----------------------------------------------------------------------
+    def filtrar_primera(self, valor,  tabla_dependiente, combo_1, primera_columna, combo_2, segunda_columna, combo_3, *args):
+        p = combo_1.get()  # Toma el dato del objeto Stringvar.
+        if (p in self.lista_de_datos)==False:
+            combo_2.set('') # En el caso se elija algo diferente a lo que inicialmente estaba
+            combo_3.set('')
+
+        tabla_filtro = tabla_dependiente[primera_columna] == p # Genera un filtro para la tabla del excel con el dato seleccionado
+        nueva_tabla = tabla_dependiente[tabla_filtro] # Aplica el filtro de la línea anterior.
+        segunda = list(set(nueva_tabla[segunda_columna])) # Genera la lista del siguiente combobox.
+        segunda.sort() # Ordena la lista...
+        combo_2.config(values=segunda) # Aplica la lista generada al siguiente combobox.
+    
+    #----------------------------------------------------------------------
+    def filtrar_segunda(self, valor, tabla_dependiente, combo_2, segunda_columna, combo_3, tercera_columna, *args):
+        s = combo_2.get()
+        if (s in self.lista_de_datos)==False:
+            combo_3.set('')
+
+        tabla_filtro = tabla_dependiente[segunda_columna] == s
+        nueva_tabla = tabla_dependiente[tabla_filtro]
+        tercera = list(set(nueva_tabla[tercera_columna]))
+        tercera.sort()
+        combo_3.config(values=tercera)
+        
+    #----------------------------------------------------------------------
     def agregar_spinbox(self, y, x, inicio, fin, incremento, defecto):
         """Método de la clase Cuadro. \n
         Permite agregar un winget con botones para incrementar o dismunir una cantidad al Frame creado con la Clase Cuadro."""
@@ -679,6 +797,29 @@ class Cuadro(Frame):
         self.lista_de_datos.append((self.dato))
 
      
+    #----------------------------------------------------------------------
+    def agregar_dateentry_editable(self, y, x):
+        """Método de la clase Cuadro. \n
+        Permite agregar una entrada de calendario al Frame creado con la Clase Cuadro."""
+
+        # Recordar que es importante utilizar: pyinstaller --hidden-import babel.numbers myscript.py
+        # Ver: https://tkcalendar.readthedocs.io/en/stable/howtos.html 
+        
+        self.y = y
+        self.x = x
+
+        # No es necesario crear un StringVar()
+        cal = DateEntry(self.z, width=39, background='darkblue',
+                            foreground='white', borderwidth=1)
+        
+        cal.grid(row = self.y, column = self.x, pady=4, padx=8)
+        cal.delete(0, "end")
+        cal.configure(validate = "none")
+        #cal["state"] = "normal"
+        self.lista_de_objetos.append((cal))
+        self.lista_de_datos.append((cal))
+     
+    
     #----------------------------------------------------------------------
     def cambio_valor(self, nombre_objeto, widget, posicion_ordinal, posicion_valor,
                     tabla, nombre_columna, nombre_col_filtrada):
@@ -805,11 +946,11 @@ class Cuadro(Frame):
                 # En este caso row[3] debe ser una lista:
                 self.agregar_combobox_decisor_1(row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9])
             
-            elif row[0] == 'CXD2':
+            elif row[0] == 'CXDEP3':
                 
                 # En este caso row[3] debe ser una lista:
 
-                self.agregar_combobox_decisor_2(row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[0])
+                self.agregar_combobox_dependiente_3(row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9])
             
 
             elif row[0] == "SB":
@@ -819,6 +960,10 @@ class Cuadro(Frame):
             elif row[0] == 'D':
 
                 self.agregar_dateentry(row[1], row[2])
+            
+            elif row[0] == 'DE':
+
+                self.agregar_dateentry_editable(row[1], row[2])
 
             else:
 
@@ -1013,10 +1158,8 @@ class Cuadro(Frame):
         for i in self.lista:
             if type(i).__name__ == 'DateEntry':
                 fecha = i.get_date()
-                try:
-                    datetime.datetime.strptime(str(fecha), '%d/%m/%Y')
-                except ValueError:
-                    self.lista_output.append(fecha)
+                if type(fecha).__name__ == 'str':
+                     self.lista_output.append(fecha)
                 else:
                     self.lista_output.append(str(fecha.strftime("%d/%m/%Y")))
             elif type(i).__name__ == 'ScrolledText':
@@ -1062,51 +1205,6 @@ class Cuadro(Frame):
             self.z.destroy()
             self.z = Frame(self.window)
             self.z.pack()
-
-
-# III. MenuSefa
-class MenuSefa():
-
-    #----------------------------------------------------------------------
-    def __init__(self, window):
-        """Constructor"""
-        
-        version = f'Usted está utilizando la versión 0.0 del aplicativo'
-        
-        menubar = Menu(window)
-        window.config(menu=menubar)
-
-        filemenu = Menu(menubar, tearoff=0)
-        filemenu.add_command(label="Inicio")
-        filemenu.add_command(label="Cerrar sesión")
-        filemenu.add_separator()
-        filemenu.add_command(label="Salir", command=window.quit)
-
-        helpmenu = Menu(menubar, tearoff=0)
-        helpmenu.add_command(label="Manual", command=self.lanzar_msj_manual)
-        helpmenu.add_separator()
-        helpmenu.add_command(label="Acerca de...", command=self.lanzar_msj_acerca_de)
-
-        # Añadir "Archivo" y "Ayuda" a la barra de Menu
-
-        menubar.add_cascade(label="Archivo", menu=filemenu)
-        menubar.add_cascade(label="Ayuda", menu=helpmenu)
-
-    #----------------------------------------------------------------------
-    def lanzar_msj_manual(self):
-        """"""
-
-        messagebox.showinfo('Manual de usuario', 'Pronto incorporaremos un manual de usuario que estará disponible desde esta opción.')
-    
-    #----------------------------------------------------------------------
-    def lanzar_msj_acerca_de(self):
-        """"""
-
-        info1 = 'Esta herramienta ha sido elaborada por el equipo de proyectos de Sefa.\n'
-        espacio = ' \n'
-        info2 = 'Usted está utilizando la versión 0.0'
-        info_completa = info1 + espacio + info2
-        messagebox.showinfo('Información sobre este aplicativo', info_completa)
 
 
 # VI. Vitrina Vista

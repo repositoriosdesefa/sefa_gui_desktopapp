@@ -18,17 +18,23 @@ b_de_hist = variables_globales.b_de_hist
 b_ep = variables_globales.b_ep
 b_ep_cod = variables_globales.b_ep_cod
 b_ep_hist = variables_globales.b_ep_hist
+b_mp = variables_globales.b_mp
+b_mp_cod = variables_globales.b_mp_cod
+b_mp_hist = variables_globales.b_mp_hist
 
 base_relacion_docs = variables_globales.base_relacion_docs
 base_relacion_dr_ep = variables_globales.base_relacion_dr_ep
 base_relacion_de_ep = variables_globales.base_relacion_de_ep
+base_relacion_mp_ep = variables_globales.base_relacion_mp_ep
 
 base_relacion_docs_hist = variables_globales.base_relacion_docs_hist
 base_relacion_dr_ep_hist = variables_globales.base_relacion_dr_ep_hist
 base_relacion_de_ep_hist = variables_globales.base_relacion_de_ep_hist
+base_relacion_mp_ep_hist = variables_globales.base_relacion_mp_ep_hist
 
 # 2. Tablas
 tabla_directorio = variables_globales.tabla_directorio
+tabla_directorio_efa = variables_globales.tabla_directorio_efa_final
 tabla_lista_efa = variables_globales.tabla_lista_efa
 
 # 3. Listas dependientes
@@ -42,6 +48,7 @@ departamento_ospa = variables_globales.departamento_ospa
 # 4. Parámetros
 # 4.1 Bases de datos
 tabla_parametros = variables_globales.tabla_parametros
+tabla_parametros_act = variables_globales.tabla_parametros_act
 # 4.2 Desplegables en Drive
 agente_conta = list(set(tabla_parametros['AGENTE CALCULADORA']))
 componente_amb = list(set(tabla_parametros['COMPONENTE CALCULADORA']))
@@ -75,6 +82,7 @@ marco_pedido = ('EFA', 'OEFA',
 tabla_relacion_dr_de = variables_globales.tabla_relacion_dr_de
 tabla_relacion_dr_ep = variables_globales.tabla_relacion_dr_ep
 tabla_relacion_de_ep = variables_globales.tabla_relacion_de_ep
+tabla_relacion_mp_ep = variables_globales.tabla_relacion_mp_ep
 # 5.1 Documentos recibidos
 tabla_de_dr_cod = variables_globales.tabla_de_dr_cod
 tabla_de_dr_completa = variables_globales.tabla_de_dr_completa
@@ -87,6 +95,10 @@ tabla_de_de_resumen = variables_globales.tabla_de_de_resumen
 tabla_de_ep_cod = variables_globales.tabla_de_ep_completa
 tabla_de_ep_completa = variables_globales.tabla_de_ep_completa
 tabla_de_ep_resumen = variables_globales.tabla_de_ep_resumen
+# 5.4 Macroproblemas
+tabla_de_mp_cod = variables_globales.tabla_de_mp_completa
+tabla_de_mp_completa = variables_globales.tabla_de_mp_completa
+tabla_de_mp_resumen = variables_globales.tabla_de_mp_resumen
     
 class Doc_recibidos_vista(funcionalidades_ospa):
     """"""
@@ -311,20 +323,20 @@ class Doc_emitidos_vista(funcionalidades_ospa):
             ('L', 2, 2, 'N° de documento'),
             ('E', 2, 3),
 
-            ('L', 3, 0, 'Detalle de requerimiento'),
-            ('ST', 3, 1),
+            ('L', 3, 0, 'Marco de pedido'),
+            ('CX', 3, 1, marco_pedido),
 
-            ('L', 4, 0, 'Marco de pedido'),
-            ('CX', 4, 1, marco_pedido),
+            ('L', 3, 2, 'Fecha de proyecto'),
+            ('DE', 3, 3), 
 
-            ('L', 4, 2, 'Fecha de proyecto'),
-            ('E', 4, 3), 
+            ('L', 4, 0, 'Fecha de firma'),
+            ('DE', 4, 1), 
 
-            ('L', 5, 0, 'Fecha de firma'),
-            ('E', 5, 1), 
+            ('L', 4, 2, 'Fecha de notificación'),
+            ('DE', 4, 3),
 
-            ('L', 5, 2, 'Fecha de notificación'),
-            ('E', 5, 3) 
+            ('L', 5, 0, 'Detalle de requerimiento'),
+            ('ST', 5, 1)
 
         ]
 
@@ -488,128 +500,107 @@ class Extremo_problemas_vista(funcionalidades_ospa):
         self.frame_rejilla = Cuadro(self)
         # En caso exista precedente, se inserta en la rejilla
         if self.nuevo == False: # Estamos en una ficha creada
-            self.tabla_de_dr_cod = b_dr_cod.generar_dataframe()
-            self.tabla_relacion_dr_de = base_relacion_docs.generar_dataframe()
+            self.tabla_de_ep_cod = b_ep_cod.generar_dataframe()
+            self.tabla_relacion_de_ep = base_relacion_de_ep.generar_dataframe()
             self.tabla_relacion_dr_ep = base_relacion_dr_ep.generar_dataframe()
             self.cod_usuario_dr = id_objeto
             self.lista_para_insertar = lista
-            self.frame_rejilla.insertar_lista_de_datos(self.lista_para_insertar)
             rejilla_ep = [
                 ('L', 0, 0, 'Código de problema'),
                 ('L', 0, 1, str(self.cod_usuario_ep)),
 
-                ('L', 0, 1, 'Componente ambiental'),
-                ('CXP', 0, 2, 27, componente_amb, '', "readonly"),
-                
-                ('L', 0, 3, 'Tipo de afectación'),
-                ('CXP', 0, 4, 27, tipo_afectacion, '', "readonly"),
-
-                ('L', 1, 0, 'Departamento'),
-                ('CXD1', 1, 1, departamento_ospa, 27, tabla_departamento_efa, 'DEP_OSPA', 'PROV_DIST_OSPA', 7, 'CXD1'),
-
-                ('L', 0, 4, 'Ocurrencia'),
-                ('CXP', 0, 5, 27, ocurrencia, '', "readonly"),
-
-                ('L', 1, 2, 'Provincia/Distrito'),
-                ('CXR', 1, 3, combo_vacio),
-
-                ('L', 1, 4, 'Descripción'),
-                ('STP', 1, 5, 28, 2),
-
-                ('L', 2, 2, 'Tipo de ubicación'),
-                ('CXP', 2, 3, 27, ubicacion, '', "readonly"),
-
-                ('L', 3, 0, 'Agente contaminante'),
-                ('CXP', 3, 1, 27, agente_conta, '', "readonly"),
-
-                ('L', 3, 2, 'Extensión'),
-                ('CXP', 3, 3, 27, extension, '', "readonly"),
-
-                ('L', 3, 4, 'EFA'),
-                ('CXP', 3, 5, 27, lista_efa_ospa, '', "readonly"),
-
-                ('L', 4, 0, 'Actividad'),
-                ('CXP', 4, 1, 27, actividad_eco, '', "readonly"),
-
-                ('L', 4, 2, 'Tipo de causa'),
-                ('CXP', 4, 3, 27, tipo_causa, '', "readonly"),
-            
-                ('L', 4, 4, 'Estado'),
-                ('CXP', 4, 5, 27, estado_problemas, '', "readonly"),
-
-                ('L', 5, 0, 'Característica 1'),
-                ('EL', 5, 1, 30, 1),
-
-                ('L', 5, 2, 'Característica 2'),
-                ('EL', 5, 3, 30, 1),
-
-                ('L', 5, 4, 'Código SINADA'),
-                ('EL', 5, 5, 30, 1)
-
-            ]
-            # Se inserta rejilla con datos
-            self.frame_rejilla.agregar_rejilla(rejilla_ep)
-        else:
-            rejilla_ep_nuevo = [
-                ('L', 0, 0, ' '),
-                ('L', 0, 1, ' '),
-                
                 ('L', 0, 2, 'Componente ambiental'),
                 ('CXP', 0, 3, 27, componente_amb, '', "readonly"),
 
                 ('L', 0, 4, 'Tipo de afectación'),
                 ('CXP', 0, 5, 27, tipo_afectacion, '', "readonly"),
 
-                ('L', 1, 0, 'Categoria EFA'),
-                ('CXD1', 1, 1, lista_efa_ospa, 24, lista_efa_dependiente, 'EFA_OSPA', 'Entidad u oficina', 9, 4),
-            
-                ('L', 1, 2, 'EFA'),
-                ('CXR', 1 , 3, combo_vacio, 9, 4),
+                ('L', 1, 0, 'Departamento'),
+                ('CXDEP3', 1, 1, 27, tabla_lista_efa, 
+                'DEPARTAMENTO ', 'Provincia', 'PROVINCIA ', 'Distrito', 'DISTRITO '),
 
-                ('L', 1, 4, 'Descripción'),
-                ('STP', 1, 5, 28, 2),
+                ('L', 2, 0, 'Tipo de causa'),
+                ('CXP', 2, 1, 27, tipo_causa, '', "readonly"),
 
-                ('L', 2, 0, 'Departamento'),
-                ('CXD1', 2, 1, departamento_ospa, 24, tabla_departamento_efa, 'DEP_OSPA', 'PROV_DIST_OSPA', 15, 7),
+                ('L', 2, 2, 'Agente contaminante'),
+                ('CXP', 2, 3, 27, agente_conta, '', "readonly"),
 
-                ('L', 2, 2, 'Provincia/Distrito'),
-                ('CXR', 2, 3, combo_vacio, 15, 7),
+                ('L', 2, 4, 'Descripción'),
+                ('STP', 2, 5, 28, 2),
 
-                #('L', 2, 2, 'Tipo de ubicación'),
-                #('CXP', 2, 3, 27, ubicacion, '', "readonly"),
-
-                ('L', 3, 0, 'Agente contaminante'),
-                ('CXP', 3, 1, 27, agente_conta, '', "readonly"),
+                ('L', 3, 0, 'Tipo de ubicación'),
+                ('CXP', 3, 1, 27, ubicacion, '', "readonly"),
 
                 ('L', 3, 2, 'Extensión'),
                 ('CXP', 3, 3, 27, extension, '', "readonly"),
 
-                ('L', 3, 4, 'Ocurrencia'),
-                ('CXP', 3, 5, 27, ocurrencia, '', "readonly"),
+                ('L', 4, 0, 'Ocurrencia'),
+                ('CXP', 4, 1, 27, ocurrencia, '', "readonly"),
 
-                ('L', 4, 0, 'Actividad'),
-                ('CXP', 4, 1, 27, actividad_eco, '', "readonly"),
+                ('L', 4, 2, 'Código SINADA'),
+                ('EL', 4, 3, 30, 1),
 
-                ('L', 4, 2, 'Tipo de causa'),
-                ('CXP', 4, 3, 27, tipo_causa, '', "readonly"),
-            
                 ('L', 4, 4, 'Estado'),
-                ('CXP', 4, 5, 27, estado_problemas, 30, 1),
+                ('CXP', 4, 5, 27, estado_problemas, '', "readonly"),
 
-                ('L', 5, 0, 'Característica 1'),
-                ('EL', 5, 1, 30, 1),
+                ('L', 5, 0, 'Tipo de EFA'),
+                ('CXDEP3', 5, 1, 27, tabla_directorio, 
+                'Tipo de entidad u oficina', 'Categoría EFA', 'EFA_OSPA', 'EFA', 'Entidad u oficina'),
 
-                ('L', 5, 2, 'Característica 2'),
-                ('EL', 5, 3, 30, 1),
+                ('L', 6, 0, 'Actividad'),
+                ('CXDEP3', 6, 1, 27, tabla_parametros_act,
+                 'ACTIVIDAD', 'Característica 1', 'CARACTERÍSTICA 1', 'Característica 2', 'CARACTERÍSTICA 2')
 
-                ('L', 5, 4, 'Código SINADA'),
-                ('EL', 5, 5, 30, 1)
+            ]
+            # Se inserta rejilla con datos
+            self.frame_rejilla.agregar_rejilla(rejilla_ep)
+            self.frame_rejilla.insertar_lista_de_datos(self.lista_para_insertar)
+        else:
+            rejilla_ep_nuevo = [
+                ('L', 0, 0, ' '),
+                ('L', 0, 1, ' '),
+                
+                ('L', 0, 2, 'Código SINADA'),
+                ('EL', 0, 3, 35, 1),
 
-                #('L', 6, 2, '¿Es prioridad?'),
-                #('CXP', 6, 3, 27, si_no, ' ', "readonly")
+                ('L', 0, 4, 'Estado'),
+                ('CXP', 0, 5, 32, estado_problemas, '', "readonly"),
 
-                #('L', 6, 4, 'Puntaje'),
-                #('EL', 6, 5, 30, 1)
+                ('L', 1, 0, 'Departamento'),
+                ('CXDEP3', 1, 1, 32, tabla_lista_efa, 
+                'DEPARTAMENTO ', 'Provincia', 'PROVINCIA ', 'Distrito', 'DISTRITO '),
+
+                ('L', 2, 0, 'Tipo de ubicación'),
+                ('CXP', 2, 1, 32, ubicacion, '', "readonly"),
+
+                ('L', 2, 2, 'Extensión'),
+                ('CXP', 2, 3, 32, extension, '', "readonly"),
+
+                ('L', 2, 4, 'Ocurrencia'),
+                ('CXP', 2, 5, 32, ocurrencia, '', "readonly"),
+
+                ('L', 3, 0, 'Tipo de afectación'),
+                ('CXP', 3, 1, 32, tipo_afectacion, '', "readonly"),
+                
+                ('L', 3, 2, 'Agente contaminante'),
+                ('CXP', 3, 3, 32, agente_conta, '', "readonly"),
+
+                ('L', 3, 4, 'Descripción'),
+                ('STP', 3, 5, 33, 2),
+
+                ('L', 4, 0, 'Tipo de causa'),
+                ('CXP', 4, 1, 32, tipo_causa, '', "readonly"),
+
+                ('L', 4, 2, 'Componente ambiental'),
+                ('CXP', 4, 3, 32, componente_amb, '', "readonly"),
+                
+                ('L', 5, 0, 'Actividad'),
+                ('CXDEP3', 5, 1, 32, tabla_parametros_act,
+                 'ACTIVIDAD', 'Característica 1', 'CARACTERÍSTICA 1', 'Característica 2', 'CARACTERÍSTICA 2'),
+
+                ('L', 6, 0, 'Tipo de EFA'),
+                ('CXDEP3', 6, 1, 32, tabla_directorio, 
+                'TIPO_OFICINA', 'Categoría EFA', 'EFA_OSPA', 'EFA', 'Entidad u oficina')
 
             ]
             # Se inserta rejilla nueva
@@ -724,86 +715,103 @@ class Macroproblemas_vista(funcionalidades_ospa):
     """"""
     
     #----------------------------------------------------------------------
-    def __init__(self, *args, nuevo=True, lista=None, id_mp = None):
+    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None):
         """Constructor"""
 
         Ventana.__init__(self, *args)
         
         # 0. Almacenamos información heredada
         self.nuevo = nuevo
-        if self.nuevo != True: # En caso exista
-            self.lista_para_insertar = lista
-            self.cod_usuario_mp = id_mp
+        self.cod_usuario_mp = id_objeto
+        self.id_objeto_ingresado = id_objeto
+        # Parámetros de vitrina
+        self.vitrina_1 = None
+        self.vitina_2 = None
+
+        # Tablas para vitrina
+        # 0. Tablas de código de objeto
+        self.tabla_de_mp_cod = tabla_de_mp_cod
+        # II.1 Lista de EP
+        self.tabla_de_ep =  tabla_de_ep_resumen
+        self.tabla_relacion_mp_ep = tabla_relacion_mp_ep
+
+        # III. Títulos e imagen
+        # III.1 Frame de Título
+        titulos = Cuadro(self)
+        titulos.agregar_encabezado('Detalle de macroproblema')
 
         # I. Labels and Entries
         rejilla_mp = [
             ('L', 0, 0, 'Nombre del problema'),
-            ('ST', 0, 1),
+            ('EL', 0, 1, 112, 3),
 
             ('L', 1, 0, 'Descripción'),
             ('ST', 1, 1),
 
             ('L', 2, 0, 'Observaciones'),
-            ('ST', 2, 1),
+            ('EL', 2, 1, 112, 3)
 
-            ('L', 3, 0, 'Estado'),
-            ('E', 3, 1)
         ]
-
-        # II. Tablas en ventana
-        # II.1 Lista de DE
-        tabla_de_ep_completa = b_ep.generar_dataframe()
-        tabla_de_ep_id = tabla_de_ep_completa
-        self.tabla_de_ep = tabla_de_ep_id.drop(['OCURRENCIA', 'EXTENSION', 'TIPO DE AFECTACION',
-                                                'PROVINCIA', 'DESCRIPCION', 'TIPO DE UBICACION',
-                                                'CARACTERISTICA 1', 'CARACTERISTICA 2', 'TIPO CAUSA',
-                                                'CODIGO SINADA', 'ACTIVIDAD', 'FECHA_ULTIMO_MOV'], axis=1)
         
-        # III. Ubicaciones
-        # III.1 Frame de Título
-        titulos = Cuadro(self)
-        titulos.agregar_imagen(0,0,'Logo_OSPA.png',202,49)
-        titulos.agregar_titulo(0,1,'                             ')
-        titulos.agregar_titulo(0,2,'Detalle del macroproblema')
-        titulos.agregar_titulo(0,3,'                             ')
-        titulos.agregar_titulo(0,4,'                             ')
-
         # III.2 Frame de rejillas
         self.frame_rejilla = Cuadro(self)
         self.frame_rejilla.agregar_rejilla(rejilla_mp)
-        # En caso exista precedente, se inserta en la rejilla
-        if self.nuevo != True:
-            self.frame_rejilla.insertar_lista_de_datos(self.lista_para_insertar)
 
         # III.3 Frame de botón de rejilla
         f_boton = Cuadro(self)
-        f_boton.agregar_button(0, 1, 'Guardar', self.enviar_mp)
-        f_boton.agregar_button(0, 2, 'Inicio', self.inicio_app) # Botón provisional
+        f_boton.agregar_button(0, 1, 'Guardar', self.guardar_y_actualizar_mp)
+        f_boton.agregar_button(0, 2, 'Volver', self.volver)
+        f_boton.agregar_button(0, 3, 'Inicio', self.inicio_app)
         
-        # III.4 Frame de botón y títulos de vitrina 1
-        self.boton_vitrina_1 = Cuadro(self)
-        self.boton_vitrina_1.agregar_button(0, 0,'(+) Agregar', self.busqueda_de)
-        self.boton_vitrina_1.agregar_titulo(0, 1,'                                                       ')
-        self.boton_vitrina_1.agregar_titulo(0, 2, 'Extremo de problemas asociados')
-        self.boton_vitrina_1.agregar_titulo(0, 3,'                              ')
-        self.boton_vitrina_1.agregar_titulo(0, 4,'                              ')
-
-        # III.5 Frame de vitrina 1
+        # III.4 Frame de vitrina 1
         self.frame_vitrina_1 = Cuadro(self)
-        if self.nuevo != True:
-            self.generar_vitrina(self.frame_vitrina_1,
-                                 b_dr_cod, self.tabla_de_ep, base_relacion_dr_ep, 
-                                 "ID_DR", "ID_EP", self.ver_ep, self.eliminar_ep)
-        else:
-            self.frame_vitrina_1.agregar_label(1, 2,'                  0 extremos de problemas asociados') 
-
+        self.vitrina_1 = self.generar_vitrina(self.nuevo, 
+                                                self.frame_vitrina_1,
+                                                '(+) Agregar', self.busqueda_ep,
+                                                'Extremos de problemas asociados',
+                                                self.cod_usuario_mp, self.tabla_de_mp_cod, 
+                                                self.tabla_de_ep, self.tabla_relacion_mp_ep, 
+                                                "ID_MP", "ID_EP", "COD_MP", 
+                                                self.ver_ep, self.eliminar_ep_y_actualizar)
+        
+        
     #----------------------------------------------------------------------
-    def enviar_mp(self, x):
+    def guardar_y_actualizar_mp(self, x):
         """"""
-        print("Guardar macroproblemas")
+        # Agregamos el objeto
+        self.guardar_objeto(self.frame_rejilla,
+                            self.cod_usuario_mp, "COD_MP", self.tabla_de_mp_cod, 
+                            b_mp_cod, b_mp, b_mp_hist, self.ver_mp)
+        # Actualización de tabla de código y visualización
+        self.tabla_de_mp_cod = b_mp_cod.generar_dataframe()
     
 
     #----------------------------------------------------------------------
-    def eliminar_ep(self, x):
+    def eliminar_ep_y_actualizar(self, id_objeto):
         """"""
-        print("Eliminar extremo de problema asociado")
+         # Se elimina el DE
+        self.eliminar_objeto(self.cod_usuario_mp, "COD_MP", id_objeto, "COD_EP",
+                            self.tabla_de_mp_cod, tabla_de_ep_cod, 
+                            base_relacion_mp_ep, base_relacion_mp_ep_hist)
+        
+        # Se actualiza tabla de relaciones
+        self.tabla_relacion_mp_ep = base_relacion_mp_ep.generar_dataframe()
+        # Se actualiza la vista de vitrinas
+        self.actualizar_vitrinas_mp()
+    
+    #----------------------------------------------------------------------
+    def actualizar_vitrinas_mp(self):
+        # I. Elimino y sitúo las vitrinas
+        # I.1 Ventana de documentos emitidos
+        self.frame_vitrina_1.eliminar_cuadro()
+        if self.vitrina_1 != None: 
+            self.vitrina_1.eliminar_posible_vitrina()
+
+        self.vitrina_1 = self.generar_vitrina(self.nuevo, 
+                                                self.frame_vitrina_1,
+                                                '(+) Agregar', self.busqueda_ep,
+                                                'Documentos recibidos asociados',
+                                                self.cod_usuario_mp, self.tabla_de_mp_cod, 
+                                                self.tabla_de_ep, self.tabla_relacion_mp_ep, 
+                                                "ID_MP", "ID_EP", "COD_MP", 
+                                                self.ver_ep, self.eliminar_ep_y_actualizar)
