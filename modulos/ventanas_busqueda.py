@@ -33,7 +33,7 @@ b_ep_cod = Base_de_datos(id_b_ospa, 'EXT_P')
 b_ep = Base_de_datos(id_b_ospa, 'EXT_PROBLEMA')
 #b_de_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_EP')
 # Macroproblemas
-b_mc = Base_de_datos(id_b_ospa, 'MACROPROBLEMA')
+b_mp = Base_de_datos(id_b_ospa, 'MACROPROBLEMA')
 # Administrados
 b_ad = Base_de_datos(id_b_ospa, 'ADMINISTRADOS')
 
@@ -42,7 +42,7 @@ id_b_efa = '1pjHXiz15Zmw-49Nr4o1YdXJnddUX74n7Tbdf5SH7Lb0'
 b_efa = Base_de_datos(id_b_efa, 'Directorio')
 
 # relacion macroproblema con extremos
-b_relacion_mc_ep = Base_de_datos(id_b_ospa, 'RELACION_MP-EP')
+b_relacion_mp_ep = Base_de_datos(id_b_ospa, 'RELACION_MP-EP')
 
 base_relacion_docs = variables_globales.base_relacion_docs
 base_relacion_dr_ep = variables_globales.base_relacion_dr_ep
@@ -772,7 +772,7 @@ class Extremos(funcionalidades_ospa):
 
         # Creando vitrina
         self.vep = Vitrina_busquedaep(self, self.tabla_deF, self.ver_ep, 
-                                     self.asociar_dr_de_ep, self.ver_mc, height=250, width=1220)
+                                     self.asociar_dr_de_ep, self.ver_mp, height=250, width=1220)
 
 #----------------------------------------------------------------------
 
@@ -903,7 +903,7 @@ class Extremos(funcionalidades_ospa):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_ep.eliminar_cuadro()
             self.frame_vitrina_ep = Cuadro(self)
-            self.vep = Vitrina_busquedaep(self, tabla_filtro3, self.ver_ep, self.asociar_dr_de_ep, self.ver_mc, height=250, width=1220)
+            self.vep = Vitrina_busquedaep(self, tabla_filtro3, self.ver_ep, self.asociar_dr_de_ep, self.ver_mp, height=250, width=1220)
         else:
             self.frame_vitrina_ep.eliminar_cuadro()
             self.frame_vitrina_ep = Cuadro(self)
@@ -925,7 +925,7 @@ class Extremos(funcionalidades_ospa):
 
         self.frame_vitrina_ep = Cuadro(self)
         # Creando vitrina
-        self.vep = Vitrina_busquedaep(self, self.tabla_deF, self.ver_ep, self.asociar_dr_de_ep, self.ver_mc, height=250, width=1220)
+        self.vep = Vitrina_busquedaep(self, self.tabla_deF, self.ver_ep, self.asociar_dr_de_ep, self.ver_mp, height=250, width=1220)
 
     #----------------------------------------------------------------------
     def volver_y_actualizar_ep(self):
@@ -949,18 +949,18 @@ class Extremos(funcionalidades_ospa):
         tabla_codigo_de_filtrada = self.tabla_ep.query("`CODIGO EXTREMO`==@id_objeto")
         self.id_interno_ep = tabla_codigo_de_filtrada.iloc[0,0]
 
-        lb1 = b_ep.listar_datos_de_fila(x)
+        lb1 = b_ep.listar_datos_de_fila(id_objeto)
         lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], 
                                 lb1[8], lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], 
                                 lb1[14], lb1[15], lb1[16], lb1[17], lb1[18], lb1[19], lb1[20]]
         self.desaparecer()
 
         subframe = ventanas_vista.Extremo_problemas_vista(self, 750, 1350, texto_documento, 
-                                        nuevo=False, lista=lista_para_insertar, id_objeto = x)
+                                        nuevo=False, lista=lista_para_insertar, id_objeto = id_objeto)
 
 
     #----------------------------------------------------------------------
-    def ver_mc(self, x):
+    def ver_mp(self, x):
         """"""
         self.x = x
         texto_documento = 'Extremo de problema: ' + x
@@ -968,8 +968,8 @@ class Extremos(funcionalidades_ospa):
         tabla_codigo_de_filtrada = self.tabla_ep.query("`CODIGO EXTREMO`==@self.x")
         self.id_interno_ep = tabla_codigo_de_filtrada.iloc[0,0]
         tabla_codigo_de_filtrada2 = tabla_codigo_de_filtrada['ID_EP'].tolist()
-        self.relacion_mc_ep = b_relacion_mc_ep.generar_dataframe()
-        relacion_activos = self.relacion_mc_ep[self.relacion_mc_ep.ID_EP.isin(tabla_codigo_de_filtrada2)]
+        self.relacion_mp_ep = b_relacion_mp_ep.generar_dataframe()
+        relacion_activos = self.relacion_mp_ep[self.relacion_mp_ep.ID_EP.isin(tabla_codigo_de_filtrada2)]
         relacion_activos2 = relacion_activos['ID_MP'].tolist()
 
 
@@ -1064,13 +1064,13 @@ class Macroproblemas(funcionalidades_ospa):
         self.listamc = listamc
         if self.nuevo != True: #en caso exista
             self.id_usuario = lista
-            self.cod_doc_mc = id_objeto
+            self.cod_doc_mp = id_objeto
             self.x2 = x
 
         # Renombramos los encabezados
-        self.mc = b_mc.generar_dataframe()
+        self.mc = b_mp.generar_dataframe()
 
-        self.ep_mc = b_relacion_mc_ep.generar_dataframe()
+        self.ep_mp = b_relacion_mp_ep.generar_dataframe()
         self.ep = b_ep.generar_dataframe()
     
 
@@ -1079,13 +1079,13 @@ class Macroproblemas(funcionalidades_ospa):
         else:
             self.mc = self.mc[self.mc.ID_MP.isin(self.listamc)]
 
-        self.tabla_mc = self.mc.rename(columns={'ID_MP':'ID MACROPROBLEMA','COD_MP':'COD. MACROPROBLEMA','NOMBRE_DEL_PROBLEMA':'NOMBRE PROBLEMA','FECHA_DE_CREACION':'FECHA CREACION'})
-        self.tabla_mcF = self.tabla_mc.loc[0:99, ['ID MACROPROBLEMA','COD. MACROPROBLEMA','FECHA CREACION','NOMBRE PROBLEMA','ESTADO','DESCRIPCION']]
+        self.tabla_mp = self.mc.rename(columns={'ID_MP':'ID MACROPROBLEMA','COD_MP':'COD. MACROPROBLEMA','NOMBRE_DEL_PROBLEMA':'NOMBRE PROBLEMA','FECHA_DE_CREACION':'FECHA CREACION'})
+        self.tabla_mpF = self.tabla_mp.loc[0:99, ['ID MACROPROBLEMA','COD. MACROPROBLEMA','FECHA CREACION','NOMBRE PROBLEMA','ESTADO','DESCRIPCION']]
         
         # Listas para desplegables
-        #self.listaTC = list(set(self.tabla_mc['TIPO CAUSA']))
-        #self.listaTA = list(set(self.tabla_mc['TIPO AFECTACION']))
-        self.listaestado = list(set(self.tabla_mc['ESTADO']))
+        #self.listaTC = list(set(self.tabla_mp['TIPO CAUSA']))
+        #self.listaTA = list(set(self.tabla_mp['TIPO AFECTACION']))
+        self.listaestado = list(set(self.tabla_mp['ESTADO']))
 
         # Agregando logo del ospa a la ventana y título
         self.mc0 = Cuadro(self)
@@ -1095,7 +1095,7 @@ class Macroproblemas(funcionalidades_ospa):
         mc3.agregar_titulo(2, 0, 'Búsqueda de macroproblemas')
     
         # Armando rejilla con los filtros
-        self.rejilla_mc = (
+        self.rejilla_mp = (
 
             ('L', 0, 0, 'Código de Macroproblema'),
             ('EE', 0, 1),
@@ -1118,12 +1118,12 @@ class Macroproblemas(funcionalidades_ospa):
         
         # Agregando rejilla a la ventana
         self.mc1 = Cuadro(self)
-        self.mc1.agregar_rejilla(self.rejilla_mc)
+        self.mc1.agregar_rejilla(self.rejilla_mp)
 
         # Generando rejilla para botones
-        self.rejilla_mc2 = (
-            ('B', 5, 4, 'Buscar', self.Buscar_mc),
-            ('B', 5, 5, 'Limpiar', self.limpiar_mc),
+        self.rejilla_mp2 = (
+            ('B', 5, 4, 'Buscar', self.Buscar_mp),
+            ('B', 5, 5, 'Limpiar', self.limpiar_mp),
             ('B', 5, 6, 'Volver', self.volver),
             ('B', 5, 7, 'Inicio', self.inicio_app),
             ('B', 5, 8, 'Crear macroproblema', self.crear_macroproblema)
@@ -1131,11 +1131,11 @@ class Macroproblemas(funcionalidades_ospa):
         
         # Agregando rejilla de botones a la ventana
         self.mc2 = Cuadro(self)
-        self.mc2.agregar_rejilla(self.rejilla_mc2)
-        self.frame_vitrina_mc = Cuadro(self)
+        self.mc2.agregar_rejilla(self.rejilla_mp2)
+        self.frame_vitrina_mp = Cuadro(self)
 
         # Creando vitrina
-        self.vmc = Vitrina_busqueda(self, self.tabla_mcF, self.ver_mc, self.funcion_de_asociar_mc, height=200, width=700)
+        self.vmc = Vitrina_busqueda(self, self.tabla_mpF, self.ver_mp, self.funcion_de_asociar_mp, height=200, width=700)
 
 #----------------------------------------------------------------------
 
@@ -1155,7 +1155,7 @@ class Macroproblemas(funcionalidades_ospa):
 
 #----------------------------------------------------------------------
     
-    def Buscar_mc(self):
+    def Buscar_mp(self):
         """"""
         # Obteniendo valores de la rejilla
         self.listas_filtromc = self.mc1.obtener_lista_de_datos()
@@ -1183,7 +1183,7 @@ class Macroproblemas(funcionalidades_ospa):
 
     def mostrarDatosmc(self, filtro):
 
-        self.filtro0 = self.tabla_mc
+        self.filtro0 = self.tabla_mp
         
         if len(self.NOMBRE)>0: # Filtro por palabra clave
             self.vmc.Eliminar_vitrina()
@@ -1215,31 +1215,31 @@ class Macroproblemas(funcionalidades_ospa):
         else:
             tabla_filtro3 = tabla_filtro2
         if len(tabla_filtro3.index) > 0:
-            self.frame_vitrina_mc.eliminar_cuadro()
-            self.frame_vitrina_mc = Cuadro(self)
-            self.vmc = Vitrina_busqueda(self, tabla_filtro3, self.ver_mc, self.funcion_de_asociar_mc, height=200, width=700)
+            self.frame_vitrina_mp.eliminar_cuadro()
+            self.frame_vitrina_mp = Cuadro(self)
+            self.vmc = Vitrina_busqueda(self, tabla_filtro3, self.ver_mp, self.funcion_de_asociar_mp, height=200, width=700)
         else:
-            self.frame_vitrina_mc.eliminar_cuadro()
-            self.frame_vitrina_mc = Cuadro(self)
-            self.frame_vitrina_mc.agregar_label(1, 2, '                  0 macroproblemas encontrados')
+            self.frame_vitrina_mp.eliminar_cuadro()
+            self.frame_vitrina_mp = Cuadro(self)
+            self.frame_vitrina_mp.agregar_label(1, 2, '                  0 macroproblemas encontrados')
 
     #----------------------------------------------------------------------
-    def limpiar_mc(self):
+    def limpiar_mp(self):
      
          # Eliminando campos
         self.mc1.eliminar_cuadro()
         self.vmc.Eliminar_vitrina()
         self.mc2.eliminar_cuadro()
-        self.frame_vitrina_mc.eliminar_cuadro()
+        self.frame_vitrina_mp.eliminar_cuadro()
         # Agregando rejilla a la ventana
         self.mc1 = Cuadro(self)
-        self.mc1.agregar_rejilla(self.rejilla_mc)
+        self.mc1.agregar_rejilla(self.rejilla_mp)
         self.mc2 = Cuadro(self)
-        self.mc2.agregar_rejilla(self.rejilla_mc2)
+        self.mc2.agregar_rejilla(self.rejilla_mp2)
 
-        self.frame_vitrina_mc = Cuadro(self)
+        self.frame_vitrina_mp = Cuadro(self)
         # Creando vitrina
-        self.vmc = Vitrina_busqueda(self, self.tabla_mcF, self.ver_mc, self.funcion_de_asociar_mc, height=200, width=700)
+        self.vmc = Vitrina_busqueda(self, self.tabla_mpF, self.ver_mp, self.funcion_de_asociar_mp, height=200, width=700)
 
     #----------------------------------------------------------------------
     def volver(self):
@@ -1248,7 +1248,7 @@ class Macroproblemas(funcionalidades_ospa):
         self.ventana_anterior.aparecer()
 
     #----------------------------------------------------------------------
-    def ver_mc(self, x):
+    def ver_mp(self, x):
         """"""
         
         self.x = x
@@ -1257,14 +1257,14 @@ class Macroproblemas(funcionalidades_ospa):
         self.IDEX = b_ep.listar_datos_de_fila(self.x)
         self.IDEX_FINAL = self.IDEX[0]
 
-        self.mc_ep = b_relacion_mc_ep.generar_dataframe()
+        self.mc_ep = b_relacion_mp_ep.generar_dataframe()
         tabla_macroproblema_filtrada = self.mc_ep[self.mc_ep['ID_EP'] == self.IDEX_FINAL]
-        codigo_mc = tabla_macroproblema_filtrada.iloc[0,2]
-        print(codigo_mc)
+        codigo_mp = tabla_macroproblema_filtrada.iloc[0,2]
+        print(codigo_mp)
     
 
     #----------------------------------------------------------------------
-    def funcion_de_asociar_mc(self, x):
+    def funcion_de_asociar_mp(self, x):
         """"""
         print("hola")
 
