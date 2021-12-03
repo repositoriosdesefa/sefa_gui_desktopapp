@@ -25,13 +25,14 @@ tabla_parametros_dep = vg.tabla_parametros_dep
 
 class funcionalidades_ospa(Ventana):
     #----------------------------------------------------------------------
-    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None):
+    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None, tipo_objeto = None):
         """Constructor"""
         
         # Objetos de clase
         self.nuevo = nuevo
         self.lista = lista
         self.id_objeto_ingresado = id_objeto
+        self.tipo_objeto = tipo_objeto
 
     #----------------------------------------------------------------------
     def inicio_app(self):
@@ -142,7 +143,7 @@ class funcionalidades_ospa(Ventana):
                         numero_mp = "-0" + str(numero_mp)
                     else:
         	            numero_mp = "-" + str(numero_mp)
-                    cod_objeto_ingresado = "MP-" + numero_mp
+                    cod_objeto_ingresado = "MP" + numero_mp
                     base_cod_objeto.agregar_codigo(cod_objeto_ingresado, ahora)
                 else:
                     base_cod_objeto.agregar_nuevo_codigo(cod_objeto_ingresado, ahora)
@@ -266,12 +267,13 @@ class funcionalidades_ospa(Ventana):
         if self.nuevo != True:
 
             id_objeto_ingresado = self.id_objeto_ingresado
+            tipo_objeto_pantalla = self.tipo_objeto
             texto_pantalla = "Documento recibido que se asociará: " + id_objeto_ingresado
 
             # Genero la nueva ventana
             self.desaparecer()
-            SubFrame = ventanas_busqueda.Doc_recibidos_busqueda(self, 500, 1200, texto_pantalla,
-                                                                nuevo=False, id_objeto = id_objeto_ingresado)
+            SubFrame = ventanas_busqueda.Doc_recibidos_busqueda(self, 500, 1200, texto_pantalla, nuevo=False, 
+                                                                id_objeto = id_objeto_ingresado, tipo_objeto_anterior = tipo_objeto_pantalla)
 
         else:
             # En caso no estuviera guardado la ficha
@@ -296,12 +298,13 @@ class funcionalidades_ospa(Ventana):
         if self.nuevo != True: 
 
             id_objeto_ingresado = self.id_objeto_ingresado
+            tipo_objeto_pantalla = self.tipo_objeto
             texto_pantalla = "Documento recibido que se asociará: " + id_objeto_ingresado
 
             # Genero la nueva ventana
             self.desaparecer()
-            SubFrame = ventanas_busqueda.Doc_emitidos_busqueda(self, 500, 1200, texto_pantalla,
-                                                           nuevo=False, id_objeto = id_objeto_ingresado)
+            SubFrame = ventanas_busqueda.Doc_emitidos_busqueda(self, 500, 1200, texto_pantalla, nuevo=False, 
+                                                                id_objeto = id_objeto_ingresado, tipo_objeto_anterior = tipo_objeto_pantalla)
 
         else:
             # En caso no estuviera guardado la ficha
@@ -325,12 +328,13 @@ class funcionalidades_ospa(Ventana):
         if self.nuevo != True:
 
             id_objeto_ingresado = self.id_objeto_ingresado
+            tipo_objeto_pantalla = self.tipo_objeto
             texto_pantalla = "Extremo de problema que se asociará: " + id_objeto_ingresado
 
             # Genero la nueva ventana
             self.desaparecer()
-            SubFrame = ventanas_busqueda.Doc_recibidos_busqueda(self, 500, 1200, texto_pantalla,
-                                                                nuevo=False, id_objeto = id_objeto_ingresado)
+            SubFrame = ventanas_busqueda.Extremos(self, 500, 1200, texto_pantalla, nuevo=False, 
+                                                    id_objeto = id_objeto_ingresado, tipo_objeto_anterior = tipo_objeto_pantalla)
 
         else:
             # En caso no estuviera guardado la ficha
@@ -357,12 +361,13 @@ class funcionalidades_ospa(Ventana):
         if self.nuevo != True:
             # En caso exista un código insertado en la rejilla
             id_objeto_ingresado = self.id_objeto_ingresado
+            tipo_objeto_pantalla = self.tipo_objeto
             texto_pantalla = "Macroproblema que se asociará: " + id_objeto_ingresado
 
             # Genero la nueva ventana
             self.desaparecer()
-            SubFrame = ventanas_busqueda.Extremos(self, 500, 1200, texto_pantalla,
-                                                           nuevo=False, id_objeto = id_objeto_ingresado)
+            SubFrame = ventanas_busqueda.Macroproblemas(self, 500, 1200, texto_pantalla, nuevo=False, 
+                                                        id_objeto = id_objeto_ingresado, tipo_objeto_anterior = tipo_objeto_pantalla)
 
         else:
             # En caso no estuviera guardado la ficha
@@ -374,7 +379,7 @@ class funcionalidades_ospa(Ventana):
         texto_documento = 'Macroproblema: ' + id_usuario
 
         lb1 = b_mp.listar_datos_de_fila(id_usuario)
-        lista_para_insertar = [lb1[2],lb1[3], lb1[4]]
+        lista_para_insertar = [lb1[2], lb1[3], lb1[4]]
 
         self.desaparecer()
         subframe = ventanas_vista.Macroproblemas_vista(self, 650, 1150, texto_documento, nuevo=False, 

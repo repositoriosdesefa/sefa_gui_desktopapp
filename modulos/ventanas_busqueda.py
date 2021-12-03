@@ -48,13 +48,14 @@ base_relacion_mp_ep_hist =  vg.base_relacion_mp_ep_hist
 class Doc_recibidos_busqueda(funcionalidades_ospa):
     """"""
     #----------------------------------------------------------------------
-    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None):
+    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None, tipo_objeto_anterior = None):
         """Constructor"""
 
         Ventana.__init__(self, *args)
 
         # Almacenamos información herededa
         self.nuevo = nuevo
+        self.tipo_objeto_anterior = tipo_objeto_anterior
         if self.nuevo != True: #en caso exista
             self.id_usuario = lista
             self.id_objeto_ingresado = id_objeto
@@ -364,13 +365,14 @@ class Doc_emitidos_busqueda(funcionalidades_ospa):
     """"""
     
     #----------------------------------------------------------------------
-    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None):
+    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None, tipo_objeto_anterior = None):
         """Constructor"""
 
         Ventana.__init__(self, *args)
 
         # Almacenamos información herededa
         self.nuevo = nuevo
+        self.tipo_objeto_anterior = tipo_objeto_anterior
         if self.nuevo != True: #en caso exista
             self.id_usuario = lista
             self.id_objeto_ingresado = id_objeto
@@ -705,18 +707,18 @@ class Extremos(funcionalidades_ospa):
     """"""
     
     #----------------------------------------------------------------------
-    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None, x = None):
+    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None, x = None, tipo_objeto_anterior = None):
         """Constructor"""
 
         Ventana.__init__(self, *args)
 
         # Almacenamos información herededa
         self.nuevo = nuevo
-        self.id_objeto = id_objeto
-        self.x = x
+        self.id_objeto_ingresado = id_objeto
+        self.x = x #Código de extremo
+        self.tipo_objeto_anterior = tipo_objeto_anterior
         if self.nuevo != True: #en caso exista
             self.id_usuario = lista
-            self.id_objeto
         
         # Renombramos los encabezados
         self.ep = b_ep_tabla
@@ -795,7 +797,7 @@ class Extremos(funcionalidades_ospa):
 
         # Creando vitrina
         self.vep = Vitrina_busquedaep(self, self.tabla_deF, self.ver_ep_cod, 
-                                     self.asociar_dr_de_ep, self.ver_mp_ep, height=250, width=1220)
+                                     self.asociar_ep, self.ver_mp_ep, height=250, width=1220)
 
     #----------------------------------------------------------------------
 
@@ -925,7 +927,7 @@ class Extremos(funcionalidades_ospa):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_ep.eliminar_cuadro()
             self.frame_vitrina_ep = Cuadro(self)
-            self.vep = Vitrina_busquedaep(self, tabla_filtro3, self.ver_ep_cod, self.asociar_dr_de_ep, self.ver_mp_ep, height=250, width=1220)
+            self.vep = Vitrina_busquedaep(self, tabla_filtro3, self.ver_ep_cod, self.asociar_ep, self.ver_mp_ep, height=250, width=1220)
         else:
             self.frame_vitrina_ep.eliminar_cuadro()
             self.frame_vitrina_ep = Cuadro(self)
@@ -947,7 +949,7 @@ class Extremos(funcionalidades_ospa):
 
         self.frame_vitrina_ep = Cuadro(self)
         # Creando vitrina
-        self.vep = Vitrina_busquedaep(self, self.tabla_deF, self.ver_ep_cod, self.asociar_dr_de_ep, self.ver_mp_ep, height=250, width=1220)
+        self.vep = Vitrina_busquedaep(self, self.tabla_deF, self.ver_ep_cod, self.asociar_ep, self.ver_mp_ep, height=250, width=1220)
 
     #----------------------------------------------------------------------
     def actualizar(self):
@@ -1019,7 +1021,7 @@ class Extremos(funcionalidades_ospa):
         # Creando vitrina
         self.frame_vitrina_ep = Cuadro(self)
         # Creando vitrina
-        self.vep = Vitrina_busquedaep(self, self.tabla_deF, self.ver_ep_cod, self.asociar_dr_de_ep, self.ver_mp_ep, height=250, width=1220)
+        self.vep = Vitrina_busquedaep(self, self.tabla_deF, self.ver_ep_cod, self.asociar_ep, self.ver_mp_ep, height=250, width=1220)
 
     #----------------------------------------------------------------------
     def ver_ep_cod(self, id_objeto):
@@ -1061,63 +1063,71 @@ class Extremos(funcionalidades_ospa):
 
 
     #----------------------------------------------------------------------
-    def asociar_dr_de_ep(self, x):
+    def asociar_ep(self, x):
         """"""
 
         self.x = x
-
+        hora_de_modificacion = str(dt.datetime.now())
+        
         if self.nuevo == True:
             messagebox.showinfo("Error", "No tiene antecedente que pueda asociarse")
         else:
-
-            #OBTENER EL ID INTERNO DEL DOCUMENTO EMITIDO
+            #OBTENER EL ID INTERNO DEL EXTREMO DE PROBLEMA
             self.IDEP = b_ep.listar_datos_de_fila(self.x)
             self.IDEP_FINAL = self.IDEP[0]
 
-            #OBTENER EL ID USUARIO DEL DOCUMENTO RECIBIDO
-            codigodr = self.cod_doc_dr
+            #OBTENER EL ID USUARIO DEL OBJETO A ASOCIAR
+            id_objeto_anterior = self.id_objeto_ingresado
             # OBTENER EL ID INTERNO DEL DOCUMENTO RECIBIDO
-            tabla_de_codigo_dr = b_dr.generar_dataframe()
-            tabla_codigo_de_filtrada = tabla_de_codigo_dr[tabla_de_codigo_dr.COD_DR == codigodr]
-            id_interno_dr = tabla_codigo_de_filtrada.iloc[0,0]
+            if self.tipo_objeto_anterior == "DR":
+                tabla_de_codigo_dr = b_dr.generar_dataframe()
+                tabla_codigo_de_filtrada = tabla_de_codigo_dr[tabla_de_codigo_dr.COD_DR == id_objeto_anterior]
+                base_relacion_objetos = base_relacion_dr_ep 
+                base_relacion_objetos_hist = base_relacion_dr_ep_hist
+            elif self.tipo_objeto_anterior == "MP":
+                tabla_de_codigo_dr = b_mp.generar_dataframe()
+                tabla_codigo_de_filtrada = tabla_de_codigo_dr[tabla_de_codigo_dr.COD_MP == id_objeto_anterior]
+                base_relacion_objetos = b_relacion_mp_ep
+                base_relacion_objetos_hist = base_relacion_mp_ep_hist
+            else:
+                raise messagebox.showinfo("Error", "No puede asociar extremos de problema desde esta vista")
+            
+            id_interno = tabla_codigo_de_filtrada.iloc[0,0]
 
             # Definición de ID de relación
-            id_relacion_doc = id_interno_dr + "/" +  self.IDEP
+            id_relacion_objetos = id_interno + "/" +  self.IDEP_FINAL
 
             # BUSCAR COINCIDENCIAS
-            valor_repetido = self.comprobar_id(base_relacion_dr_ep, id_relacion_doc)
+            valor_repetido = self.comprobar_id(base_relacion_objetos, id_relacion_objetos)
 
             # BUSCAR ESTADO DE ID RELACION SI EXISTE
-            if valor_repetido != False:  # si hay coincidencias de ese id_relacion_doc
-                tabla_de_relaciones = base_relacion_dr_ep.generar_dataframe()
-                tabla_relaciones_filtrada = tabla_de_relaciones[tabla_de_relaciones['ID_DOCS_R'] == id_relacion_doc]
+            if valor_repetido == True:  # si hay coincidencias de ese id_relacion_doc
+                tabla_de_relaciones = base_relacion_objetos.generar_dataframe()
+                tabla_relaciones_filtrada = tabla_de_relaciones[tabla_de_relaciones['ID_DOCS_R'] == id_relacion_objetos]
                 estado_rela = tabla_relaciones_filtrada.iloc[0,3]
-
-            hora_de_modificacion = str(dt.datetime.now())
-
-            if valor_repetido != True:
-            
-                # Pestaña 1: Código Único
-                datos_insertar = [id_relacion_doc, id_interno_dr, self.IDEP_FINAL,'ACTIVO',hora_de_modificacion]
-                base_relacion_dr_ep.agregar_datos(datos_insertar)
-                datos_a_cargar_hist = [id_relacion_doc, id_interno_dr, self.IDEP_FINAL,'ACTIVO',hora_de_modificacion,hora_de_modificacion]
-                base_relacion_d_hist.agregar_datos(datos_a_cargar_hist)
-                messagebox.showinfo("¡Excelente!", "El registro ha sido asociado con éxito")
-            else:
                 if estado_rela == 'ACTIVO':
                     messagebox.showinfo("Error", "Ya se encuentra asociado")
                 else:
-                    datos_iniciales = base_relacion_dr_ep.listar_datos_de_fila(id_relacion_doc)
+                    datos_iniciales = base_relacion_objetos.listar_datos_de_fila(id_relacion_objetos)
                     hora = str(dt.datetime.now())
                     datos_a_cargar_hist = datos_iniciales + [hora]
                     estado_a_sobreescribir = 'ACTIVO'
                     datos_a_cargar_hist[3] = estado_a_sobreescribir
-                    base_relacion_docs.cambiar_un_dato_de_una_fila(id_relacion_doc, 4, estado_a_sobreescribir)
-                    base_relacion_docs.cambiar_un_dato_de_una_fila(id_relacion_doc, 5, hora)
-                    base_relacion_d_hist.agregar_datos(datos_a_cargar_hist)
-                    base_relacion_d_hist.cambiar_un_dato_de_una_fila(id_relacion_doc, 4, estado_a_sobreescribir)
+                    base_relacion_objetos.cambiar_un_dato_de_una_fila(id_relacion_objetos, 4, estado_a_sobreescribir)
+                    base_relacion_objetos.cambiar_un_dato_de_una_fila(id_relacion_objetos, 5, hora)
+                    base_relacion_objetos_hist.agregar_datos(datos_a_cargar_hist)
+                    base_relacion_objetos_hist.cambiar_un_dato_de_una_fila(id_relacion_objetos, 4, estado_a_sobreescribir)
                     messagebox.showinfo("¡Excelente!", "El registro ha sido asociado con éxito")
         
+            else:
+                # Pestaña 1: Código Único
+                datos_insertar = [id_relacion_objetos, id_interno, self.IDEP_FINAL,'ACTIVO',hora_de_modificacion]
+                base_relacion_objetos.agregar_datos(datos_insertar)
+                datos_a_cargar_hist = [id_relacion_objetos, id_interno, self.IDEP_FINAL,'ACTIVO',hora_de_modificacion,hora_de_modificacion]
+                base_relacion_objetos_hist.agregar_datos(datos_a_cargar_hist)
+                messagebox.showinfo("¡Excelente!", "El registro ha sido asociado con éxito")
+                
+                
     #----------------------------------------------------------------------
 
     def comprobar_id(self, base_codigo, id_usuario):
@@ -1134,7 +1144,7 @@ class Macroproblemas(funcionalidades_ospa):
     """"""
     
     #----------------------------------------------------------------------
-    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None, x = None, listamc = None):
+    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None, x = None, listamc = None, tipo_objeto_anterior = None):
         """Constructor"""
 
         Ventana.__init__(self, *args)
@@ -1143,6 +1153,7 @@ class Macroproblemas(funcionalidades_ospa):
         self.nuevo = nuevo
         self.x2 = x
         self.listamc = listamc
+        self.tipo_objeto_anterior = tipo_objeto_anterior
         if self.nuevo != True: #en caso exista
             self.id_usuario = lista
             self.cod_doc_mp = id_objeto
@@ -1354,7 +1365,7 @@ class Macroproblemas_filtrada(funcionalidades_ospa):
     """"""
     
     #----------------------------------------------------------------------
-    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None, x = None, listamc = None):
+    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None, x = None, listamc = None, tipo_objeto_anterior = None):
         """Constructor"""
 
         Ventana.__init__(self, *args)
@@ -1362,6 +1373,7 @@ class Macroproblemas_filtrada(funcionalidades_ospa):
         # Almacenamos información herededa
         self.nuevo = nuevo
         self.x2 = x
+        self.tipo_objeto_anterior = tipo_objeto_anterior
         self.listamc = listamc
         if self.nuevo != True: #en caso exista
             self.listamp = lista
@@ -1558,18 +1570,18 @@ class Macroproblemas_filtrada(funcionalidades_ospa):
         # Creando vitrina
         self.vmc = Vitrina_pendientes(self, self.tabla_mpF, self.ver_mp, height=200, width=800)
 
-
 class Administrados(funcionalidades_ospa):
     """"""
     
     #----------------------------------------------------------------------
-    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None):
+    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None, tipo_objeto_anterior = None):
         """Constructor"""
 
         Ventana.__init__(self, *args)
 
         # Almacenamos información herededa
         self.nuevo = nuevo
+        self.tipo_objeto_anterior = tipo_objeto_anterior
         if self.nuevo != True: #en caso exista
             self.id_usuario = lista
             self.cod_doc_ad = id_objeto
@@ -1780,13 +1792,14 @@ class Pendientes_jefe_firma(funcionalidades_ospa):
     """"""
 
     #----------------------------------------------------------------------
-    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None):
+    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None, tipo_objeto_anterior = None):
         """Constructor"""
 
         Ventana.__init__(self, *args)
 
         # Almacenamos información herededa
         self.nuevo = nuevo
+        self.tipo_objeto_anterior = tipo_objeto_anterior
         if self.nuevo != True: #en caso exista
             self.id_usuario = lista
             self.id_objeto_ingresado = id_objeto
@@ -2022,13 +2035,14 @@ class Pendientes_jefe_firma(funcionalidades_ospa):
 class Pendientes_jefe_asignar(funcionalidades_ospa):
     """"""
     #----------------------------------------------------------------------
-    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None):
+    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None, tipo_objeto_anterior = None):
         """Constructor"""
 
         Ventana.__init__(self, *args)
 
         # Almacenamos información herededa
         self.nuevo = nuevo
+        self.tipo_objeto_anterior = tipo_objeto_anterior
         if self.nuevo != True: #en caso exista
             self.id_usuario = lista
             self.cod_doc_jpa = id_objeto
@@ -2235,13 +2249,14 @@ class Pendientes_jefe_asignar(funcionalidades_ospa):
 class Pendientes_por_reiterar(funcionalidades_ospa):
     """"""
     #----------------------------------------------------------------------
-    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None):
+    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None, tipo_objeto_anterior = None):
         """Constructor"""
 
         Ventana.__init__(self, *args)
 
         # Almacenamos información herededa
         self.nuevo = nuevo
+        self.tipo_objeto_anterior = tipo_objeto_anterior
         if self.nuevo != True: #en caso exista
             self.id_usuario = lista
             self.cod_doc_ppr = id_objeto
@@ -2471,17 +2486,17 @@ class Pendientes_por_reiterar(funcionalidades_ospa):
 
     #----------------------------------------------------------------------
 
-
 class Pendientes_eq1_trabajar(funcionalidades_ospa):
     """"""
     #----------------------------------------------------------------------
-    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None):
+    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None, tipo_objeto_anterior = None):
         """Constructor"""
 
         Ventana.__init__(self, *args)
 
         # Almacenamos información herededa
         self.nuevo = nuevo
+        self.tipo_objeto_anterior = tipo_objeto_anterior
         if self.nuevo != True: #en caso exista
             self.id_usuario = lista
             self.cod_doc_peq1t = id_objeto
@@ -2680,13 +2695,14 @@ class Pendientes_eq1_trabajar(funcionalidades_ospa):
 class Pendientes_eq2_calificarrpta(funcionalidades_ospa):
     """"""
     #----------------------------------------------------------------------
-    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None):
+    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None, tipo_objeto_anterior = None):
         """Constructor"""
 
         Ventana.__init__(self, *args)
 
         # Almacenamos información herededa
         self.nuevo = nuevo
+        self.tipo_objeto_anterior = tipo_objeto_anterior
         if self.nuevo != True: #en caso exista
             self.id_usuario = lista
             self.cod_doc_peq2t = id_objeto
@@ -2903,13 +2919,14 @@ class Pendientes_eq2_calificarrpta(funcionalidades_ospa):
 class Pendientes_eq2_programaciones(funcionalidades_ospa):
     """"""
     #----------------------------------------------------------------------
-    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None):
+    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None, tipo_objeto_anterior = None):
         """Constructor"""
 
         Ventana.__init__(self, *args)
 
         # Almacenamos información herededa
         self.nuevo = nuevo
+        self.tipo_objeto_anterior = tipo_objeto_anterior
         if self.nuevo != True: #en caso exista
             self.id_usuario = lista
             self.cod_doc_peq2pr = id_objeto

@@ -106,7 +106,7 @@ class Doc_recibidos_vista(funcionalidades_ospa):
     """"""
     
     #----------------------------------------------------------------------
-    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None):
+    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None, tipo_objeto = "DR"):
         """Constructor"""
 
         Ventana.__init__(self, *args)
@@ -115,6 +115,7 @@ class Doc_recibidos_vista(funcionalidades_ospa):
         self.nuevo = nuevo
         self.id_objeto_ingresado = id_objeto
         self.cod_usuario_dr = id_objeto
+        self.tipo_objeto = tipo_objeto
         # Parámetros de vitrina
         self.vitrina_1 = None
         self.vitina_2 = None
@@ -293,7 +294,7 @@ class Doc_recibidos_vista(funcionalidades_ospa):
 class Doc_emitidos_vista(funcionalidades_ospa):
     """"""
     #----------------------------------------------------------------------
-    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None):
+    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None,  tipo_objeto = "DE"):
         """Constructor"""
 
         Ventana.__init__(self, *args)
@@ -302,6 +303,7 @@ class Doc_emitidos_vista(funcionalidades_ospa):
         self.nuevo = nuevo
         self.cod_usuario_de = id_objeto
         self.id_objeto_ingresado = id_objeto
+        self.tipo_objeto = tipo_objeto
         # Parámetros de vitrina
         self.vitrina_1 = None
         self.vitina_2 = None
@@ -467,12 +469,11 @@ class Doc_emitidos_vista(funcionalidades_ospa):
                                             self.ver_ep, self.eliminar_ep_y_actualizar)
     
         
-
 class Extremo_problemas_vista(funcionalidades_ospa):
     """"""
     
     #----------------------------------------------------------------------
-    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None):
+    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None,  tipo_objeto = "EP"):
         """Constructor"""
 
         Ventana.__init__(self, *args)
@@ -481,6 +482,7 @@ class Extremo_problemas_vista(funcionalidades_ospa):
         self.nuevo = nuevo
         self.cod_usuario_ep = id_objeto
         self.id_objeto_ingresado = id_objeto
+        self.tipo_objeto = tipo_objeto
         # Parámetros de vitrina
         self.vitrina_1 = None
         self.vitina_2 = None
@@ -710,13 +712,12 @@ class Extremo_problemas_vista(funcionalidades_ospa):
         messagebox.showerror("Error",
                             'Para asociar un documento, hágalo desde la vista de documentos')
 
-
     
 class Macroproblemas_vista(funcionalidades_ospa):
     """"""
     
     #----------------------------------------------------------------------
-    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None):
+    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None,  tipo_objeto = "MP"):
         """Constructor"""
 
         Ventana.__init__(self, *args)
@@ -725,6 +726,7 @@ class Macroproblemas_vista(funcionalidades_ospa):
         self.nuevo = nuevo
         self.cod_usuario_mp = id_objeto
         self.id_objeto_ingresado = id_objeto
+        self.tipo_objeto = tipo_objeto
         # Parámetros de vitrina
         self.vitrina_1 = None
         self.vitina_2 = None
@@ -744,37 +746,39 @@ class Macroproblemas_vista(funcionalidades_ospa):
         # III.2 Frame de rejillas
         self.frame_rejilla = Cuadro(self)
         if self.nuevo == False: # Estamos en una ficha creada
-            self.tabla_de_ep_cod = b_ep_cod.generar_dataframe()
+            self.tabla_de_mp_cod = b_mp_cod.generar_dataframe()
             self.cod_usuario_mp = id_objeto
             self.lista_para_insertar = lista
             rejilla_mp = [
 
-                ('L', 0, 0, ''),
-                ('L', 0, 1, ''),
+                ('L', 0, 0, 'Código de macroproblema'),
+                ('L', 0, 1, str(self.cod_usuario_mp)),
 
-                ('L', 0, 0, 'Nombre del problema'),
-                ('EL', 0, 1, 112, 3),
+                ('L', 1, 0, 'Nombre del problema'),
+                ('EL', 1, 1, 110, 3),
 
-                ('L', 1, 0, 'Descripción'),
-                ('ST', 1, 1),
+                ('L', 2, 0, 'Descripción'),
+                ('ST', 2, 1),
 
-                ('L', 2, 0, 'Observaciones'),
-                ('EL', 2, 1, 112, 3)
+                ('L', 3, 0, 'Observaciones'),
+                ('EL', 3, 1, 112, 3)
 
             ]
+            self.frame_rejilla.agregar_rejilla(rejilla_mp)
+            self.frame_rejilla.insertar_lista_de_datos(self.lista_para_insertar)
         else:
             rejilla_mp_nuevo = [
                 ('L', 0, 0, ''),
-                ('L', 0, 1, str(self.cod_usuario_mp)),
+                ('L', 0, 1, ''),
 
-                ('L', 0, 0, 'Nombre del problema'),
-                ('EL', 0, 1, 112, 3),
+                ('L', 1, 0, 'Nombre del problema'),
+                ('EL', 1, 1, 110, 3),
 
-                ('L', 1, 0, 'Descripción'),
-                ('ST', 1, 1),
+                ('L', 2, 0, 'Descripción'),
+                ('ST', 2, 1),
 
-                ('L', 2, 0, 'Observaciones'),
-                ('EL', 2, 1, 112, 3)
+                ('L', 3, 0, 'Observaciones'),
+                ('EL', 3, 1, 112, 3)
             ]
             # Se inserta rejilla nueva
             self.frame_rejilla.agregar_rejilla(rejilla_mp_nuevo)
@@ -832,7 +836,7 @@ class Macroproblemas_vista(funcionalidades_ospa):
         self.vitrina_1 = self.generar_vitrina(self.nuevo, 
                                                 self.frame_vitrina_1,
                                                 '(+) Agregar', self.busqueda_ep,
-                                                'Documentos recibidos asociados',
+                                                'Extremos de problemas asociados',
                                                 self.cod_usuario_mp, self.tabla_de_mp_cod, 
                                                 self.tabla_de_ep, self.tabla_relacion_mp_ep, 
                                                 "ID_MP", "ID_EP", "COD_MP", 
