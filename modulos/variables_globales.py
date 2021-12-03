@@ -37,6 +37,8 @@ b_ep_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_EP')
 b_mp_cod = Base_de_datos(id_b_ospa, 'MC_P')
 b_mp = Base_de_datos(id_b_ospa, 'MACROPROBLEMA')
 b_mp_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_MP')
+# Administrados
+b_adm = Base_de_datos(id_b_ospa, 'ADMINISTRADOS')
 
 # 2. Bases de datos complementarias
 # 2.1 Directorio de Oficinas

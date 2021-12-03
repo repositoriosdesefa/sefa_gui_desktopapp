@@ -73,6 +73,14 @@ class ventanas_ospa(Ventana):
         # LargoxAncho
         SubFrame = ventanas_busqueda.Macroproblemas(self, 500, 1200, 
                     "Búsqueda de macroproblemas")
+    
+    #----------------------------------------------------------------------
+    def busqueda_Administrados(self):
+        
+        self.desaparecer()
+        # LargoxAncho
+        SubFrame = ventanas_busqueda.Administrados(self, 500, 1200, 
+                    "Búsqueda de administrados")
 
 
 
@@ -197,8 +205,10 @@ class Menu_busquedas(inicio_app_OSPA):
         c1.agregar_button(7, 1, "Ir", self.busqueda_ep)
         c1.agregar_label(8, 1,'Búsqueda de macroproblemas')
         c1.agregar_button(9, 1, "Ir", self.busqueda_mp)
-        c1.agregar_label(10, 1,' ')
-        c1.agregar_button(13, 2, "Volver", self.volver_anterior)
+        c1.agregar_label(10, 1,'Búsqueda de administrados')
+        c1.agregar_button(11, 1, "Ir", self.busqueda_Administrados)
+        c1.agregar_label(12, 1,' ')
+        c1.agregar_button(14, 2, "Volver", self.volver_anterior)
     
 
 class Menu_admin(inicio_app_OSPA):
