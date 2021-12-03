@@ -62,7 +62,7 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
         # Generamos el dataframe a filtrar
         self.tabla_inicial0 = b_dr_tabla
         self.tabla_0 = self.tabla_inicial0.rename(columns={'COD_DR':'NRO DOC','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_ENTRANTE':'HT INGRESO'})
-        self.tabla_drF = self.tabla_0.loc[0:99, ['NRO DOC','REMITENTE','HT INGRESO','FECHA INGRESO SEFA','INDICACION','ESPECIALISTA','FECHA ULTIMO MOV.','ASUNTO']]
+        self.tabla_drF = self.tabla_0.loc[0:99, ['NRO DOC','REMITENTE','HT INGRESO','FECHA INGRESO SEFA','INDICACION','ESPECIALISTA_1','FECHA ULTIMO MOV.','ASUNTO']]
         
         # Información para las listas desplegables
         self.listatipodoc = sorted(list(set(self.tabla_0['TIPO DOC'])))
@@ -101,7 +101,7 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
             ('B', 5, 4, 'Buscar', self.Buscardr),
             ('B', 5, 5, 'Limpiar', self.limpiar),
             ('B', 5, 6, 'Actualizar', self.actualizar),
-            ('B', 5, 7, 'Volver', self.volver_y_actualizar),
+            ('B', 5, 7, 'Volver', self.volver),
             ('B', 5, 8, 'Inicio', self.inicio_app)
         )
         
@@ -130,7 +130,7 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
         # Generamos el dataframe a filtrar 
         self.tabla_inicial0 = b_dr_tabla
         self.tabla_0 = self.tabla_inicial0.rename(columns={'COD_DR':'NRO DOC','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_ENTRANTE':'HT INGRESO'})
-        self.tabla_drF = self.tabla_0.loc[0:99, ['NRO DOC','REMITENTE','HT INGRESO','FECHA INGRESO SEFA','INDICACION','ESPECIALISTA','FECHA ULTIMO MOV.','ASUNTO']]
+        self.tabla_drF = self.tabla_0.loc[0:99, ['NRO DOC','REMITENTE','HT INGRESO','FECHA INGRESO SEFA','INDICACION','ESPECIALISTA_1','FECHA ULTIMO MOV.','ASUNTO']]
       
         # Información para las listas desplegables
         self.listatipodoc = sorted(list(set(self.tabla_0['TIPO DOC'])))
@@ -222,7 +222,7 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
 
     def Complementodr(self,filtro0):
 
-        tabla_filtro2 = filtro0.loc[:, ['NRO DOC','REMITENTE','HT INGRESO','FECHA INGRESO SEFA','INDICACION','ESPECIALISTA','FECHA ULTIMO MOV.','ASUNTO']]
+        tabla_filtro2 = filtro0.loc[:, ['NRO DOC','REMITENTE','HT INGRESO','FECHA INGRESO SEFA','INDICACION','ESPECIALISTA_1','FECHA ULTIMO MOV.','ASUNTO']]
         if len(tabla_filtro2.index) > 100:
             tabla_filtro3 = tabla_filtro2.head(100)
         else:
@@ -255,23 +255,6 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
         self.v1 = Vitrina_busqueda(self, self.tabla_drF, self.ver_dr, 
                                    self.asociar_dr_de, height=250, width=1080)
 
-    #----------------------------------------------------------------------
-
-    def volver_y_actualizar(self):
-        """"""
-        if self.nuevo == True:
-            self.volver()
-        else:
-            codigode = self.cod_id_objeto
-
-            lb1 = b_de.listar_datos_de_fila(codigode)
-            lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6]]
-            #,                       lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], lb1[12]]
-            self.desaparecer()
-            subframe = ventanas_vista.Doc_emitidos_vista(self, 650, 1150, 
-                                                nuevo=False, lista=lista_para_insertar, id_objeto=codigode)
-        # volver y actualizar
-        
     #----------------------------------------------------------------------
     def ver_dr(self, x):
         """"""
@@ -443,7 +426,7 @@ class Doc_emitidos_busqueda(funcionalidades_ospa):
             ('B', 5, 4, 'Buscar', self.Buscar_de),
             ('B', 5, 5, 'Limpiar', self.limpiar_de),
             ('B', 5, 6, 'Actualizar', self.actualizar),
-            ('B', 5, 7, 'Volver', self.volver_y_actualizar),
+            ('B', 5, 7, 'Volver', self.volver),
             ('B', 5, 8, 'Inicio', self.inicio_app),
             ('B', 5, 9, 'Emitir doc', self.doc_emitido)
         )
@@ -635,23 +618,6 @@ class Doc_emitidos_busqueda(funcionalidades_ospa):
                                     self.asociar_de_dr, height=250, width=1190)
 
     #----------------------------------------------------------------------
-    def volver_y_actualizar(self):
-        """"""
-        if self.nuevo == True:
-            self.volver()
-        else:
-            codigodr = self.cod_id_objeto
-
-            texto_pantalla = "Documento recibido: " + codigodr
-
-            lb1 = b_dr.listar_datos_de_fila(codigodr)
-            lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], 
-                                lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14], lb1[15], lb1[16]]
-            self.desaparecer()
-            subframe = ventanas_vista.Doc_emitidos_vista(self, 650, 1150, 
-                                                nuevo=False, lista=lista_para_insertar, id_objeto=codigodr)
-
-    #----------------------------------------------------------------------
     def ver_dr(self, id_usuario):
         """"""
         texto_documento = 'Documento recibido: ' + id_usuario
@@ -678,7 +644,7 @@ class Doc_emitidos_busqueda(funcionalidades_ospa):
             self.IDDE_FINAL = self.IDDE[0]
 
             #OBTENER EL ID USUARIO DEL DOCUMENTO RECIBIDO
-            codigodr = self.cod_id_objeto
+            codigodr = self.id_objeto_ingresado
             # OBTENER EL ID INTERNO DEL DOCUMENTO RECIBIDO
             tabla_de_codigo_dr = b_dr.generar_dataframe()
             tabla_codigo_de_filtrada = tabla_de_codigo_dr[tabla_de_codigo_dr.COD_DR == codigodr]
@@ -788,7 +754,7 @@ class Extremos(funcionalidades_ospa):
             ('CXP', 0, 5, 39, self.listaACT, '', "readonly"),
 
             ('L', 1, 0, 'Departamento'),
-            ('CXDEP3', 1, 1, 32, tabla_lista_efa, 
+            ('CXDEP3', 1, 1, 37, tabla_lista_efa, "Triple",
             'DEPARTAMENTO ', 'Provincia', 'PROVINCIA ', 'Distrito', 'DISTRITO '),
 
             ('L', 2, 0, 'Tipo de ubicación'),
@@ -817,7 +783,7 @@ class Extremos(funcionalidades_ospa):
             ('B', 5, 4, 'Buscar', self.Buscar_ep),
             ('B', 5, 5, 'Limpiar', self.limpiar_ep),
             ('B', 5, 6, 'Actualizar', self.actualizar),
-            ('B', 5, 7, 'Volver', self.volver_y_actualizar_ep),
+            ('B', 5, 7, 'Volver', self.volver),
             ('B', 5, 8, 'Inicio', self.inicio_app),
             ('B', 5, 9, 'Crear extremo', self.crear_extremo)
         )
@@ -1025,13 +991,8 @@ class Extremos(funcionalidades_ospa):
             ('CXP', 0, 5, 39, self.listaACT, '', "readonly"),
 
             ('L', 1, 0, 'Departamento'),
-            ('CXP', 1, 1, 39, self.listaDEPAR, '', "readonly"),
-
-            ('L', 1, 2, 'Provincia'),
-            ('CXP', 1, 3, 39, self.listaPROV, '', "readonly"),
-
-            #('L', 1, 4, 'Distrito'),
-            #('CXP', 1, 5, 39, self.listaDISTR, '', "readonly"),
+            ('CXDEP3', 1, 1, 37, tabla_lista_efa, "Triple",
+            'DEPARTAMENTO ', 'Provincia', 'PROVINCIA ', 'Distrito', 'DISTRITO '),
 
             ('L', 2, 0, 'Tipo de ubicación'),
             ('CXP', 2, 1, 39, self.listaTIPOUBI, '', "readonly"),
@@ -1059,20 +1020,6 @@ class Extremos(funcionalidades_ospa):
         self.frame_vitrina_ep = Cuadro(self)
         # Creando vitrina
         self.vep = Vitrina_busquedaep(self, self.tabla_deF, self.ver_ep_cod, self.asociar_dr_de_ep, self.ver_mp_ep, height=250, width=1220)
-
-    #----------------------------------------------------------------------
-    def volver_y_actualizar_ep(self):
-        """"""
-        self.nuevo
-        self.id_objeto
-
-        if self.nuevo == True:
-            self.volver()
-        else:
-            codigo_antecedente = self.id_objeto
-            texto_documento = ""
-
-            self.ver_ep_cod(self, codigo_antecedente, texto_documento)
 
     #----------------------------------------------------------------------
     def ver_ep_cod(self, id_objeto):
@@ -1397,12 +1344,6 @@ class Macroproblemas(funcionalidades_ospa):
         self.frame_vitrina_mp = Cuadro(self)
         # Creando vitrina
         self.vmc = Vitrina_busqueda(self, self.tabla_mpF, self.ver_mp, self.funcion_de_asociar_mp, height=200, width=780)
-
-    #----------------------------------------------------------------------
-    def volver(self):
-        """"""
-        self.desaparecer()
-        self.ventana_anterior.aparecer()
     
     #----------------------------------------------------------------------
     def funcion_de_asociar_mp(self, x):
@@ -1617,11 +1558,6 @@ class Macroproblemas_filtrada(funcionalidades_ospa):
         # Creando vitrina
         self.vmc = Vitrina_pendientes(self, self.tabla_mpF, self.ver_mp, height=200, width=800)
 
-    #----------------------------------------------------------------------
-    def volver(self):
-        """"""
-        self.desaparecer()
-        self.ventana_anterior.aparecer()
 
 class Administrados(funcionalidades_ospa):
     """"""
@@ -1817,17 +1753,11 @@ class Administrados(funcionalidades_ospa):
         self.vad = Vitrina_busqueda(self, self.tabla_adF, self.ver_ad, self.funcion_de_asociar_ad, height=200, width=590)
 
     #----------------------------------------------------------------------
-    def volver(self):
-        """"""
-        self.desaparecer()
-        self.ventana_anterior.aparecer()
-
-    #----------------------------------------------------------------------
     def ver_ad(self, x):
         """"""
         #self.x = x
         #texto_documento = 'Documento emitido: ' + x
-        print("hola")
+        print("Administrado")
         #bde = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOC_EMITIDOS_FINAL')
         #lb1 = bde.listar_datos_de_fila(self.x)
         #lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], 
@@ -2269,7 +2199,7 @@ class Pendientes_jefe_asignar(funcionalidades_ospa):
         
         # Generamos el dataframe a filtrar 
         self.tabla_inicial0 = b_dr_tabla
-        self.tabla_inicial2 = self.tabla_inicial0.query("ESPECIALISTA=='' or ESPECIALISTA==' '")
+        self.tabla_inicial2 = self.tabla_inicial0.query("ESPECIALISTA_1=='' or ESPECIALISTA_1==' '")
         self.tabla_jpa = self.tabla_inicial2.rename(columns={'COD_DR':'NRO DOCUMENTO','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_ENTRANTE':'HT INGRESO'})
         self.tabla_jpaF = self.tabla_jpa.loc[0:99, ['NRO DOCUMENTO','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','ASUNTO']]
 
@@ -2766,12 +2696,12 @@ class Pendientes_eq2_calificarrpta(funcionalidades_ospa):
         self.tabla_inicial1 = self.tabla_inicial0.query("TIPO_RESPUESTA=='Si'")
         #self.tabla_inicial2 = self.tabla_inicial1.query("RESPUESTA==' ' or RESPUESTA==''")
         self.tabla_peq2t = self.tabla_inicial1.rename(columns={'COD_DR':'NRO DOC','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_ENTRANTE':'HT INGRESO'})
-        self.tabla_peq2tF = self.tabla_peq2t.loc[0:99, ['NRO DOC','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','FECHA ULTIMO MOV.','ESPECIALISTA','INDICACION','ASUNTO']]
+        self.tabla_peq2tF = self.tabla_peq2t.loc[0:99, ['NRO DOC','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','FECHA ULTIMO MOV.','ESPECIALISTA_1','INDICACION','ASUNTO']]
  
         # Información para las listas desplegables
         self.peq2ttipodoc = list(set(self.tabla_peq2t['TIPO DOC']))
         self.peq2tremitente = list(set(self.tabla_peq2t['REMITENTE']))
-        self.peq2tespecialista = list(set(self.tabla_peq2t['ESPECIALISTA']))
+        self.peq2tespecialista = list(set(self.tabla_peq2t['ESPECIALISTA_1']))
 
         # Agregando logo del ospa a la ventana y título
         self.peq2t0 = Cuadro(self)
@@ -2846,7 +2776,7 @@ class Pendientes_eq2_calificarrpta(funcionalidades_ospa):
                 filtro = filtro+" & "
             else:
                 filtro
-            filtro=filtro+"ESPECIALISTA=="+"'"+self.especialistapeq2t+"' "
+            filtro=filtro+"ESPECIALISTA_1=="+"'"+self.especialistapeq2t+"' "
         
         self.mostrarDatospeq2t(filtro)
 
@@ -2887,7 +2817,7 @@ class Pendientes_eq2_calificarrpta(funcionalidades_ospa):
 
     def Complementopeq2t(self,filtro0):
 
-        tabla_filtro2 = filtro0.loc[:, ['NRO DOC','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','FECHA ULTIMO MOV.','ESPECIALISTA','INDICACION','ASUNTO']]
+        tabla_filtro2 = filtro0.loc[:, ['NRO DOC','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','FECHA ULTIMO MOV.','ESPECIALISTA_1','INDICACION','ASUNTO']]
         if len(tabla_filtro2.index) > 100:
             tabla_filtro3 = tabla_filtro2.head(100)
         else:
@@ -2935,12 +2865,12 @@ class Pendientes_eq2_calificarrpta(funcionalidades_ospa):
         self.tabla_inicial1 = self.tabla_inicial0.query("TIPO_RESPUESTA=='Si'")
         #self.tabla_inicial2 = self.tabla_inicial1.query("RESPUESTA=='' or RESPUESTA==' '")
         self.tabla_peq2t = self.tabla_inicial1.rename(columns={'COD_DR':'NRO DOC','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_ENTRANTE':'HT INGRESO'})
-        self.tabla_peq2tF = self.tabla_peq2t.loc[0:99, ['NRO DOC','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','FECHA ULTIMO MOV.','ESPECIALISTA','INDICACION','ASUNTO']]
+        self.tabla_peq2tF = self.tabla_peq2t.loc[0:99, ['NRO DOC','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','FECHA ULTIMO MOV.','ESPECIALISTA_1','INDICACION','ASUNTO']]
  
         # Información para las listas desplegables
         self.peq2ttipodoc = list(set(self.tabla_peq2t['TIPO DOC']))
         self.peq2tremitente = list(set(self.tabla_peq2t['REMITENTE']))
-        self.peq2tespecialista = list(set(self.tabla_peq2t['ESPECIALISTA']))
+        self.peq2tespecialista = list(set(self.tabla_peq2t['ESPECIALISTA_1']))
 
         self.rejilla_peq2t = (
 
@@ -3163,4 +3093,3 @@ class Pendientes_eq2_programaciones(funcionalidades_ospa):
         self.frame_vitrina_peq2pr = Cuadro(self)
         # Creando vitrina
         self.vpeq2pr = Vitrina_pendientes(self, self.tabla_peq2prF, self.ver_de, height=200, width=900)
-
