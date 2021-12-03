@@ -65,7 +65,8 @@ tipo_ingreso = ('DIRECTO', 'DERIVACION-SUBDIRECCION',
                 'DERIVACION-SUPERVISION', 'DERIVACION-SINADA')
 tipo_documento = ('OFICIO', 'MEMORANDO', 'CARTA', 'OFICIO CIRCULAR','MEMORANDO CIRCULAR', 'CARTA CIRCULAR',
                   'INFORME', 'RESOLUCIÓN', 'CÉDULA DE NOTIFICACIÓN', 'INFORME MÚLTIPLE', 'OTROS')
-especialista = ('Zurita, Carolina', 'López, José')
+especialista_1 = ('Zurita, Carolina', 'López, José')
+especialista_2 = ('Melendez, Assur', 'Cueto, María Mónica', 'Gamarra, Ibon', 'Guevara, Sandra', 'Terrones, Leslie')
 tipo_indicacion = ('No corresponde', 'Archivar', 'Actualizar', 'Crear')
 si_no = ('Si', 'No')
 tipo_respuesta = ('Ejecutó supervisión','Solicitó información a administrado',
@@ -141,26 +142,27 @@ class Doc_recibidos_vista(funcionalidades_ospa):
             ('L', 3, 0, 'Asunto'),
             ('EL', 3, 1, 112, 3),
 
-            ('L', 4, 0, 'Categoria Remitente'),
-            ('CXD1', 4, 1, lista_efa_ospa, 39, lista_efa_dependiente, 'EFA_OSPA', 'Entidad u oficina', 17, 8),
+            ('L', 4, 0, 'Tipo Remitente'),
+            ('CXDEP3', 4, 1, 37, tabla_directorio, "Doble",
+            'Tipo de entidad u oficina', 'Categoría Remitente', 'EFA_OSPA', 'Remitente', 'Entidad u oficina'),
 
-            ('L', 4, 2, 'Remitente'),
-            ('CXR', 4, 3, combo_vacio, 17, 8),
-
-            ('L', 5, 0, '¿Es respuesta?'),
-            ('CX', 5, 1, si_no),
-
-            ('L', 5, 2, 'Respuesta'),
-            ('CX', 5, 3, tipo_respuesta),
+            ('L', 5, 2, '¿Es respuesta?'),
+            ('CX', 5, 3, si_no),
 
             ('L', 6, 0, 'Indicación'),
             ('CX', 6, 1, tipo_indicacion),
 
-            ('L', 6, 2, 'Especialista asignado'),
-            ('CX', 6, 3, especialista),
+            ('L', 6, 2, 'Especialista Eq. 1'),
+            ('CX', 6, 3, especialista_1),
 
-            ('L', 7, 0, 'Aporte del documento'),
-            ('ST', 7, 1)
+            ('L', 7, 0, 'Respuesta'),
+            ('CX', 7, 1, tipo_respuesta),
+
+            ('L', 7, 2, 'Especialista Eq. 2'),
+            ('CX', 7, 3, especialista_2),
+
+            ('L', 8, 0, 'Aporte del documento'),
+            ('ST', 8, 1)
             
         ]
 
@@ -516,7 +518,7 @@ class Extremo_problemas_vista(funcionalidades_ospa):
                 ('CXP', 0, 5, 27, tipo_afectacion, '', "readonly"),
 
                 ('L', 1, 0, 'Departamento'),
-                ('CXDEP3', 1, 1, 27, tabla_lista_efa, 
+                ('CXDEP3', 1, 1, 27, tabla_lista_efa, "Triple",
                 'DEPARTAMENTO ', 'Provincia', 'PROVINCIA ', 'Distrito', 'DISTRITO '),
 
                 ('L', 2, 0, 'Tipo de causa'),
@@ -544,11 +546,11 @@ class Extremo_problemas_vista(funcionalidades_ospa):
                 ('CXP', 4, 5, 27, estado_problemas, '', "readonly"),
 
                 ('L', 5, 0, 'Tipo de EFA'),
-                ('CXDEP3', 5, 1, 27, tabla_directorio, 
+                ('CXDEP3', 5, 1, 27, tabla_directorio, "Triple",
                 'Tipo de entidad u oficina', 'Categoría EFA', 'EFA_OSPA', 'EFA', 'Entidad u oficina'),
 
                 ('L', 6, 0, 'Actividad'),
-                ('CXDEP3', 6, 1, 27, tabla_parametros_act,
+                ('CXDEP3', 6, 1, 27, tabla_parametros_act, "Triple",
                  'ACTIVIDAD', 'Característica 1', 'CARACTERÍSTICA 1', 'Característica 2', 'CARACTERÍSTICA 2')
 
             ]
@@ -567,7 +569,7 @@ class Extremo_problemas_vista(funcionalidades_ospa):
                 ('CXP', 0, 5, 32, estado_problemas, '', "readonly"),
 
                 ('L', 1, 0, 'Departamento'),
-                ('CXDEP3', 1, 1, 32, tabla_lista_efa, 
+                ('CXDEP3', 1, 1, 32, tabla_lista_efa, "Triple", 
                 'DEPARTAMENTO ', 'Provincia', 'PROVINCIA ', 'Distrito', 'DISTRITO '),
 
                 ('L', 2, 0, 'Tipo de ubicación'),
@@ -595,11 +597,11 @@ class Extremo_problemas_vista(funcionalidades_ospa):
                 ('CXP', 4, 3, 32, componente_amb, '', "readonly"),
                 
                 ('L', 5, 0, 'Actividad'),
-                ('CXDEP3', 5, 1, 32, tabla_parametros_act,
+                ('CXDEP3', 5, 1, 32, tabla_parametros_act, "Triple",
                  'ACTIVIDAD', 'Característica 1', 'CARACTERÍSTICA 1', 'Característica 2', 'CARACTERÍSTICA 2'),
 
                 ('L', 6, 0, 'Tipo de EFA'),
-                ('CXDEP3', 6, 1, 32, tabla_directorio, 
+                ('CXDEP3', 6, 1, 32, tabla_directorio, "Triple",
                 'TIPO_OFICINA', 'Categoría EFA', 'EFA_OSPA', 'EFA', 'Entidad u oficina')
 
             ]

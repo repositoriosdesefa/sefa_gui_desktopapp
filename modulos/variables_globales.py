@@ -102,8 +102,8 @@ tabla_relacion_mp_ep = base_relacion_mp_ep.generar_dataframe()
 # 5.1 Documentos recibidos
 tabla_de_dr_cod = b_dr_cod.generar_dataframe()
 tabla_de_dr_completa = b_dr.generar_dataframe()
-tabla_de_dr_resumen = tabla_de_dr_completa.drop(['VIA_RECEPCION', 'HT_ENTRANTE', 'EFA_CATEGORIA',
-                                            'F_ING_OEFA', 'TIPO_DOC', 'ESPECIALISTA',
+tabla_de_dr_resumen = tabla_de_dr_completa.drop(['VIA_RECEPCION', 'HT_ENTRANTE', 'TIPO_REMITENTE', 'CATEGORIA_REMITENTE',
+                                            'F_ING_OEFA', 'TIPO_DOC', 'ESPECIALISTA_1', 'ESPECIALISTA_2',
                                             'INDICACION', 'TIPO_RESPUESTA', 'RESPUESTA',
                                             'FECHA_ULTIMO_MOV', 'FECHA_ASIGNACION'], axis=1)
 
