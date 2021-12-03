@@ -4,7 +4,7 @@ from tkinter import Tk, messagebox
 from apoyo.elementos_de_GUI import Cuadro, Ventana
 from apoyo.manejo_de_bases import Base_de_datos, Correo_electronico
 from modulos import administracion as adm
-from modulos import menu_principal as mp
+from modulos import menus
 from modulos import variables_globales as vg
 
 class logueo1_Ingreso_de_usuario(Ventana):
@@ -18,8 +18,8 @@ class logueo1_Ingreso_de_usuario(Ventana):
 
         c1 = Cuadro(self)
         c1.agregar_label(0,0,' ')
-        c1.agregar_imagen(1,0,'herramientas_de_sefa.png',300,100)
-        c1.agregar_titulo(2,0,'ACCESO DE USUARIOS')
+        c1.agregar_imagen(1,0,'Logo_OSPA.png',300, 80)
+        c1.agregar_titulo(2,0,'ASPA - Acceso')
 
         self.c2 = Cuadro(self)
         rejilla = (
@@ -72,9 +72,9 @@ class logueo1_Ingreso_de_usuario(Ventana):
     #----------------------------------------------------------------------
     def ir(self):
         """"""
-        
+        texto_bienvenida = "Bienvenido " + vg.usuario
         self.desaparecer()
-        subframe = mp.Menu_principal(self, 500, 500, 'Menu principal')
+        subframe = menus.inicio_app_OSPA(self, 500, 500, texto_bienvenida)
     
     #----------------------------------------------------------------------
     def ir_a_recuperar_contrasena(self, event):

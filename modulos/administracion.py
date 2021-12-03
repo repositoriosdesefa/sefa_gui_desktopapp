@@ -8,9 +8,9 @@ from random import choice
 
 
 
-from apoyo.elementos_de_GUI import Cuadro, Ventana
+from apoyo.elementos_de_GUI import Cuadro, Ventana, Vitrina
 from apoyo.manejo_de_bases import Base_de_datos, Correo_electronico
-from modulos.vista_dr import Doc_recibidos_vista
+from modulos.ventanas_vista import Doc_recibidos_vista
 
 import apoyo.datos_frecuentes as dfrec
 from modulos import logueo
