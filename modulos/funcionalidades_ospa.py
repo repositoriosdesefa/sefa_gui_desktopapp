@@ -1,26 +1,27 @@
 from tkinter import  messagebox
 
-from apoyo.elementos_de_GUI import  Ventana, Vitrina_vista, Vitrina_pendientes
-from modulos import menus, ventanas_busqueda, ventanas_vista, variables_globales
+from apoyo.elementos_de_GUI import  Ventana, Vitrina_vista
+from modulos import menus, ventanas_busqueda, ventanas_vista
+from modulos import variables_globales as vg
 
 import datetime as dt
 
 # 1. Bases
-b_dr = variables_globales.b_dr
-b_dr_cod = variables_globales.b_dr_cod
-b_dr_hist = variables_globales.b_dr_hist
-b_de = variables_globales.b_de
-b_de_cod = variables_globales.b_de_cod
-b_de_hist = variables_globales.b_de_hist
-b_ep = variables_globales.b_ep
-b_ep_cod = variables_globales.b_ep_cod
-b_ep_hist = variables_globales.b_ep_hist
-b_mp = variables_globales.b_mp
-b_mp_cod = variables_globales.b_mp_cod
-b_mp_hist = variables_globales.b_mp_hist
+b_dr = vg.b_dr
+b_dr_cod = vg.b_dr_cod
+b_dr_hist = vg.b_dr_hist
+b_de = vg.b_de
+b_de_cod = vg.b_de_cod
+b_de_hist = vg.b_de_hist
+b_ep = vg.b_ep
+b_ep_cod = vg.b_ep_cod
+b_ep_hist = vg.b_ep_hist
+b_mp = vg.b_mp
+b_mp_cod = vg.b_mp_cod
+b_mp_hist = vg.b_mp_hist
 # 2. Tablas
-tabla_parametros = variables_globales.tabla_parametros
-tabla_parametros_dep = variables_globales.tabla_parametros_dep
+tabla_parametros = vg.tabla_parametros
+tabla_parametros_dep = vg.tabla_parametros_dep
 
 class funcionalidades_ospa(Ventana):
     #----------------------------------------------------------------------
@@ -132,6 +133,17 @@ class funcionalidades_ospa(Ventana):
         	            numero_codigo = "-" + str(numero_problemas)
                     cod_objeto_ingresado = sigla_cod_interno + numero_codigo
                     base_cod_objeto.agregar_codigo(cod_objeto_ingresado, ahora, departamento)
+                elif cod_entrada == "COD_MP":
+                    tabla_objeto_clase = base_cod_objeto.generar_dataframe()
+                    numero_mp = len(tabla_objeto_clase.index) + 1
+                    if numero_mp < 10:
+                        numero_codigo = "-00" + str(numero_mp)
+                    elif numero_mp < 100:
+                        numero_mp = "-0" + str(numero_mp)
+                    else:
+        	            numero_mp = "-" + str(numero_mp)
+                    cod_objeto_ingresado = "MP-" + numero_mp
+                    base_cod_objeto.agregar_codigo(cod_objeto_ingresado, ahora)
                 else:
                     base_cod_objeto.agregar_nuevo_codigo(cod_objeto_ingresado, ahora)
 
