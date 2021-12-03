@@ -1,61 +1,51 @@
 from tkinter import Message, messagebox
 import datetime as dt
 import pandas as pd
-from apoyo.elementos_de_GUI import Cuadro, Ventana, Vitrina_busqueda, Vitrina_busquedaep, Vitrina_pendientes_jefe_firma
+from apoyo.elementos_de_GUI import Cuadro, Ventana, Vitrina_busqueda, Vitrina_busquedaep, Vitrina_pendientes
 from apoyo.manejo_de_bases import Base_de_datos
-import apoyo.datos_frecuentes as dfrec
 from modulos import ventanas_vista, variables_globales, menus
 from modulos.funcionalidades_ospa import funcionalidades_ospa
 
-# BASES DE DATOS:
-#----------------------------------------------------------------------
+
+
 id_b_ospa = '13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4'
 
-# 0. Tablas relacionales
-base_relacion_docs = Base_de_datos(id_b_ospa, 'RELACION_DOCS')
-base_relacion_d_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_RELACION_D')
-base_relacion_dr_ep =  Base_de_datos(id_b_ospa, 'RELACION_DR-EP')
-base_relacion_dr_ep_hist =  Base_de_datos(id_b_ospa, 'HISTORIAL_RELACION_DR-EP')
-base_relacion_de_ep =  Base_de_datos(id_b_ospa, 'RELACION_DE-EP')
-base_relacion_de_ep_hist =  Base_de_datos(id_b_ospa, 'HISTORIAL_RELACION_DE-EP')
+# 1. Bases
+b_dr = variables_globales.b_dr
+b_dr_tabla = b_dr.generar_dataframe()
+b_dr_cod = variables_globales.b_dr_cod
+b_dr_hist = variables_globales.b_dr_hist
+b_de = variables_globales.b_de
+b_de_tabla = b_de.generar_dataframe()
+b_de_cod = variables_globales.b_de_cod
+b_de_hist = variables_globales.b_de_hist
+b_ep = variables_globales.b_ep
+b_ep_tabla = b_ep.generar_dataframe()
+b_ep_cod = variables_globales.b_ep_cod
+b_ep_hist = variables_globales.b_ep_hist
+b_mp = variables_globales.b_mp
+b_mp_tabla = b_mp.generar_dataframe()
+b_mp_cod = variables_globales.b_mp_cod
+b_mp_hist = variables_globales.b_mp_hist
+b_adm = variables_globales.b_adm
+b_adm_tabla = b_adm.generar_dataframe()
+tabla_lista_efa = variables_globales.tabla_lista_efa
 
-# 1. Bases de datos principales
-# Documentos recibidos
-b_dr_cod = Base_de_datos(id_b_ospa, 'DOCS_R')
-b_dr = Base_de_datos(id_b_ospa, 'DOC_RECIBIDOS')
-b_dr_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_DR')
-# Documentos emitidos
-b_de_cod = Base_de_datos(id_b_ospa, 'DOCS_E')
-b_de = Base_de_datos(id_b_ospa, 'DOC_EMITIDOS')
-b_de_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_DE')
-# Extremo de problemas
-b_ep_cod = Base_de_datos(id_b_ospa, 'EXT_P')
-b_ep = Base_de_datos(id_b_ospa, 'EXT_PROBLEMA')
-#b_de_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_EP')
-# Macroproblemas
-b_mp = Base_de_datos(id_b_ospa, 'MACROPROBLEMA')
-# Administrados
-b_ad = Base_de_datos(id_b_ospa, 'ADMINISTRADOS')
 
-# 2. Bases de datos complementarias
-id_b_efa = '1pjHXiz15Zmw-49Nr4o1YdXJnddUX74n7Tbdf5SH7Lb0'
-b_efa = Base_de_datos(id_b_efa, 'Directorio')
-
-# relacion macroproblema con extremos
-b_relacion_mp_ep = Base_de_datos(id_b_ospa, 'RELACION_MP-EP')
-
+# 2. Tablas relacionales
 base_relacion_docs = variables_globales.base_relacion_docs
-base_relacion_dr_ep = variables_globales.base_relacion_dr_ep
-base_relacion_de_ep = variables_globales.base_relacion_de_ep
+base_relacion_d_hist = variables_globales.base_relacion_docs_hist
+base_relacion_dr_ep =  variables_globales.base_relacion_dr_ep
+base_relacion_dr_ep_hist =  variables_globales.base_relacion_dr_ep_hist
+base_relacion_de_ep =  variables_globales.base_relacion_de_ep
+base_relacion_de_ep_hist =  variables_globales.base_relacion_de_ep_hist
+b_relacion_mp_ep =  variables_globales.base_relacion_mp_ep
+b_relacion_mp_ep_tabla = b_relacion_mp_ep.generar_dataframe()
+base_relacion_mp_ep_hist =  variables_globales.base_relacion_mp_ep_hist
 
-base_relacion_docs_hist = variables_globales.base_relacion_docs_hist
-base_relacion_dr_ep_hist = variables_globales.base_relacion_dr_ep_hist
-base_relacion_de_ep_hist = variables_globales.base_relacion_de_ep_hist
 
 
-#----------------------------------------------------------------------
-
-class Doc_recibidos_busqueda(Ventana):
+class Doc_recibidos_busqueda(funcionalidades_ospa):
     """"""
     #----------------------------------------------------------------------
     def __init__(self, *args, nuevo=True, lista=None, id_objeto = None):
@@ -67,11 +57,11 @@ class Doc_recibidos_busqueda(Ventana):
         self.nuevo = nuevo
         if self.nuevo != True: #en caso exista
             self.id_usuario = lista
-            self.cod_id_objeto = id_objeto
+            self.id_objeto_ingresado = id_objeto
 
         # Generamos el dataframe a filtrar
-        self.tabla_inicial = b_dr.generar_dataframe()
-        self.tabla_0 = self.tabla_inicial.rename(columns={'COD_DR':'NRO DOC','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_ENTRANTE':'HT INGRESO'})
+        self.tabla_inicial0 = b_dr_tabla
+        self.tabla_0 = self.tabla_inicial0.rename(columns={'COD_DR':'NRO DOC','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_ENTRANTE':'HT INGRESO'})
         self.tabla_drF = self.tabla_0.loc[0:99, ['NRO DOC','REMITENTE','HT INGRESO','FECHA INGRESO SEFA','INDICACION','ESPECIALISTA','FECHA ULTIMO MOV.','ASUNTO']]
         
         # Información para las listas desplegables
@@ -102,7 +92,6 @@ class Doc_recibidos_busqueda(Ventana):
 
         )
 
-
         # Agregando rejilla a la ventana
         self.c1 = Cuadro(self)
         self.c1.agregar_rejilla(self.rejilla_dr)
@@ -111,8 +100,9 @@ class Doc_recibidos_busqueda(Ventana):
         self.rejilla_b = (
             ('B', 5, 4, 'Buscar', self.Buscardr),
             ('B', 5, 5, 'Limpiar', self.limpiar),
-            ('B', 5, 6, 'Volver', self.volver_y_actualizar),
-            ('B', 5, 7, 'Inicio', self.inicio_app)
+            ('B', 5, 6, 'Actualizar', self.actualizar),
+            ('B', 5, 7, 'Volver', self.volver_y_actualizar),
+            ('B', 5, 8, 'Inicio', self.inicio_app)
         )
         
         # Agregando rejilla de botones a la ventana
@@ -126,15 +116,53 @@ class Doc_recibidos_busqueda(Ventana):
                                    self.asociar_dr_de, height=250, width=1080)
 
     #----------------------------------------------------------------------
+    def actualizar(self):
+        
+        # Eliminando campos
+        self.c1.eliminar_cuadro()
+        self.v1.Eliminar_vitrina()
+        self.c15.eliminar_cuadro()
+        self.frame_vitrina_dr.eliminar_cuadro()
+        # Actualizando data
+        b_dr = variables_globales.b_dr
+        b_dr_tabla = b_dr.generar_dataframe()
+        
+        # Generamos el dataframe a filtrar 
+        self.tabla_inicial0 = b_dr_tabla
+        self.tabla_0 = self.tabla_inicial0.rename(columns={'COD_DR':'NRO DOC','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_ENTRANTE':'HT INGRESO'})
+        self.tabla_drF = self.tabla_0.loc[0:99, ['NRO DOC','REMITENTE','HT INGRESO','FECHA INGRESO SEFA','INDICACION','ESPECIALISTA','FECHA ULTIMO MOV.','ASUNTO']]
+      
+        # Información para las listas desplegables
+        self.listatipodoc = sorted(list(set(self.tabla_0['TIPO DOC'])))
+        self.listaremitente = sorted(list(set(self.tabla_0['REMITENTE'])))
 
-    def inicio_app(self):
-        """"""
-        self.desaparecer()
-        # LargoxAncho
-        subFrame = menus.inicio_app_OSPA(self, 400, 400, "Inicio")
+        # Armando rejilla con los filtros
+        self.rejilla_dr = (
 
+            ('L', 0, 0, 'Nro registro Siged'),
+            ('EE', 0, 1),
 
-    #----------------------------------------------------------------------
+            ('L', 1, 0, 'Tipo de documento'),
+            ('CXP', 1, 1, 39, self.listatipodoc, '', 'readonly'),
+
+            ('L', 0, 2, 'Remitente'),
+            ('CXE', 0, 3, 39, self.listaremitente, '', 'normal'),
+
+            ('L', 1, 2, 'Número de doc'),
+            ('EE', 1, 3)
+
+        )
+
+        # Agregando rejilla a la ventana
+        self.c1 = Cuadro(self)
+        self.c1.agregar_rejilla(self.rejilla_dr)
+        self.c15 = Cuadro(self)
+        self.c15.agregar_rejilla(self.rejilla_b)
+        self.frame_vitrina_dr = Cuadro(self)
+        # Creando vitrina
+        self.v1 = Vitrina_busqueda(self, self.tabla_drF, self.ver_dr, 
+                                   self.asociar_dr_de, height=250, width=1080)
+
 
     def Buscardr(self):
         """"""
@@ -173,12 +201,6 @@ class Doc_recibidos_busqueda(Ventana):
             self.v1.Eliminar_vitrina()
             self.filtro0 = self.tabla_0[self.tabla_0['REMITENTE'].str.contains(self.remitente)]
             self.Complementodr(self.filtro0)
-
-        #if len(self.nrodoc)>0: # Filtro por palabra clave
-        #    self.v1.Eliminar_vitrina()
-        #    self.filtro0['NRO DOC']=self.filtro0['NRO DOC'].apply(str)
-        #    self.filtro0 = self.filtro0[self.filtro0['NRO DOC'].str.contains(self.nrodoc)]
-        #    self.Complementodr(self.filtro0)
 
         if len(self.ht)>0: # Filtro por palabra clave
             self.v1.Eliminar_vitrina()
@@ -249,20 +271,6 @@ class Doc_recibidos_busqueda(Ventana):
             subframe = ventanas_vista.Doc_emitidos_vista(self, 650, 1150, 
                                                 nuevo=False, lista=lista_para_insertar, id_objeto=codigode)
         # volver y actualizar
-        
-    #----------------------------------------------------------------------
-    def ver_dr(self, x):
-        """"""
-        self.x = x
-        texto_documento = 'Documento recibido: ' + x
-
-        lb1 = b_dr.listar_datos_de_fila(self.x)
-        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], 
-                                lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14], lb1[15], lb1[16]]
-        
-        self.desaparecer()
-        subframe = ventanas_vista.Doc_recibidos_vista(self, 650, 1150, texto_documento, nuevo=False, 
-                                                lista=lista_para_insertar, id_objeto = x)
 
     #----------------------------------------------------------------------
     def asociar_dr_de(self, x):
@@ -278,7 +286,7 @@ class Doc_recibidos_busqueda(Ventana):
             self.IDDR_FINAL = self.IDDR[0]
 
             #OBTENER EL ID USUARIO DEL DOCUMENTO EMITIDO
-            codigode = self.cod_id_objeto
+            codigode = self.id_objeto_ingresado
             # OBTENER EL ID INTERNO DEL DOCUMENTO EMITIDO
             tabla_de_codigo_de = b_de.generar_dataframe()
             tabla_codigo_de_filtrada = tabla_de_codigo_de[tabla_de_codigo_de.COD_DE == codigode]
@@ -324,27 +332,26 @@ class Doc_recibidos_busqueda(Ventana):
                     base_relacion_d_hist.cambiar_un_dato_de_una_fila(id_relacion_doc, 4, estado_a_sobreescribir)
                     messagebox.showinfo("¡Excelente!", "El registro ha sido asociado con éxito")
                     
-        # Asociación de extremos de problema de DR con DE
-        # 1. Obtengo la tabla de relación entre DE y EP
-        tabla_de_dr_ep = base_relacion_dr_ep.generar_dataframe()
-        # 2. Filtro las relaciones que tiene el DE
-        # Filtro para obtener las relaciones activas
-        tabla_relacion_activos = tabla_de_dr_ep[tabla_de_dr_ep['ESTADO']=="ACTIVO"]
-        # Con ese ID, filtro la tabla de relacion
-        tabla_relacion_filtrada = tabla_relacion_activos[tabla_relacion_activos['ID_DR']==self.IDDR_FINAL]
-        # 3. Obtengo el ID de los EP que están relacionados al DE
-        # Me quedo con el vector a filtrar en forma de lista
-        lista_ep = list(tabla_relacion_filtrada['ID_EP'].unique())
-        # 4. Concateno los ID de los EP relacionados al DE con el ID del DR
-        if len(lista_ep) > 0:
-            for indice in range(len(lista_ep)):
-                cod_relacion = id_interno_de + "/" + lista_ep[indice]
-                datos_insertar = [cod_relacion, id_interno_de, lista_ep[indice], 'ACTIVO', hora_de_modificacion] 
-                base_relacion_de_ep.agregar_datos(datos_insertar)
-        else:
-            messagebox.showinfo("¡Atención!", "El registro ha sido asociado con éxito")
+            # Asociación de extremos de problema de DR con DE
+            # 1. Obtengo la tabla de relación entre DE y EP
+            tabla_de_dr_ep = base_relacion_dr_ep.generar_dataframe()
+            # 2. Filtro las relaciones que tiene el DE
+            # Filtro para obtener las relaciones activas
+            tabla_relacion_activos = tabla_de_dr_ep[tabla_de_dr_ep['ESTADO']=="ACTIVO"]
+            # Con ese ID, filtro la tabla de relacion
+            tabla_relacion_filtrada = tabla_relacion_activos[tabla_relacion_activos['ID_DR']==self.IDDR_FINAL]
+            # 3. Obtengo el ID de los EP que están relacionados al DE
+            # Me quedo con el vector a filtrar en forma de lista
+            lista_ep = list(tabla_relacion_filtrada['ID_EP'].unique())
+            # 4. Concateno los ID de los EP relacionados al DE con el ID del DR
+            if len(lista_ep) > 0:
+                for indice in range(len(lista_ep)):
+                    cod_relacion = id_interno_de + "/" + lista_ep[indice]
+                    datos_insertar = [cod_relacion, id_interno_de, lista_ep[indice], 'ACTIVO', hora_de_modificacion] 
+                    base_relacion_de_ep.agregar_datos(datos_insertar)
+            else:
+                messagebox.showinfo("¡Atención!", "El registro ha sido asociado con éxito")
         
-    
     #----------------------------------------------------------------------     
     def comprobar_id(self, base_codigo, id_usuario):
         """"""
@@ -356,7 +363,7 @@ class Doc_recibidos_busqueda(Ventana):
         else:
             return False
 
-class Doc_emitidos_busqueda(Ventana):
+class Doc_emitidos_busqueda(funcionalidades_ospa):
     """"""
     
     #----------------------------------------------------------------------
@@ -369,11 +376,11 @@ class Doc_emitidos_busqueda(Ventana):
         self.nuevo = nuevo
         if self.nuevo != True: #en caso exista
             self.id_usuario = lista
-            self.cod_id_objeto = id_objeto
+            self.id_objeto_ingresado = id_objeto
 
         # Generamos el dataframe a filtrar
-        self.tabla_inicial = b_de.generar_dataframe()
-        self.tabla_0 = self.tabla_inicial.rename(columns={'COD_DE':'DOC EMITIDO','DETALLE_REQUERIMIENTO':'DETALLE','ESTADO_DOCE':'ESTADO','NUM_DOC':'NRO DOCUMENTO','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_SALIDA':'HT SALIDA','FECHA_FIRMA':'FECHA FIRMA','FECHA_NOTIFICACION':'FECHA NOTIFICACION'})
+        self.tabla_inicial0 = b_de_tabla
+        self.tabla_0 = self.tabla_inicial0.rename(columns={'COD_DE':'DOC EMITIDO','DETALLE_REQUERIMIENTO':'DETALLE','ESTADO_DOCE':'ESTADO','NUM_DOC':'NRO DOCUMENTO','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_SALIDA':'HT SALIDA','FECHA_FIRMA':'FECHA FIRMA','FECHA_NOTIFICACION':'FECHA NOTIFICACION'})
         self.tabla_drF = self.tabla_0.loc[0:99, ['DOC EMITIDO','DESTINATARIO','TIPO DOC','NRO DOCUMENTO','FECHA FIRMA','FECHA NOTIFICACION','ESTADO','CATEGORIA','DETALLE']]
  
         # Información para las listas desplegables
@@ -421,9 +428,10 @@ class Doc_emitidos_busqueda(Ventana):
         self.rejilla_bde = (
             ('B', 5, 4, 'Buscar', self.Buscar_de),
             ('B', 5, 5, 'Limpiar', self.limpiar_de),
-            ('B', 5, 6, 'Volver', self.volver_y_actualizar),
-            ('B', 5, 7, 'Inicio', self.inicio_app),
-            ('B', 5, 8, 'Emitir doc', self.doc_emitido)
+            ('B', 5, 6, 'Actualizar', self.actualizar),
+            ('B', 5, 7, 'Volver', self.volver_y_actualizar),
+            ('B', 5, 8, 'Inicio', self.inicio_app),
+            ('B', 5, 9, 'Emitir doc', self.doc_emitido)
         )
         
         # Agregando rejilla de botones a la ventana
@@ -436,12 +444,61 @@ class Doc_emitidos_busqueda(Ventana):
                                     self.asociar_de_dr, height=250, width=1190)
 
     #----------------------------------------------------------------------
+    def actualizar(self):
+        
+        # Eliminando campos
+        self.cde1.eliminar_cuadro()
+        self.vde1.Eliminar_vitrina()
+        self.cde15.eliminar_cuadro()
+        self.frame_vitrina_1.eliminar_cuadro()
+        # Actualizando data
+        b_de = variables_globales.b_de
+        b_de_tabla = b_de.generar_dataframe()
+        
+        # Generamos el dataframe a filtrar 
+        self.tabla_inicial0 = b_de_tabla
+        self.tabla_0 = self.tabla_inicial0.rename(columns={'COD_DE':'DOC EMITIDO','DETALLE_REQUERIMIENTO':'DETALLE','ESTADO_DOCE':'ESTADO','NUM_DOC':'NRO DOCUMENTO','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_SALIDA':'HT SALIDA','FECHA_FIRMA':'FECHA FIRMA','FECHA_NOTIFICACION':'FECHA NOTIFICACION'})
+        self.tabla_drF = self.tabla_0.loc[0:99, ['DOC EMITIDO','DESTINATARIO','TIPO DOC','NRO DOCUMENTO','FECHA FIRMA','FECHA NOTIFICACION','ESTADO','CATEGORIA','DETALLE']]
+ 
+        # Información para las listas desplegables
+        self.listacategoria = sorted(list(set(self.tabla_0['CATEGORIA'])))
+        self.listadestinatario = sorted(list(set(self.tabla_0['DESTINATARIO'])))
+        self.listatipodocemit = sorted(list(set(self.tabla_0['TIPO DOC'])))
+        self.listaestado = sorted(list(set(self.tabla_0['ESTADO'])))
 
-    def inicio_app(self):
-        """"""
-        self.desaparecer()
-        # LargoxAncho
-        subFrame = menus.inicio_app_OSPA(self, 400, 400, "Inicio")
+        # Armando rejilla con los filtros
+
+        self.rejilla_de = (
+
+            ('L', 0, 0, 'Categoría'),
+            ('CXP', 0, 1, 39, self.listacategoria, '', 'readonly'),
+
+            ('L', 0, 2, 'Nro registro Siged'),
+            ('EE', 0, 3),
+
+            ('L', 0, 4, 'Destinatario'),
+            ('CXE', 0, 5, 39, self.listadestinatario, '', 'normal'),
+
+            ('L', 1, 0, 'Estado'),
+            ('CXE', 1, 1, 39, self.listaestado, '', 'normal'),
+
+            ('L', 1, 2, 'Tipo de documento'),
+            ('CXP', 1, 3, 39, self.listatipodocemit, '', 'readonly'),
+
+            ('L', 1, 4, 'Nro de documento'),
+            ('EE', 1, 5)
+
+        )
+
+        # Agregando rejilla a la ventana
+        self.cde1 = Cuadro(self)
+        self.cde1.agregar_rejilla(self.rejilla_de)
+        self.cde15 = Cuadro(self)
+        self.cde15.agregar_rejilla(self.rejilla_bde)
+        self.frame_vitrina_1 = Cuadro(self)
+        # Creando vitrina
+        self.vde1 = Vitrina_busqueda(self, self.tabla_drF, self.ver_de, 
+                                    self.asociar_de_dr, height=250, width=1190)
 
     #----------------------------------------------------------------------
 
@@ -545,19 +602,6 @@ class Doc_emitidos_busqueda(Ventana):
             self.frame_vitrina_1.agregar_label(1, 2, '                  0 documentos encontrados')
 
     #----------------------------------------------------------------------
-    def ver_de(self, id_usuario):
-        """"""
-        texto_documento = 'Documento emitido: ' + id_usuario
-
-        lb1 = b_de.listar_datos_de_fila(id_usuario)
-        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], 
-                                lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], lb1[12]]
-        self.desaparecer()
-        subframe = ventanas_vista.Doc_emitidos_vista(self, 650, 1150, texto_documento, nuevo=False, 
-                                        lista=lista_para_insertar, id_objeto = id_usuario)
-    
-
-    #----------------------------------------------------------------------
 
     def limpiar_de(self):
 
@@ -573,7 +617,8 @@ class Doc_emitidos_busqueda(Ventana):
         self.cde15.agregar_rejilla(self.rejilla_bde)
         self.frame_vitrina_1 = Cuadro(self)
         # Creando vitrina
-        self.vde1 = Vitrina_busqueda(self, self.tabla_drF, self.asociar_de_dr, self.asociar_de_dr, height=250, width=1190)
+        self.vde1 = Vitrina_busqueda(self, self.tabla_drF, self.ver_de, 
+                                    self.asociar_de_dr, height=250, width=1190)
 
     #----------------------------------------------------------------------
     def volver_y_actualizar(self):
@@ -591,19 +636,6 @@ class Doc_emitidos_busqueda(Ventana):
             self.desaparecer()
             subframe = ventanas_vista.Doc_emitidos_vista(self, 650, 1150, 
                                                 nuevo=False, lista=lista_para_insertar, id_objeto=codigodr)
-
-    #----------------------------------------------------------------------
-    def ver_dr(self, id_usuario):
-        """"""
-        texto_documento = 'Documento recibido: ' + id_usuario
-
-        lb1 = b_dr.listar_datos_de_fila(id_usuario)
-        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], 
-                                lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14], lb1[15], lb1[16]]
-        
-        self.desaparecer()
-        subframe = ventanas_vista.Doc_recibidos_vista(self, 650, 1150, texto_documento, nuevo=False, 
-                                        lista=lista_para_insertar, id_objeto = id_usuario)
 
     #----------------------------------------------------------------------
     def asociar_de_dr(self, x):
@@ -694,7 +726,7 @@ class Extremos(funcionalidades_ospa):
             self.id_objeto
         
         # Renombramos los encabezados
-        self.ep = b_ep.generar_dataframe()
+        self.ep = b_ep_tabla
         self.tabla_ep = self.ep.rename(columns={'COD_EP':'CODIGO EXTREMO','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','AGENTE CONTAMINANTE':'AGENT. CONTAMI.','COMPONENTE AMBIENTAL':'COMPONEN. AMBIE.'})
         self.tabla_deF = self.tabla_ep.loc[0:99, ['CODIGO EXTREMO','AGENT. CONTAMI.','COMPONEN. AMBIE.','ACTIVIDAD','DEPARTAMENTO','EFA','ESTADO','FECHA ULTIMO MOV.','DESCRIPCION']]
         
@@ -716,6 +748,243 @@ class Extremos(funcionalidades_ospa):
         ep3 = Cuadro(self)
         ep3.agregar_titulo(2, 0, 'Búsqueda de extremos')
     
+        # Armando rejilla con los filtros
+        self.rejilla_ep = (
+
+            ('L', 0, 0, 'Agente contaminante'),
+            ('CXP', 0, 1, 39, self.listaAG, '', "readonly"),
+
+            ('L', 0, 2, 'Componente ambiental'),
+            ('CXP', 0, 3, 39, self.listaCA, '', "readonly"),
+
+            ('L', 0, 4, 'Actividad'),
+            ('CXP', 0, 5, 39, self.listaACT, '', "readonly"),
+
+            ('L', 1, 0, 'Departamento'),
+            ('CXDEP3', 1, 1, 32, tabla_lista_efa, 
+            'DEPARTAMENTO ', 'Provincia', 'PROVINCIA ', 'Distrito', 'DISTRITO '),
+
+            ('L', 2, 0, 'Tipo de ubicación'),
+            ('CXP', 2, 1, 39, self.listaTIPOUBI, '', "readonly"),
+
+            ('L', 2, 2, 'Ocurrencia'),
+            ('CXP', 2, 3, 39, self.listaOCURR, '', "readonly"),
+
+            ('L', 2, 4, 'EFA'),
+            ('CXE', 2, 5, 39, self.listaEFA, '', "normal"),
+
+            ('L', 3, 0, 'Palabra clave en descripción'),
+            ('EE', 3, 1),
+
+            ('L', 3, 2, 'Código extremo'),
+            ('EE', 3, 3)
+
+        )
+        
+        # Agregando rejilla a la ventana
+        self.ep1 = Cuadro(self)
+        self.ep1.agregar_rejilla(self.rejilla_ep)
+
+        # Generando rejilla para botones
+        self.rejilla_ep2 = (
+            ('B', 5, 4, 'Buscar', self.Buscar_ep),
+            ('B', 5, 5, 'Limpiar', self.limpiar_ep),
+            ('B', 5, 6, 'Actualizar', self.actualizar),
+            ('B', 5, 7, 'Volver', self.volver_y_actualizar_ep),
+            ('B', 5, 8, 'Inicio', self.inicio_app),
+            ('B', 5, 9, 'Crear extremo', self.crear_extremo)
+        )
+        
+        # Agregando rejilla de botones a la ventana
+        self.ep2 = Cuadro(self)
+        self.ep2.agregar_rejilla(self.rejilla_ep2)
+        self.frame_vitrina_ep = Cuadro(self)
+
+        # Creando vitrina
+        self.vep = Vitrina_busquedaep(self, self.tabla_deF, self.ver_ep_cod, 
+                                     self.asociar_dr_de_ep, self.ver_mp_ep, height=250, width=1220)
+
+    #----------------------------------------------------------------------
+
+    def crear_extremo(self):
+        """"""
+        self.desaparecer()
+        # LargoxAncho
+        SubFrame = ventanas_vista.Extremo_problemas_vista(self, 550, 1090, "Registro Extremo de Problema")
+
+    #----------------------------------------------------------------------
+    
+    def Buscar_ep(self):
+        """"""
+        # Obteniendo valores de la rejilla
+        self.listas_filtroep = self.ep1.obtener_lista_de_datos()
+        self.AG = self.listas_filtroep[0]
+        self.CA = self.listas_filtroep[1]
+        self.ACTIVIDAD = self.listas_filtroep[2]
+        self.DEPART = self.listas_filtroep[3]
+        self.PROVI = self.listas_filtroep[4]
+        self.DISTR = self.listas_filtroep[5]
+        self.TIPOUBI = self.listas_filtroep[6]
+        self.OCURRE = self.listas_filtroep[7]
+        self.EFA = self.listas_filtroep[8]
+        self.CLAVE = self.listas_filtroep[9]
+        self.codigo = self.listas_filtroep[10]
+
+        # Filtrando datos por palabras exactas
+
+        filtro=""
+        if len(self.AG)>0 :
+            filtro="`AGENT. CONTAMI.`=="+"'"+self.AG+"' "
+    
+        if len(self.CA)>0 :
+            if len(filtro)>0 :
+                filtro = filtro+" & "
+            else:
+                filtro
+            filtro=filtro+"`COMPONEN. AMBIE.`=="+"'"+self.CA+"' "
+
+        if len(self.ACTIVIDAD)>0 :
+            if len(filtro)>0 :
+                filtro = filtro+" & "
+            else:
+                filtro
+            filtro=filtro+"ACTIVIDAD=="+"'"+self.ACTIVIDAD+"' "
+
+        if len(self.DEPART)>0 :
+            if len(filtro)>0 :
+                filtro = filtro+" & "
+            else:
+                filtro
+            filtro=filtro+"DEPARTAMENTO=="+"'"+self.DEPART+"' "
+
+        if len(self.PROVI)>0 :
+            if len(filtro)>0 :
+                filtro = filtro+" & "
+            else:
+                filtro
+            filtro=filtro+"PROVINCIA=="+"'"+self.PROVI+"' "
+
+        if len(self.DISTR)>0 :
+            if len(filtro)>0 :
+                filtro = filtro+" & "
+            else:
+                filtro
+            filtro=filtro+"DISTRITO=="+"'"+self.DISTR+"' "
+
+        if len(self.TIPOUBI)>0 :
+            if len(filtro)>0 :
+                filtro = filtro+" & "
+            else:
+                filtro
+            filtro=filtro+"`TIPO DE UBICACION`=="+"'"+self.TIPOUBI+"' "
+
+        if len(self.OCURRE)>0 :
+            if len(filtro)>0 :
+                filtro = filtro+" & "
+            else:
+                filtro
+            filtro=filtro+"OCURRENCIA=="+"'"+self.OCURRE+"' "
+
+        if len(self.codigo)>0 :
+            if len(filtro)>0 :
+                filtro = filtro+" & "
+            else:
+                filtro
+            filtro=filtro+"`CODIGO EXTREMO`=="+"'"+self.codigo+"' "
+        
+        self.mostrarDatosep(filtro)       
+
+    #----------------------------------------------------------------------
+
+    def mostrarDatosep(self, filtro):
+
+        self.filtro0 = self.tabla_ep
+        
+        if len(self.EFA)>0: # Filtro por palabra clave
+            self.vep.Eliminar_vitrina()
+            self.filtro0 = self.filtro0[self.filtro0['EFA'].str.contains(self.EFA)]
+            self.Complementoep(self.filtro0)
+
+        if len(self.CLAVE)>0: # Filtro por palabra clave
+            self.vep.Eliminar_vitrina()
+            self.filtro0 = self.filtro0[self.filtro0['DESCRIPCION'].str.contains(self.CLAVE)]
+            self.Complementoep(self.filtro0)
+  
+        if len(filtro)>0:
+
+            self.vep.Eliminar_vitrina()
+            self.filtro1 = self.filtro0.query(filtro)
+            self.Complementoep(self.filtro1)
+
+        else:
+            self.vep.Eliminar_vitrina()
+            self.Complementoep(self.filtro0)
+
+    #----------------------------------------------------------------------
+
+    def Complementoep(self,filtro0):
+
+        tabla_filtro2 = filtro0.loc[:, ['CODIGO EXTREMO','AGENT. CONTAMI.','COMPONEN. AMBIE.','ACTIVIDAD','DEPARTAMENTO','EFA','ESTADO','FECHA ULTIMO MOV.','DESCRIPCION']]
+        if len(tabla_filtro2.index) > 100:
+            tabla_filtro3 = tabla_filtro2.head(100)
+        else:
+            tabla_filtro3 = tabla_filtro2
+        if len(tabla_filtro3.index) > 0:
+            self.frame_vitrina_ep.eliminar_cuadro()
+            self.frame_vitrina_ep = Cuadro(self)
+            self.vep = Vitrina_busquedaep(self, tabla_filtro3, self.ver_ep_cod, self.asociar_dr_de_ep, self.ver_mp_ep, height=250, width=1220)
+        else:
+            self.frame_vitrina_ep.eliminar_cuadro()
+            self.frame_vitrina_ep = Cuadro(self)
+            self.frame_vitrina_ep.agregar_label(1, 2, '                  0 extremos encontrados')
+
+    #----------------------------------------------------------------------
+    def limpiar_ep(self):
+     
+         # Eliminando campos
+        self.ep1.eliminar_cuadro()
+        self.vep.Eliminar_vitrina()
+        self.ep2.eliminar_cuadro()
+        self.frame_vitrina_ep.eliminar_cuadro()
+        # Agregando rejilla a la ventana
+        self.ep1 = Cuadro(self)
+        self.ep1.agregar_rejilla(self.rejilla_ep)
+        self.ep2 = Cuadro(self)
+        self.ep2.agregar_rejilla(self.rejilla_ep2)
+
+        self.frame_vitrina_ep = Cuadro(self)
+        # Creando vitrina
+        self.vep = Vitrina_busquedaep(self, self.tabla_deF, self.ver_ep_cod, self.asociar_dr_de_ep, self.ver_mp_ep, height=250, width=1220)
+
+    #----------------------------------------------------------------------
+    def actualizar(self):
+        
+        # Eliminando campos
+        self.ep1.eliminar_cuadro()
+        self.vep.Eliminar_vitrina()
+        self.ep2.eliminar_cuadro()
+        self.frame_vitrina_ep.eliminar_cuadro()
+        # Actualizando data
+        b_ep = variables_globales.b_ep
+        b_ep_tabla = b_ep.generar_dataframe()
+        
+        # Generamos el dataframe a filtrar 
+        self.ep = b_ep_tabla
+        self.tabla_ep = self.ep.rename(columns={'COD_EP':'CODIGO EXTREMO','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','AGENTE CONTAMINANTE':'AGENT. CONTAMI.','COMPONENTE AMBIENTAL':'COMPONEN. AMBIE.'})
+        self.tabla_deF = self.tabla_ep.loc[0:99, ['CODIGO EXTREMO','AGENT. CONTAMI.','COMPONEN. AMBIE.','ACTIVIDAD','DEPARTAMENTO','EFA','ESTADO','FECHA ULTIMO MOV.','DESCRIPCION']]
+     
+
+        # Información para las listas desplegables
+        self.listaAG = sorted(list(set(self.tabla_ep['AGENT. CONTAMI.'])))
+        self.listaCA = sorted(list(set(self.tabla_ep['COMPONEN. AMBIE.'])))
+        self.listaACT = sorted(list(set(self.tabla_ep['ACTIVIDAD'])))
+        self.listaDEPAR = sorted(list(set(self.tabla_ep['DEPARTAMENTO'])))
+        self.listaPROV = sorted(list(set(self.tabla_ep['PROVINCIA'])))
+        #self.listaDISTR = list(set(self.tabla_ep['DISTRITO']))
+        self.listaTIPOUBI = sorted(list(set(self.tabla_ep['TIPO DE UBICACION'])))
+        self.listaOCURR = sorted(list(set(self.tabla_ep['OCURRENCIA'])))
+        self.listaEFA = sorted(list(set(self.tabla_ep['EFA'])))
+
         # Armando rejilla con los filtros
         self.rejilla_ep = (
 
@@ -757,177 +1026,12 @@ class Extremos(funcionalidades_ospa):
         # Agregando rejilla a la ventana
         self.ep1 = Cuadro(self)
         self.ep1.agregar_rejilla(self.rejilla_ep)
-
-        # Generando rejilla para botones
-        self.rejilla_ep2 = (
-            ('B', 5, 4, 'Buscar', self.Buscar_ep),
-            ('B', 5, 5, 'Limpiar', self.limpiar_ep),
-            ('B', 5, 6, 'Volver', self.volver_y_actualizar_ep),
-            ('B', 5, 7, 'Inicio', self.inicio_app),
-            ('B', 5, 8, 'Crear extremo', self.crear_extremo)
-        )
-        
-        # Agregando rejilla de botones a la ventana
         self.ep2 = Cuadro(self)
         self.ep2.agregar_rejilla(self.rejilla_ep2)
-        self.frame_vitrina_ep = Cuadro(self)
-
         # Creando vitrina
-        self.vep = Vitrina_busquedaep(self, self.tabla_deF, self.ver_ep, 
-                                     self.asociar_dr_de_ep, self.ver_mp, height=250, width=1220)
-
-#----------------------------------------------------------------------
-
-    def inicio_app(self):
-        """"""
-        self.desaparecer()
-        # LargoxAncho
-        subFrame = menus.inicio_app_OSPA(self, 400, 400, "Inicio")
-
-#----------------------------------------------------------------------
-
-    def crear_extremo(self):
-        """"""
-        self.desaparecer()
-        # LargoxAncho
-        SubFrame = ventanas_vista.Extremo_problemas_vista(self, 550, 1090, "Registro Extremo de Problema")
-
-#----------------------------------------------------------------------
-    
-    def Buscar_ep(self):
-        """"""
-        # Obteniendo valores de la rejilla
-        self.listas_filtroep = self.ep1.obtener_lista_de_datos()
-        self.AG = self.listas_filtroep[0]
-        self.CA = self.listas_filtroep[1]
-        self.ACTIVIDAD = self.listas_filtroep[2]
-        self.DEPART = self.listas_filtroep[3]
-        self.PROVI = self.listas_filtroep[4]
-        #self.DISTR = self.listas_filtroep[5]
-        self.TIPOUBI = self.listas_filtroep[5]
-        self.OCURRE = self.listas_filtroep[6]
-        self.EFA = self.listas_filtroep[7]
-        self.CLAVE = self.listas_filtroep[8]
-        self.codigo = self.listas_filtroep[9]
-
-        # Filtrando datos por palabras exactas
-
-        filtro=""
-        if len(self.AG)>0 :
-            filtro="`AGENT. CONTAMI.`=="+"'"+self.AG+"' "
-    
-        if len(self.CA)>0 :
-            if len(filtro)>0 :
-                filtro = filtro+" & "
-            else:
-                filtro
-            filtro=filtro+"`COMPONEN. AMBIE.`=="+"'"+self.CA+"' "
-
-        if len(self.ACTIVIDAD)>0 :
-            if len(filtro)>0 :
-                filtro = filtro+" & "
-            else:
-                filtro
-            filtro=filtro+"ACTIVIDAD=="+"'"+self.ACTIVIDAD+"' "
-
-        if len(self.DEPART)>0 :
-            if len(filtro)>0 :
-                filtro = filtro+" & "
-            else:
-                filtro
-            filtro=filtro+"DEPARTAMENTO=="+"'"+self.DEPART+"' "
-
-        if len(self.PROVI)>0 :
-            if len(filtro)>0 :
-                filtro = filtro+" & "
-            else:
-                filtro
-            filtro=filtro+"PROVINCIA=="+"'"+self.PROVI+"' "
-
-        if len(self.TIPOUBI)>0 :
-            if len(filtro)>0 :
-                filtro = filtro+" & "
-            else:
-                filtro
-            filtro=filtro+"`TIPO DE UBICACION`=="+"'"+self.TIPOUBI+"' "
-
-        if len(self.OCURRE)>0 :
-            if len(filtro)>0 :
-                filtro = filtro+" & "
-            else:
-                filtro
-            filtro=filtro+"OCURRENCIA=="+"'"+self.OCURRE+"' "
-
-        if len(self.codigo)>0 :
-            if len(filtro)>0 :
-                filtro = filtro+" & "
-            else:
-                filtro
-            filtro=filtro+"`CODIGO EXTREMO`=="+"'"+self.codigo+"' "
-        
-        self.mostrarDatosep(filtro)       
-
-#----------------------------------------------------------------------
-
-    def mostrarDatosep(self, filtro):
-
-        self.filtro0 = self.tabla_ep
-        
-        if len(self.EFA)>0: # Filtro por palabra clave
-            self.vep.Eliminar_vitrina()
-            self.filtro0 = self.filtro0[self.filtro0['EFA'].str.contains(self.EFA)]
-            self.Complementoep(self.filtro0)
-
-        if len(self.CLAVE)>0: # Filtro por palabra clave
-            self.vep.Eliminar_vitrina()
-            self.filtro0 = self.filtro0[self.filtro0['DESCRIPCION'].str.contains(self.CLAVE)]
-            self.Complementoep(self.filtro0)
-  
-        if len(filtro)>0:
-
-            self.vep.Eliminar_vitrina()
-            self.filtro1 = self.filtro0.query(filtro)
-            self.Complementoep(self.filtro1)
-
-        else:
-            self.vep.Eliminar_vitrina()
-            self.Complementoep(self.filtro0)
-
-    #----------------------------------------------------------------------
-
-    def Complementoep(self,filtro0):
-
-        tabla_filtro2 = filtro0.loc[:, ['ID EXTREMO','CODIGO EXTREMO','AGENT. CONTAMI.','COMPONEN. AMBIE.','ACTIVIDAD','DEPARTAMENTO','EFA','ESTADO','FECHA ULTIMO MOV.','DESCRIPCION']]
-        if len(tabla_filtro2.index) > 100:
-            tabla_filtro3 = tabla_filtro2.head(100)
-        else:
-            tabla_filtro3 = tabla_filtro2
-        if len(tabla_filtro3.index) > 0:
-            self.frame_vitrina_ep.eliminar_cuadro()
-            self.frame_vitrina_ep = Cuadro(self)
-            self.vep = Vitrina_busquedaep(self, tabla_filtro3, self.ver_ep, self.asociar_dr_de_ep, self.ver_mp, height=250, width=1220)
-        else:
-            self.frame_vitrina_ep.eliminar_cuadro()
-            self.frame_vitrina_ep = Cuadro(self)
-            self.frame_vitrina_ep.agregar_label(1, 2, '                  0 extremos encontrados')
-
-    #----------------------------------------------------------------------
-    def limpiar_ep(self):
-     
-         # Eliminando campos
-        self.ep1.eliminar_cuadro()
-        self.vep.Eliminar_vitrina()
-        self.ep2.eliminar_cuadro()
-        self.frame_vitrina_ep.eliminar_cuadro()
-        # Agregando rejilla a la ventana
-        self.ep1 = Cuadro(self)
-        self.ep1.agregar_rejilla(self.rejilla_ep)
-        self.ep2 = Cuadro(self)
-        self.ep2.agregar_rejilla(self.rejilla_ep2)
-
         self.frame_vitrina_ep = Cuadro(self)
         # Creando vitrina
-        self.vep = Vitrina_busquedaep(self, self.tabla_deF, self.ver_ep, self.asociar_dr_de_ep, self.ver_mp, height=250, width=1220)
+        self.vep = Vitrina_busquedaep(self, self.tabla_deF, self.ver_ep_cod, self.asociar_dr_de_ep, self.ver_mp_ep, height=250, width=1220)
 
     #----------------------------------------------------------------------
     def volver_y_actualizar_ep(self):
@@ -941,10 +1045,10 @@ class Extremos(funcionalidades_ospa):
             codigo_antecedente = self.id_objeto
             texto_documento = ""
 
-            self.ver_ep(self, codigo_antecedente, texto_documento)
+            self.ver_ep_cod(self, codigo_antecedente, texto_documento)
 
     #----------------------------------------------------------------------
-    def ver_ep(self, id_objeto):
+    def ver_ep_cod(self, id_objeto):
         """"""
         texto_documento = 'Extremo de problema: ' + id_objeto
 
@@ -962,7 +1066,7 @@ class Extremos(funcionalidades_ospa):
 
 
     #----------------------------------------------------------------------
-    def ver_mp(self, x):
+    def ver_mp_ep(self, x):
         """"""
         self.x = x
         texto_documento = 'Extremo de problema: ' + x
@@ -979,7 +1083,7 @@ class Extremos(funcionalidades_ospa):
             messagebox.showinfo("Error", "No tiene macroproblemas asociados")
         else:
             self.desaparecer()
-            subframe = Macroproblemas(self, 500, 1200,texto_documento, nuevo=False, id_objeto = self.id_interno_ep, x = x, listamc = relacion_activos2)
+            subframe = Macroproblemas_filtrada(self, 500, 1200,texto_documento, nuevo=False, id_objeto = self.id_interno_ep, x = x, listamc = relacion_activos2)
 
 
     #----------------------------------------------------------------------
@@ -1040,6 +1144,7 @@ class Extremos(funcionalidades_ospa):
                     base_relacion_d_hist.cambiar_un_dato_de_una_fila(id_relacion_doc, 4, estado_a_sobreescribir)
                     messagebox.showinfo("¡Excelente!", "El registro ha sido asociado con éxito")
         
+    #----------------------------------------------------------------------
 
     def comprobar_id(self, base_codigo, id_usuario):
         """"""
@@ -1069,24 +1174,13 @@ class Macroproblemas(funcionalidades_ospa):
             self.cod_doc_mp = id_objeto
             self.x2 = x
 
-        # Renombramos los encabezados
-        self.mc = b_mp.generar_dataframe()
+        # Generamos el dataframe a filtrar
+        self.tabla_inicial0 = b_mp_tabla
 
-        self.ep_mp = b_relacion_mp_ep.generar_dataframe()
-        self.ep = b_ep.generar_dataframe()
-    
-
-        if self.x2 == None:
-            self.mc
-        else:
-            self.mc = self.mc[self.mc.ID_MP.isin(self.listamc)]
-
-        self.tabla_mp = self.mc.rename(columns={'COD_MP':'COD. MACROPROBLEMA','NOMBRE_DEL_PROBLEMA':'NOMBRE PROBLEMA','FECHA_DE_CREACION':'FECHA CREACION'})
+        self.tabla_mp = self.tabla_inicial0.rename(columns={'COD_MP':'COD. MACROPROBLEMA','NOMBRE_DEL_PROBLEMA':'NOMBRE PROBLEMA','FECHA_DE_CREACION':'FECHA CREACION'})
         self.tabla_mpF = self.tabla_mp.loc[0:99, ['COD. MACROPROBLEMA','FECHA CREACION','NOMBRE PROBLEMA','ESTADO','DESCRIPCION']]
         
         # Listas para desplegables
-        #self.listaTC = list(set(self.tabla_mp['TIPO CAUSA']))
-        #self.listaTA = list(set(self.tabla_mp['TIPO AFECTACION']))
         self.listaestado = list(set(self.tabla_mp['ESTADO']))
 
         # Agregando logo del ospa a la ventana y título
@@ -1101,12 +1195,6 @@ class Macroproblemas(funcionalidades_ospa):
 
             ('L', 0, 0, 'Código de Macroproblema'),
             ('EE', 0, 1),
-            
-            #('L', 1, 0, 'Tipo de causa'),
-            #('CXP', 1, 1, 39, self.listaTC, '', "readonly"),
-
-            #('L', 0, 2, 'Tipo de afectación'),
-            #('CXP', 0, 3, 39, self.listaTA, '', "readonly"),
 
             ('L', 0, 2, 'Estado'),
             ('CXP', 0, 3, 39, self.listaestado, '', "readonly"),
@@ -1126,9 +1214,10 @@ class Macroproblemas(funcionalidades_ospa):
         self.rejilla_mp2 = (
             ('B', 5, 4, 'Buscar', self.Buscar_mp),
             ('B', 5, 5, 'Limpiar', self.limpiar_mp),
-            ('B', 5, 6, 'Volver', self.volver),
-            ('B', 5, 7, 'Inicio', self.inicio_app),
-            ('B', 5, 8, 'Crear macroproblema', self.crear_macroproblema)
+            ('B', 5, 6, 'Actualizar', self.actualizar),
+            ('B', 5, 7, 'Volver', self.volver),
+            ('B', 5, 8, 'Inicio', self.inicio_app),
+            ('B', 5, 9, 'Crear macrop.', self.crear_macroproblema)
         )
         
         # Agregando rejilla de botones a la ventana
@@ -1137,9 +1226,9 @@ class Macroproblemas(funcionalidades_ospa):
         self.frame_vitrina_mp = Cuadro(self)
 
         # Creando vitrina
-        self.vmc = Vitrina_busqueda(self, self.tabla_mpF, self.ver_mp, self.funcion_de_asociar_mp, height=200, width=700)
+        self.vmc = Vitrina_busqueda(self, self.tabla_mpF, self.ver_mp, self.funcion_de_asociar_mp, height=200, width=780)
 
-#----------------------------------------------------------------------
+     #----------------------------------------------------------------------
 
     def crear_macroproblema(self):
         """"""
@@ -1147,15 +1236,7 @@ class Macroproblemas(funcionalidades_ospa):
         # LargoxAncho
         SubFrame = ventanas_vista.Macroproblemas_vista(self, 550, 1090, "Creación de macroproblemas")
 
-#----------------------------------------------------------------------
-
-    def inicio_app(self):
-        """"""
-        self.desaparecer()
-        # LargoxAncho
-        subFrame = menus.inicio_app_OSPA(self, 400, 400, "Inicio")
-
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     
     def Buscar_mp(self):
         """"""
@@ -1181,7 +1262,7 @@ class Macroproblemas(funcionalidades_ospa):
         
         self.mostrarDatosmc(filtro)       
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
 
     def mostrarDatosmc(self, filtro):
 
@@ -1211,7 +1292,7 @@ class Macroproblemas(funcionalidades_ospa):
 
     def Complementomc(self,filtro0):
 
-        tabla_filtro2 = filtro0.loc[:, ['ID MACROPROBLEMA','COD. MACROPROBLEMA','FECHA CREACION','NOMBRE PROBLEMA','ESTADO','DESCRIPCION']]
+        tabla_filtro2 = filtro0.loc[:, ['COD. MACROPROBLEMA','FECHA CREACION','NOMBRE PROBLEMA','ESTADO','DESCRIPCION']]
         if len(tabla_filtro2.index) > 100:
             tabla_filtro3 = tabla_filtro2.head(100)
         else:
@@ -1219,7 +1300,7 @@ class Macroproblemas(funcionalidades_ospa):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_mp.eliminar_cuadro()
             self.frame_vitrina_mp = Cuadro(self)
-            self.vmc = Vitrina_busqueda(self, tabla_filtro3, self.ver_mp, self.funcion_de_asociar_mp, height=200, width=700)
+            self.vmc = Vitrina_busqueda(self, tabla_filtro3, self.ver_mp, self.funcion_de_asociar_mp, height=200, width=780)
         else:
             self.frame_vitrina_mp.eliminar_cuadro()
             self.frame_vitrina_mp = Cuadro(self)
@@ -1241,7 +1322,273 @@ class Macroproblemas(funcionalidades_ospa):
 
         self.frame_vitrina_mp = Cuadro(self)
         # Creando vitrina
-        self.vmc = Vitrina_busqueda(self, self.tabla_mpF, self.ver_mp, self.funcion_de_asociar_mp, height=200, width=700)
+        self.vmc = Vitrina_busqueda(self, self.tabla_mpF, self.ver_mp, self.funcion_de_asociar_mp, height=200, width=780)
+
+        #----------------------------------------------------------------------
+    def actualizar(self):
+        
+        # Eliminando campos
+        self.mc1.eliminar_cuadro()
+        self.vmc.Eliminar_vitrina()
+        self.mc2.eliminar_cuadro()
+        self.frame_vitrina_mp.eliminar_cuadro()
+        # Actualizando data
+        b_mp = variables_globales.b_mp
+        b_mp_tabla = b_mp.generar_dataframe()
+        
+        # Generamos el dataframe a filtrar 
+        self.tabla_inicial0 = b_mp_tabla
+        self.tabla_mp = self.tabla_inicial0.rename(columns={'COD_MP':'COD. MACROPROBLEMA','NOMBRE_DEL_PROBLEMA':'NOMBRE PROBLEMA','FECHA_DE_CREACION':'FECHA CREACION'})
+        self.tabla_mpF = self.tabla_mp.loc[0:99, ['COD. MACROPROBLEMA','FECHA CREACION','NOMBRE PROBLEMA','ESTADO','DESCRIPCION']]
+        
+        # Información para las listas desplegables
+        self.listaestado = list(set(self.tabla_mp['ESTADO']))
+
+        # Armando rejilla con los filtros
+
+        self.rejilla_mp = (
+
+            ('L', 0, 0, 'Código de Macroproblema'),
+            ('EE', 0, 1),
+
+            ('L', 0, 2, 'Estado'),
+            ('CXP', 0, 3, 39, self.listaestado, '', "readonly"),
+
+            ('L', 1, 0, 'Nombre del problema'),
+            ('EE', 1, 1),
+
+            ('L', 1, 2, 'Palabra clave en descripción'),
+            ('EE', 1, 3),
+        )
+
+        # Agregando rejilla a la ventana
+        self.mc1 = Cuadro(self)
+        self.mc1.agregar_rejilla(self.rejilla_mp)
+        self.mc2 = Cuadro(self)
+        self.mc2.agregar_rejilla(self.rejilla_mp2)
+
+        self.frame_vitrina_mp = Cuadro(self)
+        # Creando vitrina
+        self.vmc = Vitrina_busqueda(self, self.tabla_mpF, self.ver_mp, self.funcion_de_asociar_mp, height=200, width=780)
+
+    #----------------------------------------------------------------------
+    def volver(self):
+        """"""
+        self.desaparecer()
+        self.ventana_anterior.aparecer()
+    
+    #----------------------------------------------------------------------
+    def funcion_de_asociar_mp(self, x):
+        """"""
+        print("hola")
+
+class Macroproblemas_filtrada(funcionalidades_ospa):
+    """"""
+    
+    #----------------------------------------------------------------------
+    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None, x = None, listamc = None):
+        """Constructor"""
+
+        Ventana.__init__(self, *args)
+
+        # Almacenamos información herededa
+        self.nuevo = nuevo
+        self.x2 = x
+        self.listamc = listamc
+        if self.nuevo != True: #en caso exista
+            self.listamp = lista
+            self.id_usuario= id_objeto
+            self.x2 = x
+
+        # Renombramos los encabezados
+        self.mc = b_mp_tabla
+
+        self.mc = self.mc[self.mc.ID_MP.isin(self.listamc)]
+
+        self.tabla_mp = self.mc.rename(columns={'COD_MP':'COD. MACROPROBLEMA','NOMBRE_DEL_PROBLEMA':'NOMBRE PROBLEMA','FECHA_DE_CREACION':'FECHA CREACION'})
+        self.tabla_mpF = self.tabla_mp.loc[0:99, ['COD. MACROPROBLEMA','FECHA CREACION','NOMBRE PROBLEMA','ESTADO','DESCRIPCION']]
+        
+        # Listas para desplegables
+        self.listaestado = list(set(self.tabla_mp['ESTADO']))
+
+        # Agregando logo del ospa a la ventana y título
+        self.mc0 = Cuadro(self)
+        self.mc0.agregar_label(0, 0,' ')
+        self.mc0.agregar_imagen(1, 0,'Logo_OSPA.png',202,49)
+        mc3 = Cuadro(self)
+        mc3.agregar_titulo(2, 0, 'Macroproblemas asociados')
+    
+        # Armando rejilla con los filtros
+        self.rejilla_mp = (
+
+            ('L', 0, 0, 'Código de Macroproblema'),
+            ('EE', 0, 1),
+
+            ('L', 0, 2, 'Estado'),
+            ('CXP', 0, 3, 39, self.listaestado, '', "readonly"),
+
+            ('L', 1, 0, 'Nombre del problema'),
+            ('EE', 1, 1),
+
+            ('L', 1, 2, 'Palabra clave en descripción'),
+            ('EE', 1, 3),
+        )
+        
+        # Agregando rejilla a la ventana
+        self.mc1 = Cuadro(self)
+        self.mc1.agregar_rejilla(self.rejilla_mp)
+
+        # Generando rejilla para botones
+        self.rejilla_mp2 = (
+            ('B', 5, 4, 'Buscar', self.Buscar_mpf),
+            ('B', 5, 5, 'Limpiar', self.limpiar_mp),
+            ('B', 5, 6, 'Actualizar', self.actualizar),
+            ('B', 5, 7, 'Volver', self.volver),
+            ('B', 5, 8, 'Inicio', self.inicio_app)
+        )
+        
+        # Agregando rejilla de botones a la ventana
+        self.mc2 = Cuadro(self)
+        self.mc2.agregar_rejilla(self.rejilla_mp2)
+        self.frame_vitrina_mp = Cuadro(self)
+
+        # Creando vitrina
+        self.vmc = Vitrina_pendientes(self, self.tabla_mpF, self.ver_mp, height=200, width=800)
+
+    #----------------------------------------------------------------------
+    
+    def Buscar_mpf(self):
+        """"""
+        # Obteniendo valores de la rejilla
+        self.listas_filtromcF = self.mc1.obtener_lista_de_datos()
+        self.CODIGOf = self.listas_filtromcF[0]
+        self.ESTADOf = self.listas_filtromcF[1]
+        self.NOMBREf = self.listas_filtromcF[2]
+        self.DESCRIPf = self.listas_filtromcF[3]
+
+        # Filtrando datos por palabras exactas
+
+        filtro=""
+        if len(self.CODIGOf)>0 :
+            filtro="`COD. MACROPROBLEMA`=="+"'"+self.CODIGOf+"' "
+
+        if len(self.ESTADOf)>0 :
+            if len(filtro)>0 :
+                filtro = filtro+" & "
+            else:
+                filtro
+            filtro=filtro+"ESTADO=="+"'"+self.ESTADOf+"' "
+        
+        self.mostrarDatosmcf(filtro)       
+
+    #----------------------------------------------------------------------
+
+    def mostrarDatosmcf(self, filtro):
+
+        self.filtro0 = self.tabla_mp
+        
+        if len(self.NOMBREf)>0: # Filtro por palabra clave
+            self.vmc.Eliminar_vitrina()
+            self.filtro0 = self.filtro0[self.filtro0['NOMBRE PROBLEMA'].str.contains(self.NOMBREf)]
+            self.Complementomcf(self.filtro0)
+
+        if len(self.DESCRIPf)>0: # Filtro por palabra clave
+            self.vmc.Eliminar_vitrina()
+            self.filtro0 = self.filtro0[self.filtro0['DESCRIPCION'].str.contains(self.DESCRIPf)]
+            self.Complementomcf(self.filtro0)
+  
+        if len(filtro)>0:
+
+            self.vmc.Eliminar_vitrina()
+            self.filtro1 = self.filtro0.query(filtro)
+            self.Complementomcf(self.filtro1)
+
+        else:
+            self.vmc.Eliminar_vitrina()
+            self.Complementomcf(self.filtro0)
+
+    #----------------------------------------------------------------------
+
+    def Complementomcf(self,filtro0):
+
+        tabla_filtro2 = filtro0.loc[:, ['COD. MACROPROBLEMA','FECHA CREACION','NOMBRE PROBLEMA','ESTADO','DESCRIPCION']]
+        if len(tabla_filtro2.index) > 100:
+            tabla_filtro3 = tabla_filtro2.head(100)
+        else:
+            tabla_filtro3 = tabla_filtro2
+        if len(tabla_filtro3.index) > 0:
+            self.frame_vitrina_mp.eliminar_cuadro()
+            self.frame_vitrina_mp = Cuadro(self)
+            self.vmc = Vitrina_pendientes(self, tabla_filtro3, self.ver_mp, height=200, width=800)
+        else:
+            self.frame_vitrina_mp.eliminar_cuadro()
+            self.frame_vitrina_mp = Cuadro(self)
+            self.frame_vitrina_mp.agregar_label(1, 2, '                  0 macroproblemas encontrados')
+
+    #----------------------------------------------------------------------
+    def limpiar_mp(self):
+     
+         # Eliminando campos
+        self.mc1.eliminar_cuadro()
+        self.vmc.Eliminar_vitrina()
+        self.mc2.eliminar_cuadro()
+        self.frame_vitrina_mp.eliminar_cuadro()
+        # Agregando rejilla a la ventana
+        self.mc1 = Cuadro(self)
+        self.mc1.agregar_rejilla(self.rejilla_mp)
+        self.mc2 = Cuadro(self)
+        self.mc2.agregar_rejilla(self.rejilla_mp2)
+
+        self.frame_vitrina_mp = Cuadro(self)
+        # Creando vitrina
+        self.vmc = Vitrina_pendientes(self, self.tabla_mpF, self.ver_mp, height=200, width=800)
+
+    #----------------------------------------------------------------------
+    def actualizar(self):
+        
+        # Eliminando campos
+        self.mc1.eliminar_cuadro()
+        self.vmc.Eliminar_vitrina()
+        self.mc2.eliminar_cuadro()
+        self.frame_vitrina_mp.eliminar_cuadro()
+        # Actualizando data
+        b_mp = variables_globales.b_mp
+        b_mp_tabla = b_mp.generar_dataframe()
+        
+        # Generamos el dataframe a filtrar 
+        self.tabla_inicial0 = b_mp_tabla
+        self.mc = self.tabla_inicial0[self.tabla_inicial0.ID_MP.isin(self.listamc)]
+        self.tabla_mp = self.mc.rename(columns={'COD_MP':'COD. MACROPROBLEMA','NOMBRE_DEL_PROBLEMA':'NOMBRE PROBLEMA','FECHA_DE_CREACION':'FECHA CREACION'})
+        self.tabla_mpF = self.tabla_mp.loc[0:99, ['COD. MACROPROBLEMA','FECHA CREACION','NOMBRE PROBLEMA','ESTADO','DESCRIPCION']]
+        
+        # Información para las listas desplegables
+        self.listaestado = list(set(self.tabla_mp['ESTADO']))
+        # Armando rejilla con los filtros
+
+        self.rejilla_mp = (
+
+            ('L', 0, 0, 'Código de Macroproblema'),
+            ('EE', 0, 1),
+
+            ('L', 0, 2, 'Estado'),
+            ('CXP', 0, 3, 39, self.listaestado, '', "readonly"),
+
+            ('L', 1, 0, 'Nombre del problema'),
+            ('EE', 1, 1),
+
+            ('L', 1, 2, 'Palabra clave en descripción'),
+            ('EE', 1, 3),
+        )
+
+        # Agregando rejilla a la ventana
+        self.mc1 = Cuadro(self)
+        self.mc1.agregar_rejilla(self.rejilla_mp)
+        self.mc2 = Cuadro(self)
+        self.mc2.agregar_rejilla(self.rejilla_mp2)
+
+        self.frame_vitrina_mp = Cuadro(self)
+        # Creando vitrina
+        self.vmc = Vitrina_pendientes(self, self.tabla_mpF, self.ver_mp, height=200, width=800)
 
     #----------------------------------------------------------------------
     def volver(self):
@@ -1249,35 +1596,7 @@ class Macroproblemas(funcionalidades_ospa):
         self.desaparecer()
         self.ventana_anterior.aparecer()
 
-    #----------------------------------------------------------------------
-    def ver_mp(self, x):
-        """"""
-        
-        self.x = x
-
-        #OBTENER EL ID INTERNO DEL DOCUMENTO EMITIDO
-        lb1 = b_mp.listar_datos_de_fila(self.x)
-        self.IDEX_FINAL = lb1[0]
-
-        texto_documento = "Macroproblema: " + str(x)
-        lista_para_insertar = [lb1[2],lb1[3], lb1[4]]
-
-        #self.mc_ep = b_relacion_mp_ep.generar_dataframe()
-        #tabla_macroproblema_filtrada = self.mc_ep[self.mc_ep['ID_EP'] == self.IDEX_FINAL]
-        #codigo_mp = tabla_macroproblema_filtrada.iloc[0,2]
-        #print(codigo_mp)
-
-        self.desaparecer()
-        subframe = ventanas_vista.Macroproblemas_vista(self, 650, 1150, texto_documento, nuevo=False, 
-                                                        lista = lista_para_insertar, id_objeto = x)
-    
-
-    #----------------------------------------------------------------------
-    def funcion_de_asociar_mp(self, x):
-        """"""
-        print("hola")
-
-class Administrados(Ventana):
+class Administrados(funcionalidades_ospa):
     """"""
     
     #----------------------------------------------------------------------
@@ -1293,9 +1612,9 @@ class Administrados(Ventana):
             self.cod_doc_ad = id_objeto
         
         # Renombramos los encabezados
-        self.ad = b_ad.generar_dataframe()
-        self.tabla_ad = self.ad.rename(columns={'ID_AD':'ID ADMINISTRADO','NOMBRE_O_RAZON_SOCIAL':'NOMBRE / RAZON SOCIAL','CATEGORÍA':'TIPO','DNI_RUC':'DNI / RUC','INCUMPLIMIENTO_1':'INCUMPLIMIENTO 1','INCUMPLIMIENTO_2':'INCUMPLIMIENTO 2'})
-        self.tabla_adF = self.tabla_ad.loc[0:99, ['ID ADMINISTRADO','NOMBRE / RAZON SOCIAL','TIPO','DNI / RUC','INCUMPLIMIENTO 1','INCUMPLIMIENTO 2']]
+        self.ad = b_adm_tabla
+        self.tabla_ad = self.ad.rename(columns={'ID_AD':'ID ADMINISTRADO','NOMBRE_O_RAZON_SOCIAL':'NOMBRE / RAZON SOCIAL','CATEGORÍA':'TIPO','DNI_RUC':'DNI / RUC'})
+        self.tabla_adF = self.tabla_ad.loc[0:99, ['ID ADMINISTRADO','NOMBRE / RAZON SOCIAL','TIPO','DNI / RUC']]
         
         # Listas para desplegables
         self.listaAD = list(set(self.tabla_ad['NOMBRE / RAZON SOCIAL']))
@@ -1318,10 +1637,7 @@ class Administrados(Ventana):
             ('CXP', 1, 1, 39, self.listaTIPO, '', "normal"),
 
             ('L', 0, 2, 'DNI / RUC'),
-            ('E', 0, 3),
-
-            ('L', 1, 2, 'Palabra clave en incumplimiento'),
-            ('E', 1, 3)
+            ('E', 0, 3)
         )
         
         # Agregando rejilla a la ventana
@@ -1332,8 +1648,10 @@ class Administrados(Ventana):
         self.rejilla_ad2 = (
             ('B', 5, 4, 'Buscar', self.Buscar_ad),
             ('B', 5, 5, 'Limpiar', self.limpiar_ad),
-            ('B', 5, 6, 'Volver', self.volver),
-            ('B', 5, 7, 'Inicio', self.inicio_app)
+            ('B', 5, 6, 'Actualizar', self.actualizar),
+            ('B', 5, 7, 'Volver', self.volver),
+            ('B', 5, 8, 'Crear admin.', self.crear_adm),
+            ('B', 5, 9, 'Inicio', self.inicio_app)
         )
         
         # Agregando rejilla de botones a la ventana
@@ -1342,17 +1660,9 @@ class Administrados(Ventana):
         self.frame_vitrina_ad = Cuadro(self)
 
         # Creando vitrina
-        self.vad = Vitrina_busqueda(self, self.tabla_adF, self.ver_ad, self.funcion_de_asociar_ad, height=200, width=850)
+        self.vad = Vitrina_busqueda(self, self.tabla_adF, self.ver_ad, self.funcion_de_asociar_ad, height=200, width=590)
 
-#----------------------------------------------------------------------
-
-    def inicio_app(self):
-        """"""
-        self.desaparecer()
-        # LargoxAncho
-        subFrame = ventanas_vista.inicio_app_OSPA(self, 400, 400, "Inicio")
-
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     
     def Buscar_ad(self):
         """"""
@@ -1361,7 +1671,6 @@ class Administrados(Ventana):
         self.ADMINI = self.listas_filtroad[0]
         self.Tipo = self.listas_filtroad[1]
         self.ruc = self.listas_filtroad[2]
-        self.incum = self.listas_filtroad[3]
 
         # Filtrando datos por palabras exactas
 
@@ -1378,7 +1687,7 @@ class Administrados(Ventana):
         
         self.mostrarDatosad(filtro)       
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
 
     def mostrarDatosad(self, filtro):
 
@@ -1387,11 +1696,6 @@ class Administrados(Ventana):
         if len(self.ADMINI)>0: # Filtro por palabra clave
             self.vad.Eliminar_vitrina()
             self.filtro0 = self.filtro0[self.filtro0['NOMBRE / RAZON SOCIAL'].str.contains(self.ADMINI)]
-            self.Complementoad(self.filtro0)
-
-        if len(self.incum)>0: # Filtro por palabra clave
-            self.vad.Eliminar_vitrina()
-            self.filtro0 = self.filtro0[self.filtro0['INCUMPLIMIENTO 1'].str.contains(self.incum)]
             self.Complementoad(self.filtro0)
   
         if len(filtro)>0:
@@ -1409,7 +1713,7 @@ class Administrados(Ventana):
 
     def Complementoad(self,filtro0):
 
-        tabla_filtro2 = filtro0.loc[:, ['ID ADMINISTRADO','NOMBRE / RAZON SOCIAL','TIPO','DNI / RUC','INCUMPLIMIENTO 1','INCUMPLIMIENTO 2']]
+        tabla_filtro2 = filtro0.loc[:, ['ID ADMINISTRADO','NOMBRE / RAZON SOCIAL','TIPO','DNI / RUC']]
         if len(tabla_filtro2.index) > 100:
             tabla_filtro3 = tabla_filtro2.head(100)
         else:
@@ -1417,7 +1721,7 @@ class Administrados(Ventana):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_ad.eliminar_cuadro()
             self.frame_vitrina_ad = Cuadro(self)
-            self.vad = Vitrina_busqueda(self, tabla_filtro3, self.ver_ad, self.funcion_de_asociar_ad, height=200, width=850)
+            self.vad = Vitrina_busqueda(self, tabla_filtro3, self.ver_ad, self.funcion_de_asociar_ad, height=200, width=590)
         else:
             self.frame_vitrina_ad.eliminar_cuadro()
             self.frame_vitrina_ad = Cuadro(self)
@@ -1439,7 +1743,51 @@ class Administrados(Ventana):
 
         self.frame_vitrina_ad = Cuadro(self)
         # Creando vitrina
-        self.vad = Vitrina_busqueda(self, self.tabla_adF, self.ver_ad, self.funcion_de_asociar_ad, height=200, width=850)
+        self.vad = Vitrina_busqueda(self, self.tabla_adF, self.ver_ad, self.funcion_de_asociar_ad, height=200, width=590)
+
+    #----------------------------------------------------------------------
+    def actualizar(self):
+        
+        # Eliminando campos
+        self.ad1.eliminar_cuadro()
+        self.vad.Eliminar_vitrina()
+        self.ad2.eliminar_cuadro()
+        self.frame_vitrina_ad.eliminar_cuadro()
+        # Actualizando data
+        b_adm = variables_globales.b_adm
+        b_adm_tabla = b_adm.generar_dataframe()
+        
+        # Generamos el dataframe a filtrar 
+        self.ad = b_adm_tabla
+        self.tabla_ad = self.ad.rename(columns={'ID_AD':'ID ADMINISTRADO','NOMBRE_O_RAZON_SOCIAL':'NOMBRE / RAZON SOCIAL','CATEGORÍA':'TIPO','DNI_RUC':'DNI / RUC'})
+        self.tabla_adF = self.tabla_ad.loc[0:99, ['ID ADMINISTRADO','NOMBRE / RAZON SOCIAL','TIPO','DNI / RUC']]
+        
+        # Información para las listas desplegables
+        self.listaAD = list(set(self.tabla_ad['NOMBRE / RAZON SOCIAL']))
+        self.listaTIPO= list(set(self.tabla_ad['TIPO']))
+        # Armando rejilla con los filtros
+
+        self.rejilla_ad = (
+
+            ('L', 0, 0, 'Administrado'),
+            ('CXP', 0, 1, 39, self.listaAD, '', "normal"),
+
+            ('L', 1, 0, 'Tipo'),
+            ('CXP', 1, 1, 39, self.listaTIPO, '', "normal"),
+
+            ('L', 0, 2, 'DNI / RUC'),
+            ('E', 0, 3)
+        )
+        
+        # Agregando rejilla a la ventana
+        self.ad1 = Cuadro(self)
+        self.ad1.agregar_rejilla(self.rejilla_ad)
+        self.ad2 = Cuadro(self)
+        self.ad2.agregar_rejilla(self.rejilla_ad2)
+
+        self.frame_vitrina_ad = Cuadro(self)
+        # Creando vitrina
+        self.vad = Vitrina_busqueda(self, self.tabla_adF, self.ver_ad, self.funcion_de_asociar_ad, height=200, width=590)
 
     #----------------------------------------------------------------------
     def volver(self):
@@ -1466,10 +1814,15 @@ class Administrados(Ventana):
         """"""
         print("hola")
 
-class Pendientes_jefe_firma(Doc_emitidos_busqueda):
+    #----------------------------------------------------------------------
+    def crear_adm(self, x):
+        """"""
+        print("hola")
+
+class Pendientes_jefe_firma(funcionalidades_ospa):
     """"""
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def __init__(self, *args, nuevo=True, lista=None, id_objeto = None):
         """Constructor"""
 
@@ -1479,13 +1832,13 @@ class Pendientes_jefe_firma(Doc_emitidos_busqueda):
         self.nuevo = nuevo
         if self.nuevo != True: #en caso exista
             self.id_usuario = lista
-            self.cod_doc_pf = id_objeto
+            self.id_objeto_ingresado = id_objeto
 
         # Generamos el dataframe a filtrar
-        self.tabla_inicial = b_de.generar_dataframe()
-        self.tabla_inicial1 = self.tabla_inicial.query("FECHA_FIRMA=='' or FECHA_FIRMA==' '")
-        self.tabla_0_pfirma = self.tabla_inicial1.rename(columns={'COD_DE':'DOC EMITIDO','DETALLE_REQUERIMIENTO':'DETALLE','ESTADO_DOCE':'ESTADO','NUM_DOC':'NRO DOCUMENTO','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_SALIDA':'HT SALIDA','FECHA_FIRMA':'FECHA FIRMA','FECHA_NOTIFICACION':'FECHA NOTIFICACION','FECHA_PROYECTO_FINAL':'FECHA PROYECTO'})
-        self.tabla_pfirmaF = self.tabla_0_pfirma.loc[0:99, ['DOC EMITIDO','DESTINATARIO','TIPO DOC','NRO DOCUMENTO','ESPECIALISTA','FECHA PROYECTO','CATEGORIA','DETALLE']]
+        self.tabla_inicial0 = b_de_tabla
+        self.tabla_inicial1 = self.tabla_inicial0.query("FECHA_FIRMA=='' or FECHA_FIRMA==' '")
+        self.tabla_0_pfirma = self.tabla_inicial1.rename(columns={'COD_DE':'HT','DETALLE_REQUERIMIENTO':'DETALLE','ESTADO_DOCE':'ESTADO','NUM_DOC':'NRO DOCUMENTO','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_SALIDA':'HT SALIDA','FECHA_FIRMA':'FECHA FIRMA','FECHA_NOTIFICACION':'FECHA NOTIFICACION','FECHA_PROYECTO_FINAL':'FECHA PROYECTO'})
+        self.tabla_pfirmaF = self.tabla_0_pfirma.loc[0:99, ['HT','DESTINATARIO','TIPO DOC','NRO DOCUMENTO','ESPECIALISTA','FECHA PROYECTO','CATEGORIA','DETALLE']]
  
         # Información para las listas desplegables
         self.categoria = sorted(list(set(self.tabla_0_pfirma['CATEGORIA'])))
@@ -1532,8 +1885,9 @@ class Pendientes_jefe_firma(Doc_emitidos_busqueda):
         self.rejilla_2_pfirma = (
             ('B', 5, 4, 'Buscar', self.Buscar_pfirma),
             ('B', 5, 5, 'Limpiar', self.limpiar_pfirma),
-            ('B', 5, 6, 'Volver', self.volver_pfirma),
-            ('B', 5, 7, 'Inicio', self.inicio_app)
+            ('B', 5, 6, 'Actualizar', self.actualizar),
+            ('B', 5, 7, 'Volver', self.volver),
+            ('B', 5, 8, 'Inicio', self.inicio_app)
         )
         
         # Agregando rejilla de botones a la ventana
@@ -1542,16 +1896,8 @@ class Pendientes_jefe_firma(Doc_emitidos_busqueda):
         self.frame_vitrina_pfirma = Cuadro(self)
 
         # Creando vitrina
-        self.vpfirma = Vitrina_pendientes_jefe_firma(self, self.tabla_pfirmaF, 
-                                                    self.ver_de, self.funcion_de_asociar_pfirma, height=250, width=1190)
-
-    #----------------------------------------------------------------------
-
-    def inicio_app(self):
-        """"""
-        self.desaparecer()
-        # LargoxAncho
-        subFrame = menus.inicio_app_OSPA(self, 400, 400, "Inicio")
+        self.vpfirma = Vitrina_pendientes(self, self.tabla_pfirmaF, 
+                                                    self.ver_de, height=250, width=1190)
 
     #----------------------------------------------------------------------
 
@@ -1609,12 +1955,6 @@ class Pendientes_jefe_firma(Doc_emitidos_busqueda):
             self.filtro0 = self.filtro0[self.filtro0['HT SALIDA'].str.contains(self.htpfirma)]
             self.Complementopfirma(self.filtro0)
 
-        #if len(self.docpfirma)>0: # Filtro por palabra clave
-        #    self.vpfirma.Eliminar_vitrina()
-        #    self.filtro0['NRO DOCUMENTO']=self.filtro0['NRO DOCUMENTO'].apply(str)
-        #    self.filtro0 = self.filtro0[self.filtro0['NRO DOCUMENTO'].str.contains(self.docpfirma)]
-        #    self.Complementopfirma(self.filtro0)
-
         if len(self.destinpfirma)>0: # Filtro por palabra clave
             self.vpfirma.Eliminar_vitrina()
             self.filtro0 = self.filtro0[self.filtro0['DESTINATARIO'].str.contains(self.destinpfirma)]
@@ -1633,7 +1973,7 @@ class Pendientes_jefe_firma(Doc_emitidos_busqueda):
     #----------------------------------------------------------------------
     def Complementopfirma(self,filtro0):
 
-        tabla_filtro2 = filtro0.loc[:, ['DOC EMITIDO','DESTINATARIO','TIPO DOC','NRO DOCUMENTO','ESPECIALISTA','FECHA PROYECTO','CATEGORIA','DETALLE']]
+        tabla_filtro2 = filtro0.loc[:, ['HT','DESTINATARIO','TIPO DOC','NRO DOCUMENTO','ESPECIALISTA','FECHA PROYECTO','CATEGORIA','DETALLE']]
         if len(tabla_filtro2.index) > 100:
             tabla_filtro3 = tabla_filtro2.head(100)
         else:
@@ -1641,7 +1981,7 @@ class Pendientes_jefe_firma(Doc_emitidos_busqueda):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_pfirma.eliminar_cuadro()
             self.frame_vitrina_pfirma = Cuadro(self)
-            self.vpfirma = Vitrina_pendientes_jefe_firma(self, tabla_filtro3, self.ver_pfirma, self.funcion_de_asociar_pfirma, height=250, width=1190)
+            self.vpfirma = Vitrina_pendientes(self, tabla_filtro3, self.ver_de, height=250, width=1190)
         else:
             self.frame_vitrina_pfirma.eliminar_cuadro()
             self.frame_vitrina_pfirma = Cuadro(self)
@@ -1663,35 +2003,66 @@ class Pendientes_jefe_firma(Doc_emitidos_busqueda):
         self.pfirma15.agregar_rejilla(self.rejilla_2_pfirma)
         self.frame_vitrina_pfirma = Cuadro(self)
         # Creando vitrina
-        self.vpfirma = Vitrina_pendientes_jefe_firma(self, self.tabla_pfirmaF, self.ver_pfirma, self.funcion_de_asociar_pfirma, height=250, width=1190)
-
-#----------------------------------------------------------------------
-
-    def ver_pfirma(self, x):
-
-        self.x = x
-        texto_documento = 'Documento emitido: ' + x
-
-        lb1 = b_de.listar_datos_de_fila(x)
-        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], lb1[9]]
-                                # lb1[10], lb1[11], lb1[12]]
-        self.desaparecer()
-        subframe = ventanas_vista.Doc_emitidos_vista(self, 650, 1150, texto_documento, nuevo=False, 
-                                        lista=lista_para_insertar, id_objeto = x)
+        self.vpfirma = Vitrina_pendientes(self, self.tabla_pfirmaF, self.ver_de, height=250, width=1190)
 
     #----------------------------------------------------------------------
+    def actualizar(self):
+        
+        # Eliminando campos
+        self.pfirma1.eliminar_cuadro()
+        self.vpfirma.Eliminar_vitrina()
+        self.pfirma15.eliminar_cuadro()
+        self.frame_vitrina_pfirma.eliminar_cuadro()
+        # Actualizando data
+        b_de = variables_globales.b_de
+        b_de_tabla = b_de.generar_dataframe()
+        
+        # Generamos el dataframe a filtrar 
+        self.tabla_inicial0 = b_de_tabla
+        self.tabla_inicial1 = self.tabla_inicial0.query("FECHA_FIRMA=='' or FECHA_FIRMA==' '")
+        self.tabla_0_pfirma = self.tabla_inicial1.rename(columns={'COD_DE':'HT','DETALLE_REQUERIMIENTO':'DETALLE','ESTADO_DOCE':'ESTADO','NUM_DOC':'NRO DOCUMENTO','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_SALIDA':'HT SALIDA','FECHA_FIRMA':'FECHA FIRMA','FECHA_NOTIFICACION':'FECHA NOTIFICACION','FECHA_PROYECTO_FINAL':'FECHA PROYECTO'})
+        self.tabla_pfirmaF = self.tabla_0_pfirma.loc[0:99, ['HT','DESTINATARIO','TIPO DOC','NRO DOCUMENTO','ESPECIALISTA','FECHA PROYECTO','CATEGORIA','DETALLE']]
+ 
+        # Información para las listas desplegables
+        self.categoria = sorted(list(set(self.tabla_0_pfirma['CATEGORIA'])))
+        self.destinatario = sorted(list(set(self.tabla_0_pfirma['DESTINATARIO'])))
+        self.tipodocemitpfirma = sorted(list(set(self.tabla_0_pfirma['TIPO DOC'])))
+        self.especialista = sorted(list(set(self.tabla_0_pfirma['ESPECIALISTA'])))
 
-    def volver_pfirma(self):
-        """"""
-        self.desaparecer()
-        self.ventana_anterior.aparecer()
+        # Armando rejilla con los filtros
 
-    #----------------------------------------------------------------------
-    def funcion_de_asociar_pfirma(self, x):
-        """"""
-        print('hola')
+        self.rejilla_pfirma = (
+
+            ('L', 0, 0, 'Categoría'),
+            ('CXP', 0, 1, 39, self.categoria, '', 'readonly'),
+
+            ('L', 0, 2, 'Nro registro Siged'),
+            ('EE', 0, 3),
+
+            ('L', 0, 4, 'Destinatario'),
+            ('CXE', 0, 5, 39, self.destinatario, '', 'normal'),
+
+            ('L', 1, 0, 'Especialista'),
+            ('CXP', 1, 1, 39, self.especialista, '', 'readonly'),
+
+            ('L', 1, 2, 'Tipo de documento'),
+            ('CXP', 1, 3, 39, self.tipodocemitpfirma, '', 'readonly'),
+
+            ('L', 1, 4, 'Nro de documento'),
+            ('EE', 1, 5)
+
+        )
+
+        # Agregando rejilla a la ventana
+        self.pfirma1 = Cuadro(self)
+        self.pfirma1.agregar_rejilla(self.rejilla_pfirma)
+        self.pfirma15 = Cuadro(self)
+        self.pfirma15.agregar_rejilla(self.rejilla_2_pfirma)
+        self.frame_vitrina_pfirma = Cuadro(self)
+        # Creando vitrina
+        self.vpfirma = Vitrina_pendientes(self, self.tabla_pfirmaF, self.ver_de, height=250, width=1190)
     
-class Pendientes_jefe_asignar(Ventana):
+class Pendientes_jefe_asignar(funcionalidades_ospa):
     """"""
     #----------------------------------------------------------------------
     def __init__(self, *args, nuevo=True, lista=None, id_objeto = None):
@@ -1703,18 +2074,19 @@ class Pendientes_jefe_asignar(Ventana):
         self.nuevo = nuevo
         if self.nuevo != True: #en caso exista
             self.id_usuario = lista
-            self.cod_doc_jpa = id_objeto
-
-        # Generamos el dataframe a filtrar
-        self.tabla_inicial0 = b_dr.generar_dataframe()
-        #self.tabla_inicial1 = self.tabla_inicial0[self.tabla_inicial0['TIPO_RESPUESTA']!='Si']
+            self.id_objeto_ingresado = id_objeto
+        
+        # Generamos el dataframe a filtrar 
+        self.tabla_inicial0 = b_dr_tabla
         self.tabla_inicial2 = self.tabla_inicial0.query("ESPECIALISTA=='' or ESPECIALISTA==' '")
         self.tabla_jpa = self.tabla_inicial2.rename(columns={'COD_DR':'NRO DOCUMENTO','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_ENTRANTE':'HT INGRESO'})
         self.tabla_jpaF = self.tabla_jpa.loc[0:99, ['NRO DOCUMENTO','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','ASUNTO']]
- 
+
+
         # Información para las listas desplegables
         self.jpatipodoc = sorted(list(set(self.tabla_jpa['TIPO DOC'])))
         self.jparemitente = sorted(list(set(self.tabla_jpa['REMITENTE'])))
+
 
         # Agregando logo del ospa a la ventana y título
         self.jpa0 = Cuadro(self)
@@ -1722,6 +2094,7 @@ class Pendientes_jefe_asignar(Ventana):
         self.jpa0.agregar_imagen(1,0,'Logo_OSPA.png',202,49)
         jpa2 = Cuadro(self)
         jpa2.agregar_titulo(2, 0, 'Documentos pendientes de asignar')
+
 
         # Armando rejilla con los filtros
         self.rejilla_jpa = (
@@ -1748,8 +2121,9 @@ class Pendientes_jefe_asignar(Ventana):
         self.rejilla_jpa2 = (
             ('B', 5, 4, 'Buscar', self.Buscar_jpa),
             ('B', 5, 5, 'Limpiar', self.limpiar_jpa),
-            ('B', 5, 6, 'Volver', self.volver_jpa),
-            ('B', 5, 7, 'Inicio', self.inicio_app)
+            ('B', 5, 6, 'Actualizar', self.actualizar),
+            ('B', 5, 7, 'Volver', self.volver),
+            ('B', 5, 8, 'Inicio', self.inicio_app),
         )
         
         # Agregando rejilla de botones a la ventana
@@ -1759,17 +2133,8 @@ class Pendientes_jefe_asignar(Ventana):
         self.frame_vitrina_jpa = Cuadro(self)
 
         # Creando vitrina
-        self.vjpa = Vitrina_pendientes_jefe_firma(self, self.tabla_jpaF, self.ver_jpa, 
-                                   self.funcion_de_asociar_jpa, height=200, width=770)
+        self.vjpa = Vitrina_pendientes(self, self.tabla_jpaF, self.ver_dr, height=200, width=770)
     
-    #----------------------------------------------------------------------
-
-    def inicio_app(self):
-        """"""
-        self.desaparecer()
-        # LargoxAncho
-        subFrame = menus.inicio_app_OSPA(self, 400, 400, "Inicio")
-
     #----------------------------------------------------------------------
 
     def Buscar_jpa(self):
@@ -1809,12 +2174,6 @@ class Pendientes_jefe_asignar(Ventana):
             self.filtro0 = self.tabla_jpa[self.tabla_jpa['REMITENTE'].str.contains(self.remitentejpa)]
             self.Complementojpa(self.filtro0)
 
-        #if len(self.nrodocjpa)>0: # Filtro por palabra clave
-        #    self.vjpa.Eliminar_vitrina()
-        #    self.filtro0['NRO DOC']=self.filtro0['NRO DOC'].apply(str)
-        #    self.filtro0 = self.filtro0[self.filtro0['NRO DOC'].str.contains(self.nrodocjpa)]
-        #    self.Complementojpa(self.filtro0)
-
         if len(self.htjpa)>0: # Filtro por palabra clave
             self.vjpa.Eliminar_vitrina()
             self.filtro0['HT INGRESO']=self.filtro0['HT INGRESO'].apply(str)
@@ -1843,8 +2202,7 @@ class Pendientes_jefe_asignar(Ventana):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_jpa.eliminar_cuadro()
             self.frame_vitrina_jpa = Cuadro(self)
-            self.vjpa = Vitrina_pendientes_jefe_firma(self, tabla_filtro3, self.ver_jpa, 
-                                   self.funcion_de_asociar_jpa, height=200, width=770)
+            self.vjpa = Vitrina_pendientes(self, tabla_filtro3, self.ver_dr, height=200, width=770)
         else:
             self.frame_vitrina_jpa.eliminar_cuadro()
             self.frame_vitrina_jpa = Cuadro(self)
@@ -1858,6 +2216,7 @@ class Pendientes_jefe_asignar(Ventana):
         self.vjpa.Eliminar_vitrina()
         self.jpa15.eliminar_cuadro()
         self.frame_vitrina_jpa.eliminar_cuadro()
+
         # Agregando rejilla a la ventana
         self.jpa1 = Cuadro(self)
         self.jpa1.agregar_rejilla(self.rejilla_jpa)
@@ -1865,37 +2224,57 @@ class Pendientes_jefe_asignar(Ventana):
         self.jpa15.agregar_rejilla(self.rejilla_jpa2)
         self.frame_vitrina_jpa = Cuadro(self)
         # Creando vitrina
-        self.vjpa = Vitrina_pendientes_jefe_firma(self, self.tabla_jpaF, self.ver_jpa, 
-                                   self.funcion_de_asociar_jpa, height=200, width=770)
+        self.vjpa = Vitrina_pendientes(self, self.tabla_jpaF, self.ver_dr, height=200, width=770)
+
 
     #----------------------------------------------------------------------
-
-    def volver_jpa(self):
-        """"""
-        self.desaparecer()
-        self.ventana_anterior.aparecer()
-
-    #----------------------------------------------------------------------
-    def ver_jpa(self, x):
-        """"""
-        self.x = x
-        texto_documento = 'Documento recibido: ' + x
-        #print(x)
-        lb1 = b_dr.listar_datos_de_fila(self.x)
-        # PARA EL CASO DE ESTA PANTALLA SOLO LLEVARA LOS DATOS INGRESADOS HASTA APORTE DEL DOC O ASUNTO (CAMPOS OBLIGATORIO)
-        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], 
-                                lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14], lb1[15], lb1[16]]
+    def actualizar(self):
         
-        self.desaparecer()
-        subframe = ventanas_vista.Doc_recibidos_vista(self, 650, 1150, texto_documento, nuevo=False, 
-                                                    lista=lista_para_insertar, id_objeto = x)
+        # Eliminando campos
+        self.jpa1.eliminar_cuadro()
+        self.vjpa.Eliminar_vitrina()
+        self.jpa15.eliminar_cuadro()
+        self.frame_vitrina_jpa.eliminar_cuadro()
+        # Actualizando data
+        b_dr = variables_globales.b_dr
+        b_dr_tabla = b_dr.generar_dataframe()
+        
+        # Generamos el dataframe a filtrar 
+        self.tabla_inicial0 = b_dr_tabla
+        self.tabla_inicial2 = self.tabla_inicial0.query("ESPECIALISTA=='' or ESPECIALISTA==' '")
+        self.tabla_jpa = self.tabla_inicial2.rename(columns={'COD_DR':'NRO DOCUMENTO','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_ENTRANTE':'HT INGRESO'})
+        self.tabla_jpaF = self.tabla_jpa.loc[0:99, ['NRO DOCUMENTO','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','ASUNTO']]
 
-    #----------------------------------------------------------------------
-    def funcion_de_asociar_jpa(self, x):
-        """"""
-        print('hola')
+        # Información para las listas desplegables
+        self.jpatipodoc = sorted(list(set(self.tabla_jpa['TIPO DOC'])))
+        self.jparemitente = sorted(list(set(self.tabla_jpa['REMITENTE'])))
 
-class Pendientes_por_reiterar(Ventana):
+        self.rejilla_jpa = (
+
+            ('L', 0, 0, 'Nro registro Siged'),
+            ('EE', 0, 1),
+
+            ('L', 1, 0, 'Tipo de documento'),
+            ('CXP', 1, 1, 39, self.jpatipodoc, '', 'readonly'),
+
+            ('L', 0, 2, 'Remitente'),
+            ('CXE', 0, 3, 39, self.jparemitente, '', 'normal'),
+
+            ('L', 1, 2, 'Número de doc'),
+            ('EE', 1, 3)
+
+        )
+
+        # Agregando rejilla a la ventana
+        self.jpa1 = Cuadro(self)
+        self.jpa1.agregar_rejilla(self.rejilla_jpa)
+        self.jpa15 = Cuadro(self)
+        self.jpa15.agregar_rejilla(self.rejilla_jpa2)
+        self.frame_vitrina_jpa = Cuadro(self)
+        # Creando vitrina
+        self.vjpa = Vitrina_pendientes(self, self.tabla_jpaF, self.ver_dr, height=200, width=770)
+
+class Pendientes_por_reiterar(funcionalidades_ospa):
     """"""
     #----------------------------------------------------------------------
     def __init__(self, *args, nuevo=True, lista=None, id_objeto = None):
@@ -1910,10 +2289,10 @@ class Pendientes_por_reiterar(Ventana):
             self.cod_doc_ppr = id_objeto
 
         # Generamos el dataframe a filtrar
-        self.tabla_inicial0 = b_de.generar_dataframe()
+        self.tabla_inicial0 = b_de_tabla
         self.tabla_inicial1 = self.tabla_inicial0.query("ESTADO_DOCE=='Enviar reiterativo' or ESTADO_DOCE=='Eviar OCI'")
-        self.tabla_ppr = self.tabla_inicial1.rename(columns={'COD_DE':'DOC EMITIDO','DETALLE_REQUERIMIENTO':'DETALLE','ESTADO_DOCE':'ESTADO','NUM_DOC':'NRO DOCUMENTO','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_SALIDA':'HT SALIDA','FECHA_FIRMA':'FECHA FIRMA','FECHA_NOTIFICACION':'FECHA NOTIFICACION','FECHA_PROYECTO_FINAL':'FECHA PROYECTO'})
-        self.tabla_pprF = self.tabla_ppr.loc[0:99, ['DOC EMITIDO','DESTINATARIO','HT SALIDA','ESPECIALISTA','FECHA PROYECTO','CATEGORIA','DETALLE']]
+        self.tabla_ppr = self.tabla_inicial1.rename(columns={'COD_DE':'HT SALIDA','DETALLE_REQUERIMIENTO':'DETALLE','ESTADO_DOCE':'ESTADO','NUM_DOC':'NRO DOCUMENTO','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','FECHA_FIRMA':'FECHA FIRMA','FECHA_NOTIFICACION':'FECHA NOTIFICACION','FECHA_PROYECTO_FINAL':'FECHA PROYECTO'})
+        self.tabla_pprF = self.tabla_ppr.loc[0:99, ['HT SALIDA','DESTINATARIO','NRO DOCUMENTO','ESPECIALISTA','FECHA PROYECTO','CATEGORIA','DETALLE']]
  
         # Información para las listas desplegables
         self.categoriappr = list(set(self.tabla_ppr['CATEGORIA']))
@@ -1958,8 +2337,9 @@ class Pendientes_por_reiterar(Ventana):
         self.rejilla_2_ppr = (
             ('B', 5, 4, 'Buscar', self.Buscar_ppr),
             ('B', 5, 5, 'Limpiar', self.limpiar_ppr),
-            ('B', 5, 6, 'Volver', self.volver_ppr),
-            ('B', 5, 7, 'Inicio', self.inicio_app)
+            ('B', 5, 6, 'Actualizar', self.actualizar),
+            ('B', 5, 7, 'Volver', self.volver),
+            ('B', 5, 8, 'Inicio', self.inicio_app)
         )
         
         # Agregando rejilla de botones a la ventana
@@ -1968,15 +2348,7 @@ class Pendientes_por_reiterar(Ventana):
         self.frame_vitrina_ppr = Cuadro(self)
 
         # Creando vitrina
-        self.vppr = Vitrina_pendientes_jefe_firma(self, self.tabla_pprF, self.ver_ppr, self.funcion_de_asociar_ppr, height=200, width=1050)
-
-    #----------------------------------------------------------------------
-
-    def inicio_app(self):
-        """"""
-        self.desaparecer()
-        # LargoxAncho
-        subFrame = menus.inicio_app_OSPA(self, 400, 400, "Inicio")
+        self.vppr = Vitrina_pendientes(self, self.tabla_pprF, self.ver_de, height=200, width=1050)
 
     #----------------------------------------------------------------------
 
@@ -1992,6 +2364,8 @@ class Pendientes_por_reiterar(Ventana):
         self.docppr = self.listas_filtroppr[5]
 
         # Filtrando datos por palabras exactas
+        self.filtro0 = self.tabla_ppr
+        self.filtro0['NRO DOCUMENTO']=self.filtro0['NRO DOCUMENTO'].apply(str)
 
         filtro=""
         if len(self.decateppr)>0 :
@@ -2003,6 +2377,13 @@ class Pendientes_por_reiterar(Ventana):
             else:
                 filtro
             filtro=filtro+"`TIPO DOC`=="+"'"+self.tipodocppr+"' "
+
+        if len(self.docppr)>0 :
+            if len(filtro)>0 :
+                filtro = filtro+" & "
+            else:
+                filtro
+            filtro=filtro+"`NRO DOCUMENTO`=="+"'"+self.docppr+"' "
         
         self.mostrarDatosppr(filtro)
 
@@ -2014,14 +2395,8 @@ class Pendientes_por_reiterar(Ventana):
         
         if len(self.htppr)>0: # Filtro por palabra clave
             self.vppr.Eliminar_vitrina()
-            self.filtro0['HT SALIDA']=self.filtro0['HT SALIDA'].apply(str)
-            self.filtro0 = self.filtro0[self.filtro0['HT SALIDA'].str.contains(self.htppr)]
-            self.Complementoppr(self.filtro0)
-
-        if len(self.docppr)>0: # Filtro por palabra clave
-            self.vppr.Eliminar_vitrina()
-            self.filtro0['NRO DOCUMENTO']=self.filtro0['NRO DOCUMENTO'].apply(str)
-            self.filtro0 = self.filtro0[self.filtro0['NRO DOCUMENTO'].str.contains(self.docppr)]
+            self.filtro0['HT_SALIDA']=self.filtro0['HT_SALIDA'].apply(str)
+            self.filtro0 = self.filtro0[self.filtro0['HT_SALIDA'].str.contains(self.htppr)]
             self.Complementoppr(self.filtro0)
 
         if len(self.destinppr)>0: # Filtro por palabra clave
@@ -2047,7 +2422,7 @@ class Pendientes_por_reiterar(Ventana):
     #----------------------------------------------------------------------
     def Complementoppr(self,filtro0):
 
-        tabla_filtro2 = filtro0.loc[:, ['DOC EMITIDO','DESTINATARIO','HT SALIDA','ESPECIALISTA','FECHA PROYECTO','CATEGORIA','DETALLE']]
+        tabla_filtro2 = filtro0.loc[:, ['HT SALIDA','DESTINATARIO','NRO DOCUMENTO','ESPECIALISTA','FECHA PROYECTO','CATEGORIA','DETALLE']]
         if len(tabla_filtro2.index) > 100:
             tabla_filtro3 = tabla_filtro2.head(100)
         else:
@@ -2055,7 +2430,7 @@ class Pendientes_por_reiterar(Ventana):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_ppr.eliminar_cuadro()
             self.frame_vitrina_ppr = Cuadro(self)
-            self.vppr = Vitrina_pendientes_jefe_firma(self, tabla_filtro3, self.ver_ppr, self.funcion_de_asociar_ppr, height=200, width=1050)
+            self.vppr = Vitrina_pendientes(self, tabla_filtro3, self.ver_de, height=200, width=1050)
         else:
             self.frame_vitrina_ppr.eliminar_cuadro()
             self.frame_vitrina_ppr = Cuadro(self)
@@ -2077,98 +2452,69 @@ class Pendientes_por_reiterar(Ventana):
         self.ppr15.agregar_rejilla(self.rejilla_2_ppr)
         self.frame_vitrina_ppr = Cuadro(self)
         # Creando vitrina
-        self.vppr = Vitrina_pendientes_jefe_firma(self, self.tabla_pprF, self.ver_ppr, self.funcion_de_asociar_ppr, height=200, width=1050)
+        self.vppr = Vitrina_pendientes(self, self.tabla_pprF, self.ver_de, height=200, width=1050)
 
     #----------------------------------------------------------------------
-
-    def volver_ppr(self):
-        """"""
-        self.desaparecer()
-        self.ventana_anterior.aparecer()
-
-    #----------------------------------------------------------------------
-    def ver_ppr(self, x):
-        """"""
-        self.x = x
-        texto_documento = 'Documento emitido: ' + x
-
-        lb1 = b_de.listar_datos_de_fila(self.x)
-        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], 
-                                lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], lb1[12]]
-        self.desaparecer()
-        subframe = ventanas_vista.Doc_emitidos_vista(self, 650, 1150, texto_documento, 
-                                                nuevo=False, lista=lista_para_insertar, id_objeto=x)
-
-    #----------------------------------------------------------------------
-    def funcion_de_asociar_ppr(self, x):
-        """"""
-        self.x = x
-
-        #OBTENER EL ID INTERNO DEL DOCUMENTO EMITIDO
-        self.bdee = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'DOC_EMITIDOS')
-        self.IDDE = self.bdee.listar_datos_de_fila(self.x)
-        self.IDDE_FINAL = self.IDDE[0]
-
-        #OBTENER EL ID USUARIO DEL DOCUMENTO RECIBIDO
-        codigodr = self.cod_doc_ppr
-        # OBTENER EL ID INTERNO DEL DOCUMENTO RECIBIDO
-        tabla_de_codigo_dr = b_dr.generar_dataframe()
-        tabla_codigo_de_filtrada = tabla_de_codigo_dr[tabla_de_codigo_dr.COD_DR == codigodr]
-        id_interno_dr = tabla_codigo_de_filtrada.iloc[0,0]
-
-        # Definición de ID de relación
-        id_relacion_doc = id_interno_dr + "/" +  self.IDDE_FINAL
-
-        # BUSCAR COINCIDENCIAS
-        valor_repetido = self.comprobar_id(base_relacion_docs, id_relacion_doc)
-
-        # BUSCAR ESTADO DE ID RELACION SI EXISTE
-        if valor_repetido != False:  # si hay coincidencias de ese id_relacion_doc
-            tabla_de_relaciones = base_relacion_docs.generar_dataframe()
-            tabla_relaciones_filtrada = tabla_de_relaciones[tabla_de_relaciones['ID_DOCS_R'] == id_relacion_doc]
-            estado_rela = tabla_relaciones_filtrada.iloc[0,3]
-
-        hora_de_modificacion = str(dt.datetime.now())
-
-        if valor_repetido != True:
-            
-            # GUARDAR RELACION
-            b0 = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'RELACION_DOCS')
-
-            # Pestaña 1: Código Único
-            datos_insertar = [id_relacion_doc,id_interno_dr, self.IDDE_FINAL,'ACTIVO',hora_de_modificacion]
-            b0.agregar_datos(datos_insertar)
-            datos_a_cargar_hist = [id_relacion_doc, id_interno_dr, self.IDDE_FINAL,'ACTIVO',hora_de_modificacion,hora_de_modificacion]
-            base_relacion_d_hist.agregar_datos(datos_a_cargar_hist)
-            messagebox.showinfo("¡Excelente!", "El registro ha sido asociado con éxito")
-        else:
-            if estado_rela == 'ACTIVO':
-                messagebox.showinfo("Error", "Ya se encuentra asociado")
-            else:
-                datos_iniciales = base_relacion_docs.listar_datos_de_fila(id_relacion_doc)
-                hora = str(dt.datetime.now())
-                datos_a_cargar_hist = datos_iniciales + [hora]
-                estado_a_sobreescribir = 'ACTIVO'
-                datos_a_cargar_hist[3] = estado_a_sobreescribir
-                base_relacion_docs.cambiar_un_dato_de_una_fila(id_relacion_doc, 4, estado_a_sobreescribir)
-                base_relacion_docs.cambiar_un_dato_de_una_fila(id_relacion_doc, 5, hora)
-                base_relacion_d_hist.agregar_datos(datos_a_cargar_hist)
-                base_relacion_d_hist.cambiar_un_dato_de_una_fila(id_relacion_doc, 4, estado_a_sobreescribir)
-                messagebox.showinfo("¡Excelente!", "El registro ha sido asociado con éxito")
+    def actualizar(self):
         
+        # Eliminando campos
+        self.ppr1.eliminar_cuadro()
+        self.vppr.Eliminar_vitrina()
+        self.ppr15.eliminar_cuadro()
+        self.frame_vitrina_ppr.eliminar_cuadro()
+        # Actualizando data
+        b_de = variables_globales.b_de
+        b_de_tabla = b_de.generar_dataframe()
+        
+        # Generamos el dataframe a filtrar 
+        self.tabla_inicial0 = b_de_tabla
+        self.tabla_inicial1 = self.tabla_inicial0.query("ESTADO_DOCE=='Enviar reiterativo' or ESTADO_DOCE=='Eviar OCI'")
+        self.tabla_ppr = self.tabla_inicial1.rename(columns={'COD_DE':'HT SALIDA','DETALLE_REQUERIMIENTO':'DETALLE','ESTADO_DOCE':'ESTADO','NUM_DOC':'NRO DOCUMENTO','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','FECHA_FIRMA':'FECHA FIRMA','FECHA_NOTIFICACION':'FECHA NOTIFICACION','FECHA_PROYECTO_FINAL':'FECHA PROYECTO'})
+        self.tabla_pprF = self.tabla_ppr.loc[0:99, ['HT SALIDA','DESTINATARIO','NRO DOCUMENTO','ESPECIALISTA','FECHA PROYECTO','CATEGORIA','DETALLE']]
+ 
+        # Información para las listas desplegables
+        self.categoriappr = list(set(self.tabla_ppr['CATEGORIA']))
+        self.destinatarioppr = list(set(self.tabla_ppr['DESTINATARIO']))
+        self.tipodocemitpfirmappr = list(set(self.tabla_ppr['TIPO DOC']))
+        self.especialistappr = list(set(self.tabla_ppr['ESPECIALISTA']))
+
+        self.rejilla_ppr = (
+
+            ('L', 0, 0, 'Categoría'),
+            ('CXP', 0, 1, 39, self.categoriappr, '', 'readonly'),
+
+            ('L', 1, 0, 'Nro registro Siged'),
+            ('EE', 1, 1),
+
+            ('L', 0, 2, 'Destinatario'),
+            ('CXE', 0, 3, 39, self.destinatarioppr, '', 'normal'),
+
+            ('L', 1, 2, 'Especialista'),
+            ('CXP', 1, 3, 39, self.especialistappr, '', 'readonly'),
+
+            ('L', 2, 0, 'Tipo de documento'),
+            ('CXP', 2, 1, 39, self.tipodocemitpfirmappr, '', 'readonly'),
+
+            ('L', 2, 2, 'Nro de documento'),
+            ('EE', 2, 3)
+
+        )
         
 
-    def comprobar_id(self, base_codigo, id_usuario):
-        """"""
-        # Comprobar coincidencias
-        cantidad_de_coincidencias = base_codigo.contar_coincidencias(id_usuario)
+        # Agregando rejilla a la ventana
+        self.ppr1 = Cuadro(self)
+        self.ppr1.agregar_rejilla(self.rejilla_ppr)
+        self.ppr15 = Cuadro(self)
+        self.ppr15.agregar_rejilla(self.rejilla_2_ppr)
+        self.frame_vitrina_ppr = Cuadro(self)
+        # Creando vitrina
+        self.vppr = Vitrina_pendientes(self, self.tabla_pprF, self.ver_de, height=200, width=1050)
 
-        if cantidad_de_coincidencias != 0:
-            return True
-        else:
-            return False
 
-class Pendientes_eq1_trabajar(Ventana):
+    #----------------------------------------------------------------------
+
+
+class Pendientes_eq1_trabajar(funcionalidades_ospa):
     """"""
     #----------------------------------------------------------------------
     def __init__(self, *args, nuevo=True, lista=None, id_objeto = None):
@@ -2183,8 +2529,8 @@ class Pendientes_eq1_trabajar(Ventana):
             self.cod_doc_peq1t = id_objeto
 
         # Generamos el dataframe a filtrar
-        self.tabla_inicial0 = b_dr.generar_dataframe()
-        self.tabla_inicial1 = self.tabla_inicial0.query("ESPECIALISTA=='' or ESPECIALISTA==' '")
+        self.tabla_inicial0 = b_dr_tabla
+        self.tabla_inicial1 = self.tabla_inicial0.query("TIPO_RESPUESTA!='No'")
         self.tabla_peq1t = self.tabla_inicial1.rename(columns={'COD_DR':'NRO DOC','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_ENTRANTE':'HT INGRESO'})
         self.tabla_peq1tF = self.tabla_peq1t.loc[0:99, ['NRO DOC','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','FECHA ULTIMO MOV.','INDICACION','ASUNTO']]
  
@@ -2224,8 +2570,9 @@ class Pendientes_eq1_trabajar(Ventana):
         self.rejilla_peq1t2 = (
             ('B', 5, 4, 'Buscar', self.Buscar_peq1t),
             ('B', 5, 5, 'Limpiar', self.limpiar_peq1t),
-            ('B', 5, 6, 'Volver', self.volver_peq1t),
-            ('B', 5, 7, 'Inicio', self.inicio_app)
+            ('B', 5, 6, 'Actualizar', self.actualizar),
+            ('B', 5, 7, 'Volver', self.volver),
+            ('B', 5, 8, 'Inicio', self.inicio_app)
         )
         
         # Agregando rejilla de botones a la ventana
@@ -2235,17 +2582,8 @@ class Pendientes_eq1_trabajar(Ventana):
         self.frame_vitrina_peq1t = Cuadro(self)
 
         # Creando vitrina 
-        self.vpeq1t = Vitrina_pendientes_jefe_firma(self, self.tabla_peq1tF, self.ver_peq1t, 
-                                   self.funcion_de_asociar_peq1t, height=200, width=1080)
+        self.vpeq1t = Vitrina_pendientes(self, self.tabla_peq1tF, self.ver_dr, height=200, width=1080)
     
-    #----------------------------------------------------------------------
-
-    def inicio_app(self):
-        """"""
-        self.desaparecer()
-        # LargoxAncho
-        subFrame = menus.inicio_app_OSPA(self, 400, 400, "Inicio")
-
     #----------------------------------------------------------------------
 
     def Buscar_peq1t(self):
@@ -2310,8 +2648,7 @@ class Pendientes_eq1_trabajar(Ventana):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_peq1t.eliminar_cuadro()
             self.frame_vitrina_peq1t = Cuadro(self)
-            self.vpeq1t = Vitrina_pendientes_jefe_firma(self, tabla_filtro3, self.ver_peq1t, 
-                                   self.funcion_de_asociar_peq1t, height=200, width=1080)
+            self.vpeq1t = Vitrina_pendientes(self, tabla_filtro3, self.ver_dr, height=200, width=1080)
         else:
             self.frame_vitrina_peq1t.eliminar_cuadro()
             self.frame_vitrina_peq1t = Cuadro(self)
@@ -2332,36 +2669,57 @@ class Pendientes_eq1_trabajar(Ventana):
         self.peq1t15.agregar_rejilla(self.rejilla_peq1t2)
         self.frame_vitrina_peq1t = Cuadro(self)
         # Creando vitrina
-        self.vpeq1t = Vitrina_pendientes_jefe_firma(self, self.tabla_peq1tF, self.ver_peq1t, 
-                                   self.funcion_de_asociar_peq1t, height=200, width=1080)
+        self.vpeq1t = Vitrina_pendientes(self, self.tabla_peq1tF, self.ver_dr, height=200, width=1080)
 
     #----------------------------------------------------------------------
-
-    def volver_peq1t(self):
-        """"""
-        self.desaparecer()
-        self.ventana_anterior.aparecer()
-
-    #----------------------------------------------------------------------
-    def ver_peq1t(self, x):
-        """"""
-        self.x = x
-        texto_documento = 'Documento recibido: ' + x
-        #print(x)
-        lb1 = b_dr.listar_datos_de_fila(self.x)
-        # PARA EL CASO DE ESTA PANTALLA SOLO LLEVARA LOS DATOS INGRESADOS HASTA APORTE DEL DOC O ASUNTO (CAMPOS OBLIGATORIO)
-        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8]]
+    def actualizar(self):
         
-        self.desaparecer()
-        subframe = ventanas_vista.Doc_recibidos_vista(self, 650, 1150, texto_documento, nuevo=False, 
-                                                lista=lista_para_insertar, id_objeto = x)
+        # Eliminando campos
+        self.peq1t1.eliminar_cuadro()
+        self.vpeq1t.Eliminar_vitrina()
+        self.peq1t15.eliminar_cuadro()
+        self.frame_vitrina_peq1t.eliminar_cuadro()
+        # Actualizando data
+        b_dr = variables_globales.b_dr
+        b_dr_tabla = b_dr.generar_dataframe()
+        
+        # Generamos el dataframe a filtrar 
+        self.tabla_inicial0 = b_dr_tabla
+        self.tabla_inicial1 = self.tabla_inicial0.query("TIPO_RESPUESTA!='No'")
+        self.tabla_peq1t = self.tabla_inicial1.rename(columns={'COD_DR':'NRO DOC','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_ENTRANTE':'HT INGRESO'})
+        self.tabla_peq1tF = self.tabla_peq1t.loc[0:99, ['NRO DOC','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','FECHA ULTIMO MOV.','INDICACION','ASUNTO']]
+ 
+        # Información para las listas desplegables
+        self.peq1ttipodoc = list(set(self.tabla_peq1t['TIPO DOC']))
+        self.peq1tremitente = list(set(self.tabla_peq1t['REMITENTE']))
 
+        self.rejilla_peq1t = (
+
+            ('L', 0, 0, 'Nro registro Siged'),
+            ('EE', 0, 1),
+
+            ('L', 1, 0, 'Tipo de documento'),
+            ('CXP', 1, 1, 39, self.peq1ttipodoc, '', 'readonly'),
+
+            ('L', 0, 2, 'Remitente'),
+            ('CXE', 0, 3, 39, self.peq1tremitente, '', 'normal'),
+
+            ('L', 1, 2, 'Número de doc'),
+            ('EE', 1, 3)
+
+        )
+        
+        # Agregando rejilla a la ventana
+        self.peq1t1 = Cuadro(self)
+        self.peq1t1.agregar_rejilla(self.rejilla_peq1t)
+        self.peq1t15 = Cuadro(self)
+        self.peq1t15.agregar_rejilla(self.rejilla_peq1t2)
+        self.frame_vitrina_peq1t = Cuadro(self)
+        # Creando vitrina
+        self.vpeq1t = Vitrina_pendientes(self, self.tabla_peq1tF, self.ver_dr, height=200, width=1080)
     #----------------------------------------------------------------------
-    def funcion_de_asociar_peq1t(self, x):
-        """"""
-        print('hola')
 
-class Pendientes_eq2_calificarrpta(Ventana):
+class Pendientes_eq2_calificarrpta(funcionalidades_ospa):
     """"""
     #----------------------------------------------------------------------
     def __init__(self, *args, nuevo=True, lista=None, id_objeto = None):
@@ -2376,10 +2734,10 @@ class Pendientes_eq2_calificarrpta(Ventana):
             self.cod_doc_peq2t = id_objeto
 
         # Generamos el dataframe a filtrar
-        self.tabla_inicial0 = b_dr.generar_dataframe()
+        self.tabla_inicial0 = b_dr_tabla
         self.tabla_inicial1 = self.tabla_inicial0.query("TIPO_RESPUESTA=='Si'")
-        self.tabla_inicial2 = self.tabla_inicial1.query("RESPUESTA=='' or RESPUESTA==' '")
-        self.tabla_peq2t = self.tabla_inicial2.rename(columns={'COD_DR':'NRO DOC','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_ENTRANTE':'HT INGRESO'})
+        #self.tabla_inicial2 = self.tabla_inicial1.query("RESPUESTA==' ' or RESPUESTA==''")
+        self.tabla_peq2t = self.tabla_inicial1.rename(columns={'COD_DR':'NRO DOC','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_ENTRANTE':'HT INGRESO'})
         self.tabla_peq2tF = self.tabla_peq2t.loc[0:99, ['NRO DOC','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','FECHA ULTIMO MOV.','ESPECIALISTA','INDICACION','ASUNTO']]
  
         # Información para las listas desplegables
@@ -2422,8 +2780,9 @@ class Pendientes_eq2_calificarrpta(Ventana):
         self.rejilla_peq2t2 = (
             ('B', 5, 4, 'Buscar', self.Buscar_peq2t),
             ('B', 5, 5, 'Limpiar', self.limpiar_peq2t),
-            ('B', 5, 6, 'Volver', self.volver_peq2t),
-            ('B', 5, 7, 'Inicio', self.inicio_app)
+            ('B', 5, 6, 'Volver', self.volver),
+            ('B', 5, 7, 'Actualizar', self.actualizar),
+            ('B', 5, 8, 'Inicio', self.inicio_app)
         )
         
         # Agregando rejilla de botones a la ventana
@@ -2433,16 +2792,8 @@ class Pendientes_eq2_calificarrpta(Ventana):
         self.frame_vitrina_peq2t = Cuadro(self)
 
         # Creando vitrina 
-        self.vpeq2t = Vitrina_pendientes_jefe_firma(self, self.tabla_peq2tF, self.ver_peq2t, 
-                                   self.funcion_de_asociar_peq2t, height=200, width=1150)
-    
-    #----------------------------------------------------------------------
+        self.vpeq2t = Vitrina_pendientes(self, self.tabla_peq2tF, self.ver_dr, height=200, width=1170)
 
-    def inicio_app(self):
-        """"""
-        self.desaparecer()
-        # LargoxAncho
-        subFrame = menus.inicio_app_OSPA(self, 400, 400, "Inicio")
 
     #----------------------------------------------------------------------
 
@@ -2516,8 +2867,7 @@ class Pendientes_eq2_calificarrpta(Ventana):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_peq2t.eliminar_cuadro()
             self.frame_vitrina_peq2t = Cuadro(self)
-            self.vpeq2t = Vitrina_pendientes_jefe_firma(self, tabla_filtro3, self.ver_peq2t, 
-                                   self.funcion_de_asociar_peq2t, height=200, width=1150)
+            self.vpeq2t = Vitrina_pendientes(self, tabla_filtro3, self.ver_dr, height=200, width=1170)
         else:
             self.frame_vitrina_peq2t.eliminar_cuadro()
             self.frame_vitrina_peq2t = Cuadro(self)
@@ -2538,38 +2888,61 @@ class Pendientes_eq2_calificarrpta(Ventana):
         self.peq2t15.agregar_rejilla(self.rejilla_peq2t2)
         self.frame_vitrina_peq2t = Cuadro(self)
         # Creando vitrina
-        self.vpeq2t = Vitrina_pendientes_jefe_firma(self, self.tabla_peq2tF, self.ver_peq2t, 
-                                   self.funcion_de_asociar_peq2t, height=200, width=1250)
+        self.vpeq2t = Vitrina_pendientes(self, self.tabla_peq2tF, self.ver_dr, height=200, width=1270)
 
     #----------------------------------------------------------------------
-
-    def volver_peq2t(self):
-        """"""
-        self.desaparecer()
-        self.ventana_anterior.aparecer()
-
-    #----------------------------------------------------------------------
-    def ver_peq2t(self, x):
-        """"""
-        self.x = x
-        texto_documento = 'Documento recibido: ' + x
-        #print(x)
-        lb1 = b_dr.listar_datos_de_fila(self.x)
-        # PARA EL CASO DE ESTA PANTALLA SOLO LLEVARA LOS DATOS INGRESADOS HASTA APORTE DEL DOC O ASUNTO (CAMPOS OBLIGATORIO)
-        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], 
-                                lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14], lb1[15], lb1[16]]
+    def actualizar(self):
         
-        self.desaparecer()
-        subframe = ventanas_vista.Doc_recibidos_vista(self, 650, 1150, texto_documento, nuevo=False, 
-                                                    lista=lista_para_insertar, id_objeto = x)
+        # Eliminando campos
+        self.peq2t1.eliminar_cuadro()
+        self.vpeq2t.Eliminar_vitrina()
+        self.peq2t15.eliminar_cuadro()
+        self.frame_vitrina_peq2t.eliminar_cuadro()
+        # Actualizando data
+        b_dr = variables_globales.b_dr
+        b_dr_tabla = b_dr.generar_dataframe()
+        
+        # Generamos el dataframe a filtrar 
+        self.tabla_inicial0 = b_dr_tabla
+        self.tabla_inicial1 = self.tabla_inicial0.query("TIPO_RESPUESTA=='Si'")
+        #self.tabla_inicial2 = self.tabla_inicial1.query("RESPUESTA=='' or RESPUESTA==' '")
+        self.tabla_peq2t = self.tabla_inicial1.rename(columns={'COD_DR':'NRO DOC','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_ENTRANTE':'HT INGRESO'})
+        self.tabla_peq2tF = self.tabla_peq2t.loc[0:99, ['NRO DOC','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','FECHA ULTIMO MOV.','ESPECIALISTA','INDICACION','ASUNTO']]
+ 
+        # Información para las listas desplegables
+        self.peq2ttipodoc = list(set(self.tabla_peq2t['TIPO DOC']))
+        self.peq2tremitente = list(set(self.tabla_peq2t['REMITENTE']))
+        self.peq2tespecialista = list(set(self.tabla_peq2t['ESPECIALISTA']))
 
-    #----------------------------------------------------------------------
-    def funcion_de_asociar_peq2t(self, x):
-        """"""
-        print('hola')
+        self.rejilla_peq2t = (
 
+            ('L', 0, 0, 'Nro registro Siged'),
+            ('EE', 0, 1),
 
-class Pendientes_eq2_programaciones(Ventana):
+            ('L', 1, 0, 'Tipo de documento'),
+            ('CXP', 1, 1, 39, self.peq2ttipodoc, '', 'readonly'),
+
+            ('L', 0, 2, 'Remitente'),
+            ('CXE', 0, 3, 39, self.peq2tremitente, '', 'normal'),
+
+            ('L', 1, 2, 'Número de doc'),
+            ('EE', 1, 3),
+
+            ('L', 2, 0, 'Especialista'),
+            ('CXP', 2, 1, 39, self.peq2tespecialista, '', 'readonly')
+
+        )
+        
+        # Agregando rejilla a la ventana
+        self.peq2t1 = Cuadro(self)
+        self.peq2t1.agregar_rejilla(self.rejilla_peq2t)
+        self.peq2t15 = Cuadro(self)
+        self.peq2t15.agregar_rejilla(self.rejilla_peq2t2)
+        self.frame_vitrina_peq2t = Cuadro(self)
+        # Creando vitrina
+        self.vpeq2t = Vitrina_pendientes(self, self.tabla_peq2tF, self.ver_dr, height=200, width=1270)
+
+class Pendientes_eq2_programaciones(funcionalidades_ospa):
     """"""
     #----------------------------------------------------------------------
     def __init__(self, *args, nuevo=True, lista=None, id_objeto = None):
@@ -2584,7 +2957,7 @@ class Pendientes_eq2_programaciones(Ventana):
             self.cod_doc_peq2pr = id_objeto
 
         # Generamos el dataframe a filtrar
-        self.tabla_inicial0 = b_de.generar_dataframe()
+        self.tabla_inicial0 = b_de_tabla
         self.tabla_inicial1 = self.tabla_inicial0[self.tabla_inicial0['CATEGORIA']=='Programación'] 
         self.tabla_peq2pr = self.tabla_inicial1.rename(columns={'COD_DE':'DOC EMITIDO','FECHA_PROYECTO_FINAL':'FECHA ACCION','FECHA_FIRMA':'FECHA PROGRAMACION','TIPO_DOC':'TIPO DOC','ESTADO_DOCE':'ESTADO','DOCUMENTO_ELABORADO':'¿SE EJECUTO?'})
         self.tabla_peq2prF = self.tabla_peq2pr.loc[0:99, ['DESTINATARIO','FECHA ACCION','FECHA PROGRAMACION','ESPECIALISTA','ESTADO','¿SE EJECUTO?']]
@@ -2623,8 +2996,9 @@ class Pendientes_eq2_programaciones(Ventana):
         self.rejilla_peq2pr2 = (
             ('B', 5, 4, 'Buscar', self.Buscar_peq2pr),
             ('B', 5, 5, 'Limpiar', self.limpiar_peq2pr),
-            ('B', 5, 6, 'Volver', self.volver_peq2pr),
-            ('B', 5, 7, 'Inicio', self.inicio_app)
+            ('B', 5, 6, 'Actualizar', self.actualizar),
+            ('B', 5, 7, 'Volver', self.volver),
+            ('B', 5, 8, 'Inicio', self.inicio_app)
         )
         
         # Agregando rejilla de botones a la ventana
@@ -2634,16 +3008,7 @@ class Pendientes_eq2_programaciones(Ventana):
         self.frame_vitrina_peq2pr = Cuadro(self)
 
         # Creando vitrina 
-        self.vpeq2pr = Vitrina_pendientes_jefe_firma(self, self.tabla_peq2prF, self.ver_peq2pr, 
-                                   self.funcion_de_asociar_peq2pr, height=200, width=1250)
-    
-    #----------------------------------------------------------------------
-
-    def inicio_app(self):
-        """"""
-        self.desaparecer()
-        # LargoxAncho
-        subFrame = menus.inicio_app_OSPA(self, 400, 400, "Inicio")
+        self.vpeq2pr = Vitrina_pendientes(self, self.tabla_peq2prF, self.ver_de, height=200, width=900)
 
     #----------------------------------------------------------------------
 
@@ -2703,8 +3068,7 @@ class Pendientes_eq2_programaciones(Ventana):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_peq2pr.eliminar_cuadro()
             self.frame_vitrina_peq2pr = Cuadro(self)
-            self.vpeq2pr = Vitrina_pendientes_jefe_firma(self, tabla_filtro3, self.ver_peq2pr, 
-                                   self.funcion_de_asociar_peq2pr, height=200, width=1090)
+            self.vpeq2pr = Vitrina_pendientes(self, tabla_filtro3, self.ver_de, height=200, width=900)
         else:
             self.frame_vitrina_peq2pr.eliminar_cuadro()
             self.frame_vitrina_peq2pr = Cuadro(self)
@@ -2725,30 +3089,50 @@ class Pendientes_eq2_programaciones(Ventana):
         self.peq2pr15.agregar_rejilla(self.rejilla_peq2pr2)
         self.frame_vitrina_peq2pr = Cuadro(self)
         # Creando vitrina
-        self.vpeq2pr = Vitrina_pendientes_jefe_firma(self, self.tabla_peq2prF, self.ver_peq2pr, 
-                                   self.funcion_de_asociar_peq2pr, height=200, width=1250)
+        self.vpeq2pr = Vitrina_pendientes(self, self.tabla_peq2prF, self.ver_de, height=200, width=900)
 
-    #----------------------------------------------------------------------
+        #----------------------------------------------------------------------
+    def actualizar(self):
+        
+        # Eliminando campos
+        self.peq2pr1.eliminar_cuadro()
+        self.vpeq2pr.Eliminar_vitrina()
+        self.peq2pr15.eliminar_cuadro()
+        self.frame_vitrina_peq2pr.eliminar_cuadro()
+        # Actualizando data
+        b_de = variables_globales.b_de
+        b_de_tabla = b_de.generar_dataframe()
+        
+        # Generamos el dataframe a filtrar 
+        self.tabla_inicial0 = b_de_tabla
+        self.tabla_inicial1 = self.tabla_inicial0[self.tabla_inicial0['CATEGORIA']=='Programación'] 
+        self.tabla_peq2pr = self.tabla_inicial1.rename(columns={'COD_DE':'DOC EMITIDO','FECHA_PROYECTO_FINAL':'FECHA ACCION','FECHA_FIRMA':'FECHA PROGRAMACION','TIPO_DOC':'TIPO DOC','ESTADO_DOCE':'ESTADO','DOCUMENTO_ELABORADO':'¿SE EJECUTO?'})
+        self.tabla_peq2prF = self.tabla_peq2pr.loc[0:99, ['DESTINATARIO','FECHA ACCION','FECHA PROGRAMACION','ESPECIALISTA','ESTADO','¿SE EJECUTO?']]
+ 
+        # Información para las listas desplegables
+        self.peq2prremitente = list(set(self.tabla_peq2pr['DESTINATARIO']))
+        self.peq2prespecialista = list(set(self.tabla_peq2pr['ESPECIALISTA']))
+        self.peq2prestado = list(set(self.tabla_peq2pr['ESTADO']))
 
-    def volver_peq2pr(self):
-        """"""
-        self.desaparecer()
-        self.ventana_anterior.aparecer()
+        self.rejilla_peq2pr = (
 
-    #----------------------------------------------------------------------
-    def ver_peq2pr(self, x):
-        """"""
-        self.x = x
-        texto_documento = 'Documento emitido: ' + x
+            ('L', 0, 0, 'Remitente'),
+            ('CXE', 0, 1, 39, self.peq2prremitente, '', 'normal'),
 
-        lb1 = b_de.listar_datos_de_fila(self.x)
-        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6]]
-        self.desaparecer()
-        subframe = ventanas_vista.Doc_emitidos_vista(self, 650, 1150, texto_documento, 
-                                                nuevo=False, lista=lista_para_insertar, id_objeto=x)
+            ('L', 1, 0, 'Especialista'),
+            ('CXP', 1, 1, 39, self.peq2prespecialista, '', 'readonly'),
 
-    #----------------------------------------------------------------------
-    def funcion_de_asociar_peq2pr(self, x):
-        """"""
-        print('hola')
+            ('L', 0, 2, 'Estado'),
+            ('CXP', 0, 3, 39, self.peq2prestado, '', 'readonly')
+
+        )
+        
+        # Agregando rejilla a la ventana
+        self.peq2pr1 = Cuadro(self)
+        self.peq2pr1.agregar_rejilla(self.rejilla_peq2pr)
+        self.peq2pr15 = Cuadro(self)
+        self.peq2pr15.agregar_rejilla(self.rejilla_peq2pr2)
+        self.frame_vitrina_peq2pr = Cuadro(self)
+        # Creando vitrina
+        self.vpeq2pr = Vitrina_pendientes(self, self.tabla_peq2prF, self.ver_de, height=200, width=900)
 

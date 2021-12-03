@@ -1,6 +1,6 @@
 from tkinter import  messagebox
 
-from apoyo.elementos_de_GUI import  Ventana, Vitrina_vista
+from apoyo.elementos_de_GUI import  Ventana, Vitrina_vista, Vitrina_pendientes
 from modulos import menus, ventanas_busqueda, ventanas_vista, variables_globales
 
 import datetime as dt
@@ -365,7 +365,7 @@ class funcionalidades_ospa(Ventana):
         lista_para_insertar = [lb1[2],lb1[3], lb1[4]]
 
         self.desaparecer()
-        subframe = ventanas_vista.Extremo_problemas_vista(self, 650, 1150, texto_documento, nuevo=False, 
+        subframe = ventanas_vista.Macroproblemas_vista(self, 650, 1150, texto_documento, nuevo=False, 
                                         lista=lista_para_insertar, id_objeto = id_usuario)
     
     #----------------------------------------------------------------------

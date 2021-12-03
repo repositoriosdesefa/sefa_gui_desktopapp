@@ -364,7 +364,7 @@ class Cuadro(Frame):
         self.lista_de_objetos.append((self.boton))
 
     #----------------------------------------------------------------------
-    def agregar_boton_grande(self, y, x, texto, funcion, ancho, largo):
+    def agregar_boton_grande(self, y, x, texto, funcion, ancho):
         """Método de la clase Cuadro. \n
         Permite agregar un botón al Frame creado con la Clase Cuadro."""
 
@@ -397,8 +397,7 @@ class Cuadro(Frame):
                         bg = formato.boton_sin_que_pase_cursor,
                         relief="flat",
                         cursor="hand2",
-                        width = ancho,
-                        height = largo
+                        width = ancho
                         )
         self.boton.grid(row= self.y, column=self.x, pady=4, padx=8)
         Efecto_de_boton(self.boton)
@@ -876,6 +875,10 @@ class Cuadro(Frame):
             elif row[0] == 'BL':
 
                 self.agregar_button_label(row[1], row[2], row[3], row[4])
+            
+            elif row[0] == 'BG':
+
+                self.agregar_boton_grande(row[1], row[2], row[3], row[4], row[5])
 
             elif row[0] == 'I':
                 
@@ -2015,17 +2018,16 @@ class Hovertip_Sefa(Hovertip):
 
 # X. Vitrina pendientes jefe
 
-class Vitrina_pendientes_jefe_firma(Frame):
+class Vitrina_pendientes(Frame):
     """"""
 
     #----------------------------------------------------------------------
-    def __init__(self, window, tabla, funcion1, funcion2, height=100, width=1600):
+    def __init__(self, window, tabla, funcion1, height=100, width=1600):
         """Constructor"""
 
         self.window = window
         self.tabla = tabla
         self.funcion1 = funcion1
-        self.funcion2 = funcion2
         #self.funcion3 = funcion3
         self.height = height
         self.width = width
