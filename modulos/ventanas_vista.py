@@ -4,51 +4,52 @@ from tkinter import *
 from tkinter import messagebox
 from tkinter.constants import TRUE
 
-from modulos import ventanas_busqueda, variables_globales
+from modulos import ventanas_busqueda
+from modulos import variables_globales as vg
 from modulos.funcionalidades_ospa import funcionalidades_ospa
 from apoyo.elementos_de_GUI import Cuadro, Ventana
 
 # 1. Bases
-b_dr = variables_globales.b_dr
-b_dr_cod = variables_globales.b_dr_cod
-b_dr_hist = variables_globales.b_dr_hist
-b_de = variables_globales.b_de
-b_de_cod = variables_globales.b_de_cod
-b_de_hist = variables_globales.b_de_hist
-b_ep = variables_globales.b_ep
-b_ep_cod = variables_globales.b_ep_cod
-b_ep_hist = variables_globales.b_ep_hist
-b_mp = variables_globales.b_mp
-b_mp_cod = variables_globales.b_mp_cod
-b_mp_hist = variables_globales.b_mp_hist
+b_dr = vg.b_dr
+b_dr_cod = vg.b_dr_cod
+b_dr_hist = vg.b_dr_hist
+b_de = vg.b_de
+b_de_cod = vg.b_de_cod
+b_de_hist = vg.b_de_hist
+b_ep = vg.b_ep
+b_ep_cod = vg.b_ep_cod
+b_ep_hist = vg.b_ep_hist
+b_mp = vg.b_mp
+b_mp_cod = vg.b_mp_cod
+b_mp_hist = vg.b_mp_hist
 
-base_relacion_docs = variables_globales.base_relacion_docs
-base_relacion_dr_ep = variables_globales.base_relacion_dr_ep
-base_relacion_de_ep = variables_globales.base_relacion_de_ep
-base_relacion_mp_ep = variables_globales.base_relacion_mp_ep
+base_relacion_docs = vg.base_relacion_docs
+base_relacion_dr_ep = vg.base_relacion_dr_ep
+base_relacion_de_ep = vg.base_relacion_de_ep
+base_relacion_mp_ep = vg.base_relacion_mp_ep
 
-base_relacion_docs_hist = variables_globales.base_relacion_docs_hist
-base_relacion_dr_ep_hist = variables_globales.base_relacion_dr_ep_hist
-base_relacion_de_ep_hist = variables_globales.base_relacion_de_ep_hist
-base_relacion_mp_ep_hist = variables_globales.base_relacion_mp_ep_hist
+base_relacion_docs_hist = vg.base_relacion_docs_hist
+base_relacion_dr_ep_hist = vg.base_relacion_dr_ep_hist
+base_relacion_de_ep_hist = vg.base_relacion_de_ep_hist
+base_relacion_mp_ep_hist = vg.base_relacion_mp_ep_hist
 
 # 2. Tablas
-tabla_directorio = variables_globales.tabla_directorio
-tabla_directorio_efa = variables_globales.tabla_directorio_efa_final
-tabla_lista_efa = variables_globales.tabla_lista_efa
+tabla_directorio = vg.tabla_directorio
+tabla_directorio_efa = vg.tabla_directorio_efa_final
+tabla_lista_efa = vg.tabla_lista_efa
 
 # 3. Listas dependientes
 # 21. Lista de EFA
-lista_efa_dependiente = variables_globales.lista_efa_dependiente
+lista_efa_dependiente = vg.lista_efa_dependiente
 lista_efa_ospa = sorted(list(lista_efa_dependiente['EFA_OSPA'].unique()))
 # 3.2 Ubigeo
-tabla_departamento_efa = variables_globales.tabla_departamento_efa
-departamento_ospa = variables_globales.departamento_ospa
+tabla_departamento_efa = vg.tabla_departamento_efa
+departamento_ospa = vg.departamento_ospa
 
 # 4. Parámetros
 # 4.1 Bases de datos
-tabla_parametros = variables_globales.tabla_parametros
-tabla_parametros_act = variables_globales.tabla_parametros_act
+tabla_parametros = vg.tabla_parametros
+tabla_parametros_act = vg.tabla_parametros_act
 # 4.2 Desplegables en Drive
 agente_conta = list(set(tabla_parametros['AGENTE CALCULADORA']))
 componente_amb = list(set(tabla_parametros['COMPONENTE CALCULADORA']))
@@ -80,26 +81,26 @@ marco_pedido = ('EFA', 'OEFA',
 
 # 5. Tablas resumen
 # 5.0 Relaciones
-tabla_relacion_dr_de = variables_globales.tabla_relacion_dr_de
-tabla_relacion_dr_ep = variables_globales.tabla_relacion_dr_ep
-tabla_relacion_de_ep = variables_globales.tabla_relacion_de_ep
-tabla_relacion_mp_ep = variables_globales.tabla_relacion_mp_ep
+tabla_relacion_dr_de = vg.tabla_relacion_dr_de
+tabla_relacion_dr_ep = vg.tabla_relacion_dr_ep
+tabla_relacion_de_ep = vg.tabla_relacion_de_ep
+tabla_relacion_mp_ep = vg.tabla_relacion_mp_ep
 # 5.1 Documentos recibidos
-tabla_de_dr_cod = variables_globales.tabla_de_dr_cod
-tabla_de_dr_completa = variables_globales.tabla_de_dr_completa
-tabla_de_dr_resumen = variables_globales.tabla_de_dr_resumen
+tabla_de_dr_cod = vg.tabla_de_dr_cod
+tabla_de_dr_completa = vg.tabla_de_dr_completa
+tabla_de_dr_resumen = vg.tabla_de_dr_resumen
 # 5.2 Documentos emitidos
-tabla_de_de_cod = variables_globales.tabla_de_de_cod
-tabla_de_de_completa = variables_globales.tabla_de_de_completa
-tabla_de_de_resumen = variables_globales.tabla_de_de_resumen
+tabla_de_de_cod = vg.tabla_de_de_cod
+tabla_de_de_completa = vg.tabla_de_de_completa
+tabla_de_de_resumen = vg.tabla_de_de_resumen
 # 5.3 Extremos de problema
-tabla_de_ep_cod = variables_globales.tabla_de_ep_completa
-tabla_de_ep_completa = variables_globales.tabla_de_ep_completa
-tabla_de_ep_resumen = variables_globales.tabla_de_ep_resumen
+tabla_de_ep_cod = vg.tabla_de_ep_completa
+tabla_de_ep_completa = vg.tabla_de_ep_completa
+tabla_de_ep_resumen = vg.tabla_de_ep_resumen
 # 5.4 Macroproblemas
-tabla_de_mp_cod = variables_globales.tabla_de_mp_completa
-tabla_de_mp_completa = variables_globales.tabla_de_mp_completa
-tabla_de_mp_resumen = variables_globales.tabla_de_mp_resumen
+tabla_de_mp_cod = vg.tabla_de_mp_completa
+tabla_de_mp_completa = vg.tabla_de_mp_completa
+tabla_de_mp_resumen = vg.tabla_de_mp_resumen
     
 class Doc_recibidos_vista(funcionalidades_ospa):
     """"""
@@ -511,48 +512,47 @@ class Extremo_problemas_vista(funcionalidades_ospa):
                 ('L', 0, 0, 'Código de problema'),
                 ('L', 0, 1, str(self.cod_usuario_ep)),
 
-                ('L', 0, 2, 'Componente ambiental'),
-                ('CXP', 0, 3, 27, componente_amb, '', "readonly"),
+                ('L', 0, 2, 'Código SINADA'),
+                ('EL', 0, 3, 35, 1),
 
-                ('L', 0, 4, 'Tipo de afectación'),
-                ('CXP', 0, 5, 27, tipo_afectacion, '', "readonly"),
+                ('L', 0, 4, 'Estado'),
+                ('CXP', 0, 5, 32, estado_problemas, '', "readonly"),
 
                 ('L', 1, 0, 'Departamento'),
-                ('CXDEP3', 1, 1, 27, tabla_lista_efa, "Triple",
+                ('CXDEP3', 1, 1, 32, tabla_lista_efa, "Triple", 
                 'DEPARTAMENTO ', 'Provincia', 'PROVINCIA ', 'Distrito', 'DISTRITO '),
 
-                ('L', 2, 0, 'Tipo de causa'),
-                ('CXP', 2, 1, 27, tipo_causa, '', "readonly"),
+                ('L', 2, 0, 'Tipo de ubicación'),
+                ('CXP', 2, 1, 32, ubicacion, '', "readonly"),
 
-                ('L', 2, 2, 'Agente contaminante'),
-                ('CXP', 2, 3, 27, agente_conta, '', "readonly"),
+                ('L', 2, 2, 'Extensión'),
+                ('CXP', 2, 3, 32, extension, '', "readonly"),
 
-                ('L', 2, 4, 'Descripción'),
-                ('STP', 2, 5, 28, 2),
+                ('L', 2, 4, 'Ocurrencia'),
+                ('CXP', 2, 5, 32, ocurrencia, '', "readonly"),
 
-                ('L', 3, 0, 'Tipo de ubicación'),
-                ('CXP', 3, 1, 27, ubicacion, '', "readonly"),
+                ('L', 3, 0, 'Tipo de afectación'),
+                ('CXP', 3, 1, 32, tipo_afectacion, '', "readonly"),
+                
+                ('L', 3, 2, 'Agente contaminante'),
+                ('CXP', 3, 3, 32, agente_conta, '', "readonly"),
 
-                ('L', 3, 2, 'Extensión'),
-                ('CXP', 3, 3, 27, extension, '', "readonly"),
+                ('L', 3, 4, 'Descripción'),
+                ('STP', 3, 5, 33, 2),
 
-                ('L', 4, 0, 'Ocurrencia'),
-                ('CXP', 4, 1, 27, ocurrencia, '', "readonly"),
+                ('L', 4, 0, 'Tipo de causa'),
+                ('CXP', 4, 1, 32, tipo_causa, '', "readonly"),
 
-                ('L', 4, 2, 'Código SINADA'),
-                ('EL', 4, 3, 30, 1),
+                ('L', 4, 2, 'Componente ambiental'),
+                ('CXP', 4, 3, 32, componente_amb, '', "readonly"),
+                
+                ('L', 5, 0, 'Actividad'),
+                ('CXDEP3', 5, 1, 32, tabla_parametros_act, "Triple",
+                 'ACTIVIDAD', 'Característica 1', 'CARACTERÍSTICA 1', 'Característica 2', 'CARACTERÍSTICA 2'),
 
-                ('L', 4, 4, 'Estado'),
-                ('CXP', 4, 5, 27, estado_problemas, '', "readonly"),
-
-                ('L', 5, 0, 'Tipo de EFA'),
-                ('CXDEP3', 5, 1, 27, tabla_directorio, "Triple",
-                'Tipo de entidad u oficina', 'Categoría EFA', 'EFA_OSPA', 'EFA', 'Entidad u oficina'),
-
-                ('L', 6, 0, 'Actividad'),
-                ('CXDEP3', 6, 1, 27, tabla_parametros_act, "Triple",
-                 'ACTIVIDAD', 'Característica 1', 'CARACTERÍSTICA 1', 'Característica 2', 'CARACTERÍSTICA 2')
-
+                ('L', 6, 0, 'Tipo de EFA'),
+                ('CXDEP3', 6, 1, 32, tabla_directorio, "Triple",
+                'TIPO_OFICINA', 'Categoría EFA', 'EFA_OSPA', 'EFA', 'Entidad u oficina')
             ]
             # Se inserta rejilla con datos
             self.frame_rejilla.agregar_rejilla(rejilla_ep)
@@ -603,7 +603,6 @@ class Extremo_problemas_vista(funcionalidades_ospa):
                 ('L', 6, 0, 'Tipo de EFA'),
                 ('CXDEP3', 6, 1, 32, tabla_directorio, "Triple",
                 'TIPO_OFICINA', 'Categoría EFA', 'EFA_OSPA', 'EFA', 'Entidad u oficina')
-
             ]
             # Se inserta rejilla nueva
             self.frame_rejilla.agregar_rejilla(rejilla_ep_nuevo)
@@ -742,28 +741,43 @@ class Macroproblemas_vista(funcionalidades_ospa):
         titulos = Cuadro(self)
         titulos.agregar_encabezado('Detalle de macroproblema')
 
-        # I. Labels and Entries
-        rejilla_mp = [
-            ('L', 0, 0, 'Nombre del problema'),
-            ('EL', 0, 1, 112, 3),
-
-            ('L', 1, 0, 'Descripción'),
-            ('ST', 1, 1),
-
-            ('L', 2, 0, 'Observaciones'),
-            ('EL', 2, 1, 112, 3)
-
-        ]
-        
         # III.2 Frame de rejillas
         self.frame_rejilla = Cuadro(self)
-        self.frame_rejilla.agregar_rejilla(rejilla_mp)
         if self.nuevo == False: # Estamos en una ficha creada
-            self.tabla_de_mp_cod = b_mp_cod.generar_dataframe()
-            self.tabla_relacion_mp_ep = base_relacion_mp_ep.generar_dataframe()
+            self.tabla_de_ep_cod = b_ep_cod.generar_dataframe()
             self.cod_usuario_mp = id_objeto
             self.lista_para_insertar = lista
-            self.frame_rejilla.insertar_lista_de_datos(self.lista_para_insertar)
+            rejilla_mp = [
+
+                ('L', 0, 0, ''),
+                ('L', 0, 1, ''),
+
+                ('L', 0, 0, 'Nombre del problema'),
+                ('EL', 0, 1, 112, 3),
+
+                ('L', 1, 0, 'Descripción'),
+                ('ST', 1, 1),
+
+                ('L', 2, 0, 'Observaciones'),
+                ('EL', 2, 1, 112, 3)
+
+            ]
+        else:
+            rejilla_mp_nuevo = [
+                ('L', 0, 0, ''),
+                ('L', 0, 1, str(self.cod_usuario_mp)),
+
+                ('L', 0, 0, 'Nombre del problema'),
+                ('EL', 0, 1, 112, 3),
+
+                ('L', 1, 0, 'Descripción'),
+                ('ST', 1, 1),
+
+                ('L', 2, 0, 'Observaciones'),
+                ('EL', 2, 1, 112, 3)
+            ]
+            # Se inserta rejilla nueva
+            self.frame_rejilla.agregar_rejilla(rejilla_mp_nuevo)
 
         # III.3 Frame de botón de rejilla
         f_boton = Cuadro(self)

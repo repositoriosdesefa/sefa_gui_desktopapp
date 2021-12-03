@@ -3,45 +3,45 @@ import datetime as dt
 import pandas as pd
 from apoyo.elementos_de_GUI import Cuadro, Ventana, Vitrina_busqueda, Vitrina_busquedaep, Vitrina_pendientes
 from apoyo.manejo_de_bases import Base_de_datos
-from modulos import ventanas_vista, variables_globales, menus
+from modulos import ventanas_vista, menus
+from modulos import variables_globales as vg
 from modulos.funcionalidades_ospa import funcionalidades_ospa
-
 
 
 id_b_ospa = '13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4'
 
 # 1. Bases
-b_dr = variables_globales.b_dr
+b_dr = vg.b_dr
 b_dr_tabla = b_dr.generar_dataframe()
-b_dr_cod = variables_globales.b_dr_cod
-b_dr_hist = variables_globales.b_dr_hist
-b_de = variables_globales.b_de
+b_dr_cod = vg.b_dr_cod
+b_dr_hist = vg.b_dr_hist
+b_de = vg.b_de
 b_de_tabla = b_de.generar_dataframe()
-b_de_cod = variables_globales.b_de_cod
-b_de_hist = variables_globales.b_de_hist
-b_ep = variables_globales.b_ep
+b_de_cod = vg.b_de_cod
+b_de_hist = vg.b_de_hist
+b_ep = vg.b_ep
 b_ep_tabla = b_ep.generar_dataframe()
-b_ep_cod = variables_globales.b_ep_cod
-b_ep_hist = variables_globales.b_ep_hist
-b_mp = variables_globales.b_mp
+b_ep_cod = vg.b_ep_cod
+b_ep_hist = vg.b_ep_hist
+b_mp = vg.b_mp
 b_mp_tabla = b_mp.generar_dataframe()
-b_mp_cod = variables_globales.b_mp_cod
-b_mp_hist = variables_globales.b_mp_hist
-b_adm = variables_globales.b_adm
+b_mp_cod = vg.b_mp_cod
+b_mp_hist = vg.b_mp_hist
+b_adm = vg.b_adm
 b_adm_tabla = b_adm.generar_dataframe()
-tabla_lista_efa = variables_globales.tabla_lista_efa
+tabla_lista_efa = vg.tabla_lista_efa
 
 
 # 2. Tablas relacionales
-base_relacion_docs = variables_globales.base_relacion_docs
-base_relacion_d_hist = variables_globales.base_relacion_docs_hist
-base_relacion_dr_ep =  variables_globales.base_relacion_dr_ep
-base_relacion_dr_ep_hist =  variables_globales.base_relacion_dr_ep_hist
-base_relacion_de_ep =  variables_globales.base_relacion_de_ep
-base_relacion_de_ep_hist =  variables_globales.base_relacion_de_ep_hist
-b_relacion_mp_ep =  variables_globales.base_relacion_mp_ep
+base_relacion_docs = vg.base_relacion_docs
+base_relacion_d_hist = vg.base_relacion_docs_hist
+base_relacion_dr_ep =  vg.base_relacion_dr_ep
+base_relacion_dr_ep_hist =  vg.base_relacion_dr_ep_hist
+base_relacion_de_ep =  vg.base_relacion_de_ep
+base_relacion_de_ep_hist =  vg.base_relacion_de_ep_hist
+b_relacion_mp_ep =  vg.base_relacion_mp_ep
 b_relacion_mp_ep_tabla = b_relacion_mp_ep.generar_dataframe()
-base_relacion_mp_ep_hist =  variables_globales.base_relacion_mp_ep_hist
+base_relacion_mp_ep_hist =  vg.base_relacion_mp_ep_hist
 
 
 
@@ -124,7 +124,7 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
         self.c15.eliminar_cuadro()
         self.frame_vitrina_dr.eliminar_cuadro()
         # Actualizando data
-        b_dr = variables_globales.b_dr
+        b_dr = vg.b_dr
         b_dr_tabla = b_dr.generar_dataframe()
         
         # Generamos el dataframe a filtrar 
@@ -449,7 +449,7 @@ class Doc_emitidos_busqueda(funcionalidades_ospa):
         self.cde15.eliminar_cuadro()
         self.frame_vitrina_1.eliminar_cuadro()
         # Actualizando data
-        b_de = variables_globales.b_de
+        b_de = vg.b_de
         b_de_tabla = b_de.generar_dataframe()
         
         # Generamos el dataframe a filtrar 
@@ -958,7 +958,7 @@ class Extremos(funcionalidades_ospa):
         self.ep2.eliminar_cuadro()
         self.frame_vitrina_ep.eliminar_cuadro()
         # Actualizando data
-        b_ep = variables_globales.b_ep
+        b_ep = vg.b_ep
         b_ep_tabla = b_ep.generar_dataframe()
         
         # Generamos el dataframe a filtrar 
@@ -1307,7 +1307,7 @@ class Macroproblemas(funcionalidades_ospa):
         self.mc2.eliminar_cuadro()
         self.frame_vitrina_mp.eliminar_cuadro()
         # Actualizando data
-        b_mp = variables_globales.b_mp
+        b_mp = vg.b_mp
         b_mp_tabla = b_mp.generar_dataframe()
         
         # Generamos el dataframe a filtrar 
@@ -1520,7 +1520,7 @@ class Macroproblemas_filtrada(funcionalidades_ospa):
         self.mc2.eliminar_cuadro()
         self.frame_vitrina_mp.eliminar_cuadro()
         # Actualizando data
-        b_mp = variables_globales.b_mp
+        b_mp = vg.b_mp
         b_mp_tabla = b_mp.generar_dataframe()
         
         # Generamos el dataframe a filtrar 
@@ -1717,7 +1717,7 @@ class Administrados(funcionalidades_ospa):
         self.ad2.eliminar_cuadro()
         self.frame_vitrina_ad.eliminar_cuadro()
         # Actualizando data
-        b_adm = variables_globales.b_adm
+        b_adm = vg.b_adm
         b_adm_tabla = b_adm.generar_dataframe()
         
         # Generamos el dataframe a filtrar 
@@ -1971,7 +1971,7 @@ class Pendientes_jefe_firma(funcionalidades_ospa):
         self.pfirma15.eliminar_cuadro()
         self.frame_vitrina_pfirma.eliminar_cuadro()
         # Actualizando data
-        b_de = variables_globales.b_de
+        b_de = vg.b_de
         b_de_tabla = b_de.generar_dataframe()
         
         # Generamos el dataframe a filtrar 
@@ -2194,7 +2194,7 @@ class Pendientes_jefe_asignar(funcionalidades_ospa):
         self.jpa15.eliminar_cuadro()
         self.frame_vitrina_jpa.eliminar_cuadro()
         # Actualizando data
-        b_dr = variables_globales.b_dr
+        b_dr = vg.b_dr
         b_dr_tabla = b_dr.generar_dataframe()
         
         # Generamos el dataframe a filtrar 
@@ -2421,7 +2421,7 @@ class Pendientes_por_reiterar(funcionalidades_ospa):
         self.ppr15.eliminar_cuadro()
         self.frame_vitrina_ppr.eliminar_cuadro()
         # Actualizando data
-        b_de = variables_globales.b_de
+        b_de = vg.b_de
         b_de_tabla = b_de.generar_dataframe()
         
         # Generamos el dataframe a filtrar 
@@ -2638,7 +2638,7 @@ class Pendientes_eq1_trabajar(funcionalidades_ospa):
         self.peq1t15.eliminar_cuadro()
         self.frame_vitrina_peq1t.eliminar_cuadro()
         # Actualizando data
-        b_dr = variables_globales.b_dr
+        b_dr = vg.b_dr
         b_dr_tabla = b_dr.generar_dataframe()
         
         # Generamos el dataframe a filtrar 
@@ -2857,7 +2857,7 @@ class Pendientes_eq2_calificarrpta(funcionalidades_ospa):
         self.peq2t15.eliminar_cuadro()
         self.frame_vitrina_peq2t.eliminar_cuadro()
         # Actualizando data
-        b_dr = variables_globales.b_dr
+        b_dr = vg.b_dr
         b_dr_tabla = b_dr.generar_dataframe()
         
         # Generamos el dataframe a filtrar 
@@ -3058,7 +3058,7 @@ class Pendientes_eq2_programaciones(funcionalidades_ospa):
         self.peq2pr15.eliminar_cuadro()
         self.frame_vitrina_peq2pr.eliminar_cuadro()
         # Actualizando data
-        b_de = variables_globales.b_de
+        b_de = vg.b_de
         b_de_tabla = b_de.generar_dataframe()
         
         # Generamos el dataframe a filtrar 
