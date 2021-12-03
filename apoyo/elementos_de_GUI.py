@@ -675,7 +675,7 @@ class Cuadro(Frame):
         self.lista_de_datos[posicion_valor] = self.combo
 
     #----------------------------------------------------------------------
-    def agregar_combobox_dependiente_3(self, y, x, ancho, tabla, 
+    def agregar_combobox_dependiente_3(self, y, x, ancho, tabla, disposicion_columna,
                                         columna_1, etiqueta_2, columna_2, etiqueta_3, columna_3):
         """Método de la clase Cuadro. \n
         Permite agregar una lista desplegable al Frame creado con la Clase Cuadro."""
@@ -688,8 +688,12 @@ class Cuadro(Frame):
         self.y_2 = y
         self.x_2 = int(x + 2)
 
-        self.y_3 = y
-        self.x_3 = int(x + 4)
+        if disposicion_columna == 'Doble':
+            self.y_3 = int(y + 1)
+            self.x_3 = int(x)
+        else:
+            self.y_3 = y
+            self.x_3 = int(x + 4)
 
         tabla_dependiente = tabla
         lista_inicial =  list(set(tabla[columna_1]))
@@ -717,7 +721,11 @@ class Cuadro(Frame):
         self.lista_de_objetos.append((combo_1))
         self.agregar_label(y, int(x+1), etiqueta_2)
         self.lista_de_objetos.append((combo_2))
-        self.agregar_label(y, int(x+3), etiqueta_3)
+        if disposicion_columna == 'Doble':
+            self.agregar_label(int(y+1), int(x-1), etiqueta_3)
+        else:
+            self.agregar_label(y, int(x+3), etiqueta_3)
+        
         self.lista_de_objetos.append((combo_3))
 
         self.lista_de_datos.append((combo_1))
@@ -949,7 +957,7 @@ class Cuadro(Frame):
                 
                 # En este caso row[3] debe ser una lista:
 
-                self.agregar_combobox_dependiente_3(row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9])
+                self.agregar_combobox_dependiente_3(row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10])
             
 
             elif row[0] == "SB":

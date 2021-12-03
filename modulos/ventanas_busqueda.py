@@ -271,6 +271,20 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
             subframe = ventanas_vista.Doc_emitidos_vista(self, 650, 1150, 
                                                 nuevo=False, lista=lista_para_insertar, id_objeto=codigode)
         # volver y actualizar
+        
+    #----------------------------------------------------------------------
+    def ver_dr(self, x):
+        """"""
+        self.x = x
+        texto_documento = 'Documento recibido: ' + x
+
+        lb1 = b_dr.listar_datos_de_fila(self.x)
+        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], lb1[9], lb1[10],
+                                 lb1[11], lb1[12], lb1[13], lb1[14], lb1[15], lb1[16], lb1[17], lb1[18]]
+        
+        self.desaparecer()
+        subframe = ventanas_vista.Doc_recibidos_vista(self, 650, 1150, texto_documento, nuevo=False, 
+                                                lista=lista_para_insertar, id_objeto = x)
 
     #----------------------------------------------------------------------
     def asociar_dr_de(self, x):
@@ -636,6 +650,19 @@ class Doc_emitidos_busqueda(funcionalidades_ospa):
             self.desaparecer()
             subframe = ventanas_vista.Doc_emitidos_vista(self, 650, 1150, 
                                                 nuevo=False, lista=lista_para_insertar, id_objeto=codigodr)
+
+    #----------------------------------------------------------------------
+    def ver_dr(self, id_usuario):
+        """"""
+        texto_documento = 'Documento recibido: ' + id_usuario
+
+        lb1 = b_dr.listar_datos_de_fila(id_usuario)
+        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], lb1[9], lb1[10],
+                                lb1[11], lb1[12], lb1[13], lb1[14], lb1[15], lb1[16], lb1[17], lb1[18]]
+        
+        self.desaparecer()
+        subframe = ventanas_vista.Doc_recibidos_vista(self, 650, 1150, texto_documento, nuevo=False, 
+                                        lista=lista_para_insertar, id_objeto = id_usuario)
 
     #----------------------------------------------------------------------
     def asociar_de_dr(self, x):
@@ -2074,11 +2101,12 @@ class Pendientes_jefe_asignar(funcionalidades_ospa):
         self.nuevo = nuevo
         if self.nuevo != True: #en caso exista
             self.id_usuario = lista
-            self.id_objeto_ingresado = id_objeto
-        
-        # Generamos el dataframe a filtrar 
-        self.tabla_inicial0 = b_dr_tabla
-        self.tabla_inicial2 = self.tabla_inicial0.query("ESPECIALISTA=='' or ESPECIALISTA==' '")
+            self.cod_doc_jpa = id_objeto
+
+        # Generamos el dataframe a filtrar
+        self.tabla_inicial0 = b_dr.generar_dataframe()
+        #self.tabla_inicial1 = self.tabla_inicial0[self.tabla_inicial0['TIPO_RESPUESTA']!='Si']
+        self.tabla_inicial2 = self.tabla_inicial0.query("ESPECIALISTA_1=='' or ESPECIALISTA_1==' '")
         self.tabla_jpa = self.tabla_inicial2.rename(columns={'COD_DR':'NRO DOCUMENTO','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_ENTRANTE':'HT INGRESO'})
         self.tabla_jpaF = self.tabla_jpa.loc[0:99, ['NRO DOCUMENTO','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','ASUNTO']]
 

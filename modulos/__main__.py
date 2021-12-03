@@ -1,8 +1,7 @@
 from tkinter import Tk
 
-#from modulos import logueo
-
-from modulos.menus import  inicio_app_OSPA
+from modulos import logueo
+from modulos.administracion import Pantalla_de_usuario
 
 
 ########################################################################
@@ -16,9 +15,9 @@ class Aplicacion(object):
         self.root = parent
         self.root.withdraw()
 
-        #subFrame = logueo.logueo1_Ingreso_de_usuario(self, 450, 400, "Herramientas de Sefa - Versión 0.0")
+        subFrame = logueo.logueo1_Ingreso_de_usuario(self, 400, 400, "ASPA - Versión 0.0")
 
-        subFrame = inicio_app_OSPA(self, 400, 400, "Inicio")
+        #subFrame = inicio_app_OSPA(self, 400, 400, "Inicio")
         
         # LargoxAncho
         # subFrame = vista_dr.Doc_recibidos_vista(self,650, 1100,'Documentos recibidos')
