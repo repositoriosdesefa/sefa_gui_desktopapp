@@ -3,16 +3,13 @@ import pandas as pd
 
 from tkinter import Tk, Frame, messagebox
 
-
 from random import choice
-
-
 
 from apoyo.elementos_de_GUI import Cuadro, Ventana, Vitrina
 from apoyo.manejo_de_bases import Base_de_datos, Correo_electronico
-from modulos.ventanas_vista import Doc_recibidos_vista
-
 import apoyo.datos_frecuentes as dfrec
+
+from modulos.ventanas_vista import Doc_recibidos_vista
 from modulos import logueo
 
 class Ingresar_contrasena_de_adminitrador(Ventana):
@@ -96,21 +93,18 @@ class Administrar_usuarios(Ventana):
     #----------------------------------------------------------------------
     def ir_a_crear_usuario(self):
         """"""
-        
         self.desaparecer()
         subframe = Pantalla_de_usuario(self, 500, 400, 'Nuevo usuario')
     
     #----------------------------------------------------------------------
     def ir_a_usuarios_eliminados(self):
         """"""
-
         self.desaparecer()
         subframe = Administar_eliminados(self, 500, 800, 'Usuarios eliminados')
 
     #----------------------------------------------------------------------
     def ver_usuario(self, x):
-        """"""
-        
+        """"""    
         self.x = x
         texto_usuario = 'Usuario: ' + x
 
@@ -171,7 +165,6 @@ class Administrar_usuarios(Ventana):
     #----------------------------------------------------------------------
     def actualizar_vitrina(self):
         """"""
-
         self.f2.destroy()
         self.f2 = Frame(self.f1)
         self.f2.pack()
@@ -180,9 +173,8 @@ class Administrar_usuarios(Ventana):
     #----------------------------------------------------------------------
     def volver_a_logueo(self):
         """"""
-
         self.destruir()
-        subFrame = logueo.logueo1_Ingreso_de_usuario(self, 450, 400, "Herramientas de Sefa - Versión 0.0")
+        subFrame = logueo.logueo1_Ingreso_de_usuario(self, 450, 400, "ASPA - Versión 0.0")
 
 class Pantalla_de_usuario(Ventana):
     """"""
@@ -255,11 +247,9 @@ class Pantalla_de_usuario(Ventana):
         else:
 
             # Pestaña 1
-
             self.b1.agregar_datos_generando_codigo(correo)
 
             # Pestaña 2
-
             lista_descargada_codigo = self.b1.listar_datos_de_fila(correo)
             codigo = lista_descargada_codigo[0]
             hora_de_creacion = lista_descargada_codigo[1]
@@ -267,7 +257,6 @@ class Pantalla_de_usuario(Ventana):
             self.b2.agregar_datos(lista_a_cargar_p2)
 
             # Pestaña 3
-
             lista_a_cargar_p3 = lista_a_cargar_p2 + [hora_de_creacion]
             self.b3.agregar_datos(lista_a_cargar_p3)
 
@@ -293,7 +282,6 @@ class Pantalla_de_usuario(Ventana):
         contrasenna = lista_descargada_p2[6]
 
         # Comprobar email
-
         if correo == ultimo_correo:
             valor_de_comprobacion = False
             
@@ -307,16 +295,13 @@ class Pantalla_de_usuario(Ventana):
         else:
 
             # Pestaña 1
-
             self.b1.cambiar_un_dato_de_una_fila(codigo,4,correo)
 
             # Pestaña 2
-
             lista_a_cargar_p2 = [codigo, correo, nombres, apellidos, usuario, oficina, contrasenna]
             self.b2.cambiar_los_datos_de_una_fila(codigo, lista_a_cargar_p2)
 
             # Pestaña 3
-
             hora = str(dt.datetime.now())
             lista_a_cargar_p3 = lista_a_cargar_p2 + [hora]
             self.b3.agregar_datos(lista_a_cargar_p3)
@@ -365,7 +350,6 @@ class Pantalla_de_usuario(Ventana):
 
 class Administar_eliminados(Ventana):
     """"""
-    
     #----------------------------------------------------------------------
     def __init__(self, *args):
         """Constructor"""
@@ -433,6 +417,3 @@ class Administar_eliminados(Ventana):
         lista_a_cargar_p3 = lista_descargada_p2 + [hora]
         self.b3.agregar_datos(lista_a_cargar_p3)
         self.actualizar_vitrina()
-
-
-
