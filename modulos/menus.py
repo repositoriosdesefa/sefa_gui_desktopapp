@@ -26,7 +26,7 @@ class ventanas_ospa(Ventana):
         self.desaparecer()
         # LargoxAncho
         SubFrame = ventanas_busqueda.Doc_recibidos_busqueda(self, 560, 1150,
-                     "Búsqueda de documentos recibidos")
+                                                            "Búsqueda de documentos recibidos", False)
      
     #----------------------------------------------------------------------
     def nuevo_de(self):
@@ -111,7 +111,7 @@ class inicio_app_OSPA(ventanas_ospa):
 
         self.desaparecer()
         # LargoxAncho
-        SubFrame = Menu_jefe(self, 400, 400, "Bienvenido/a Jefe/a del OSPA")
+        SubFrame = Menu_jefe(self, 400, 400, "Bienvenido/a Jefe/a del OSPA", False)
     
     #----------------------------------------------------------------------
     def inicio_adm(self):
@@ -182,8 +182,8 @@ class Menu_jefe(inicio_app_OSPA):
         
         self.desaparecer()
         # LargoxAncho
-        SubFrame = Menu_busquedas(self, 400, 400, 
-                    "Búsquedas")
+        SubFrame = Menu_busquedas(self, 600, 400, 
+                    "Búsquedas", False)
 
 
 class Menu_busquedas(inicio_app_OSPA):

@@ -74,7 +74,7 @@ class logueo1_Ingreso_de_usuario(Ventana):
         """"""
         texto_bienvenida = "Bienvenido " + vg.usuario
         self.desaparecer()
-        subframe = menus.inicio_app_OSPA(self, 500, 500, texto_bienvenida)
+        subframe = menus.inicio_app_OSPA(self, 500, 500, texto_bienvenida, False)
     
     #----------------------------------------------------------------------
     def ir_a_recuperar_contrasena(self, event):

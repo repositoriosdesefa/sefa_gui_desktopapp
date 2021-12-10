@@ -34,6 +34,12 @@ class funcionalidades_ospa(Ventana):
         self.id_objeto_ingresado = id_objeto
         self.tipo_objeto = tipo_objeto
 
+        # Frame de Scrollbar
+        if self.scrollable_ventana == True:
+            self.frame_principal = self.scrollframe
+        else:
+            self.frame_principal = self
+
     #----------------------------------------------------------------------
     def inicio_app(self):
         """"""
@@ -252,8 +258,8 @@ class funcionalidades_ospa(Ventana):
             # Tabla de documentos emitidos filtrada
             tabla_vitrina = tabla_filtrada.drop([id_salida], axis=1)
             if len(tabla_vitrina.index) > 0:
-                self.vitrina = Vitrina_vista(self, tabla_vitrina, funcion_ver, funcion_eliminar, 
-                                             height=80, width=1050) 
+                self.vitrina = Vitrina_vista(self.frame_principal, tabla_vitrina, funcion_ver, funcion_eliminar, 
+                                             height=160, width=1050) 
                 return self.vitrina
             else:
                 frame_vitrina.agregar_label(1, 2, '                  0 documentos recibidos asociados')
@@ -289,8 +295,8 @@ class funcionalidades_ospa(Ventana):
                                  lb1[11], lb1[12], lb1[13], lb1[14], lb1[15], lb1[16],  lb1[17], lb1[18]]
         
         self.desaparecer()
-        subframe = ventanas_vista.Doc_recibidos_vista(self, 650, 1150, texto_documento, nuevo=False, 
-                                                    lista=lista_para_insertar, id_objeto = id_objeto_ingresado)
+        subframe = ventanas_vista.Doc_recibidos_vista(self, 650, 1150, texto_documento, 
+                                                    nuevo=False, lista=lista_para_insertar, id_objeto = id_objeto_ingresado)
 
    #----------------------------------------------------------------------
     def busqueda_de(self):
