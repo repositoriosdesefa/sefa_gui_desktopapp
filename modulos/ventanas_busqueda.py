@@ -8,7 +8,7 @@ from modulos import variables_globales as vg
 from modulos.funcionalidades_ospa import funcionalidades_ospa
 
 
-id_b_ospa = '13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4'
+id_b_ospa = vg.id_b_ospa
 
 # 1. Bases
 b_dr = vg.b_dr
@@ -164,7 +164,7 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
         self.v1 = Vitrina_busqueda(self, self.tabla_drF, self.ver_dr, 
                                    self.asociar_dr_de, height=250, width=1080)
 
-
+    #----------------------------------------------------------------------  
     def Buscardr(self):
         """"""
         # Obteniendo valores de la rejilla
@@ -193,7 +193,6 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
         self.mostrarDatosdr(filtro)
 
     #----------------------------------------------------------------------  
-
     def mostrarDatosdr(self, filtro):
 
         self.filtro0 = self.tabla_0
@@ -255,20 +254,6 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
         # Creando vitrina
         self.v1 = Vitrina_busqueda(self, self.tabla_drF, self.ver_dr, 
                                    self.asociar_dr_de, height=250, width=1080)
-
-    #----------------------------------------------------------------------
-    def ver_dr(self, x):
-        """"""
-        self.x = x
-        texto_documento = 'Documento recibido: ' + x
-
-        lb1 = b_dr.listar_datos_de_fila(self.x)
-        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], lb1[9], lb1[10],
-                                 lb1[11], lb1[12], lb1[13], lb1[14], lb1[15], lb1[16], lb1[17], lb1[18]]
-        
-        self.desaparecer()
-        subframe = ventanas_vista.Doc_recibidos_vista(self, 650, 1150, texto_documento, True, nuevo=False, 
-                                                lista=lista_para_insertar, id_objeto = x)
 
     #----------------------------------------------------------------------
     def asociar_dr_de(self, x):
@@ -620,19 +605,6 @@ class Doc_emitidos_busqueda(funcionalidades_ospa):
                                     self.asociar_de_dr, height=250, width=1190)
 
     #----------------------------------------------------------------------
-    def ver_dr(self, id_usuario):
-        """"""
-        texto_documento = 'Documento recibido: ' + id_usuario
-
-        lb1 = b_dr.listar_datos_de_fila(id_usuario)
-        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], lb1[9], lb1[10],
-                                lb1[11], lb1[12], lb1[13], lb1[14], lb1[15], lb1[16], lb1[17], lb1[18]]
-        
-        self.desaparecer()
-        subframe = ventanas_vista.Doc_recibidos_vista(self, 650, 1150, texto_documento, nuevo=False, 
-                                        lista=lista_para_insertar, id_objeto = id_usuario)
-
-    #----------------------------------------------------------------------
     def asociar_de_dr(self, x):
         """"""
         self.x = x
@@ -796,7 +768,7 @@ class Extremos(funcionalidades_ospa):
         self.frame_vitrina_ep = Cuadro(self)
 
         # Creando vitrina
-        self.vep = Vitrina_busquedaep(self, self.tabla_deF, self.ver_ep_cod, 
+        self.vep = Vitrina_busquedaep(self, self.tabla_deF, self.ver_ep, 
                                      self.asociar_ep, self.ver_mp_ep, height=250, width=1220)
 
     #----------------------------------------------------------------------
@@ -927,7 +899,7 @@ class Extremos(funcionalidades_ospa):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_ep.eliminar_cuadro()
             self.frame_vitrina_ep = Cuadro(self)
-            self.vep = Vitrina_busquedaep(self, tabla_filtro3, self.ver_ep_cod, self.asociar_ep, self.ver_mp_ep, height=250, width=1220)
+            self.vep = Vitrina_busquedaep(self, tabla_filtro3, self.ver_ep, self.asociar_ep, self.ver_mp_ep, height=250, width=1220)
         else:
             self.frame_vitrina_ep.eliminar_cuadro()
             self.frame_vitrina_ep = Cuadro(self)
@@ -949,7 +921,7 @@ class Extremos(funcionalidades_ospa):
 
         self.frame_vitrina_ep = Cuadro(self)
         # Creando vitrina
-        self.vep = Vitrina_busquedaep(self, self.tabla_deF, self.ver_ep_cod, self.asociar_ep, self.ver_mp_ep, height=250, width=1220)
+        self.vep = Vitrina_busquedaep(self, self.tabla_deF, self.ver_ep, self.asociar_ep, self.ver_mp_ep, height=250, width=1220)
 
     #----------------------------------------------------------------------
     def actualizar(self):
@@ -1021,25 +993,7 @@ class Extremos(funcionalidades_ospa):
         # Creando vitrina
         self.frame_vitrina_ep = Cuadro(self)
         # Creando vitrina
-        self.vep = Vitrina_busquedaep(self, self.tabla_deF, self.ver_ep_cod, self.asociar_ep, self.ver_mp_ep, height=250, width=1220)
-
-    #----------------------------------------------------------------------
-    def ver_ep_cod(self, id_objeto):
-        """"""
-        texto_documento = 'Extremo de problema: ' + id_objeto
-
-        tabla_codigo_de_filtrada = self.tabla_ep.query("`CODIGO EXTREMO`==@id_objeto")
-        self.id_interno_ep = tabla_codigo_de_filtrada.iloc[0,0]
-
-        lb1 = b_ep.listar_datos_de_fila(id_objeto)
-        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], 
-                                lb1[8], lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], 
-                                lb1[14], lb1[15], lb1[16], lb1[17], lb1[18], lb1[19], lb1[20]]
-        self.desaparecer()
-
-        subframe = ventanas_vista.Extremo_problemas_vista(self, 750, 1350, texto_documento, 
-                                        nuevo=False, lista=lista_para_insertar, id_objeto = id_objeto)
-
+        self.vep = Vitrina_busquedaep(self, self.tabla_deF, self.ver_ep, self.asociar_ep, self.ver_mp_ep, height=250, width=1220)
 
     #----------------------------------------------------------------------
     def ver_mp_ep(self, x):

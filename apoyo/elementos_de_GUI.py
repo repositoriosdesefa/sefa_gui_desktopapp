@@ -92,7 +92,7 @@ class Ventana(Toplevel):
         self.config(background= formato.fondo)
 
         if self.scrollable_ventana == True:
-            self.main_frame = Frame(self)
+            self.main_frame = Frame(self, bg= formato.fondo)
             self.main_frame.pack(fill="both", expand=True)
             self.scrollframe = VerticalScrolledFrame(self.main_frame)
             self.scrollframe.pack(fill="both", expand=True)
@@ -181,11 +181,11 @@ class VerticalScrolledFrame:
         width = kwargs.pop('width', None)
         height = kwargs.pop('height', None)
         bg = kwargs.pop('bg', kwargs.pop('background', None))
-        self.outer = Frame(master, **kwargs)
+        self.outer = Frame(master, bg = formato.fondo, **kwargs)
 
         self.vsb = tk.Scrollbar(self.outer, orient=tk.VERTICAL)
         self.vsb.pack(fill=tk.Y, side=tk.RIGHT)
-        self.canvas = tk.Canvas(self.outer, highlightthickness=0, width=width, height=height, bg=bg)
+        self.canvas = tk.Canvas(self.outer, highlightthickness=0, width=width, height=height, bg=formato.fondo)
         self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         self.canvas['yscrollcommand'] = self.vsb.set
         # mouse scroll does not seem to work with just "bind"; You have
@@ -195,7 +195,7 @@ class VerticalScrolledFrame:
         self.canvas.bind("<Leave>", self._unbind_mouse)
         self.vsb['command'] = self.canvas.yview
 
-        self.inner = tk.Frame(self.canvas, bg=bg)
+        self.inner = tk.Frame(self.canvas, bg=formato.fondo)
         # pack the inner Frame into the Canvas with the topleft corner 4 pixels offset
         self.canvas.create_window(4, 4, window=self.inner, anchor='nw')
         self.inner.bind("<Configure>", self._on_frame_configure)
@@ -258,11 +258,11 @@ class Cuadro(Frame):
             self.scrollframe = ScrollFrame(self.main_frame, height=50, width=50)
             self.scrollframe.pack(side="top", fill=None, expand=False)
             # Frame que contiene objetos:
-            self.z = Frame(self.scrollframe.viewPort)
+            self.z = Frame(self.scrollframe.viewPort, formato.fondo)
             self.z.pack(side="top", fill="both", expand=True)
 
         else:
-            self.z = Frame(self.window)
+            self.z = Frame(self.window, bg = formato.fondo)
             self.z.pack()
 
         self.lista_de_objetos = []
@@ -281,6 +281,7 @@ class Cuadro(Frame):
             self.z, 
             text= self.texto,
             font= formato.tipo_de_letra_titulo,
+            bg = formato.fondo
             )
         self.etiqueta.grid(row= self.y, column=self.x, sticky='news', pady=8, padx=8)
         self.lista_de_objetos.append((self.etiqueta))
@@ -297,7 +298,8 @@ class Cuadro(Frame):
             self.z, 
             text= self.texto,
             font= formato.tipo_de_letra,
-            anchor="w"
+            anchor="w",
+            bg = formato.fondo
             )
         self.etiqueta.grid(row= self.y, column=self.x, sticky='news', pady=4, padx=8)
         self.lista_de_objetos.append((self.etiqueta))
@@ -315,7 +317,8 @@ class Cuadro(Frame):
         self.etiqueta = Label(
             self.z, 
             text= self.texto,
-            font= formato.tipo_de_letra
+            font= formato.tipo_de_letra,
+            bg = formato.fondo
             )
         self.etiqueta.grid(row= self.y, column=self.x, sticky='news', pady=4, padx=8)
         #self.etiqueta.bind("<Button-1>",lambda e,argumento=argumento:self.funcion)
@@ -417,7 +420,7 @@ class Cuadro(Frame):
         self.imagen_cargada = Image.open(self.ubicacion)
         self.imagen_cargada = self.imagen_cargada.resize((self.largo, self.alto), Image.ANTIALIAS)
         self.imagen = ImageTk.PhotoImage(self.imagen_cargada)
-        self.imagen_label = Label(self.z, image=self.imagen)
+        self.imagen_label = Label(self.z, image=self.imagen, bg = formato.fondo)
         self.imagen_label.grid(row = self.y, column = self.x)
         self.lista_de_objetos.append((self.imagen_label))
     
@@ -444,7 +447,7 @@ class Cuadro(Frame):
         nombre_entry = "valor" + self.fila + self.columna 
 
         self.data = StringVar(name=nombre_entry)
-        self.entrada = Entry(self.z, textvariable=self.data, width= 42)
+        self.entrada = Entry(self.z, textvariable=self.data, bg= formato.fondo, width= 42)
         self.entrada.grid(row= self.y, column=self.x, pady=4, padx=8)
         self.lista_de_objetos.append((self.entrada))
         self.lista_de_datos.append((self.data))
@@ -457,7 +460,7 @@ class Cuadro(Frame):
         self.y= y
         self.x= x
         self.data = StringVar()
-        self.entrada = Entry(self.z, textvariable=self.data, width= 42)
+        self.entrada = Entry(self.z, textvariable=self.data, bg= formato.fondo, width= 42)
         self.entrada.grid(row= self.y, column=self.x, pady=4, padx=8)
         self.lista_de_objetos.append((self.entrada))
         self.lista_de_datos.append((self.data))
@@ -471,7 +474,7 @@ class Cuadro(Frame):
         self.x= x
         self.data = StringVar()
         n_columnas = int(numero_de_columnas_unidas)
-        self.entrada = Entry(self.z, textvariable=self.data, width = ancho)
+        self.entrada = Entry(self.z, textvariable=self.data, bg= formato.fondo, width = ancho)
         self.entrada.grid(row= self.y, column=self.x, columnspan= n_columnas, pady=4, padx=8)
         self.lista_de_objetos.append((self.entrada))
         self.lista_de_datos.append((self.data))
@@ -484,7 +487,7 @@ class Cuadro(Frame):
         self.y= y
         self.x= x
         self.data = StringVar()
-        self.entrada = Entry(self.z, textvariable=self.data, width= 43, show='*')
+        self.entrada = Entry(self.z, textvariable=self.data, bg= formato.fondo, width= 43, show='*')
         self.entrada.grid(row= self.y, column=self.x, pady=4, padx=8)
         self.lista_de_objetos.append((self.entrada))
         self.lista_de_datos.append((self.data))
@@ -500,7 +503,8 @@ class Cuadro(Frame):
                             wrap = WORD, 
                             width = 108, 
                             height = 2, 
-                            font = ("Helvetica", 8))
+                            font = ("Helvetica", 8),
+                            bg= formato.fondo)
         self.text_area.grid(row = self.y, column = self.x, columnspan= 3, pady=4, padx=8)
         self.lista_de_objetos.append((self.text_area))
         self.lista_de_datos.append((self.text_area))
@@ -1229,21 +1233,21 @@ class Vitrina_vista(Frame):
         self.height = height
         self.width = width
         
-        self.main_frame = Frame(self.window)
+        self.main_frame = Frame(self.window, bg = formato.fondo)
         self.main_frame.pack()
 
         # Encabezados (entorno)
 
-        self.frame_base_encabezado = Frame(self.main_frame)
+        self.frame_base_encabezado = Frame(self.main_frame, bg = formato.fondo)
         self.frame_base_encabezado.pack()
 
-        self.canvas_encabezado = Canvas(self.frame_base_encabezado, height=23, width=self.width)
+        self.canvas_encabezado = Canvas(self.frame_base_encabezado, height=23, width=self.width, bg = formato.fondo)
         self.canvas_encabezado.pack(side='left', fill='both', expand=True)
 
-        self.empty_frame = Frame(self.frame_base_encabezado, width=12)
+        self.empty_frame = Frame(self.frame_base_encabezado, width=12, bg = formato.fondo)
         self.empty_frame.pack(side='right', fill='both', expand=True)
 
-        self.frame_dentro_del_canvas = Frame(self.canvas_encabezado) # Éste es el frame donde colocaremos los encabezados
+        self.frame_dentro_del_canvas = Frame(self.canvas_encabezado, bg = formato.fondo) # Éste es el frame donde colocaremos los encabezados
         # Encabezado
         self.canvas_encabezado.create_window(4, 4, window=self.frame_dentro_del_canvas, anchor='nw')
 
@@ -1278,7 +1282,7 @@ class Vitrina_vista(Frame):
         opciones_label = Label(
             self.frame_dentro_del_canvas,
             text='Opciones',
-            font=formato.tipo_de_letra_tabla,
+            font= formato.tipo_de_letra_tabla,
             fg = formato.color_negro,
             width= 16,
             height=1, 
@@ -1432,21 +1436,21 @@ class Vitrina_busqueda(Frame):
         self.height = height
         self.width = width
         
-        self.main_frame = Frame(self.window)
+        self.main_frame = Frame(self.window, bg = formato.fondo)
         self.main_frame.pack()
 
         # Encabezados (entorno)
 
-        self.frame_base_encabezado = Frame(self.main_frame)
+        self.frame_base_encabezado = Frame(self.main_frame, bg = formato.fondo)
         self.frame_base_encabezado.pack()
 
-        self.canvas_encabezado = Canvas(self.frame_base_encabezado, height=23, width=self.width)
+        self.canvas_encabezado = Canvas(self.frame_base_encabezado, height=23, width=self.width, bg = formato.fondo)
         self.canvas_encabezado.pack(side='left', fill='both', expand=True)
 
         self.empty_frame = Frame(self.frame_base_encabezado, width=12)
         self.empty_frame.pack(side='right', fill='both', expand=True)
 
-        self.frame_dentro_del_canvas = Frame(self.canvas_encabezado) # Éste es el frame donde colocaremos los encabezados
+        self.frame_dentro_del_canvas = Frame(self.canvas_encabezado, bg = formato.fondo) # Éste es el frame donde colocaremos los encabezados
 
         self.canvas_encabezado.create_window(4, 4, window=self.frame_dentro_del_canvas, anchor='nw')
 
@@ -1627,16 +1631,16 @@ class Vitrina_busquedaep(Frame):
 
         # Encabezados (entorno)
 
-        self.frame_base_encabezado = Frame(self.main_frame)
+        self.frame_base_encabezado = Frame(self.main_frame, bg = formato.fondo)
         self.frame_base_encabezado.pack()
 
-        self.canvas_encabezado = Canvas(self.frame_base_encabezado, height=20, width=self.width)
+        self.canvas_encabezado = Canvas(self.frame_base_encabezado, height=20, width=self.width, bg = formato.fondo)
         self.canvas_encabezado.pack(side='left', fill='both', expand=True)
 
-        self.empty_frame = Frame(self.frame_base_encabezado, width=12)
+        self.empty_frame = Frame(self.frame_base_encabezado, width=12, bg = formato.fondo)
         self.empty_frame.pack(side='right', fill='both', expand=True)
 
-        self.frame_dentro_del_canvas = Frame(self.canvas_encabezado) # Éste es el frame donde colocaremos los encabezados
+        self.frame_dentro_del_canvas = Frame(self.canvas_encabezado, bg = formato.fondo) # Éste es el frame donde colocaremos los encabezados
 
         self.canvas_encabezado.create_window(4, 4, window=self.frame_dentro_del_canvas, anchor='nw')
 
@@ -1859,21 +1863,21 @@ class Vitrina(Frame):
         self.height = height
         self.width = width
         
-        self.main_frame = Frame(self.window)
+        self.main_frame = Frame(self.window, bg = formato.fondo)
         self.main_frame.pack()
 
         # Encabezados (entorno)
 
-        self.frame_base_encabezado = Frame(self.main_frame)
+        self.frame_base_encabezado = Frame(self.main_frame, bg = formato.fondo)
         self.frame_base_encabezado.pack()
 
-        self.canvas_encabezado = Canvas(self.frame_base_encabezado, height=23, width=self.width)
+        self.canvas_encabezado = Canvas(self.frame_base_encabezado, height=23, width=self.width, bg = formato.fondo)
         self.canvas_encabezado.pack(side='left', fill='both', expand=True)
 
-        self.empty_frame = Frame(self.frame_base_encabezado, width=12)
+        self.empty_frame = Frame(self.frame_base_encabezado, width=12, bg = formato.fondo)
         self.empty_frame.pack(side='right', fill='both', expand=True)
 
-        self.frame_dentro_del_canvas = Frame(self.canvas_encabezado) # Éste es el frame donde colocaremos los encabezados
+        self.frame_dentro_del_canvas = Frame(self.canvas_encabezado, bg = formato.fondo) # Éste es el frame donde colocaremos los encabezados
 
         self.canvas_encabezado.create_window(4, 4, window=self.frame_dentro_del_canvas, anchor='nw')
 
@@ -2040,18 +2044,18 @@ class Vitrina_pendientes(Frame):
         self.height = height
         self.width = width
         
-        self.main_frame = Frame(self.window)
+        self.main_frame = Frame(self.window, bg = formato.fondo)
         self.main_frame.pack()
 
         # Encabezados (entorno)
 
-        self.frame_base_encabezado = Frame(self.main_frame)
+        self.frame_base_encabezado = Frame(self.main_frame, bg = formato.fondo)
         self.frame_base_encabezado.pack()
 
-        self.canvas_encabezado = Canvas(self.frame_base_encabezado, height=23, width=self.width)
+        self.canvas_encabezado = Canvas(self.frame_base_encabezado, height=23, width=self.width, bg = formato.fondo)
         self.canvas_encabezado.pack(side='left', fill='both', expand=True)
 
-        self.empty_frame = Frame(self.frame_base_encabezado, width=12)
+        self.empty_frame = Frame(self.frame_base_encabezado, width=12, bg = formato.fondo)
         self.empty_frame.pack(side='right', fill='both', expand=True)
 
         self.frame_dentro_del_canvas = Frame(self.canvas_encabezado) # Éste es el frame donde colocaremos los encabezados

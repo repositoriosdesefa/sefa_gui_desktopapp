@@ -278,8 +278,8 @@ class funcionalidades_ospa(Ventana):
 
             # Genero la nueva ventana
             self.desaparecer()
-            SubFrame = ventanas_busqueda.Doc_recibidos_busqueda(self, 500, 1200, texto_pantalla, nuevo=False, 
-                                                                id_objeto = id_objeto_ingresado, tipo_objeto_anterior = tipo_objeto_pantalla)
+            SubFrame = ventanas_busqueda.Doc_recibidos_busqueda(self, 500, 1200, texto_pantalla, 
+                                                                nuevo=False, id_objeto = id_objeto_ingresado, tipo_objeto_anterior = tipo_objeto_pantalla)
 
         else:
             # En caso no estuviera guardado la ficha
@@ -295,8 +295,8 @@ class funcionalidades_ospa(Ventana):
                                  lb1[11], lb1[12], lb1[13], lb1[14], lb1[15], lb1[16],  lb1[17], lb1[18]]
         
         self.desaparecer()
-        subframe = ventanas_vista.Doc_recibidos_vista(self, 650, 1150, texto_documento, 
-                                                    nuevo=False, lista=lista_para_insertar, id_objeto = id_objeto_ingresado)
+        subframe = ventanas_vista.Doc_recibidos_vista(self, 600, 1067, texto_documento, True,
+                                                      nuevo=False, lista=lista_para_insertar, id_objeto = id_objeto_ingresado)
 
    #----------------------------------------------------------------------
     def busqueda_de(self):
@@ -309,8 +309,8 @@ class funcionalidades_ospa(Ventana):
 
             # Genero la nueva ventana
             self.desaparecer()
-            SubFrame = ventanas_busqueda.Doc_emitidos_busqueda(self, 500, 1200, texto_pantalla, nuevo=False, 
-                                                                id_objeto = id_objeto_ingresado, tipo_objeto_anterior = tipo_objeto_pantalla)
+            SubFrame = ventanas_busqueda.Doc_emitidos_busqueda(self, 500, 1200, texto_pantalla, 
+                                                                nuevo=False, id_objeto = id_objeto_ingresado, tipo_objeto_anterior = tipo_objeto_pantalla)
 
         else:
             # En caso no estuviera guardado la ficha
@@ -325,8 +325,8 @@ class funcionalidades_ospa(Ventana):
         lista_para_insertar = [lb1[2], lb1[3], lb1[4], lb1[5], lb1[6], 
                                 lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], lb1[12]]
         self.desaparecer()
-        subframe = ventanas_vista.Doc_emitidos_vista(self, 650, 1150, texto_documento, nuevo=False, 
-                                        lista=lista_para_insertar, id_objeto = id_usuario)
+        subframe = ventanas_vista.Doc_emitidos_vista(self, 600, 1067, texto_documento, True,
+                                                     nuevo=False, lista=lista_para_insertar, id_objeto = id_usuario)
     
     #----------------------------------------------------------------------
     def busqueda_ep(self):
@@ -358,8 +358,8 @@ class funcionalidades_ospa(Ventana):
                                 lb1[14], lb1[15], lb1[16], lb1[17], lb1[18], lb1[19], lb1[20]]
 
         self.desaparecer()
-        subframe = ventanas_vista.Extremo_problemas_vista(self, 650, 1150, texto_documento, nuevo=False, 
-                                        lista=lista_para_insertar, id_objeto = id_usuario)
+        subframe = ventanas_vista.Extremo_problemas_vista(self, 600, 1067, texto_documento, True,
+                                        nuevo=False, lista=lista_para_insertar, id_objeto = id_usuario)
     
     #----------------------------------------------------------------------
     def busqueda_mp(self):
@@ -388,8 +388,8 @@ class funcionalidades_ospa(Ventana):
         lista_para_insertar = [lb1[2], lb1[3], lb1[4]]
 
         self.desaparecer()
-        subframe = ventanas_vista.Macroproblemas_vista(self, 650, 1150, texto_documento, nuevo=False, 
-                                        lista=lista_para_insertar, id_objeto = id_usuario)
+        subframe = ventanas_vista.Macroproblemas_vista(self, 600, 1067, texto_documento,
+                                                        nuevo=False, lista=lista_para_insertar, id_objeto = id_usuario)
     
     #----------------------------------------------------------------------
     def comprobar_id(self, base_codigo, id_usuario):

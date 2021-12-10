@@ -4,7 +4,8 @@
 
 # GENERALES
 
-fondo = '#f0f0f0'
+fondo = '#ffffff'
+#fondo = '#f0f0f0'
 tipo_de_letra = 'helvetica 8'
 tipo_de_letra_titulo = 'helvetica 14'
 

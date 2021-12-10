@@ -18,14 +18,14 @@ class ventanas_ospa(Ventana):
         
         self.desaparecer()
         # LargoxAncho
-        SubFrame = ventanas_vista.Doc_recibidos_vista(self, 550, 1090, "Registro Documento Recibido")
+        SubFrame = ventanas_vista.Doc_recibidos_vista(self, 550, 1100, "Registro Documento Recibido")
 
     #----------------------------------------------------------------------
     def busqueda_dr(self):
 
         self.desaparecer()
         # LargoxAncho
-        SubFrame = ventanas_busqueda.Doc_recibidos_busqueda(self, 560, 1150,
+        SubFrame = ventanas_busqueda.Doc_recibidos_busqueda(self, 550, 1100,
                                                             "Búsqueda de documentos recibidos", False)
      
     #----------------------------------------------------------------------
@@ -33,7 +33,7 @@ class ventanas_ospa(Ventana):
         
         self.desaparecer()
         # LargoxAncho
-        SubFrame = ventanas_vista.Doc_emitidos_vista(self, 550, 1090, "Registro Documento Emitido")
+        SubFrame = ventanas_vista.Doc_emitidos_vista(self, 550, 1100, "Registro Documento Emitido")
     
     #----------------------------------------------------------------------
     def busqueda_de(self):
@@ -48,7 +48,7 @@ class ventanas_ospa(Ventana):
         
         self.desaparecer()
         # LargoxAncho
-        SubFrame = ventanas_vista.Extremo_problemas_vista(self, 550, 1090, "Registro Extremo de Problema")
+        SubFrame = ventanas_vista.Extremo_problemas_vista(self, 550, 1100, "Registro Extremo de Problema")
     
     
     #----------------------------------------------------------------------
@@ -56,7 +56,7 @@ class ventanas_ospa(Ventana):
         
         self.desaparecer()
         # LargoxAncho
-        SubFrame = ventanas_busqueda.Extremos(self, 600, 1400, 
+        SubFrame = ventanas_busqueda.Extremos(self, 550, 1300, 
                     "Búsqueda de extremos de problemas")
     
     #----------------------------------------------------------------------
@@ -64,14 +64,14 @@ class ventanas_ospa(Ventana):
         
         self.desaparecer()
         # LargoxAncho
-        SubFrame = ventanas_vista.Macroproblemas_vista(self, 550, 1090, "Creación de macroproblemas")
+        SubFrame = ventanas_vista.Macroproblemas_vista(self, 550, 1100, "Creación de macroproblemas")
     
     #----------------------------------------------------------------------
     def busqueda_mp(self):
         
         self.desaparecer()
         # LargoxAncho
-        SubFrame = ventanas_busqueda.Macroproblemas(self, 500, 1200, 
+        SubFrame = ventanas_busqueda.Macroproblemas(self, 550, 1300, 
                     "Búsqueda de macroproblemas")
     
     #----------------------------------------------------------------------
@@ -79,7 +79,7 @@ class ventanas_ospa(Ventana):
         
         self.desaparecer()
         # LargoxAncho
-        SubFrame = ventanas_busqueda.Administrados(self, 500, 1200, 
+        SubFrame = ventanas_busqueda.Administrados(self, 500, 1300, 
                     "Búsqueda de administrados")
 
 
@@ -118,14 +118,14 @@ class inicio_app_OSPA(ventanas_ospa):
 
         self.desaparecer()
         # LargoxAncho
-        SubFrame = Menu_admin(self, 400, 400, "Bienvenido/a")
+        SubFrame = Menu_admin(self, 250, 400, "Bienvenido/a")
 
     #----------------------------------------------------------------------
     def inicio_e1(self):
 
         self.desaparecer()
         # LargoxAncho
-        SubFrame = Inicio_eq1(self, 400, 400, "Documentos emitidos")
+        SubFrame = Inicio_eq1(self, 250, 400, "Documentos emitidos")
     
     #----------------------------------------------------------------------
     def inicio_e2(self):
@@ -182,7 +182,7 @@ class Menu_jefe(inicio_app_OSPA):
         
         self.desaparecer()
         # LargoxAncho
-        SubFrame = Menu_busquedas(self, 600, 400, 
+        SubFrame = Menu_busquedas(self, 450, 400, 
                     "Búsquedas", False)
 
 
