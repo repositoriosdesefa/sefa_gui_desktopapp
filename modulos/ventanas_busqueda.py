@@ -267,7 +267,7 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
                                  lb1[11], lb1[12], lb1[13], lb1[14], lb1[15], lb1[16], lb1[17], lb1[18]]
         
         self.desaparecer()
-        subframe = ventanas_vista.Doc_recibidos_vista(self, 650, 1150, texto_documento, nuevo=False, 
+        subframe = ventanas_vista.Doc_recibidos_vista(self, 650, 1150, texto_documento, True, nuevo=False, 
                                                 lista=lista_para_insertar, id_objeto = x)
 
     #----------------------------------------------------------------------

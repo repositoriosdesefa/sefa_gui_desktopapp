@@ -110,7 +110,12 @@ class Doc_recibidos_vista(funcionalidades_ospa):
         """Constructor"""
 
         Ventana.__init__(self, *args)
-        
+        # Determinar la ventana principal a partir si es (o no) scrollable
+        if self.scrollable_ventana == True:
+            self.frame_principal = self.scrollframe
+        else:
+            self.frame_principal = self
+
         # 0. Almacenamos información heredada
         self.nuevo = nuevo
         self.id_objeto_ingresado = id_objeto
@@ -180,10 +185,10 @@ class Doc_recibidos_vista(funcionalidades_ospa):
 
         # III. Títulos e imagen
         # III.1 Frame de Título
-        titulos = Cuadro(self)
+        titulos = Cuadro(self.frame_principal)
         titulos.agregar_encabezado('Detalle de documento recibido')
         # III.2 Frame de rejillas
-        self.frame_rejilla = Cuadro(self)
+        self.frame_rejilla = Cuadro(self.frame_principal)
         self.frame_rejilla.agregar_rejilla(rejilla_dr)
         # En caso exista precedente, se inserta en la rejilla
         if self.nuevo == False: # Estamos en una ficha creada
@@ -195,13 +200,13 @@ class Doc_recibidos_vista(funcionalidades_ospa):
             self.frame_rejilla.insertar_lista_de_datos(self.lista_para_insertar)
 
         # III.3 Frame de botón de rejilla
-        f_boton = Cuadro(self)
+        f_boton = Cuadro(self.frame_principal)
         f_boton.agregar_button(0, 1, 'Guardar', self.guardar_y_actualizar_dr)
         f_boton.agregar_button(0, 2, 'Volver', self.volver)
         f_boton.agregar_button(0, 3, 'Inicio', self.inicio_app)
 
         # III.4 Frame de vitrina 1
-        self.frame_vitrina_1 = Cuadro(self)
+        self.frame_vitrina_1 = Cuadro(self.frame_principal)
         self.vitrina_1 = self.generar_vitrina(self.nuevo, 
                                             self.frame_vitrina_1,
                                             '(+) Agregar', self.busqueda_de,
@@ -212,7 +217,7 @@ class Doc_recibidos_vista(funcionalidades_ospa):
                                             self.ver_de, self.eliminar_de_y_actualizar)
 
         # III.5 Frame de vitrina 2
-        self.frame_vitrina_2 = Cuadro(self)
+        self.frame_vitrina_2 = Cuadro(self.frame_principal)
         self.vitrina_2 = self.generar_vitrina(self.nuevo, 
                                             self.frame_vitrina_2,
                                             '(+) Agregar', self.busqueda_ep,
@@ -298,6 +303,11 @@ class Doc_emitidos_vista(funcionalidades_ospa):
         """Constructor"""
 
         Ventana.__init__(self, *args)
+         # Determinar la ventana principal a partir si es (o no) scrollable
+        if self.scrollable_ventana == True:
+            self.frame_principal = self.scrollframe
+        else:
+            self.frame_principal = self
 
         # 0. Almacenamos información heredada
         self.nuevo = nuevo
@@ -477,6 +487,11 @@ class Extremo_problemas_vista(funcionalidades_ospa):
         """Constructor"""
 
         Ventana.__init__(self, *args)
+         # Determinar la ventana principal a partir si es (o no) scrollable
+        if self.scrollable_ventana == True:
+            self.frame_principal = self.scrollframe
+        else:
+            self.frame_principal = self
         
         # 0. Almacenamos información heredada
         self.nuevo = nuevo
@@ -721,6 +736,11 @@ class Macroproblemas_vista(funcionalidades_ospa):
         """Constructor"""
 
         Ventana.__init__(self, *args)
+         # Determinar la ventana principal a partir si es (o no) scrollable
+        if self.scrollable_ventana == True:
+            self.frame_principal = self.scrollframe
+        else:
+            self.frame_principal = self
         
         # 0. Almacenamos información heredada
         self.nuevo = nuevo
