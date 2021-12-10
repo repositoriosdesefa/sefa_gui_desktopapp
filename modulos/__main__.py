@@ -1,8 +1,8 @@
 from tkinter import Tk
 
 from modulos import logueo
-from modulos.administracion import Pantalla_de_usuario
 
+from apoyo.elementos_de_GUI import Ventana
 
 ########################################################################
 class Aplicacion(object):
@@ -14,10 +14,7 @@ class Aplicacion(object):
 
         self.root = parent
         self.root.withdraw()
-
-        subFrame = logueo.logueo1_Ingreso_de_usuario(self, 400, 400, "ASPA - Versión 0.0")
-
-        #subFrame = inicio_app_OSPA(self, 400, 400, "Inicio")
+        subFrame = logueo.logueo1_Ingreso_de_usuario(self, 400, 400, "ASPA - Versión 0.0", False)
         
         # LargoxAncho
         # subFrame = vista_dr.Doc_recibidos_vista(self,650, 1100,'Documentos recibidos')
