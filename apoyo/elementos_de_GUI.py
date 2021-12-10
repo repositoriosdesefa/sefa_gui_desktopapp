@@ -70,13 +70,14 @@ class MenuSefa():
 class Ventana(Toplevel):
     """"""
     #----------------------------------------------------------------------
-    def __init__(self, ventana_anterior, alto = 300, ancho = 520, titulo = "Aplicativo de Sefa"):
+    def __init__(self, ventana_anterior, alto = 300, ancho = 520, titulo = "Aplicativo de Sefa", scrollable_ventana = False):
         """Constructor especial de la clase Ventana.\n
         Sirve para generar nuevas ventanas en una desktop app"""
 
-        self.scrollable = True
-        self.ventana_anterior = ventana_anterior
         Toplevel.__init__(self)
+
+        self.scrollable_ventana = scrollable_ventana
+        self.ventana_anterior = ventana_anterior
         self.alto = alto
         self.ancho = ancho
         self.titulo = titulo 
@@ -90,14 +91,14 @@ class Ventana(Toplevel):
         self.title(self.titulo)
         self.config(background= formato.fondo)
 
-        #if self.scrollable == True:
-        #    self.main_frame = Frame(ventana_anterior)
-        #    self.main_frame.pack(side="top", fill="both", expand=True)
-        #    self.scrollframe = ScrollFrame(self.main_frame, height=50, width=50)
-        #    self.scrollframe.pack(side="top", fill=None, expand=False)
-            # Frame que contiene objetos:
-        #    self.z = Frame(self.scrollframe.viewPort)
-        #    self.z.pack(side="top", fill="both", expand=True)
+        if self.scrollable_ventana == True:
+            self.main_frame = Frame(self)
+            self.main_frame.pack(fill="both", expand=True)
+            self.scrollframe = VerticalScrolledFrame(self.main_frame)
+            self.scrollframe.pack(fill="both", expand=True)
+
+        else:
+            pass
 
     #----------------------------------------------------------------------
     def desaparecer(self):
@@ -261,7 +262,6 @@ class Cuadro(Frame):
             self.z.pack(side="top", fill="both", expand=True)
 
         else:
-            # Frame que contiene objetos:
             self.z = Frame(self.window)
             self.z.pack()
 
