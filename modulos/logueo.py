@@ -42,6 +42,9 @@ class logueo1_Ingreso_de_usuario(Ventana):
         )
         c4.agregar_rejilla(rejilla2)
 
+        c5 = Cuadro(self)
+        c5.agregar_franja_inferior('Franja_Inferior_OSPA.png', 70, 400)
+
     #----------------------------------------------------------------------
     def comprobar_datos(self):
         """"""
@@ -74,7 +77,7 @@ class logueo1_Ingreso_de_usuario(Ventana):
         """"""
         texto_bienvenida = "Bienvenido " + vg.usuario
         self.desaparecer()
-        subframe = menus.inicio_app_OSPA(self, 400, 400, texto_bienvenida, False)
+        subframe = menus.inicio_app_OSPA(self, 405, 403, texto_bienvenida, False)
     
     #----------------------------------------------------------------------
     def ir_a_recuperar_contrasena(self, event):

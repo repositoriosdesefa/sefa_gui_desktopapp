@@ -106,6 +106,9 @@ class inicio_app_OSPA(ventanas_ospa):
         c1.agregar_button(9, 1, "Ir", self.inicio_e2)
         c1.agregar_label(10, 1,' ')
 
+        c2 = Cuadro(self)
+        c2.agregar_franja_inferior('Franja_Inferior_OSPA.png', 70, 400)
+
     #----------------------------------------------------------------------
     def inicio_jefe(self):
 

@@ -235,7 +235,6 @@ class VerticalScrolledFrame:
     def __str__(self):
         return str(self.outer)
 
-
 # V. Clase Cuadro
 class Cuadro(Frame):
     """"""
@@ -433,6 +432,11 @@ class Cuadro(Frame):
         self.agregar_titulo(0,3,'                             ')
         self.agregar_titulo(0,4,'                             ')
 
+    #----------------------------------------------------------------------
+    def agregar_franja_inferior(self, imagen, largo, ancho):
+        """"""
+        self.agregar_imagen(0,0, imagen, ancho, largo)
+        
     #----------------------------------------------------------------------
     def agregar_entry(self, y, x):
         """Método de la clase Cuadro. \n

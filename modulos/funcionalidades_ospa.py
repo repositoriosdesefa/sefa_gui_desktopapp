@@ -47,7 +47,7 @@ class funcionalidades_ospa(Ventana):
         # LargoxAncho
         subFrame = menus.inicio_app_OSPA(self, 400, 400, "Inicio")
         
-         #----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def guardar_objeto(self, rejilla_datos, 
                         cod_objeto_clase, cod_entrada, tabla_objeto_clase,
                         base_codigo_objeto, base_objeto_clase, base_objeto_clase_hist,
