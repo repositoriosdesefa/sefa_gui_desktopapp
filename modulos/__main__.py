@@ -17,7 +17,7 @@ class Aplicacion(object):
         subFrame = logueo.logueo1_Ingreso_de_usuario(self, 462, 403, "ASPA - Versión 0.0", False)
         
         # LargoxAncho
-        # subFrame = vista_dr.Doc_recibidos_vista(self,650, 1100,'Documentos recibidos')
+        # subFrame = vista_dr.Doc_recibidos_vista(self, 650, 1100,'Documentos recibidos')
 
 
 #----------------------------------------------------------------------

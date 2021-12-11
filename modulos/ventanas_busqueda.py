@@ -7,10 +7,15 @@ from modulos import ventanas_vista, menus
 from modulos import variables_globales as vg
 from modulos.funcionalidades_ospa import funcionalidades_ospa
 
-
-id_b_ospa = vg.id_b_ospa
+# Parámetros ventana
+ancho_v_vista = vg.ancho_v_vista
+alto_v_vista = vg.alto_v_vista
+ancho_v_busqueda = vg.ancho_v_busqueda
+alto_v_busqueda = vg.alto_v_busqueda
+ancho_v_busqueda_franja = ancho_v_busqueda - 3
 
 # 1. Bases
+id_b_ospa = vg.id_b_ospa
 b_dr = vg.b_dr
 b_dr_tabla = b_dr.generar_dataframe()
 b_dr_cod = vg.b_dr_cod
@@ -31,7 +36,6 @@ b_adm = vg.b_adm
 b_adm_tabla = b_adm.generar_dataframe()
 tabla_lista_efa = vg.tabla_lista_efa
 
-
 # 2. Tablas relacionales
 base_relacion_docs = vg.base_relacion_docs
 base_relacion_d_hist = vg.base_relacion_docs_hist
@@ -42,7 +46,6 @@ base_relacion_de_ep_hist =  vg.base_relacion_de_ep_hist
 b_relacion_mp_ep =  vg.base_relacion_mp_ep
 b_relacion_mp_ep_tabla = b_relacion_mp_ep.generar_dataframe()
 base_relacion_mp_ep_hist =  vg.base_relacion_mp_ep_hist
-
 
 
 class Doc_recibidos_busqueda(funcionalidades_ospa):
@@ -115,6 +118,10 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
         # Creando vitrina
         self.v1 = Vitrina_busqueda(self, self.tabla_drF, self.ver_dr, 
                                    self.asociar_dr_de, height=250, width=1080)
+        
+        # Franja inferior
+        self.c16 = Cuadro(self)
+        self.c16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', 78, ancho_v_busqueda_franja)
 
     #----------------------------------------------------------------------
     def actualizar(self):
@@ -759,7 +766,7 @@ class Extremos(funcionalidades_ospa):
             ('B', 5, 6, 'Actualizar', self.actualizar),
             ('B', 5, 7, 'Volver', self.volver),
             ('B', 5, 8, 'Inicio', self.inicio_app),
-            ('B', 5, 9, 'Crear extremo', self.crear_extremo)
+            ('B', 5, 9, 'Crear extremo', self.nuevo_ep)
         )
         
         # Agregando rejilla de botones a la ventana
@@ -770,14 +777,6 @@ class Extremos(funcionalidades_ospa):
         # Creando vitrina
         self.vep = Vitrina_busquedaep(self, self.tabla_deF, self.ver_ep, 
                                      self.asociar_ep, self.ver_mp_ep, height=250, width=1220)
-
-    #----------------------------------------------------------------------
-
-    def crear_extremo(self):
-        """"""
-        self.desaparecer()
-        # LargoxAncho
-        SubFrame = ventanas_vista.Extremo_problemas_vista(self, 550, 1090, "Registro Extremo de Problema")
 
     #----------------------------------------------------------------------
     

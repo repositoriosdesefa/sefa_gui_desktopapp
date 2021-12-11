@@ -9,6 +9,12 @@ from modulos import variables_globales as vg
 from modulos.funcionalidades_ospa import funcionalidades_ospa
 from apoyo.elementos_de_GUI import Cuadro, Ventana
 
+# Parámetros ventana
+ancho_v_vista = vg.ancho_v_vista
+alto_v_vista = vg.alto_v_vista
+ancho_v_busqueda = vg.ancho_v_busqueda
+alto_v_busqueda = vg.alto_v_busqueda
+
 # 1. Bases
 b_dr = vg.b_dr
 b_dr_cod = vg.b_dr_cod
@@ -366,11 +372,11 @@ class Doc_emitidos_vista(funcionalidades_ospa):
 
         # III. Ubicaciones
         # III.1 Frame de Título
-        titulos = Cuadro(self)
+        titulos = Cuadro(self.frame_principal)
         titulos.agregar_encabezado('Detalle del Documento Emitido')
         
         # III.2 Frame de rejillas
-        self.frame_rejilla = Cuadro(self)
+        self.frame_rejilla = Cuadro(self.frame_principal)
         self.frame_rejilla.agregar_rejilla(rejilla_de)
         # En caso exista precedente, se inserta en la rejilla
         if self.nuevo == False: # Estamos en una ficha creada
@@ -382,13 +388,13 @@ class Doc_emitidos_vista(funcionalidades_ospa):
             self.frame_rejilla.insertar_lista_de_datos(self.lista_para_insertar)
 
         # III.3 Frame de botón de rejilla
-        f_boton = Cuadro(self)
+        f_boton = Cuadro(self.frame_principal)
         f_boton.agregar_button(0, 1, 'Guardar', self.guardar_y_actualizar_de)
         f_boton.agregar_button(0, 2, 'Volver', self.volver)
         f_boton.agregar_button(0, 3, 'Inicio', self.inicio_app)
 
         # III.4 Frame de vitrina 1
-        self.frame_vitrina_1 = Cuadro(self)
+        self.frame_vitrina_1 = Cuadro(self.frame_principal)
         self.vitrina_1 = self.generar_vitrina(self.nuevo, 
                                             self.frame_vitrina_1,
                                             '(+) Agregar', self.busqueda_dr,
@@ -399,7 +405,7 @@ class Doc_emitidos_vista(funcionalidades_ospa):
                                             self.ver_de, self.eliminar_dr_y_actualizar)
         
         # III.5 Frame de vitrina 2
-        self.frame_vitrina_2 = Cuadro(self)
+        self.frame_vitrina_2 = Cuadro(self.frame_principal)
         self.vitrina_2 = self.generar_vitrina(self.nuevo, 
                                             self.frame_vitrina_2,
                                             '(+) Agregar', self.busqueda_ep,
@@ -477,8 +483,7 @@ class Doc_emitidos_vista(funcionalidades_ospa):
                                             self.tabla_de_ep, self.tabla_relacion_de_ep, 
                                             "ID_DE", "ID_EP", "COD_DE", 
                                             self.ver_ep, self.eliminar_ep_y_actualizar)
-    
-        
+         
 class Extremo_problemas_vista(funcionalidades_ospa):
     """"""
     
@@ -514,10 +519,10 @@ class Extremo_problemas_vista(funcionalidades_ospa):
 
         # III. Títulos e imagen
         # III.1 Frame de Título
-        titulos = Cuadro(self)
+        titulos = Cuadro(self.frame_principal)
         titulos.agregar_encabezado('Detalle de extremo de problema')
         # III.2 Frame de rejillas
-        self.frame_rejilla = Cuadro(self)
+        self.frame_rejilla = Cuadro(self.frame_principal)
         # En caso exista precedente, se inserta en la rejilla
         if self.nuevo == False: # Estamos en una ficha creada
             self.tabla_de_ep_cod = b_ep_cod.generar_dataframe()
@@ -625,13 +630,13 @@ class Extremo_problemas_vista(funcionalidades_ospa):
             self.frame_rejilla.agregar_rejilla(rejilla_ep_nuevo)
 
         # III.3 Frame de botón de rejilla
-        f_boton = Cuadro(self)
+        f_boton = Cuadro(self.frame_principal)
         f_boton.agregar_button(0, 1, 'Guardar', self.guardar_y_actualizar_ep)
         f_boton.agregar_button(0, 2, 'Volver', self.volver)
         f_boton.agregar_button(0, 3, 'Inicio', self.inicio_app)
         
         # III.4 Frame de vitrina 1
-        self.frame_vitrina_1 = Cuadro(self)
+        self.frame_vitrina_1 = Cuadro(self.frame_principal)
         self.vitrina_1 = self.generar_vitrina(self.nuevo, 
                                                 self.frame_vitrina_1,
                                                 '(+) Agregar', self.no_asociar,
@@ -642,7 +647,7 @@ class Extremo_problemas_vista(funcionalidades_ospa):
                                                 self.ver_dr, self.eliminar_dr_y_actualizar)
         
         # III.5 Frame de vitrina 2
-        self.frame_vitrina_2 = Cuadro(self)
+        self.frame_vitrina_2 = Cuadro(self.frame_principal)
         self.vitrina_2 = self.generar_vitrina(self.nuevo, 
                                                 self.frame_vitrina_2,
                                                 '(+) Agregar', self.no_asociar,
@@ -727,7 +732,6 @@ class Extremo_problemas_vista(funcionalidades_ospa):
         messagebox.showerror("Error",
                             'Para asociar un documento, hágalo desde la vista de documentos')
 
-    
 class Macroproblemas_vista(funcionalidades_ospa):
     """"""
     
@@ -760,11 +764,11 @@ class Macroproblemas_vista(funcionalidades_ospa):
 
         # III. Títulos e imagen
         # III.1 Frame de Título
-        titulos = Cuadro(self)
+        titulos = Cuadro(self.frame_principal)
         titulos.agregar_encabezado('Detalle de macroproblema')
 
         # III.2 Frame de rejillas
-        self.frame_rejilla = Cuadro(self)
+        self.frame_rejilla = Cuadro(self.frame_principal)
         if self.nuevo == False: # Estamos en una ficha creada
             self.tabla_de_mp_cod = b_mp_cod.generar_dataframe()
             self.cod_usuario_mp = id_objeto
@@ -804,13 +808,13 @@ class Macroproblemas_vista(funcionalidades_ospa):
             self.frame_rejilla.agregar_rejilla(rejilla_mp_nuevo)
 
         # III.3 Frame de botón de rejilla
-        f_boton = Cuadro(self)
+        f_boton = Cuadro(self.frame_principal)
         f_boton.agregar_button(0, 1, 'Guardar', self.guardar_y_actualizar_mp)
         f_boton.agregar_button(0, 2, 'Volver', self.volver)
         f_boton.agregar_button(0, 3, 'Inicio', self.inicio_app)
         
         # III.4 Frame de vitrina 1
-        self.frame_vitrina_1 = Cuadro(self)
+        self.frame_vitrina_1 = Cuadro(self.frame_principal)
         self.vitrina_1 = self.generar_vitrina(self.nuevo, 
                                                 self.frame_vitrina_1,
                                                 '(+) Agregar', self.busqueda_ep,

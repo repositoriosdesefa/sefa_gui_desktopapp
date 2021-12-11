@@ -2,88 +2,25 @@ import datetime as dt
 
 from tkinter import messagebox
 
+from modulos.funcionalidades_ospa import funcionalidades_ospa
 from modulos import ventanas_busqueda, ventanas_vista
-from apoyo.elementos_de_GUI import Cuadro, Ventana, Hovertip_Sefa, Vitrina_vista 
-from apoyo.manejo_de_bases import Base_de_datos
-import apoyo.datos_frecuentes as dfrec
+from modulos import variables_globales as vg
 
+from apoyo.elementos_de_GUI import Cuadro, Ventana
 
-class ventanas_ospa(Ventana):
+# Parámetros ventana
+ancho_v_vista = vg.ancho_v_vista
+alto_v_vista = vg.alto_v_vista
+ancho_v_busqueda = vg.ancho_v_busqueda
+alto_v_busqueda = vg.alto_v_busqueda
+
+# 0. Métodos de generación de ventanas
+class ventanas_ospa(funcionalidades_ospa):
     """"""
     def __init__(self, *args):
         """Constructor"""
 
-    #----------------------------------------------------------------------
-    def nuevo_dr(self):
-        
-        self.desaparecer()
-        # LargoxAncho
-        SubFrame = ventanas_vista.Doc_recibidos_vista(self, 550, 1100, "Registro Documento Recibido")
-
-    #----------------------------------------------------------------------
-    def busqueda_dr(self):
-
-        self.desaparecer()
-        # LargoxAncho
-        SubFrame = ventanas_busqueda.Doc_recibidos_busqueda(self, 550, 1100,
-                                                            "Búsqueda de documentos recibidos", False)
-     
-    #----------------------------------------------------------------------
-    def nuevo_de(self):
-        
-        self.desaparecer()
-        # LargoxAncho
-        SubFrame = ventanas_vista.Doc_emitidos_vista(self, 550, 1100, "Registro Documento Emitido")
-    
-    #----------------------------------------------------------------------
-    def busqueda_de(self):
-
-        self.desaparecer()
-        # LargoxAncho
-        SubFrame = ventanas_busqueda.Doc_emitidos_busqueda(self, 550, 1300, 
-                    "Búsqueda de documentos emitidos")
-    
-    #----------------------------------------------------------------------
-    def nuevo_ep(self):
-        
-        self.desaparecer()
-        # LargoxAncho
-        SubFrame = ventanas_vista.Extremo_problemas_vista(self, 550, 1100, "Registro Extremo de Problema")
-    
-    
-    #----------------------------------------------------------------------
-    def busqueda_ep(self):
-        
-        self.desaparecer()
-        # LargoxAncho
-        SubFrame = ventanas_busqueda.Extremos(self, 550, 1300, 
-                    "Búsqueda de extremos de problemas")
-    
-    #----------------------------------------------------------------------
-    def nuevo_mp(self):
-        
-        self.desaparecer()
-        # LargoxAncho
-        SubFrame = ventanas_vista.Macroproblemas_vista(self, 550, 1100, "Creación de macroproblemas")
-    
-    #----------------------------------------------------------------------
-    def busqueda_mp(self):
-        
-        self.desaparecer()
-        # LargoxAncho
-        SubFrame = ventanas_busqueda.Macroproblemas(self, 550, 1300, 
-                    "Búsqueda de macroproblemas")
-    
-    #----------------------------------------------------------------------
-    def busqueda_Administrados(self):
-        
-        self.desaparecer()
-        # LargoxAncho
-        SubFrame = ventanas_busqueda.Administrados(self, 500, 1300, 
-                    "Búsqueda de administrados")
-
-
-
+# I. Inicio de aplicativo
 class inicio_app_OSPA(ventanas_ospa):
     """"""
     
@@ -143,7 +80,7 @@ class inicio_app_OSPA(ventanas_ospa):
         self.desaparecer()
         self.ventana_anterior.aparecer()
 
-
+# II. Menú de jefe
 class Menu_jefe(inicio_app_OSPA):
     
     #----------------------------------------------------------------------
@@ -188,7 +125,7 @@ class Menu_jefe(inicio_app_OSPA):
         SubFrame = Menu_busquedas(self, 450, 400, 
                     "Búsquedas", False)
 
-
+# III. Menú de búsquedas
 class Menu_busquedas(inicio_app_OSPA):
     
     #----------------------------------------------------------------------
@@ -201,19 +138,66 @@ class Menu_busquedas(inicio_app_OSPA):
         c1.agregar_label(0, 1, ' ')
         c1.agregar_imagen(1, 1,'Logo_OSPA.png',202,49)
         c1.agregar_label(2, 1,'Búsqueda DR')
-        c1.agregar_button(3, 1, "Ir", self.busqueda_dr)
+        c1.agregar_button(3, 1, "Ir", self.n_busqueda_dr)
         c1.agregar_label(4, 1,'Búsqueda DE')
-        c1.agregar_button(5, 1, "Ir", self.busqueda_de)
+        c1.agregar_button(5, 1, "Ir", self.n_busqueda_de)
         c1.agregar_label(6, 1,'Búsqueda de extremos')
-        c1.agregar_button(7, 1, "Ir", self.busqueda_ep)
+        c1.agregar_button(7, 1, "Ir", self.n_busqueda_ep)
         c1.agregar_label(8, 1,'Búsqueda de macroproblemas')
-        c1.agregar_button(9, 1, "Ir", self.busqueda_mp)
+        c1.agregar_button(9, 1, "Ir", self.n_busqueda_mp)
         c1.agregar_label(10, 1,'Búsqueda de administrados')
-        c1.agregar_button(11, 1, "Ir", self.busqueda_Administrados)
+        c1.agregar_button(11, 1, "Ir", self.n_busqueda_administrados)
         c1.agregar_label(12, 1,' ')
         c1.agregar_button(14, 2, "Volver", self.volver_anterior)
     
+    #----------------------------------------------------------------------
+    def n_busqueda_dr(self):
 
+        self.desaparecer()
+
+        texto_b_dr = "Búsqueda de documentos recibidos"
+        # LargoxAncho
+        SubFrame = ventanas_busqueda.Doc_recibidos_busqueda(self, alto_v_busqueda, ancho_v_busqueda, texto_b_dr, False)
+     
+
+    #----------------------------------------------------------------------
+    def n_busqueda_de(self):
+
+        self.desaparecer()
+
+        texto_b_de = "Búsqueda de documentos emitidos"
+        # LargoxAncho
+        SubFrame = ventanas_busqueda.Doc_emitidos_busqueda(self, alto_v_busqueda, ancho_v_busqueda, False)
+    
+    #----------------------------------------------------------------------
+    def n_busqueda_ep(self):
+        
+        self.desaparecer()
+
+        texto_b_ep = "Búsqueda de extremos de problemas"
+        # LargoxAncho
+        SubFrame = ventanas_busqueda.Extremos(self, alto_v_busqueda, ancho_v_busqueda, texto_b_ep, False)
+    
+
+    #----------------------------------------------------------------------
+    def n_busqueda_mp(self):
+        
+        self.desaparecer()
+
+        texto_b_mp = "Búsqueda de macroproblemas"
+        # LargoxAncho
+        SubFrame = ventanas_busqueda.Macroproblemas(self, alto_v_busqueda, ancho_v_busqueda, texto_b_mp, False)
+    
+    #----------------------------------------------------------------------
+    def n_busqueda_administrados(self):
+        
+        self.desaparecer()
+
+        texto_b_adm = "Búsqueda de administrados"
+        # LargoxAncho
+        SubFrame = ventanas_busqueda.Administrados(self, alto_v_busqueda, ancho_v_busqueda, texto_b_adm, False)
+
+# IV. Menú administrativo    
 class Menu_admin(inicio_app_OSPA):
     
     #----------------------------------------------------------------------
@@ -247,7 +231,7 @@ class Menu_admin(inicio_app_OSPA):
         # LargoxAncho
         SubFrame = ventanas_busqueda.Pendientes_por_reiterar(self, 560, 1090, "Documentos pendientes de reiterar/comunicar al OCI")
 
-
+# V. Menú Equipo 1
 class Inicio_eq1(inicio_app_OSPA):
     
     #----------------------------------------------------------------------
@@ -273,7 +257,7 @@ class Inicio_eq1(inicio_app_OSPA):
         # LargoxAncho
         SubFrame = ventanas_busqueda.Pendientes_eq1_trabajar(self, 560, 1150, "Documentos pendientes de trabajar")
 
-
+# VI. Menú Equipo 2
 class Inicio_eq2(inicio_app_OSPA):
     
     #----------------------------------------------------------------------
@@ -312,4 +296,3 @@ class Inicio_eq2(inicio_app_OSPA):
         # LargoxAncho
         SubFrame = ventanas_busqueda.Pendientes_eq2_programaciones(self, 580, 1300, 
                     "Programaciones")
-

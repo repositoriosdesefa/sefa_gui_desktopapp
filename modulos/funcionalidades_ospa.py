@@ -6,6 +6,12 @@ from modulos import variables_globales as vg
 
 import datetime as dt
 
+# Parámetros ventana
+ancho_v_vista = vg.ancho_v_vista
+alto_v_vista = vg.alto_v_vista
+ancho_v_busqueda = vg.ancho_v_busqueda
+alto_v_busqueda = vg.alto_v_busqueda
+
 # 1. Bases
 b_dr = vg.b_dr
 b_dr_cod = vg.b_dr_cod
@@ -219,7 +225,6 @@ class funcionalidades_ospa(Ventana):
         # Confirmación de eliminación de documento emitido
         messagebox.showinfo("¡Documento emitido eliminado!", "El registro se ha desasociado correctamente")
 
-
     #----------------------------------------------------------------------
     def generar_vitrina(self, nuevo, 
                         frame_vitrina,
@@ -266,7 +271,15 @@ class funcionalidades_ospa(Ventana):
         else:
             frame_vitrina.agregar_label(1, 2, '                  0 documentos recibidos asociados')
     
-    
+    #----------------------------------------------------------------------
+    def nuevo_dr(self):
+        
+        self.desaparecer()
+
+        texto_dr = "Nuevo documento Recibido"
+        # LargoxAncho
+        SubFrame = ventanas_vista.Doc_recibidos_vista(self, alto_v_vista, ancho_v_vista, texto_dr, True)
+
     #----------------------------------------------------------------------
     def busqueda_dr(self):
         """"""
@@ -278,7 +291,7 @@ class funcionalidades_ospa(Ventana):
 
             # Genero la nueva ventana
             self.desaparecer()
-            SubFrame = ventanas_busqueda.Doc_recibidos_busqueda(self, 500, 1200, texto_pantalla, 
+            SubFrame = ventanas_busqueda.Doc_recibidos_busqueda(self, alto_v_busqueda, ancho_v_busqueda, texto_pantalla, 
                                                                 nuevo=False, id_objeto = id_objeto_ingresado, tipo_objeto_anterior = tipo_objeto_pantalla)
 
         else:
@@ -295,9 +308,18 @@ class funcionalidades_ospa(Ventana):
                                  lb1[11], lb1[12], lb1[13], lb1[14], lb1[15], lb1[16],  lb1[17], lb1[18]]
         
         self.desaparecer()
-        subframe = ventanas_vista.Doc_recibidos_vista(self, 600, 1067, texto_documento, True,
+        subframe = ventanas_vista.Doc_recibidos_vista(self, alto_v_vista, ancho_v_vista, texto_documento, True,
                                                       nuevo=False, lista=lista_para_insertar, id_objeto = id_objeto_ingresado)
 
+    #----------------------------------------------------------------------
+    def nuevo_de(self):
+        
+        self.desaparecer()
+
+        texto_de = "Nuevo documento emitido"
+        # LargoxAncho
+        SubFrame = ventanas_vista.Doc_emitidos_vista(self, alto_v_vista, ancho_v_vista, texto_de, True)
+    
    #----------------------------------------------------------------------
     def busqueda_de(self):
         """"""
@@ -309,7 +331,7 @@ class funcionalidades_ospa(Ventana):
 
             # Genero la nueva ventana
             self.desaparecer()
-            SubFrame = ventanas_busqueda.Doc_emitidos_busqueda(self, 500, 1200, texto_pantalla, 
+            SubFrame = ventanas_busqueda.Doc_emitidos_busqueda(self, alto_v_busqueda, ancho_v_busqueda, texto_pantalla, 
                                                                 nuevo=False, id_objeto = id_objeto_ingresado, tipo_objeto_anterior = tipo_objeto_pantalla)
 
         else:
@@ -325,8 +347,17 @@ class funcionalidades_ospa(Ventana):
         lista_para_insertar = [lb1[2], lb1[3], lb1[4], lb1[5], lb1[6], 
                                 lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], lb1[12]]
         self.desaparecer()
-        subframe = ventanas_vista.Doc_emitidos_vista(self, 600, 1067, texto_documento, True,
+        subframe = ventanas_vista.Doc_emitidos_vista(self, alto_v_vista, ancho_v_vista, texto_documento, True,
                                                      nuevo=False, lista=lista_para_insertar, id_objeto = id_usuario)
+    
+    #----------------------------------------------------------------------
+    def nuevo_ep(self):
+        
+        self.desaparecer()
+
+        texto_ep = "Nuevo extremo de problema"
+        # LargoxAncho
+        SubFrame = ventanas_vista.Extremo_problemas_vista(self, alto_v_vista, ancho_v_vista, texto_ep, True)
     
     #----------------------------------------------------------------------
     def busqueda_ep(self):
@@ -339,14 +370,13 @@ class funcionalidades_ospa(Ventana):
 
             # Genero la nueva ventana
             self.desaparecer()
-            SubFrame = ventanas_busqueda.Extremos(self, 500, 1200, texto_pantalla, nuevo=False, 
-                                                    id_objeto = id_objeto_ingresado, tipo_objeto_anterior = tipo_objeto_pantalla)
+            SubFrame = ventanas_busqueda.Extremos(self, alto_v_busqueda, ancho_v_busqueda, texto_pantalla, 
+                                                  nuevo=False, id_objeto = id_objeto_ingresado, tipo_objeto_anterior = tipo_objeto_pantalla)
 
         else:
             # En caso no estuviera guardado la ficha
             messagebox.showerror("¡Guardar!", "Antes de asociar un documento emitido, por favor guarde la información registrada")
  
-
     #----------------------------------------------------------------------
     def ver_ep(self, id_usuario):
         """"""
@@ -358,8 +388,17 @@ class funcionalidades_ospa(Ventana):
                                 lb1[14], lb1[15], lb1[16], lb1[17], lb1[18], lb1[19], lb1[20]]
 
         self.desaparecer()
-        subframe = ventanas_vista.Extremo_problemas_vista(self, 600, 1067, texto_documento, True,
+        subframe = ventanas_vista.Extremo_problemas_vista(self, alto_v_vista, ancho_v_vista, texto_documento, True,
                                         nuevo=False, lista=lista_para_insertar, id_objeto = id_usuario)
+    
+    #----------------------------------------------------------------------
+    def nuevo_mp(self):
+        
+        self.desaparecer()
+
+        texto_mp = "Creación de macroproblemas"
+        # LargoxAncho
+        SubFrame = ventanas_vista.Macroproblemas_vista(self, alto_v_vista, ancho_v_vista, texto_mp, True)
     
     #----------------------------------------------------------------------
     def busqueda_mp(self):
@@ -372,8 +411,8 @@ class funcionalidades_ospa(Ventana):
 
             # Genero la nueva ventana
             self.desaparecer()
-            SubFrame = ventanas_busqueda.Macroproblemas(self, 500, 1200, texto_pantalla, nuevo=False, 
-                                                        id_objeto = id_objeto_ingresado, tipo_objeto_anterior = tipo_objeto_pantalla)
+            SubFrame = ventanas_busqueda.Macroproblemas(self, alto_v_busqueda, ancho_v_busqueda, texto_pantalla, 
+                                                        nuevo=False, id_objeto = id_objeto_ingresado, tipo_objeto_anterior = tipo_objeto_pantalla)
 
         else:
             # En caso no estuviera guardado la ficha
@@ -388,7 +427,7 @@ class funcionalidades_ospa(Ventana):
         lista_para_insertar = [lb1[2], lb1[3], lb1[4]]
 
         self.desaparecer()
-        subframe = ventanas_vista.Macroproblemas_vista(self, 600, 1067, texto_documento,
+        subframe = ventanas_vista.Macroproblemas_vista(self, alto_v_vista, ancho_v_vista, texto_documento, True,
                                                         nuevo=False, lista=lista_para_insertar, id_objeto = id_usuario)
     
     #----------------------------------------------------------------------
@@ -401,4 +440,3 @@ class funcionalidades_ospa(Ventana):
             return True
         else:
             return False
-
