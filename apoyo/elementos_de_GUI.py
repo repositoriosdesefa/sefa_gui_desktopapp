@@ -613,7 +613,7 @@ class Cuadro(Frame):
         self.x= x
         self.text_area = sc.ScrolledText(self.z, 
                             wrap = WORD, 
-                            width = 108, 
+                            width = 110, 
                             height = 2, 
                             font = ("Helvetica", 8),
                             bg= formato.fondo)
@@ -1359,12 +1359,10 @@ class Vitrina(Frame):
         self.canvas_encabezado.create_window(4, 4, window=self.frame_dentro_del_canvas, anchor='nw')
 
         # Cuerpo de la tabla (entorno)
-
         self.frame_con_scrollbar = VerticalScrolledFrame(self.main_frame, height=self.height, width=self.width)
         self.frame_con_scrollbar.pack()
 
         # Incluir encabezados de la tabla
-
         columnas_de_tabla = self.tabla.columns.values.tolist()
         indice_de_columnas = range(len(columnas_de_tabla))
         elementos_columnas = {
@@ -1517,13 +1515,14 @@ class Vitrina_vista(Frame):
         self.frame_base_encabezado = Frame(self.main_frame, bg = formato.fondo)
         self.frame_base_encabezado.pack()
 
-        self.canvas_encabezado = Canvas(self.frame_base_encabezado, height=23, width=self.width, bg = formato.fondo,  highlightthickness = 0)
+        self.canvas_encabezado = Canvas(self.frame_base_encabezado, height=25, width=self.width, bg = formato.fondo,  highlightthickness = 0)
         self.canvas_encabezado.pack(side='left', fill='both', expand=True)
 
         self.empty_frame = Frame(self.frame_base_encabezado, width=12, bg = formato.fondo)
         self.empty_frame.pack(side='right', fill='both', expand=True)
 
         self.frame_dentro_del_canvas = Frame(self.canvas_encabezado, bg = formato.fondo) # Éste es el frame donde colocaremos los encabezados
+        
         # Encabezado
         self.canvas_encabezado.create_window(4, 4, window=self.frame_dentro_del_canvas, anchor='nw')
 
@@ -1531,6 +1530,10 @@ class Vitrina_vista(Frame):
 
         self.frame_con_scrollbar = VerticalScrolledFrame(self.main_frame, height=self.height, width=self.width)
         self.frame_con_scrollbar.pack()
+
+        # Espacio vacio al final
+        self.empty_frame_2 = Frame(self.window, height=15, width=self.width, bg = formato.fondo,  borderwidth = 3)
+        self.empty_frame_2.pack(side='bottom', fill='both', expand=True)
 
         # Incluir encabezados de la tabla
 
@@ -1548,8 +1551,8 @@ class Vitrina_vista(Frame):
                 text=row[1],
                 font=formato.tipo_de_letra_tabla,
                 fg = formato.color_negro,
-                width= 25, 
-                height=1, 
+                width= 22, 
+                height = 1, 
                 relief='groove',
                 bg=formato.fondo_encabezados_de_tabla
                 )
@@ -1557,12 +1560,12 @@ class Vitrina_vista(Frame):
     
         opciones_label = Label(
             self.frame_dentro_del_canvas,
-            text='Opciones',
-            font= formato.tipo_de_letra_tabla,
+            text ='Opciones',
+            font = formato.tipo_de_letra_tabla,
             fg = formato.color_negro,
-            width= 16,
-            height=1, 
-            relief='groove',
+            width = 18,
+            height = 1, 
+            relief = 'groove',
             bg=formato.fondo_encabezados_de_tabla
             )
         opciones_label.grid(row=0, column=len(columnas_de_tabla)+1)
@@ -1588,22 +1591,22 @@ class Vitrina_vista(Frame):
                     texto_tabla_vista = texto_recortado + "..."
                     valor = Label(
                         valores_subframe, 
-                        text= texto_tabla_vista,
-                        font=formato.tipo_de_letra_tabla,
-                        width=25, 
+                        text = texto_tabla_vista,
+                        font = formato.tipo_de_letra_tabla,
+                        width = 22, 
                         height = 2,
                         relief='groove',
-                        bg= formato.fondo_valores_de_tabla,
-                        wraplength=125, 
+                        bg = formato.fondo_valores_de_tabla,
+                        wraplength = 125, 
                         justify="center")
                     Hovertip_Sefa(valor, text = texto_completo)
                     valor.grid(row=0, column=row[0])
                 else:
                     valor = Label(
                         valores_subframe, 
-                        text= row[1],
-                        font=formato.tipo_de_letra_tabla,
-                        width=25, 
+                        text = row[1],
+                        font = formato.tipo_de_letra_tabla,
+                        width =22, 
                         height = 2,
                         relief='groove',
                         bg= formato.fondo_valores_de_tabla,
@@ -1620,7 +1623,7 @@ class Vitrina_vista(Frame):
                 text='Detalle',
                 font=formato.tipo_de_letra_tabla,
                 fg = formato.letras_del_boton,
-                width=7,
+                width=9,
                 height=2,
                 relief='groove',
                 cursor="hand2",
@@ -1629,6 +1632,21 @@ class Vitrina_vista(Frame):
             boton_ver.grid(row=0, column=len(lista_de_valores)+1)
             boton_ver.bind("<Button-1>", lambda e, argumento=argumento:self.funcion1(argumento))
             self.Efecto_de_boton(boton_ver)
+
+            boton_eliminar = Label(
+                valores_subframe,
+                text='Eliminar',
+                font=formato.tipo_de_letra_tabla,
+                fg = formato.letras_del_boton,
+                width=9,
+                height=2,
+                relief='groove',
+                cursor="hand2",
+                bg=formato.boton_sin_que_pase_cursor
+            )
+            boton_eliminar.grid(row=0, column=len(lista_de_valores)+2)
+            boton_eliminar.bind("<Button-1>",lambda e,argumento=argumento:self.funcion2(argumento))
+            self.Efecto_de_boton(boton_eliminar)
 
             #boton_editar = Label(
             #    valores_subframe,
@@ -1644,21 +1662,6 @@ class Vitrina_vista(Frame):
             #boton_editar.grid(row=0, column=len(lista_de_valores)+2)
             #boton_editar.bind("<Button-1>",lambda e,argumento=argumento:self.funcion2(argumento))
             #self.Efecto_de_boton(boton_editar)
-
-            boton_eliminar = Label(
-                valores_subframe,
-                text='Eliminar',
-                font=formato.tipo_de_letra_tabla,
-                fg = formato.letras_del_boton,
-                width=7,
-                height=2,
-                relief='groove',
-                cursor="hand2",
-                bg=formato.boton_sin_que_pase_cursor
-            )
-            boton_eliminar.grid(row=0, column=len(lista_de_valores)+2)
-            boton_eliminar.bind("<Button-1>",lambda e,argumento=argumento:self.funcion2(argumento))
-            self.Efecto_de_boton(boton_eliminar)
 
     #----------------------------------------------------------------------
     def Efecto_de_boton(self, boton):

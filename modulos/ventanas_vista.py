@@ -12,8 +12,8 @@ from apoyo.elementos_de_GUI import Cuadro, Ventana
 # Parámetros ventana
 ancho_v_vista = vg.ancho_v_vista
 alto_v_vista = vg.alto_v_vista
-ancho_v_busqueda = vg.ancho_v_busqueda
-alto_v_busqueda = vg.alto_v_busqueda
+ancho_v_vista_vitrina = vg.ancho_v_vista_vitrina
+alto_v_vista_vitrina = vg.alto_v_vista_vitrina
 
 # 1. Bases
 b_dr = vg.b_dr
@@ -156,7 +156,7 @@ class Doc_recibidos_vista(funcionalidades_ospa):
             ('EL', 3, 1, 112, 3),
 
             ('L', 4, 0, 'Tipo Remitente'),
-            ('CXDEP3', 4, 1, 37, tabla_directorio, "Doble",
+            ('CXDEP3', 4, 1, 39, tabla_directorio, "Doble",
             'Tipo de entidad u oficina', 'Categoría Remitente', 'EFA_OSPA', 'Remitente', 'Entidad u oficina'),
 
             ('L', 5, 2, '¿Es respuesta?'),
@@ -210,8 +210,6 @@ class Doc_recibidos_vista(funcionalidades_ospa):
         # III.3 Frame de botón de rejilla
         f_boton = Cuadro(self.frame_principal)
         f_boton.agregar_button(0, 1, 'Guardar', self.guardar_y_actualizar_dr)
-        f_boton.agregar_button(0, 2, 'Volver', self.volver)
-        f_boton.agregar_button(0, 3, 'Inicio', self.inicio_app)
 
         # III.4 Frame de vitrina 1
         self.frame_vitrina_1 = Cuadro(self.frame_principal)
@@ -393,8 +391,6 @@ class Doc_emitidos_vista(funcionalidades_ospa):
         # III.3 Frame de botón de rejilla
         f_boton = Cuadro(self.frame_principal)
         f_boton.agregar_button(0, 1, 'Guardar', self.guardar_y_actualizar_de)
-        f_boton.agregar_button(0, 2, 'Volver', self.volver)
-        f_boton.agregar_button(0, 3, 'Inicio', self.inicio_app)
 
         # III.4 Frame de vitrina 1
         self.frame_vitrina_1 = Cuadro(self.frame_principal)
@@ -640,8 +636,6 @@ class Extremo_problemas_vista(funcionalidades_ospa):
         # III.3 Frame de botón de rejilla
         f_boton = Cuadro(self.frame_principal)
         f_boton.agregar_button(0, 1, 'Guardar', self.guardar_y_actualizar_ep)
-        f_boton.agregar_button(0, 2, 'Volver', self.volver)
-        f_boton.agregar_button(0, 3, 'Inicio', self.inicio_app)
         
         # III.4 Frame de vitrina 1
         self.frame_vitrina_1 = Cuadro(self.frame_principal)
@@ -833,7 +827,7 @@ class Macroproblemas_vista(funcionalidades_ospa):
                 ('ST', 2, 1),
 
                 ('L', 3, 0, 'Observaciones'),
-                ('EL', 3, 1, 112, 3)
+                ('EL', 3, 1, 110, 3)
 
             ]
             self.frame_rejilla.agregar_rejilla(rejilla_mp)
@@ -850,7 +844,7 @@ class Macroproblemas_vista(funcionalidades_ospa):
                 ('ST', 2, 1),
 
                 ('L', 3, 0, 'Observaciones'),
-                ('EL', 3, 1, 112, 3)
+                ('EL', 3, 1, 110, 3)
             ]
             # Se inserta rejilla nueva
             self.frame_rejilla.agregar_rejilla(rejilla_mp_nuevo)
@@ -858,8 +852,6 @@ class Macroproblemas_vista(funcionalidades_ospa):
         # III.3 Frame de botón de rejilla
         f_boton = Cuadro(self.frame_principal)
         f_boton.agregar_button(0, 1, 'Guardar', self.guardar_y_actualizar_mp)
-        f_boton.agregar_button(0, 2, 'Volver', self.volver)
-        f_boton.agregar_button(0, 3, 'Inicio', self.inicio_app)
         
         # III.4 Frame de vitrina 1
         self.frame_vitrina_1 = Cuadro(self.frame_principal)

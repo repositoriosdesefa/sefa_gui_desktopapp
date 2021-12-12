@@ -9,8 +9,13 @@ import datetime as dt
 # Parámetros ventana
 ancho_v_vista = vg.ancho_v_vista
 alto_v_vista = vg.alto_v_vista
+ancho_v_vista_vitrina = vg.ancho_v_vista_vitrina
+alto_v_vista_vitrina = vg.alto_v_vista_vitrina
+
 ancho_v_busqueda = vg.ancho_v_busqueda
 alto_v_busqueda = vg.alto_v_busqueda
+ancho_v_busqueda_vitrina = vg.ancho_v_busqueda_vitrina
+alto_v_busqueda_vitrina = vg.alto_v_busqueda_vitrina
 
 # 1. Bases
 b_dr = vg.b_dr
@@ -49,7 +54,7 @@ class funcionalidades_ospa(Ventana):
     #----------------------------------------------------------------------
     def inicio_app(self, evento = None):
         """"""
-        self.desaparecer()
+        self.destruir()
         texto_bienvenida = vg.texto_bienvenida
         # LargoxAncho
         subFrame = menus.inicio_app_OSPA(self, 434, 403, texto_bienvenida)
@@ -239,7 +244,7 @@ class funcionalidades_ospa(Ventana):
 
         # Se agrega el botón y título del Frame
         frame_vitrina.agregar_button(0, 0, texto_boton, funcion_boton)
-        frame_vitrina.agregar_titulo(0, 1,'                                                       ')
+        frame_vitrina.agregar_titulo(0, 1,'                                         ')
         frame_vitrina.agregar_titulo(0, 2, texto_titulo)
         frame_vitrina.agregar_titulo(0, 3,'                              ')
         frame_vitrina.agregar_titulo(0, 4,'                              ')
@@ -265,12 +270,16 @@ class funcionalidades_ospa(Ventana):
             tabla_vitrina = tabla_filtrada.drop([id_salida], axis=1)
             if len(tabla_vitrina.index) > 0:
                 self.vitrina = Vitrina_vista(self.frame_principal, tabla_vitrina, funcion_ver, funcion_eliminar, 
-                                             height=160, width=1050) 
+                                             height=alto_v_vista_vitrina, width=ancho_v_vista_vitrina) 
                 return self.vitrina
             else:
-                frame_vitrina.agregar_label(1, 2, '                  0 documentos recibidos asociados')
+                frame_vitrina.agregar_label(1, 2, '     ')
+                frame_vitrina.agregar_label(2, 2, '                  0 documentos recibidos asociados')
+                frame_vitrina.agregar_titulo(3, 2, '     ')
         else:
-            frame_vitrina.agregar_label(1, 2, '                  0 documentos recibidos asociados')
+            frame_vitrina.agregar_label(1, 2, '     ')
+            frame_vitrina.agregar_label(2, 2, '                  0 documentos recibidos asociados')
+            frame_vitrina.agregar_titulo(3, 2, '     ')
     
     #----------------------------------------------------------------------
     def nuevo_dr(self):
@@ -445,7 +454,7 @@ class funcionalidades_ospa(Ventana):
     #----------------------------------------------------------------------
     def cerrar_sesion(self, evento = None):
 
-        self.desaparecer()
+        self.destruir()
         
         vg.cod_usuario = None
         vg.usuario = None

@@ -62,10 +62,16 @@ tabla_departamento_efa = tabla_lista_efa.loc[:, ['DEP_OSPA', 'PROV_DIST_OSPA']]
 departamento_ospa = sorted(list(tabla_lista_efa['DEP_OSPA'].unique()))
 
 # 4. Parámetros
-ancho_v_vista = 1100
+ancho_v_vista = 1025
 alto_v_vista = 600
+ancho_v_vista_vitrina = 950
+alto_v_vista_vitrina = 120
+
 ancho_v_busqueda = 1300
-alto_v_busqueda = 582
+alto_v_busqueda = 568
+ancho_v_busqueda_vitrina = 1075
+alto_v_busqueda_vitrina = 240
+
 # 4.1 Bases de datos
 id_parametros = '1NPg8Q0O_NqQ6bkRhy4ow17x2XJ08r6Ev3R6X80WmZ3c'
 base_parametros = Base_de_datos(id_parametros, 'PARAMETROS')

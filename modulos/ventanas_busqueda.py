@@ -8,14 +8,13 @@ from modulos import variables_globales as vg
 from modulos.funcionalidades_ospa import funcionalidades_ospa
 
 # Parámetros ventana
-ancho_v_vista = vg.ancho_v_vista
-alto_v_vista = vg.alto_v_vista
 ancho_v_busqueda = vg.ancho_v_busqueda
 alto_v_busqueda = vg.alto_v_busqueda
+ancho_v_busqueda_vitrina = vg.ancho_v_busqueda_vitrina
+alto_v_busqueda_vitrina = vg.alto_v_busqueda_vitrina
+
 ancho_v_busqueda_franja = ancho_v_busqueda - 3
 alto_v_busqueda_franja = 78
-ancho_v_busqueda_vitrina = 1080
-alto_v_busqueda_vitrina = 250
 
 # 1. Bases
 id_b_ospa = vg.id_b_ospa
