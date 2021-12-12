@@ -147,7 +147,7 @@ class ScrollFrame(Frame):
 
         super().__init__(parent, **kwargs)
         
-        self.canvas = Canvas(self, borderwidth=1, background=formato.fondo)
+        self.canvas = Canvas(self, borderwidth=1, background=formato.fondo, highlightthickness = 0)
         self.viewPort = Frame(self.canvas, background=formato.fondo)
 
         self.vsb = Scrollbar(self, orient="vertical", command=self.canvas.yview)
@@ -330,7 +330,8 @@ class Cuadro(Frame):
             self.z, 
             text= self.texto,
             font= formato.tipo_de_letra,
-            bg = formato.fondo
+            bg = formato.fondo,
+            cursor = "hand2"
             )
         self.etiqueta.grid(row= self.y, column=self.x, sticky='news', pady=4, padx=8)
         #self.etiqueta.bind("<Button-1>",lambda e,argumento=argumento:self.funcion)
@@ -493,16 +494,24 @@ class Cuadro(Frame):
         
         self.texto_titulo = Label(self.z, text= self.titulo, font= formato.tipo_de_letra_titulo, bg = formato.fondo)
         self.imagen_label_1 = Label(self.z, image=self.imagen_1, bg = formato.fondo)
-        self.imagen_label_2 = Label(self.z, image=self.imagen_2, bg = formato.fondo)
-        self.imagen_label_3 = Label(self.z, image=self.imagen_3, bg = formato.fondo)
+        self.imagen_label_2 = Label(self.z, image=self.imagen_2, bg = formato.fondo, cursor="hand2")
+        self.imagen_label_3 = Label(self.z, image=self.imagen_3, bg = formato.fondo, cursor="hand2")
+        self.texto_vacio = Label(self.z, text= "  ", bg = formato.fondo)
+       
+        self.canvas_linea = Canvas(self.z, bg = formato.fondo, width = 1000, height = 20, highlightthickness = 0)
+        self.canvas_linea.create_line(5, 2, 995, 2, width= 2, fill = formato.fondo_encabezados_de_tabla)
+        self.canvas_linea.create_line(15, 6, 985, 6, width= 1, fill = formato.fondo_encabezados_de_tabla)
 
         self.imagen_label_2.bind("<Button-1>", self.funcion_1)
         self.imagen_label_3.bind("<Button-1>", self.funcion_2)
 
-        self.imagen_label_1.pack(fill="x", side='left')
-        self.texto_titulo.pack(fill = "x", side = "left", expand = 1)
-        self.imagen_label_2.pack(fill="x",side='left')
-        self.imagen_label_3.pack(fill="x",side='left')
+        self.imagen_label_1.grid(sticky = "w", row = 0, column= 0)
+        self.texto_vacio.grid(sticky = "e", padx= 300, row = 0, column = 1)
+        self.imagen_label_2.grid(sticky = "e", row = 0, column = 2)
+        self.imagen_label_3.grid(sticky = "e", row = 0, column = 3)
+
+        self.canvas_linea.grid(row = 1, column = 0, columnspan = 4)
+        self.texto_titulo.grid(row = 2, column = 0, columnspan= 4)
         
         self.lista_de_objetos.append((self.imagen_label_1))
         self.lista_de_objetos.append((self.imagen_label_2))
@@ -535,6 +544,7 @@ class Cuadro(Frame):
         self.agregar_franja_superior("Logo_OSPA.png", "Inicio.png", "Salida.png", titulo_ventana,
                                     49, 202, 40, 40, 40, 40,
                                     funcion_1, funcion_2)
+    
     #----------------------------------------------------------------------
     def agregar_entry(self, y, x):
         """Método de la clase Cuadro. \n
@@ -1307,11 +1317,11 @@ class Cuadro(Frame):
         """"""
         if self.scrollable:
             self.main_frame.destroy() 
-            self.z = Frame(self.scrollframe.viewPort)
+            self.z = Frame(self.scrollframe.viewPort, bg = formato.fondo)
             self.z.pack(side="top", fill="both", expand=True)  
         else:
             self.z.destroy()
-            self.z = Frame(self.window)
+            self.z = Frame(self.window, bg = formato.fondo)
             self.z.pack()
 
 # VI. Vitrina
@@ -1338,7 +1348,7 @@ class Vitrina(Frame):
         self.frame_base_encabezado = Frame(self.main_frame, bg = formato.fondo)
         self.frame_base_encabezado.pack()
 
-        self.canvas_encabezado = Canvas(self.frame_base_encabezado, height=23, width=self.width, bg = formato.fondo)
+        self.canvas_encabezado = Canvas(self.frame_base_encabezado, height=23, width=self.width, bg = formato.fondo,  highlightthickness = 0)
         self.canvas_encabezado.pack(side='left', fill='both', expand=True)
 
         self.empty_frame = Frame(self.frame_base_encabezado, width=12, bg = formato.fondo)
@@ -1507,7 +1517,7 @@ class Vitrina_vista(Frame):
         self.frame_base_encabezado = Frame(self.main_frame, bg = formato.fondo)
         self.frame_base_encabezado.pack()
 
-        self.canvas_encabezado = Canvas(self.frame_base_encabezado, height=23, width=self.width, bg = formato.fondo)
+        self.canvas_encabezado = Canvas(self.frame_base_encabezado, height=23, width=self.width, bg = formato.fondo,  highlightthickness = 0)
         self.canvas_encabezado.pack(side='left', fill='both', expand=True)
 
         self.empty_frame = Frame(self.frame_base_encabezado, width=12, bg = formato.fondo)
@@ -1709,7 +1719,7 @@ class Vitrina_busqueda(Frame):
         self.frame_base_encabezado = Frame(self.main_frame, bg = formato.fondo)
         self.frame_base_encabezado.pack()
 
-        self.canvas_encabezado = Canvas(self.frame_base_encabezado, height=23, width=self.width, bg = formato.fondo)
+        self.canvas_encabezado = Canvas(self.frame_base_encabezado, height=23, width=self.width, bg = formato.fondo,  highlightthickness = 0)
         self.canvas_encabezado.pack(side='left', fill='both', expand=True)
 
         self.empty_frame = Frame(self.frame_base_encabezado, width=12)
@@ -1900,7 +1910,7 @@ class Vitrina_busquedaep(Frame):
         self.frame_base_encabezado = Frame(self.main_frame, bg = formato.fondo)
         self.frame_base_encabezado.pack()
 
-        self.canvas_encabezado = Canvas(self.frame_base_encabezado, height=20, width=self.width, bg = formato.fondo)
+        self.canvas_encabezado = Canvas(self.frame_base_encabezado, height=20, width=self.width, bg = formato.fondo, highlightthickness = 0)
         self.canvas_encabezado.pack(side='left', fill='both', expand=True)
 
         self.empty_frame = Frame(self.frame_base_encabezado, width=12, bg = formato.fondo)
@@ -2135,7 +2145,7 @@ class Vitrina_pendientes(Frame):
         self.frame_base_encabezado = Frame(self.main_frame, bg = formato.fondo)
         self.frame_base_encabezado.pack()
 
-        self.canvas_encabezado = Canvas(self.frame_base_encabezado, height=23, width=self.width, bg = formato.fondo)
+        self.canvas_encabezado = Canvas(self.frame_base_encabezado, height=23, width=self.width, bg = formato.fondo,  highlightthickness = 0)
         self.canvas_encabezado.pack(side='left', fill='both', expand=True)
 
         self.empty_frame = Frame(self.frame_base_encabezado, width=12, bg = formato.fondo)

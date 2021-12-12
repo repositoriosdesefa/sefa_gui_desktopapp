@@ -375,7 +375,8 @@ class Doc_emitidos_vista(funcionalidades_ospa):
         # III. Ubicaciones
         # III.1 Frame de Título
         titulos = Cuadro(self.frame_principal)
-        titulos.agregar_encabezado('Detalle del Documento Emitido')
+        titulos.agregar_franja_superior_ospa('Detalle de documento emitido', 
+                                            self.inicio_app, self.cerrar_sesion)
         
         # III.2 Frame de rejillas
         self.frame_rejilla = Cuadro(self.frame_principal)
@@ -518,11 +519,15 @@ class Extremo_problemas_vista(funcionalidades_ospa):
         # II.2 Lista de DE
         self.tabla_de_de =  tabla_de_de_resumen
         self.tabla_relacion_de_ep = tabla_relacion_de_ep
+        # II.3 Lista de MP
+        self.tabla_de_mp = tabla_de_mp_resumen
+        self.tabla_relacion_mp_ep = tabla_relacion_mp_ep
 
         # III. Títulos e imagen
         # III.1 Frame de Título
         titulos = Cuadro(self.frame_principal)
-        titulos.agregar_encabezado('Detalle de extremo de problema')
+        titulos.agregar_franja_superior_ospa('Detalle de extremo de problema', 
+                                            self.inicio_app, self.cerrar_sesion)
         # III.2 Frame de rejillas
         self.frame_rejilla = Cuadro(self.frame_principal)
         # En caso exista precedente, se inserta en la rejilla
@@ -530,6 +535,7 @@ class Extremo_problemas_vista(funcionalidades_ospa):
             self.tabla_de_ep_cod = b_ep_cod.generar_dataframe()
             self.tabla_relacion_de_ep = base_relacion_de_ep.generar_dataframe()
             self.tabla_relacion_dr_ep = base_relacion_dr_ep.generar_dataframe()
+            self.tabla_relacion_mp_ep = base_relacion_mp_ep.generar_dataframe()
             self.cod_usuario_dr = id_objeto
             self.lista_para_insertar = lista
             rejilla_ep = [
@@ -658,6 +664,17 @@ class Extremo_problemas_vista(funcionalidades_ospa):
                                                 self.tabla_de_de, self.tabla_relacion_de_ep, 
                                                 "ID_EP", "ID_DE", "COD_EP", 
                                                 self.ver_de, self.eliminar_de_y_actualizar)
+        
+        # III.5 Frame de vitrina 3
+        self.frame_vitrina_3 = Cuadro(self.frame_principal)
+        self.vitrina_3 = self.generar_vitrina(self.nuevo, 
+                                                self.frame_vitrina_3,
+                                                '(+) Agregar', self.no_asociar,
+                                                'Macroproblemas asociados',
+                                                self.cod_usuario_ep, self.tabla_de_ep_cod, 
+                                                self.tabla_de_mp, self.tabla_relacion_mp_ep, 
+                                                "ID_EP", "ID_MP", "COD_EP", 
+                                                self.ver_mp, self.eliminar_mp_y_actualizar)
 
     #----------------------------------------------------------------------
     def guardar_y_actualizar_ep(self):
@@ -672,10 +689,15 @@ class Extremo_problemas_vista(funcionalidades_ospa):
     #----------------------------------------------------------------------
     def actualizar_vitrinas_ep(self):
         
-        # 0. Elimino el último frame
+        # 0. Elimino los últimos frame
+        # Frame 2
         self.frame_vitrina_2.eliminar_cuadro()
         if self.vitrina_2 != None:
             self.vitrina_2.eliminar_posible_vitrina()
+        # Frame 3
+        self.frame_vitrina_3.eliminar_cuadro()
+        if self.vitrina_3 != None:
+            self.vitrina_3.eliminar_posible_vitrina()
 
         # I. Situo las ventanas actualizadas
         # I.1 Ventana de documentos emitidos
@@ -702,6 +724,17 @@ class Extremo_problemas_vista(funcionalidades_ospa):
                                                 self.tabla_de_de, self.tabla_relacion_de_ep, 
                                                 "ID_EP", "ID_DE", "COD_EP", 
                                                 self.ver_de, self.eliminar_de_y_actualizar)
+        
+        # III.5 Frame de vitrina 3
+        self.frame_vitrina_3.eliminar_cuadro()
+        self.vitrina_3 = self.generar_vitrina(self.nuevo, 
+                                                self.frame_vitrina_3,
+                                                '(+) Agregar', self.no_asociar,
+                                                'Macroproblemas asociados',
+                                                self.cod_usuario_ep, self.tabla_de_ep_cod, 
+                                                self.tabla_de_mp, self.tabla_relacion_mp_ep, 
+                                                "ID_EP", "ID_MP", "COD_EP", 
+                                                self.ver_mp, self.eliminar_mp_y_actualizar)
 
 
     #----------------------------------------------------------------------
@@ -726,6 +759,18 @@ class Extremo_problemas_vista(funcionalidades_ospa):
         
         # Se actualiza tabla de relaciones
         self.tabla_relacion_de_ep = base_relacion_de_ep.generar_dataframe()
+        # Se actualiza la vista de vitrinas
+        self.actualizar_vitrinas_ep()
+
+    #----------------------------------------------------------------------
+    def eliminar_mp_y_actualizar(self, id_objeto):
+        # Se elimina el DE
+        self.eliminar_objeto(self.cod_usuario_ep, "COD_EP", id_objeto, "COD_MP",
+                            self.tabla_de_ep_cod, tabla_de_mp_cod, 
+                            base_relacion_mp_ep, base_relacion_mp_ep_hist)
+        
+        # Se actualiza tabla de relaciones
+        self.tabla_relacion_mp_ep = base_relacion_mp_ep.generar_dataframe()
         # Se actualiza la vista de vitrinas
         self.actualizar_vitrinas_ep()
 
@@ -767,7 +812,8 @@ class Macroproblemas_vista(funcionalidades_ospa):
         # III. Títulos e imagen
         # III.1 Frame de Título
         titulos = Cuadro(self.frame_principal)
-        titulos.agregar_encabezado('Detalle de macroproblema')
+        titulos.agregar_franja_superior_ospa('Detalle de macroproblema', 
+                                            self.inicio_app, self.cerrar_sesion)
 
         # III.2 Frame de rejillas
         self.frame_rejilla = Cuadro(self.frame_principal)
