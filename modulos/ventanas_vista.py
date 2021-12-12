@@ -192,7 +192,9 @@ class Doc_recibidos_vista(funcionalidades_ospa):
         # III. Títulos e imagen
         # III.1 Frame de Título
         titulos = Cuadro(self.frame_principal)
-        titulos.agregar_encabezado('Detalle de documento recibido')
+        titulos.agregar_franja_superior_ospa('Detalle de documento recibido', 
+                                            self.inicio_app, self.cerrar_sesion)
+        #titulos.agregar_encabezado('Detalle de documento recibido')
         # III.2 Frame de rejillas
         self.frame_rejilla = Cuadro(self.frame_principal)
         self.frame_rejilla.agregar_rejilla(rejilla_dr)

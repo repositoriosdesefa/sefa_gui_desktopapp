@@ -75,9 +75,10 @@ class logueo1_Ingreso_de_usuario(Ventana):
     #----------------------------------------------------------------------
     def ir(self):
         """"""
-        texto_bienvenida = "Bienvenido " + vg.usuario
+        vg.texto_bienvenida = "Bienvenido " + vg.usuario
+        texto_bienvenida = vg.texto_bienvenida
         self.desaparecer()
-        subframe = menus.inicio_app_OSPA(self, 405, 403, texto_bienvenida, False)
+        subframe = menus.inicio_app_OSPA(self, 434, 403, texto_bienvenida, False)
     
     #----------------------------------------------------------------------
     def ir_a_recuperar_contrasena(self, event):
@@ -222,4 +223,3 @@ class logueo3_Cambiar_contrasena(Ventana):
                         b3.agregar_datos(nuevos_datos_de_usuario_para_historial)
                         self.volver()
                         messagebox.showwarning('Operación exitosa', 'Su contraseña ha sido modificada.')
-

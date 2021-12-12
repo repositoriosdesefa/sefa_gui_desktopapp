@@ -3,6 +3,7 @@ from tkinter import *
 from tkinter import messagebox 
 from tkinter import scrolledtext as sc
 from tkinter import ttk, Frame, Canvas, Label
+from typing import TextIO
 from tkcalendar import Calendar, DateEntry
 import datetime
 import apoyo.formato as formato 
@@ -444,6 +445,70 @@ class Cuadro(Frame):
         self.agregar_titulo(0,3,'                             ')
         self.agregar_titulo(0,4,'                             ')
 
+        #----------------------------------------------------------------------
+    
+    #----------------------------------------------------------------------
+    def agregar_franja_superior(self, imagen_1, imagen_2, imagen_3, titulo,
+                                largo_1, ancho_1, largo_2, ancho_2, largo_3, ancho_3,
+                                funcion_1, funcion_2):
+        """"""
+
+        self.titulo = titulo
+
+        self.ancho_imagen_1 = ancho_1
+        self.largo_imagen_1 = largo_1
+
+        self.ancho_imagen_2 = ancho_2
+        self.largo_imagen_2 = largo_2
+
+        self.ancho_imagen_3 = ancho_3
+        self.largo_imagen_3 = largo_3
+
+        self.nombre_archivo_1 = imagen_1
+        self.nombre_archivo_2 = imagen_2
+        self.nombre_archivo_3 = imagen_3
+
+        self.ubicacion_1 = str('images/' + self.nombre_archivo_1)
+        self.ubicacion_2 = str('images/' + self.nombre_archivo_2)
+        self.ubicacion_3 = str('images/' + self.nombre_archivo_3)
+
+        self.funcion_1 = funcion_1
+        self.funcion_2 = funcion_2
+
+        self.imagen_cargada_1 = Image.open(self.ubicacion_1)
+        self.imagen_cargada_1 = self.imagen_cargada_1.resize((self.ancho_imagen_1, self.largo_imagen_1), 
+                                                            Image.ANTIALIAS)
+
+        self.imagen_cargada_2 = Image.open(self.ubicacion_2)
+        self.imagen_cargada_2 = self.imagen_cargada_2.resize((self.ancho_imagen_2, self.largo_imagen_2), 
+                                                            Image.ANTIALIAS)
+        
+        self.imagen_cargada_3 = Image.open(self.ubicacion_3)
+        self.imagen_cargada_3 = self.imagen_cargada_3.resize((self.ancho_imagen_3, self.largo_imagen_3), 
+                                                            Image.ANTIALIAS)
+                            
+        self.imagen_1 = ImageTk.PhotoImage(self.imagen_cargada_1)
+        self.imagen_2 = ImageTk.PhotoImage(self.imagen_cargada_2)
+        self.imagen_3 = ImageTk.PhotoImage(self.imagen_cargada_3)
+        
+        self.texto_titulo = Label(self.z, text= self.titulo, font= formato.tipo_de_letra_titulo, bg = formato.fondo)
+        self.imagen_label_1 = Label(self.z, image=self.imagen_1, bg = formato.fondo)
+        self.imagen_label_2 = Label(self.z, image=self.imagen_2, bg = formato.fondo)
+        self.imagen_label_3 = Label(self.z, image=self.imagen_3, bg = formato.fondo)
+
+        self.imagen_label_2.bind("<Button-1>", self.funcion_1)
+        self.imagen_label_3.bind("<Button-1>", self.funcion_2)
+
+        self.imagen_label_1.pack(fill="x", side='left')
+        self.texto_titulo.pack(fill = "x", side = "left", expand = 1)
+        self.imagen_label_2.pack(fill="x",side='left')
+        self.imagen_label_3.pack(fill="x",side='left')
+        
+        self.lista_de_objetos.append((self.imagen_label_1))
+        self.lista_de_objetos.append((self.imagen_label_2))
+        self.lista_de_objetos.append((self.imagen_label_3))
+        self.lista_de_objetos.append((self.texto_titulo))
+    
     #----------------------------------------------------------------------
     def agregar_franja_inferior(self, imagen, largo, ancho):
         """"""
@@ -457,9 +522,19 @@ class Cuadro(Frame):
                                                          Image.ANTIALIAS)
         self.imagen = ImageTk.PhotoImage(self.imagen_cargada)
         self.imagen_label = Label(self.z, image=self.imagen, bg = formato.fondo)
+        self.espacio = Label(self.z, text= "       ", font= formato.tipo_de_letra_titulo,
+                             bg = formato.fondo)
+        self.espacio.pack(side = "top")
         self.imagen_label.pack(side='bottom')
         self.lista_de_objetos.append((self.imagen_label))
         
+    #----------------------------------------------------------------------
+    def agregar_franja_superior_ospa(self, titulo, funcion_1, funcion_2):
+
+        titulo_ventana = titulo
+        self.agregar_franja_superior("Logo_OSPA.png", "Inicio.png", "Salida.png", titulo_ventana,
+                                    49, 202, 40, 40, 40, 40,
+                                    funcion_1, funcion_2)
     #----------------------------------------------------------------------
     def agregar_entry(self, y, x):
         """Método de la clase Cuadro. \n

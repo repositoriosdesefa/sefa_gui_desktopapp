@@ -1,7 +1,7 @@
 from tkinter import  messagebox
 
 from apoyo.elementos_de_GUI import  Ventana, Vitrina_vista
-from modulos import menus, ventanas_busqueda, ventanas_vista
+from modulos import menus, ventanas_busqueda, ventanas_vista, logueo
 from modulos import variables_globales as vg
 
 import datetime as dt
@@ -47,11 +47,12 @@ class funcionalidades_ospa(Ventana):
             self.frame_principal = self
 
     #----------------------------------------------------------------------
-    def inicio_app(self):
+    def inicio_app(self, evento = None):
         """"""
         self.desaparecer()
+        texto_bienvenida = vg.texto_bienvenida
         # LargoxAncho
-        subFrame = menus.inicio_app_OSPA(self, 400, 400, "Inicio")
+        subFrame = menus.inicio_app_OSPA(self, 434, 403, texto_bienvenida)
         
     #----------------------------------------------------------------------
     def guardar_objeto(self, rejilla_datos, 
@@ -440,3 +441,15 @@ class funcionalidades_ospa(Ventana):
             return True
         else:
             return False
+    
+    #----------------------------------------------------------------------
+    def cerrar_sesion(self, evento = None):
+
+        self.desaparecer()
+        
+        vg.cod_usuario = None
+        vg.usuario = None
+        vg.oficina = None
+        vg.texto_bienvenida = None
+        
+        subFrame = logueo.logueo1_Ingreso_de_usuario(self, 492, 403, "ASPA - Versión 0.0", False)

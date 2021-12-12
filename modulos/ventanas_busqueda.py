@@ -13,6 +13,9 @@ alto_v_vista = vg.alto_v_vista
 ancho_v_busqueda = vg.ancho_v_busqueda
 alto_v_busqueda = vg.alto_v_busqueda
 ancho_v_busqueda_franja = ancho_v_busqueda - 3
+alto_v_busqueda_franja = 78
+ancho_v_busqueda_vitrina = 1080
+alto_v_busqueda_vitrina = 250
 
 # 1. Bases
 id_b_ospa = vg.id_b_ospa
@@ -46,7 +49,6 @@ base_relacion_de_ep_hist =  vg.base_relacion_de_ep_hist
 b_relacion_mp_ep =  vg.base_relacion_mp_ep
 b_relacion_mp_ep_tabla = b_relacion_mp_ep.generar_dataframe()
 base_relacion_mp_ep_hist =  vg.base_relacion_mp_ep_hist
-
 
 class Doc_recibidos_busqueda(funcionalidades_ospa):
     """"""
@@ -117,11 +119,11 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
 
         # Creando vitrina
         self.v1 = Vitrina_busqueda(self, self.tabla_drF, self.ver_dr, 
-                                   self.asociar_dr_de, height=250, width=1080)
+                                   self.asociar_dr_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
         
         # Franja inferior
         self.c16 = Cuadro(self)
-        self.c16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', 78, ancho_v_busqueda_franja)
+        self.c16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
 
     #----------------------------------------------------------------------
     def actualizar(self):
@@ -169,7 +171,7 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
         self.frame_vitrina_dr = Cuadro(self)
         # Creando vitrina
         self.v1 = Vitrina_busqueda(self, self.tabla_drF, self.ver_dr, 
-                                   self.asociar_dr_de, height=250, width=1080)
+                                   self.asociar_dr_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
 
     #----------------------------------------------------------------------  
     def Buscardr(self):
@@ -238,7 +240,7 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
             self.frame_vitrina_dr.eliminar_cuadro()
             self.frame_vitrina_dr = Cuadro(self)
             self.v1 = Vitrina_busqueda(self, tabla_filtro3, self.ver_dr, 
-                                   self.asociar_dr_de, height=250, width=1080)
+                                   self.asociar_dr_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
         else:
             self.frame_vitrina_dr.eliminar_cuadro()
             self.frame_vitrina_dr = Cuadro(self)
@@ -260,7 +262,7 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
         self.frame_vitrina_dr = Cuadro(self)
         # Creando vitrina
         self.v1 = Vitrina_busqueda(self, self.tabla_drF, self.ver_dr, 
-                                   self.asociar_dr_de, height=250, width=1080)
+                                   self.asociar_dr_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
 
     #----------------------------------------------------------------------
     def asociar_dr_de(self, x):
@@ -341,17 +343,6 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
                     base_relacion_de_ep.agregar_datos(datos_insertar)
             else:
                 messagebox.showinfo("¡Atención!", "El registro ha sido asociado con éxito")
-        
-    #----------------------------------------------------------------------     
-    def comprobar_id(self, base_codigo, id_usuario):
-        """"""
-        # Comprobar coincidencias
-        cantidad_de_coincidencias = base_codigo.contar_coincidencias(id_usuario)
-
-        if cantidad_de_coincidencias != 0:
-            return True
-        else:
-            return False
 
 class Doc_emitidos_busqueda(funcionalidades_ospa):
     """"""
@@ -432,7 +423,12 @@ class Doc_emitidos_busqueda(funcionalidades_ospa):
 
         # Creando vitrina
         self.vde1 = Vitrina_busqueda(self, self.tabla_drF, self.ver_de, 
-                                    self.asociar_de_dr, height=250, width=1190)
+                                    self.asociar_de_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
+        
+        # Franja inferior
+        self.cde16 = Cuadro(self)
+        self.cde16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
+
 
     #----------------------------------------------------------------------
     def actualizar(self):
@@ -489,7 +485,7 @@ class Doc_emitidos_busqueda(funcionalidades_ospa):
         self.frame_vitrina_1 = Cuadro(self)
         # Creando vitrina
         self.vde1 = Vitrina_busqueda(self, self.tabla_drF, self.ver_de, 
-                                    self.asociar_de_dr, height=250, width=1190)
+                                    self.asociar_de_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
 
     #----------------------------------------------------------------------
 
@@ -586,7 +582,7 @@ class Doc_emitidos_busqueda(funcionalidades_ospa):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_1.eliminar_cuadro()
             self.frame_vitrina_1 = Cuadro(self)
-            self.vde1 = Vitrina_busqueda(self, tabla_filtro3, self.ver_de, self.asociar_de_dr, height=250, width=1190)
+            self.vde1 = Vitrina_busqueda(self, tabla_filtro3, self.ver_de, self.asociar_de_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
         else:
             self.frame_vitrina_1.eliminar_cuadro()
             self.frame_vitrina_1 = Cuadro(self)
@@ -609,7 +605,7 @@ class Doc_emitidos_busqueda(funcionalidades_ospa):
         self.frame_vitrina_1 = Cuadro(self)
         # Creando vitrina
         self.vde1 = Vitrina_busqueda(self, self.tabla_drF, self.ver_de, 
-                                    self.asociar_de_dr, height=250, width=1190)
+                                    self.asociar_de_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
 
     #----------------------------------------------------------------------
     def asociar_de_dr(self, x):
@@ -776,7 +772,12 @@ class Extremos(funcionalidades_ospa):
 
         # Creando vitrina
         self.vep = Vitrina_busquedaep(self, self.tabla_deF, self.ver_ep, 
-                                     self.asociar_ep, self.ver_mp_ep, height=250, width=1220)
+                                     self.asociar_ep, self.ver_mp_ep, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
+        
+        # Franja inferior
+        self.ep3 = Cuadro(self)
+        self.ep3.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
+
 
     #----------------------------------------------------------------------
     
@@ -898,7 +899,7 @@ class Extremos(funcionalidades_ospa):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_ep.eliminar_cuadro()
             self.frame_vitrina_ep = Cuadro(self)
-            self.vep = Vitrina_busquedaep(self, tabla_filtro3, self.ver_ep, self.asociar_ep, self.ver_mp_ep, height=250, width=1220)
+            self.vep = Vitrina_busquedaep(self, tabla_filtro3, self.ver_ep, self.asociar_ep, self.ver_mp_ep, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
         else:
             self.frame_vitrina_ep.eliminar_cuadro()
             self.frame_vitrina_ep = Cuadro(self)
@@ -920,7 +921,7 @@ class Extremos(funcionalidades_ospa):
 
         self.frame_vitrina_ep = Cuadro(self)
         # Creando vitrina
-        self.vep = Vitrina_busquedaep(self, self.tabla_deF, self.ver_ep, self.asociar_ep, self.ver_mp_ep, height=250, width=1220)
+        self.vep = Vitrina_busquedaep(self, self.tabla_deF, self.ver_ep, self.asociar_ep, self.ver_mp_ep, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
 
     #----------------------------------------------------------------------
     def actualizar(self):
@@ -992,7 +993,7 @@ class Extremos(funcionalidades_ospa):
         # Creando vitrina
         self.frame_vitrina_ep = Cuadro(self)
         # Creando vitrina
-        self.vep = Vitrina_busquedaep(self, self.tabla_deF, self.ver_ep, self.asociar_ep, self.ver_mp_ep, height=250, width=1220)
+        self.vep = Vitrina_busquedaep(self, self.tabla_deF, self.ver_ep, self.asociar_ep, self.ver_mp_ep, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
 
     #----------------------------------------------------------------------
     def ver_mp_ep(self, x):
@@ -1164,7 +1165,13 @@ class Macroproblemas(funcionalidades_ospa):
         self.frame_vitrina_mp = Cuadro(self)
 
         # Creando vitrina
-        self.vmc = Vitrina_busqueda(self, self.tabla_mpF, self.ver_mp, self.funcion_de_asociar_mp, height=200, width=780)
+        self.vmc = Vitrina_busqueda(self, self.tabla_mpF, self.ver_mp, self.funcion_de_asociar_mp, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
+
+        # Franja inferior
+        self.mc3 = Cuadro(self)
+        self.mc3.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
+
+
 
      #----------------------------------------------------------------------
 
@@ -1238,7 +1245,7 @@ class Macroproblemas(funcionalidades_ospa):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_mp.eliminar_cuadro()
             self.frame_vitrina_mp = Cuadro(self)
-            self.vmc = Vitrina_busqueda(self, tabla_filtro3, self.ver_mp, self.funcion_de_asociar_mp, height=200, width=780)
+            self.vmc = Vitrina_busqueda(self, tabla_filtro3, self.ver_mp, self.funcion_de_asociar_mp, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
         else:
             self.frame_vitrina_mp.eliminar_cuadro()
             self.frame_vitrina_mp = Cuadro(self)
@@ -1260,7 +1267,7 @@ class Macroproblemas(funcionalidades_ospa):
 
         self.frame_vitrina_mp = Cuadro(self)
         # Creando vitrina
-        self.vmc = Vitrina_busqueda(self, self.tabla_mpF, self.ver_mp, self.funcion_de_asociar_mp, height=200, width=780)
+        self.vmc = Vitrina_busqueda(self, self.tabla_mpF, self.ver_mp, self.funcion_de_asociar_mp, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
 
         #----------------------------------------------------------------------
     def actualizar(self):
@@ -1307,7 +1314,7 @@ class Macroproblemas(funcionalidades_ospa):
 
         self.frame_vitrina_mp = Cuadro(self)
         # Creando vitrina
-        self.vmc = Vitrina_busqueda(self, self.tabla_mpF, self.ver_mp, self.funcion_de_asociar_mp, height=200, width=780)
+        self.vmc = Vitrina_busqueda(self, self.tabla_mpF, self.ver_mp, self.funcion_de_asociar_mp, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
     
     #----------------------------------------------------------------------
     def funcion_de_asociar_mp(self, x):
@@ -1386,7 +1393,13 @@ class Macroproblemas_filtrada(funcionalidades_ospa):
         self.frame_vitrina_mp = Cuadro(self)
 
         # Creando vitrina
-        self.vmc = Vitrina_pendientes(self, self.tabla_mpF, self.ver_mp, height=200, width=800)
+        self.vmc = Vitrina_pendientes(self, self.tabla_mpF, self.ver_mp, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
+
+        # Franja inferior
+        self.mc3 = Cuadro(self)
+        self.mc3.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
+
+
 
     #----------------------------------------------------------------------
     
@@ -1452,7 +1465,7 @@ class Macroproblemas_filtrada(funcionalidades_ospa):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_mp.eliminar_cuadro()
             self.frame_vitrina_mp = Cuadro(self)
-            self.vmc = Vitrina_pendientes(self, tabla_filtro3, self.ver_mp, height=200, width=800)
+            self.vmc = Vitrina_pendientes(self, tabla_filtro3, self.ver_mp, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
         else:
             self.frame_vitrina_mp.eliminar_cuadro()
             self.frame_vitrina_mp = Cuadro(self)
@@ -1474,8 +1487,7 @@ class Macroproblemas_filtrada(funcionalidades_ospa):
 
         self.frame_vitrina_mp = Cuadro(self)
         # Creando vitrina
-        self.vmc = Vitrina_pendientes(self, self.tabla_mpF, self.ver_mp, height=200, width=800)
-
+        self.vmc = Vitrina_pendientes(self, self.tabla_mpF, self.ver_mp, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
     #----------------------------------------------------------------------
     def actualizar(self):
         
@@ -1521,7 +1533,7 @@ class Macroproblemas_filtrada(funcionalidades_ospa):
 
         self.frame_vitrina_mp = Cuadro(self)
         # Creando vitrina
-        self.vmc = Vitrina_pendientes(self, self.tabla_mpF, self.ver_mp, height=200, width=800)
+        self.vmc = Vitrina_pendientes(self, self.tabla_mpF, self.ver_mp, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
 
 class Administrados(funcionalidades_ospa):
     """"""
@@ -1588,7 +1600,7 @@ class Administrados(funcionalidades_ospa):
         self.frame_vitrina_ad = Cuadro(self)
 
         # Creando vitrina
-        self.vad = Vitrina_busqueda(self, self.tabla_adF, self.ver_ad, self.funcion_de_asociar_ad, height=200, width=590)
+        self.vad = Vitrina_busqueda(self, self.tabla_adF, self.ver_ad, self.funcion_de_asociar_ad, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
 
     #----------------------------------------------------------------------
     
@@ -1649,7 +1661,7 @@ class Administrados(funcionalidades_ospa):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_ad.eliminar_cuadro()
             self.frame_vitrina_ad = Cuadro(self)
-            self.vad = Vitrina_busqueda(self, tabla_filtro3, self.ver_ad, self.funcion_de_asociar_ad, height=200, width=590)
+            self.vad = Vitrina_busqueda(self, tabla_filtro3, self.ver_ad, self.funcion_de_asociar_ad, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
         else:
             self.frame_vitrina_ad.eliminar_cuadro()
             self.frame_vitrina_ad = Cuadro(self)
@@ -1671,7 +1683,7 @@ class Administrados(funcionalidades_ospa):
 
         self.frame_vitrina_ad = Cuadro(self)
         # Creando vitrina
-        self.vad = Vitrina_busqueda(self, self.tabla_adF, self.ver_ad, self.funcion_de_asociar_ad, height=200, width=590)
+        self.vad = Vitrina_busqueda(self, self.tabla_adF, self.ver_ad, self.funcion_de_asociar_ad, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
 
     #----------------------------------------------------------------------
     def actualizar(self):
@@ -1715,7 +1727,7 @@ class Administrados(funcionalidades_ospa):
 
         self.frame_vitrina_ad = Cuadro(self)
         # Creando vitrina
-        self.vad = Vitrina_busqueda(self, self.tabla_adF, self.ver_ad, self.funcion_de_asociar_ad, height=200, width=590)
+        self.vad = Vitrina_busqueda(self, self.tabla_adF, self.ver_ad, self.funcion_de_asociar_ad, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
 
     #----------------------------------------------------------------------
     def ver_ad(self, x):
@@ -1820,7 +1832,11 @@ class Pendientes_jefe_firma(funcionalidades_ospa):
 
         # Creando vitrina
         self.vpfirma = Vitrina_pendientes(self, self.tabla_pfirmaF, 
-                                                    self.ver_de, height=250, width=1190)
+                                                    self.ver_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
+        
+        # Franja inferior
+        self.pfirma16 = Cuadro(self)
+        self.pfirma16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
 
     #----------------------------------------------------------------------
 
@@ -1904,7 +1920,7 @@ class Pendientes_jefe_firma(funcionalidades_ospa):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_pfirma.eliminar_cuadro()
             self.frame_vitrina_pfirma = Cuadro(self)
-            self.vpfirma = Vitrina_pendientes(self, tabla_filtro3, self.ver_de, height=250, width=1190)
+            self.vpfirma = Vitrina_pendientes(self, tabla_filtro3, self.ver_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
         else:
             self.frame_vitrina_pfirma.eliminar_cuadro()
             self.frame_vitrina_pfirma = Cuadro(self)
@@ -1926,7 +1942,7 @@ class Pendientes_jefe_firma(funcionalidades_ospa):
         self.pfirma15.agregar_rejilla(self.rejilla_2_pfirma)
         self.frame_vitrina_pfirma = Cuadro(self)
         # Creando vitrina
-        self.vpfirma = Vitrina_pendientes(self, self.tabla_pfirmaF, self.ver_de, height=250, width=1190)
+        self.vpfirma = Vitrina_pendientes(self, self.tabla_pfirmaF, self.ver_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
 
     #----------------------------------------------------------------------
     def actualizar(self):
@@ -1983,7 +1999,7 @@ class Pendientes_jefe_firma(funcionalidades_ospa):
         self.pfirma15.agregar_rejilla(self.rejilla_2_pfirma)
         self.frame_vitrina_pfirma = Cuadro(self)
         # Creando vitrina
-        self.vpfirma = Vitrina_pendientes(self, self.tabla_pfirmaF, self.ver_de, height=250, width=1190)
+        self.vpfirma = Vitrina_pendientes(self, self.tabla_pfirmaF, self.ver_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
     
 class Pendientes_jefe_asignar(funcionalidades_ospa):
     """"""
@@ -2058,8 +2074,12 @@ class Pendientes_jefe_asignar(funcionalidades_ospa):
         self.frame_vitrina_jpa = Cuadro(self)
 
         # Creando vitrina
-        self.vjpa = Vitrina_pendientes(self, self.tabla_jpaF, self.ver_dr, height=200, width=770)
-    
+        self.vjpa = Vitrina_pendientes(self, self.tabla_jpaF, self.ver_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
+
+        # Franja inferior
+        self.jpa16 = Cuadro(self)
+        self.jpa16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
+  
     #----------------------------------------------------------------------
 
     def Buscar_jpa(self):
@@ -2127,7 +2147,7 @@ class Pendientes_jefe_asignar(funcionalidades_ospa):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_jpa.eliminar_cuadro()
             self.frame_vitrina_jpa = Cuadro(self)
-            self.vjpa = Vitrina_pendientes(self, tabla_filtro3, self.ver_dr, height=200, width=770)
+            self.vjpa = Vitrina_pendientes(self, tabla_filtro3, self.ver_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
         else:
             self.frame_vitrina_jpa.eliminar_cuadro()
             self.frame_vitrina_jpa = Cuadro(self)
@@ -2149,7 +2169,7 @@ class Pendientes_jefe_asignar(funcionalidades_ospa):
         self.jpa15.agregar_rejilla(self.rejilla_jpa2)
         self.frame_vitrina_jpa = Cuadro(self)
         # Creando vitrina
-        self.vjpa = Vitrina_pendientes(self, self.tabla_jpaF, self.ver_dr, height=200, width=770)
+        self.vjpa = Vitrina_pendientes(self, self.tabla_jpaF, self.ver_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
 
 
     #----------------------------------------------------------------------
@@ -2197,7 +2217,7 @@ class Pendientes_jefe_asignar(funcionalidades_ospa):
         self.jpa15.agregar_rejilla(self.rejilla_jpa2)
         self.frame_vitrina_jpa = Cuadro(self)
         # Creando vitrina
-        self.vjpa = Vitrina_pendientes(self, self.tabla_jpaF, self.ver_dr, height=200, width=770)
+        self.vjpa = Vitrina_pendientes(self, self.tabla_jpaF, self.ver_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
 
 class Pendientes_por_reiterar(funcionalidades_ospa):
     """"""
@@ -2274,7 +2294,11 @@ class Pendientes_por_reiterar(funcionalidades_ospa):
         self.frame_vitrina_ppr = Cuadro(self)
 
         # Creando vitrina
-        self.vppr = Vitrina_pendientes(self, self.tabla_pprF, self.ver_de, height=200, width=1050)
+        self.vppr = Vitrina_pendientes(self, self.tabla_pprF, self.ver_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
+
+        # Franja inferior
+        self.ppr16 = Cuadro(self)
+        self.ppr16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
 
     #----------------------------------------------------------------------
 
@@ -2356,7 +2380,7 @@ class Pendientes_por_reiterar(funcionalidades_ospa):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_ppr.eliminar_cuadro()
             self.frame_vitrina_ppr = Cuadro(self)
-            self.vppr = Vitrina_pendientes(self, tabla_filtro3, self.ver_de, height=200, width=1050)
+            self.vppr = Vitrina_pendientes(self, tabla_filtro3, self.ver_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
         else:
             self.frame_vitrina_ppr.eliminar_cuadro()
             self.frame_vitrina_ppr = Cuadro(self)
@@ -2378,7 +2402,7 @@ class Pendientes_por_reiterar(funcionalidades_ospa):
         self.ppr15.agregar_rejilla(self.rejilla_2_ppr)
         self.frame_vitrina_ppr = Cuadro(self)
         # Creando vitrina
-        self.vppr = Vitrina_pendientes(self, self.tabla_pprF, self.ver_de, height=200, width=1050)
+        self.vppr = Vitrina_pendientes(self, self.tabla_pprF, self.ver_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
 
     #----------------------------------------------------------------------
     def actualizar(self):
@@ -2434,7 +2458,7 @@ class Pendientes_por_reiterar(funcionalidades_ospa):
         self.ppr15.agregar_rejilla(self.rejilla_2_ppr)
         self.frame_vitrina_ppr = Cuadro(self)
         # Creando vitrina
-        self.vppr = Vitrina_pendientes(self, self.tabla_pprF, self.ver_de, height=200, width=1050)
+        self.vppr = Vitrina_pendientes(self, self.tabla_pprF, self.ver_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
 
 
     #----------------------------------------------------------------------
@@ -2508,7 +2532,12 @@ class Pendientes_eq1_trabajar(funcionalidades_ospa):
         self.frame_vitrina_peq1t = Cuadro(self)
 
         # Creando vitrina 
-        self.vpeq1t = Vitrina_pendientes(self, self.tabla_peq1tF, self.ver_dr, height=200, width=1080)
+        self.vpeq1t = Vitrina_pendientes(self, self.tabla_peq1tF, self.ver_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
+
+        # Franja inferior
+        self.peq1t16 = Cuadro(self)
+        self.peq1t16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
+
     
     #----------------------------------------------------------------------
 
@@ -2574,7 +2603,7 @@ class Pendientes_eq1_trabajar(funcionalidades_ospa):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_peq1t.eliminar_cuadro()
             self.frame_vitrina_peq1t = Cuadro(self)
-            self.vpeq1t = Vitrina_pendientes(self, tabla_filtro3, self.ver_dr, height=200, width=1080)
+            self.vpeq1t = Vitrina_pendientes(self, tabla_filtro3, self.ver_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
         else:
             self.frame_vitrina_peq1t.eliminar_cuadro()
             self.frame_vitrina_peq1t = Cuadro(self)
@@ -2595,7 +2624,7 @@ class Pendientes_eq1_trabajar(funcionalidades_ospa):
         self.peq1t15.agregar_rejilla(self.rejilla_peq1t2)
         self.frame_vitrina_peq1t = Cuadro(self)
         # Creando vitrina
-        self.vpeq1t = Vitrina_pendientes(self, self.tabla_peq1tF, self.ver_dr, height=200, width=1080)
+        self.vpeq1t = Vitrina_pendientes(self, self.tabla_peq1tF, self.ver_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
 
     #----------------------------------------------------------------------
     def actualizar(self):
@@ -2642,7 +2671,7 @@ class Pendientes_eq1_trabajar(funcionalidades_ospa):
         self.peq1t15.agregar_rejilla(self.rejilla_peq1t2)
         self.frame_vitrina_peq1t = Cuadro(self)
         # Creando vitrina
-        self.vpeq1t = Vitrina_pendientes(self, self.tabla_peq1tF, self.ver_dr, height=200, width=1080)
+        self.vpeq1t = Vitrina_pendientes(self, self.tabla_peq1tF, self.ver_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
     #----------------------------------------------------------------------
 
 class Pendientes_eq2_calificarrpta(funcionalidades_ospa):
@@ -2719,8 +2748,11 @@ class Pendientes_eq2_calificarrpta(funcionalidades_ospa):
         self.frame_vitrina_peq2t = Cuadro(self)
 
         # Creando vitrina 
-        self.vpeq2t = Vitrina_pendientes(self, self.tabla_peq2tF, self.ver_dr, height=200, width=1170)
+        self.vpeq2t = Vitrina_pendientes(self, self.tabla_peq2tF, self.ver_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
 
+        # Franja inferior
+        self.peq2t16 = Cuadro(self)
+        self.peq2t16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
 
     #----------------------------------------------------------------------
 
@@ -2794,7 +2826,7 @@ class Pendientes_eq2_calificarrpta(funcionalidades_ospa):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_peq2t.eliminar_cuadro()
             self.frame_vitrina_peq2t = Cuadro(self)
-            self.vpeq2t = Vitrina_pendientes(self, tabla_filtro3, self.ver_dr, height=200, width=1170)
+            self.vpeq2t = Vitrina_pendientes(self, tabla_filtro3, self.ver_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
         else:
             self.frame_vitrina_peq2t.eliminar_cuadro()
             self.frame_vitrina_peq2t = Cuadro(self)
@@ -2815,7 +2847,7 @@ class Pendientes_eq2_calificarrpta(funcionalidades_ospa):
         self.peq2t15.agregar_rejilla(self.rejilla_peq2t2)
         self.frame_vitrina_peq2t = Cuadro(self)
         # Creando vitrina
-        self.vpeq2t = Vitrina_pendientes(self, self.tabla_peq2tF, self.ver_dr, height=200, width=1270)
+        self.vpeq2t = Vitrina_pendientes(self, self.tabla_peq2tF, self.ver_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
 
     #----------------------------------------------------------------------
     def actualizar(self):
@@ -2867,7 +2899,7 @@ class Pendientes_eq2_calificarrpta(funcionalidades_ospa):
         self.peq2t15.agregar_rejilla(self.rejilla_peq2t2)
         self.frame_vitrina_peq2t = Cuadro(self)
         # Creando vitrina
-        self.vpeq2t = Vitrina_pendientes(self, self.tabla_peq2tF, self.ver_dr, height=200, width=1270)
+        self.vpeq2t = Vitrina_pendientes(self, self.tabla_peq2tF, self.ver_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
 
 class Pendientes_eq2_programaciones(funcionalidades_ospa):
     """"""
@@ -2936,7 +2968,11 @@ class Pendientes_eq2_programaciones(funcionalidades_ospa):
         self.frame_vitrina_peq2pr = Cuadro(self)
 
         # Creando vitrina 
-        self.vpeq2pr = Vitrina_pendientes(self, self.tabla_peq2prF, self.ver_de, height=200, width=900)
+        self.vpeq2pr = Vitrina_pendientes(self, self.tabla_peq2prF, self.ver_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
+        
+        # Franja inferior
+        self.peq2pr16 = Cuadro(self)
+        self.peq2pr16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
 
     #----------------------------------------------------------------------
 
@@ -2996,7 +3032,7 @@ class Pendientes_eq2_programaciones(funcionalidades_ospa):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_peq2pr.eliminar_cuadro()
             self.frame_vitrina_peq2pr = Cuadro(self)
-            self.vpeq2pr = Vitrina_pendientes(self, tabla_filtro3, self.ver_de, height=200, width=900)
+            self.vpeq2pr = Vitrina_pendientes(self, tabla_filtro3, self.ver_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
         else:
             self.frame_vitrina_peq2pr.eliminar_cuadro()
             self.frame_vitrina_peq2pr = Cuadro(self)
@@ -3017,7 +3053,7 @@ class Pendientes_eq2_programaciones(funcionalidades_ospa):
         self.peq2pr15.agregar_rejilla(self.rejilla_peq2pr2)
         self.frame_vitrina_peq2pr = Cuadro(self)
         # Creando vitrina
-        self.vpeq2pr = Vitrina_pendientes(self, self.tabla_peq2prF, self.ver_de, height=200, width=900)
+        self.vpeq2pr = Vitrina_pendientes(self, self.tabla_peq2prF, self.ver_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
 
         #----------------------------------------------------------------------
     def actualizar(self):
@@ -3062,4 +3098,4 @@ class Pendientes_eq2_programaciones(funcionalidades_ospa):
         self.peq2pr15.agregar_rejilla(self.rejilla_peq2pr2)
         self.frame_vitrina_peq2pr = Cuadro(self)
         # Creando vitrina
-        self.vpeq2pr = Vitrina_pendientes(self, self.tabla_peq2prF, self.ver_de, height=200, width=900)
+        self.vpeq2pr = Vitrina_pendientes(self, self.tabla_peq2prF, self.ver_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
