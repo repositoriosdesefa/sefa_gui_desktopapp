@@ -1,5 +1,5 @@
 from tkinter import  messagebox
-
+import pandas as pd
 from apoyo.elementos_de_GUI import  Ventana, Vitrina_vista
 from modulos import menus, ventanas_busqueda, ventanas_vista, logueo
 from modulos import variables_globales as vg
@@ -462,3 +462,49 @@ class funcionalidades_ospa(Ventana):
         vg.texto_bienvenida = None
         
         subFrame = logueo.logueo1_Ingreso_de_usuario(self, 492, 403, "ASPA - Versión 0.0", False)
+
+#----------------------------------------------------------------------
+    def renombrar_encabezados(self, tabla, tipo_base = None):
+
+        self.tabla = tabla
+        self.tipo_base = tipo_base
+
+        if self.tipo_base == 'dr':
+            tabla_renombrada = self.tabla.rename(columns={'COD_DR':'NRO DOC','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_ENTRANTE':'HT INGRESO'})
+            tabla_renombrada['FECHA INGRESO SEFA'] = pd.to_datetime(tabla_renombrada['FECHA INGRESO SEFA'], dayfirst=True)
+            tabla_renombrada2 = tabla_renombrada.sort_values(by='FECHA INGRESO SEFA', ascending=True)
+            tabla_renombrada2['FECHA INGRESO SEFA'] = tabla_renombrada2['FECHA INGRESO SEFA'].dt.strftime('%d/%m/%Y')
+        
+            return tabla_renombrada2     
+        else:
+            print("Hola")
+#----------------------------------------------------------------------
+    def seleccionar_encabezados(self, tabla, tipo_base = None):
+
+        self.tabla = tabla
+        self.tipo_base = tipo_base
+
+        if self.tipo_base == 'dr':
+            tabla_seleccionada = self.tabla.loc[:,['NRO DOC','REMITENTE','HT INGRESO','FECHA INGRESO SEFA','INDICACION','FECHA ULTIMO MOV.','ASUNTO']]
+            return tabla_seleccionada      
+        else:
+            print("Hola")
+
+#----------------------------------------------------------------------
+    def actualizar_dr(self):
+
+        self.destruir()
+        texto_b_dr = "Búsqueda de documentos recibidos"
+        SubFrame = ventanas_busqueda.Doc_recibidos_busqueda(self, alto_v_busqueda, ancho_v_busqueda, texto_b_dr, False)
+#----------------------------------------------------------------------
+    def actualizar_de(self):
+
+        self.destruir()
+        texto_b_de = "Búsqueda de documentos emitidos"
+        SubFrame = ventanas_busqueda.Doc_emitidos_busqueda(self, alto_v_busqueda, ancho_v_busqueda, texto_b_de, False)
+#----------------------------------------------------------------------
+    def actualizar_ep(self):
+
+        self.destruir()
+        texto_b_ep = "Búsqueda de extremos de problemas"
+        SubFrame = ventanas_busqueda.Extremos(self, alto_v_busqueda, ancho_v_busqueda, texto_b_ep, False)
