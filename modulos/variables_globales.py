@@ -69,8 +69,11 @@ alto_v_vista_vitrina = 120
 
 ancho_v_busqueda = 1300
 alto_v_busqueda = 568
-ancho_v_busqueda_vitrina = 1075
+ancho_v_busqueda_vitrina = 950
+ancho_v_busqueda_de_vitrina = 1020
+ancho_v_busqueda_ep_vitrina = 1020
 alto_v_busqueda_vitrina = 240
+
 
 # 4.1 Bases de datos
 id_parametros = '1NPg8Q0O_NqQ6bkRhy4ow17x2XJ08r6Ev3R6X80WmZ3c'
