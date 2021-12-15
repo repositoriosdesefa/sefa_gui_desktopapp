@@ -7,11 +7,13 @@ from modulos import ventanas_vista, menus
 from modulos import variables_globales as vg
 from modulos.funcionalidades_ospa import funcionalidades_ospa
 
-# Parámetros ventana
+# Parámetros ventana 
 ancho_v_busqueda = vg.ancho_v_busqueda
 alto_v_busqueda = vg.alto_v_busqueda
 ancho_v_busqueda_vitrina = vg.ancho_v_busqueda_vitrina
 alto_v_busqueda_vitrina = vg.alto_v_busqueda_vitrina
+ancho_v_busqueda_de_vitrina = vg.ancho_v_busqueda_de_vitrina
+ancho_v_busqueda_ep_vitrina = vg.ancho_v_busqueda_ep_vitrina
 
 ancho_v_busqueda_franja = ancho_v_busqueda - 3
 alto_v_busqueda_franja = 78
@@ -19,7 +21,7 @@ alto_v_busqueda_franja = 78
 # 1. Bases
 id_b_ospa = vg.id_b_ospa
 b_dr = vg.b_dr
-b_dr_tabla = b_dr.generar_dataframe()
+#b_dr_tabla = b_dr.generar_dataframe()
 b_dr_cod = vg.b_dr_cod
 b_dr_hist = vg.b_dr_hist
 b_de = vg.b_de
@@ -65,20 +67,20 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
             self.id_objeto_ingresado = id_objeto
 
         # Generamos el dataframe a filtrar
-        self.tabla_inicial0 = b_dr_tabla
-        self.tabla_0 = self.tabla_inicial0.rename(columns={'COD_DR':'NRO DOC','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_ENTRANTE':'HT INGRESO'})
-        self.tabla_drF = self.tabla_0.loc[0:99, ['NRO DOC','REMITENTE','HT INGRESO','FECHA INGRESO SEFA','INDICACION','ESPECIALISTA_1','FECHA ULTIMO MOV.','ASUNTO']]
+        b_dr_tabla = b_dr.generar_dataframe()
+        self.tabla_inicial = b_dr_tabla
+        self.tabla_renombrada = self.renombrar_encabezados(self.tabla_inicial, tipo_base = 'dr')
+        self.tabla_seleccionada = self.seleccionar_encabezados(self.tabla_renombrada, tipo_base = 'dr')
+        self.tabla_drF = self.tabla_seleccionada.head(100)
         
         # Información para las listas desplegables
-        self.listatipodoc = sorted(list(set(self.tabla_0['TIPO DOC'])))
-        self.listaremitente = sorted(list(set(self.tabla_0['REMITENTE'])))
+        self.listatipodoc = sorted(list(set(self.tabla_renombrada['TIPO DOC'])))
+        self.listaremitente = sorted(list(set(self.tabla_renombrada['REMITENTE'])))
 
         # Agregando logo del ospa a la ventana y título
-        self.c0 = Cuadro(self)
-        self.c0.agregar_label(0,0,' ')
-        self.c0.agregar_imagen(1,0,'Logo_OSPA.png',202,49)
-        c2 = Cuadro(self)
-        c2.agregar_titulo(2, 0, 'Búsqueda de documentos recibidos')
+        titulos = Cuadro(self)
+        titulos.agregar_franja_superior_ospa('Detalle de documento recibido', 
+                                            self.inicio_app, self.cerrar_sesion)
 
         # Armando rejilla con los filtros
         self.rejilla_dr = (
@@ -98,91 +100,41 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
         )
 
         # Agregando rejilla a la ventana
-        self.c1 = Cuadro(self)
-        self.c1.agregar_rejilla(self.rejilla_dr)
+        self.rejilla_1 = Cuadro(self)
+        self.rejilla_1.agregar_rejilla(self.rejilla_dr)
 
         # Generando rejilla para botones
         self.rejilla_b = (
             ('B', 5, 4, 'Buscar', self.Buscardr),
             ('B', 5, 5, 'Limpiar', self.limpiar),
-            ('B', 5, 6, 'Actualizar', self.actualizar),
-            ('B', 5, 7, 'Volver', self.volver),
-            ('B', 5, 8, 'Inicio', self.inicio_app)
+            ('B', 5, 6, 'Actualizar', self.actualizar_dr),
+            ('B', 5, 7, 'Volver', self.volver)
         )
         
         # Agregando rejilla de botones a la ventana
-        self.c15 = Cuadro(self)
-        self.c15.agregar_rejilla(self.rejilla_b)
-
+        self.rejilla_2 = Cuadro(self)
+        self.rejilla_2.agregar_rejilla(self.rejilla_b)
         self.frame_vitrina_dr = Cuadro(self)
 
         # Creando vitrina
-        self.v1 = Vitrina_busqueda(self, self.tabla_drF, self.ver_dr, 
+        self.vdr = Vitrina_busqueda(self, self.tabla_drF, self.ver_dr, 
                                    self.asociar_dr_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
         
         # Franja inferior
-        self.c16 = Cuadro(self)
-        self.c16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
-
-    #----------------------------------------------------------------------
-    def actualizar(self):
-        
-        # Eliminando campos
-        self.c1.eliminar_cuadro()
-        self.v1.Eliminar_vitrina()
-        self.c15.eliminar_cuadro()
-        self.frame_vitrina_dr.eliminar_cuadro()
-        # Actualizando data
-        b_dr = vg.b_dr
-        b_dr_tabla = b_dr.generar_dataframe()
-        
-        # Generamos el dataframe a filtrar 
-        self.tabla_inicial0 = b_dr_tabla
-        self.tabla_0 = self.tabla_inicial0.rename(columns={'COD_DR':'NRO DOC','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_ENTRANTE':'HT INGRESO'})
-        self.tabla_drF = self.tabla_0.loc[0:99, ['NRO DOC','REMITENTE','HT INGRESO','FECHA INGRESO SEFA','INDICACION','ESPECIALISTA_1','FECHA ULTIMO MOV.','ASUNTO']]
-      
-        # Información para las listas desplegables
-        self.listatipodoc = sorted(list(set(self.tabla_0['TIPO DOC'])))
-        self.listaremitente = sorted(list(set(self.tabla_0['REMITENTE'])))
-
-        # Armando rejilla con los filtros
-        self.rejilla_dr = (
-
-            ('L', 0, 0, 'Nro registro Siged'),
-            ('EE', 0, 1),
-
-            ('L', 1, 0, 'Tipo de documento'),
-            ('CXP', 1, 1, 39, self.listatipodoc, '', 'readonly'),
-
-            ('L', 0, 2, 'Remitente'),
-            ('CXE', 0, 3, 39, self.listaremitente, '', 'normal'),
-
-            ('L', 1, 2, 'Número de doc'),
-            ('EE', 1, 3)
-
-        )
-
-        # Agregando rejilla a la ventana
-        self.c1 = Cuadro(self)
-        self.c1.agregar_rejilla(self.rejilla_dr)
-        self.c15 = Cuadro(self)
-        self.c15.agregar_rejilla(self.rejilla_b)
-        self.frame_vitrina_dr = Cuadro(self)
-        # Creando vitrina
-        self.v1 = Vitrina_busqueda(self, self.tabla_drF, self.ver_dr, 
-                                   self.asociar_dr_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
+        self.franjai = Cuadro(self)
+        self.franjai.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
 
     #----------------------------------------------------------------------  
     def Buscardr(self):
         """"""
         # Obteniendo valores de la rejilla
-        self.listas_filtro = self.c1.obtener_lista_de_datos()
+        self.listas_filtro = self.rejilla_1.obtener_lista_de_datos()
         self.ht = self.listas_filtro[0]
         self.tipodoc = self.listas_filtro[1]
         self.remitente = self.listas_filtro[2]
         self.nrodoc = self.listas_filtro[3]
 
-        self.filtro0 = self.tabla_0
+        self.filtro0 = self.tabla_renombrada
         self.filtro0['NUM_DOC']=self.filtro0['NUM_DOC'].apply(str)
 
         # Filtrando datos por palabras exactas
@@ -203,65 +155,79 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
     #----------------------------------------------------------------------  
     def mostrarDatosdr(self, filtro):
 
-        self.filtro0 = self.tabla_0
+        self.filtro0 = self.tabla_renombrada
         
         if len(self.remitente)>0: # Filtro por palabra clave
-            self.v1.Eliminar_vitrina()
-            self.filtro0 = self.tabla_0[self.tabla_0['REMITENTE'].str.contains(self.remitente)]
+            self.vdr.Eliminar_vitrina()
+            self.filtro0 = self.tabla_renombrada[self.tabla_renombrada['REMITENTE'].str.contains(self.remitente)]
             self.Complementodr(self.filtro0)
 
         if len(self.ht)>0: # Filtro por palabra clave
-            self.v1.Eliminar_vitrina()
+            self.vdr.Eliminar_vitrina()
             self.filtro0['HT INGRESO']=self.filtro0['HT INGRESO'].apply(str)
             self.filtro0 = self.filtro0[self.filtro0['HT INGRESO'].str.contains(self.ht)]
             self.Complementodr(self.filtro0)
 
         if len(filtro)>0:
 
-            self.v1.Eliminar_vitrina()
+            self.vdr.Eliminar_vitrina()
             self.filtro1 = self.filtro0.query(filtro)
             self.Complementodr(self.filtro1)
 
         else:
-            self.v1.Eliminar_vitrina()
+            self.vdr.Eliminar_vitrina()
             self.Complementodr(self.filtro0)
 
     #----------------------------------------------------------------------
 
     def Complementodr(self,filtro0):
 
-        tabla_filtro2 = filtro0.loc[:, ['NRO DOC','REMITENTE','HT INGRESO','FECHA INGRESO SEFA','INDICACION','ESPECIALISTA_1','FECHA ULTIMO MOV.','ASUNTO']]
-        if len(tabla_filtro2.index) > 100:
-            tabla_filtro3 = tabla_filtro2.head(100)
+        self.tabla_seleccionada = self.seleccionar_encabezados(filtro0, tipo_base = 'dr')
+        self.tabla = self.tabla_seleccionada.loc[:]
+
+        if len(self.tabla.index) > 100:
+            tabla_final = self.tabla.head(100)
         else:
-            tabla_filtro3 = tabla_filtro2
-        if len(tabla_filtro3.index) > 0:
+            tabla_final = self.tabla
+        if len(tabla_final.index) > 0:
+            self.franjai.eliminar_cuadro()
             self.frame_vitrina_dr.eliminar_cuadro()
             self.frame_vitrina_dr = Cuadro(self)
-            self.v1 = Vitrina_busqueda(self, tabla_filtro3, self.ver_dr, 
+            self.vdr = Vitrina_busqueda(self, tabla_final, self.ver_dr, 
                                    self.asociar_dr_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
+            # Franja inferior
+            self.franjai = Cuadro(self)
+            self.franjai.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
         else:
+            self.franjai.eliminar_cuadro()
             self.frame_vitrina_dr.eliminar_cuadro()
             self.frame_vitrina_dr = Cuadro(self)
             self.frame_vitrina_dr.agregar_label(1, 2, '                  0 documentos encontrados')
+            # Franja inferior
+            self.franjai = Cuadro(self)
+            self.franjai.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
 
     #----------------------------------------------------------------------
     def limpiar(self):
-        
+
         # Eliminando campos
-        self.c1.eliminar_cuadro()
-        self.v1.Eliminar_vitrina()
-        self.c15.eliminar_cuadro()
+        self.rejilla_1.eliminar_cuadro()
+        self.vdr.Eliminar_vitrina()
+        self.rejilla_2.eliminar_cuadro()
+        self.franjai.eliminar_cuadro()
         self.frame_vitrina_dr.eliminar_cuadro()
         # Agregando rejilla a la ventana
-        self.c1 = Cuadro(self)
-        self.c1.agregar_rejilla(self.rejilla_dr)
-        self.c15 = Cuadro(self)
-        self.c15.agregar_rejilla(self.rejilla_b)
+        self.rejilla_1 = Cuadro(self)
+        self.rejilla_1.agregar_rejilla(self.rejilla_dr)
+        self.rejilla_2 = Cuadro(self)
+        self.rejilla_2.agregar_rejilla(self.rejilla_b)
         self.frame_vitrina_dr = Cuadro(self)
         # Creando vitrina
-        self.v1 = Vitrina_busqueda(self, self.tabla_drF, self.ver_dr, 
+        self.vdr = Vitrina_busqueda(self, self.tabla_drF, self.ver_dr, 
                                    self.asociar_dr_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
+        # Franja inferior
+        self.franjai = Cuadro(self)
+        self.franjai.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
 
     #----------------------------------------------------------------------
     def asociar_dr_de(self, x):
@@ -371,11 +337,9 @@ class Doc_emitidos_busqueda(funcionalidades_ospa):
         self.listaestado = sorted(list(set(self.tabla_0['ESTADO'])))
 
         # Agregando logo del ospa a la ventana y título
-        self.cde0 = Cuadro(self)
-        self.cde0.agregar_label(0, 0,' ')
-        self.cde0.agregar_imagen(1, 0,'Logo_OSPA.png',202,49)
-        cde2 = Cuadro(self)
-        cde2.agregar_titulo(2, 0, 'Búsqueda de documentos emitidos')
+        titulos = Cuadro(self)
+        titulos.agregar_franja_superior_ospa('Detalle de documento recibido', 
+                                            self.inicio_app, self.cerrar_sesion)
 
         # Armando rejilla con los filtros
 
@@ -409,9 +373,8 @@ class Doc_emitidos_busqueda(funcionalidades_ospa):
         self.rejilla_bde = (
             ('B', 5, 4, 'Buscar', self.Buscar_de),
             ('B', 5, 5, 'Limpiar', self.limpiar_de),
-            ('B', 5, 6, 'Actualizar', self.actualizar),
+            ('B', 5, 6, 'Actualizar', self.actualizar_de),
             ('B', 5, 7, 'Volver', self.volver),
-            ('B', 5, 8, 'Inicio', self.inicio_app),
             ('B', 5, 9, 'Emitir doc', self.doc_emitido)
         )
         
@@ -422,69 +385,11 @@ class Doc_emitidos_busqueda(funcionalidades_ospa):
 
         # Creando vitrina
         self.vde1 = Vitrina_busqueda(self, self.tabla_drF, self.ver_de, 
-                                    self.asociar_de_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
+                                    self.asociar_de_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_de_vitrina)
         
         # Franja inferior
         self.cde16 = Cuadro(self)
         self.cde16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
-
-
-    #----------------------------------------------------------------------
-    def actualizar(self):
-        
-        # Eliminando campos
-        self.cde1.eliminar_cuadro()
-        self.vde1.Eliminar_vitrina()
-        self.cde15.eliminar_cuadro()
-        self.frame_vitrina_1.eliminar_cuadro()
-        # Actualizando data
-        b_de = vg.b_de
-        b_de_tabla = b_de.generar_dataframe()
-        
-        # Generamos el dataframe a filtrar 
-        self.tabla_inicial0 = b_de_tabla
-        self.tabla_0 = self.tabla_inicial0.rename(columns={'COD_DE':'DOC EMITIDO','DETALLE_REQUERIMIENTO':'DETALLE','ESTADO_DOCE':'ESTADO','NUM_DOC':'NRO DOCUMENTO','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_SALIDA':'HT SALIDA','FECHA_FIRMA':'FECHA FIRMA','FECHA_NOTIFICACION':'FECHA NOTIFICACION'})
-        self.tabla_drF = self.tabla_0.loc[0:99, ['DOC EMITIDO','DESTINATARIO','TIPO DOC','NRO DOCUMENTO','FECHA FIRMA','FECHA NOTIFICACION','ESTADO','CATEGORIA','DETALLE']]
- 
-        # Información para las listas desplegables
-        self.listacategoria = sorted(list(set(self.tabla_0['CATEGORIA'])))
-        self.listadestinatario = sorted(list(set(self.tabla_0['DESTINATARIO'])))
-        self.listatipodocemit = sorted(list(set(self.tabla_0['TIPO DOC'])))
-        self.listaestado = sorted(list(set(self.tabla_0['ESTADO'])))
-
-        # Armando rejilla con los filtros
-
-        self.rejilla_de = (
-
-            ('L', 0, 0, 'Categoría'),
-            ('CXP', 0, 1, 39, self.listacategoria, '', 'readonly'),
-
-            ('L', 0, 2, 'Nro registro Siged'),
-            ('EE', 0, 3),
-
-            ('L', 0, 4, 'Destinatario'),
-            ('CXE', 0, 5, 39, self.listadestinatario, '', 'normal'),
-
-            ('L', 1, 0, 'Estado'),
-            ('CXE', 1, 1, 39, self.listaestado, '', 'normal'),
-
-            ('L', 1, 2, 'Tipo de documento'),
-            ('CXP', 1, 3, 39, self.listatipodocemit, '', 'readonly'),
-
-            ('L', 1, 4, 'Nro de documento'),
-            ('EE', 1, 5)
-
-        )
-
-        # Agregando rejilla a la ventana
-        self.cde1 = Cuadro(self)
-        self.cde1.agregar_rejilla(self.rejilla_de)
-        self.cde15 = Cuadro(self)
-        self.cde15.agregar_rejilla(self.rejilla_bde)
-        self.frame_vitrina_1 = Cuadro(self)
-        # Creando vitrina
-        self.vde1 = Vitrina_busqueda(self, self.tabla_drF, self.ver_de, 
-                                    self.asociar_de_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
 
     #----------------------------------------------------------------------
 
@@ -579,13 +484,17 @@ class Doc_emitidos_busqueda(funcionalidades_ospa):
         else:
             tabla_filtro3 = tabla_filtro2
         if len(tabla_filtro3.index) > 0:
+            self.cde16.eliminar_cuadro()
             self.frame_vitrina_1.eliminar_cuadro()
             self.frame_vitrina_1 = Cuadro(self)
+            self.cde16 = Cuadro(self)
             self.vde1 = Vitrina_busqueda(self, tabla_filtro3, self.ver_de, self.asociar_de_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
         else:
+            self.cde16.eliminar_cuadro()
             self.frame_vitrina_1.eliminar_cuadro()
             self.frame_vitrina_1 = Cuadro(self)
             self.frame_vitrina_1.agregar_label(1, 2, '                  0 documentos encontrados')
+            self.cde16 = Cuadro(self)
 
     #----------------------------------------------------------------------
 
@@ -596,12 +505,14 @@ class Doc_emitidos_busqueda(funcionalidades_ospa):
         self.vde1.Eliminar_vitrina()
         self.cde15.eliminar_cuadro()
         self.frame_vitrina_1.eliminar_cuadro()
+        self.cde16.eliminar_cuadro()
         # Agregando rejilla a la ventana
         self.cde1 = Cuadro(self)
         self.cde1.agregar_rejilla(self.rejilla_de)
         self.cde15 = Cuadro(self)
         self.cde15.agregar_rejilla(self.rejilla_bde)
         self.frame_vitrina_1 = Cuadro(self)
+        self.cde16 = Cuadro(self)
         # Creando vitrina
         self.vde1 = Vitrina_busqueda(self, self.tabla_drF, self.ver_de, 
                                     self.asociar_de_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
@@ -703,19 +614,14 @@ class Extremos(funcionalidades_ospa):
         self.listaAG = sorted(list(set(self.tabla_ep['AGENT. CONTAMI.'])))
         self.listaCA = sorted(list(set(self.tabla_ep['COMPONEN. AMBIE.'])))
         self.listaACT = sorted(list(set(self.tabla_ep['ACTIVIDAD'])))
-        self.listaDEPAR = sorted(list(set(self.tabla_ep['DEPARTAMENTO'])))
-        self.listaPROV = sorted(list(set(self.tabla_ep['PROVINCIA'])))
-        #self.listaDISTR = list(set(self.tabla_ep['DISTRITO']))
         self.listaTIPOUBI = sorted(list(set(self.tabla_ep['TIPO DE UBICACION'])))
         self.listaOCURR = sorted(list(set(self.tabla_ep['OCURRENCIA'])))
         self.listaEFA = sorted(list(set(self.tabla_ep['EFA'])))
 
         # Agregando logo del ospa a la ventana y título
-        self.ep0 = Cuadro(self)
-        self.ep0.agregar_label(0, 0,' ')
-        self.ep0.agregar_imagen(1, 0,'Logo_OSPA.png',202,49)
-        ep3 = Cuadro(self)
-        ep3.agregar_titulo(2, 0, 'Búsqueda de extremos')
+        titulos = Cuadro(self)
+        titulos.agregar_franja_superior_ospa('Detalle de documento recibido', 
+                                            self.inicio_app, self.cerrar_sesion)
     
         # Armando rejilla con los filtros
         self.rejilla_ep = (
@@ -758,9 +664,8 @@ class Extremos(funcionalidades_ospa):
         self.rejilla_ep2 = (
             ('B', 5, 4, 'Buscar', self.Buscar_ep),
             ('B', 5, 5, 'Limpiar', self.limpiar_ep),
-            ('B', 5, 6, 'Actualizar', self.actualizar),
+            ('B', 5, 6, 'Actualizar', self.actualizar_ep),
             ('B', 5, 7, 'Volver', self.volver),
-            ('B', 5, 8, 'Inicio', self.inicio_app),
             ('B', 5, 9, 'Crear extremo', self.nuevo_ep)
         )
         
@@ -771,7 +676,7 @@ class Extremos(funcionalidades_ospa):
 
         # Creando vitrina
         self.vep = Vitrina_busquedaep(self, self.tabla_deF, self.ver_ep, 
-                                     self.asociar_ep, self.ver_mp_ep, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
+                                     self.asociar_ep, self.ver_mp_ep, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_ep_vitrina)
         
         # Franja inferior
         self.ep3 = Cuadro(self)
@@ -896,12 +801,16 @@ class Extremos(funcionalidades_ospa):
         else:
             tabla_filtro3 = tabla_filtro2
         if len(tabla_filtro3.index) > 0:
+            self.ep3.eliminar_cuadro()
             self.frame_vitrina_ep.eliminar_cuadro()
             self.frame_vitrina_ep = Cuadro(self)
+            self.ep3 = Cuadro(self)
             self.vep = Vitrina_busquedaep(self, tabla_filtro3, self.ver_ep, self.asociar_ep, self.ver_mp_ep, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
         else:
             self.frame_vitrina_ep.eliminar_cuadro()
+            self.ep3.eliminar_cuadro()
             self.frame_vitrina_ep = Cuadro(self)
+            self.ep3 = Cuadro(self)
             self.frame_vitrina_ep.agregar_label(1, 2, '                  0 extremos encontrados')
 
     #----------------------------------------------------------------------
@@ -912,88 +821,17 @@ class Extremos(funcionalidades_ospa):
         self.vep.Eliminar_vitrina()
         self.ep2.eliminar_cuadro()
         self.frame_vitrina_ep.eliminar_cuadro()
+        self.ep3.eliminar_cuadro()
         # Agregando rejilla a la ventana
         self.ep1 = Cuadro(self)
         self.ep1.agregar_rejilla(self.rejilla_ep)
         self.ep2 = Cuadro(self)
         self.ep2.agregar_rejilla(self.rejilla_ep2)
+        self.ep3 = Cuadro(self)
 
         self.frame_vitrina_ep = Cuadro(self)
         # Creando vitrina
         self.vep = Vitrina_busquedaep(self, self.tabla_deF, self.ver_ep, self.asociar_ep, self.ver_mp_ep, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
-
-    #----------------------------------------------------------------------
-    def actualizar(self):
-        
-        # Eliminando campos
-        self.ep1.eliminar_cuadro()
-        self.vep.Eliminar_vitrina()
-        self.ep2.eliminar_cuadro()
-        self.frame_vitrina_ep.eliminar_cuadro()
-        # Actualizando data
-        b_ep = vg.b_ep
-        b_ep_tabla = b_ep.generar_dataframe()
-        
-        # Generamos el dataframe a filtrar 
-        self.ep = b_ep_tabla
-        self.tabla_ep = self.ep.rename(columns={'COD_EP':'CODIGO EXTREMO','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','AGENTE CONTAMINANTE':'AGENT. CONTAMI.','COMPONENTE AMBIENTAL':'COMPONEN. AMBIE.'})
-        self.tabla_deF = self.tabla_ep.loc[0:99, ['CODIGO EXTREMO','AGENT. CONTAMI.','COMPONEN. AMBIE.','ACTIVIDAD','DEPARTAMENTO','EFA','ESTADO','FECHA ULTIMO MOV.','DESCRIPCION']]
-     
-
-        # Información para las listas desplegables
-        self.listaAG = sorted(list(set(self.tabla_ep['AGENT. CONTAMI.'])))
-        self.listaCA = sorted(list(set(self.tabla_ep['COMPONEN. AMBIE.'])))
-        self.listaACT = sorted(list(set(self.tabla_ep['ACTIVIDAD'])))
-        self.listaDEPAR = sorted(list(set(self.tabla_ep['DEPARTAMENTO'])))
-        self.listaPROV = sorted(list(set(self.tabla_ep['PROVINCIA'])))
-        #self.listaDISTR = list(set(self.tabla_ep['DISTRITO']))
-        self.listaTIPOUBI = sorted(list(set(self.tabla_ep['TIPO DE UBICACION'])))
-        self.listaOCURR = sorted(list(set(self.tabla_ep['OCURRENCIA'])))
-        self.listaEFA = sorted(list(set(self.tabla_ep['EFA'])))
-
-        # Armando rejilla con los filtros
-        self.rejilla_ep = (
-
-            ('L', 0, 0, 'Agente contaminante'),
-            ('CXP', 0, 1, 39, self.listaAG, '', "readonly"),
-
-            ('L', 0, 2, 'Componente ambiental'),
-            ('CXP', 0, 3, 39, self.listaCA, '', "readonly"),
-
-            ('L', 0, 4, 'Actividad'),
-            ('CXP', 0, 5, 39, self.listaACT, '', "readonly"),
-
-            ('L', 1, 0, 'Departamento'),
-            ('CXDEP3', 1, 1, 37, tabla_lista_efa, "Triple",
-            'DEPARTAMENTO ', 'Provincia', 'PROVINCIA ', 'Distrito', 'DISTRITO '),
-
-            ('L', 2, 0, 'Tipo de ubicación'),
-            ('CXP', 2, 1, 39, self.listaTIPOUBI, '', "readonly"),
-
-            ('L', 2, 2, 'Ocurrencia'),
-            ('CXP', 2, 3, 39, self.listaOCURR, '', "readonly"),
-
-            ('L', 2, 4, 'EFA'),
-            ('CXE', 2, 5, 39, self.listaEFA, '', "normal"),
-
-            ('L', 3, 0, 'Palabra clave en descripción'),
-            ('EE', 3, 1),
-
-            ('L', 3, 2, 'Código extremo'),
-            ('EE', 3, 3)
-
-        )
-        
-        # Agregando rejilla a la ventana
-        self.ep1 = Cuadro(self)
-        self.ep1.agregar_rejilla(self.rejilla_ep)
-        self.ep2 = Cuadro(self)
-        self.ep2.agregar_rejilla(self.rejilla_ep2)
-        # Creando vitrina
-        self.frame_vitrina_ep = Cuadro(self)
-        # Creando vitrina
-        self.vep = Vitrina_busquedaep(self, self.tabla_deF, self.ver_ep, self.asociar_ep, self.ver_mp_ep, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
-
     #----------------------------------------------------------------------
     def ver_mp_ep(self, x):
         """"""
