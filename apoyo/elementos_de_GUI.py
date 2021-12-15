@@ -1752,7 +1752,7 @@ class Vitrina_busqueda(Frame):
                 self.frame_dentro_del_canvas, 
                 text=row[1],
                 font=formato.tipo_de_letra_tabla,
-                fg = formato.color_negro,
+                fg = formato.color_blanco,
                 width= 19,#se modifico estaba con 21 
                 height=1, 
                 relief='groove',
@@ -1764,7 +1764,7 @@ class Vitrina_busqueda(Frame):
             self.frame_dentro_del_canvas,
             text='OPCIONES',
             font=formato.tipo_de_letra_tabla,
-            fg = formato.color_negro,
+            fg = formato.color_blanco,
             width= 16, #se modifico
             height=1, 
             relief='groove',
