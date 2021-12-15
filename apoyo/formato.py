@@ -20,6 +20,7 @@ letras_del_boton_cuando_pasa_cursor = '#000000'
 
 fondo_encabezados_de_tabla = '#1d85bf'
 color_negro = '#000000'
+color_blanco = '#FFFFFF'
 tipo_de_letra_tabla = 'helvetica 7'
 fondo_valores_de_tabla = '#ffffff'
 
