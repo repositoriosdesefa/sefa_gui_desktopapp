@@ -85,8 +85,6 @@ alto_v_busqueda_vitrina = 240
 ancho_v_busqueda_prei_vitrina = 1065
 ancho_v_busqueda_peq2_vitrina = 1180
 
-
-
 alto_logo = 50
 ancho_logo = 280
 
@@ -150,7 +148,7 @@ tabla_de_de_cod = b_de_cod.generar_dataframe()
 tabla_de_de_completa = b_de.generar_dataframe()
 tabla_de_de_resumen =  tabla_de_de_completa.drop(['HT_SALIDA', 'FECHA_PROYECTO_FINAL', 
                                                     'FECHA_FIRMA', 'TIPO_DOC', 'CATEGORIA_DESTINATARIO',
-                                                    'MARCO_PEDIDO', 'FECHA_ULTIMO_MOV', 
+                                                    'MARCO_PEDIDO', 'FECHA_ULTIMO_MOV', 'TIPO_DESTINATARIO',
                                                     'PLAZO', 'ESTADO_DOCE', 'ESPECIALISTA', 'USUARIO',
                                                     'FECHA_PROYECTO_REIT',	'SE_EMITIO_REIT', 	'TIPO_DOC_REIT',
                                                     'NUM_DOC_REIT', 'FECHA_FIRMA_REIT', 'FECHA_NOTIFICACION_REIT',
@@ -164,7 +162,7 @@ tabla_de_ep_resumen = tabla_de_ep_completa.drop(['OCURRENCIA', 'EXTENSION', 'TIP
                                                 'PROVINCIA', 'DESCRIPCION', 'TIPO DE UBICACION', 'DISTRITO', 
                                                 'TIPO_EFA', 'CATEGORIA_EFA',
                                                 'CARACTERISTICA 1', 'CARACTERISTICA 2', 'TIPO CAUSA',
-                                                'PRIORIDAD', 'PUNTAJE', 
+                                                'PRIORIDAD', 'PUNTAJE',  'USUARIO',
                                                 'CODIGO SINADA', 'ACTIVIDAD', 'FECHA_ULTIMO_MOV', 'USUARIO'], axis=1)
 
 # 5.4 Macroproblemas
