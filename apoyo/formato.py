@@ -7,7 +7,10 @@
 fondo = '#ffffff'
 #fondo = '#f0f0f0'
 tipo_de_letra = 'helvetica 8'
-tipo_de_letra_titulo = 'helvetica 14'
+tipo_de_letra_titulo = 'helvetica 14 bold'
+color_letra_titulo = '#144aa7'
+tipo_de_letra_titulo_2 = 'helvetica 12 bold'
+color_letra_titulo_2 = '#1d85bf'
 
 # BOTONES
 
@@ -20,6 +23,8 @@ letras_del_boton_cuando_pasa_cursor = '#000000'
 
 fondo_encabezados_de_tabla = '#1d85bf'
 color_negro = '#000000'
+color_blanco = '#ffffff'
+tipo_de_letra_tabla_encabezado = 'helvetica 7 bold'
 tipo_de_letra_tabla = 'helvetica 7'
 fondo_valores_de_tabla = '#ffffff'
 
