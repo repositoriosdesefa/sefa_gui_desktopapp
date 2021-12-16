@@ -294,7 +294,6 @@ class Inicio_eq1(inicio_app_OSPA):
         c1.agregar_label(9, 0,' ')
 
         c2 = Cuadro(self)
-        c2.agregar_label(0, 0,' ')
         c2.agregar_button(1, 0, "Volver", self.volver_anterior)
 
         c3 = Cuadro(self)

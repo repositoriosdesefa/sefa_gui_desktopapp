@@ -479,7 +479,7 @@ class funcionalidades_ospa(Ventana):
         vg.oficina = None
         vg.texto_bienvenida = None
         
-        subFrame = logueo.logueo1_Ingreso_de_usuario(self, 492, 403, "ASPA - Versión 0.0", False)
+        subFrame = logueo.logueo1_Ingreso_de_usuario(self, 584, 453, "ASPA - Versión 0.0", False)
 
 #----------------------------------------------------------------------
     def renombrar_encabezados(self, tabla, tipo_base = None):

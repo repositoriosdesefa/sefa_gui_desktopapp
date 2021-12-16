@@ -428,7 +428,7 @@ class Doc_emitidos_busqueda(funcionalidades_ospa):
             ('B', 5, 5, 'Limpiar', self.limpiar_de),
             ('B', 5, 6, 'Actualizar', self.actualizar_de),
             ('B', 5, 7, 'Volver', self.volver),
-            ('B', 5, 9, 'Emitir doc', self.doc_emitido)
+            ('B', 5, 9, 'Emitir doc', self.nuevo_de)
         )
         
         # Agregando rejilla de botones a la ventana
