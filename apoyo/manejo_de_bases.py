@@ -147,8 +147,54 @@ class Base_de_datos():
         self.lista_de_datos_completos = self.datos_obligatorios + [dato_unico]
         self.worksheet.append_row(self.lista_de_datos_completos)
 
+    #----------------------------------------------------------------------
+    def obtener_usuario(self, base_usuario, cod_objeto, abrev_codigo_objeto):
+        
+        # Obtención de código de usuario
+        b_usuario = base_usuario
+        codigo_objeto = cod_objeto
+
+        tabla_objeto = self.generar_dataframe()
+        tabla_usuario_objeto = tabla_objeto.loc[:, ['USUARIO', abrev_codigo_objeto]]
+        tabla_usuario_objeto_filtrada = tabla_usuario_objeto[tabla_usuario_objeto[abrev_codigo_objeto]==codigo_objeto]
+        cod_usuario = tabla_usuario_objeto_filtrada.iloc[0,0]
+
+        usuario = self.obtener_nombre_usuario_a_partir_de_codigo(b_usuario, cod_usuario)
+
+        # Obtener nombre de usuario
+        return usuario
+    
+    #----------------------------------------------------------------------
+    def obtener_nombre_usuario_a_partir_de_codigo(self, base_usuario, cod_usuario):
+        
+        # Obtención de código de usuario
+        b_usuario = base_usuario
+        codigo_usuario = cod_usuario
+
+        tabla_usuarios = b_usuario.generar_dataframe()
+        tabla_usuario = tabla_usuarios.loc[:, ['Usuario', 'Código de usuario']]
+
+        # Filtrar tablas de usuario
+        tabla_usuario_filtrada = tabla_usuario[tabla_usuario['Código de usuario']==codigo_usuario]
+        usuario = tabla_usuario_filtrada.iloc[0,0]
+
+        # Obtener nombre de usuario
+        return usuario
+    
+    #----------------------------------------------------------------------
+    def obtener_valor_columna_con_codigo_unico(self, nombre_columna_con_codigo, cod_unico, nombre_columna_valor):
+
+        # Tabla
+        tabla = self.generar_dataframe()
+        tabla_seleccionada = tabla.loc[:, [nombre_columna_valor, nombre_columna_con_codigo]]
+
+        tabla_filtrada = tabla_seleccionada[tabla_seleccionada[nombre_columna_con_codigo]==cod_unico]
+        valor = tabla_filtrada.iloc[0,0]
+
+        return valor
+  
     #---------------------------------------------------------------------
-    def agregar_codigo(self, dato, tiempo, dato_adicional = ""):
+    def agregar_codigo(self, dato, tiempo, dato_adicional = None, dato_adicional_2 = None):
         """[...]"""
 
         tabla = self.generar_dataframe()
@@ -163,11 +209,19 @@ class Base_de_datos():
         self.codigo = self.pestanna + "-" + str(self.hoy.year) + "-" + str(numero)
         self.datos_obligatorios = [self.codigo, str(tiempo), numero]
         dato_unico = dato
-        if dato_adicional == "":
+        
+        # Sin datos adicionales
+        if dato_adicional == None and dato_adicional_2 == None :
             self.lista_de_datos_completos = self.datos_obligatorios + [dato_unico]
-        else:
+        # Solo con un dato adicional
+        elif dato_adicional_2 == None:
             dato_2 = dato_adicional
             self.lista_de_datos_completos = self.datos_obligatorios + [dato_unico] + [dato_2]
+        # Con dos datos adicionales
+        else:
+            dato_2 = dato_adicional
+            dato_3 = dato_adicional
+            self.lista_de_datos_completos = self.datos_obligatorios + [dato_unico] + [dato_2] + [dato_3]
             
         self.worksheet.append_row(self.lista_de_datos_completos)
 
@@ -204,7 +258,7 @@ class Correo_electronico():
         firma = datos_registrados[2]
         return firma
 
-    #----------------------------------------------------------------------
+  #----------------------------------------------------------------------
     def enviar(self):
         """[...]"""
 

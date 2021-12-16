@@ -127,6 +127,54 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
         self.franjai = Cuadro(self)
         self.franjai.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
 
+    #----------------------------------------------------------------------
+    def actualizar(self):
+        
+        # Eliminando campos
+        self.c1.eliminar_cuadro()
+        self.v1.Eliminar_vitrina()
+        self.c15.eliminar_cuadro()
+        self.frame_vitrina_dr.eliminar_cuadro()
+        # Actualizando data
+        b_dr = vg.b_dr
+        b_dr_tabla = b_dr.generar_dataframe()
+        
+        # Generamos el dataframe a filtrar 
+        self.tabla_inicial0 = b_dr_tabla
+        self.tabla_0 = self.tabla_inicial0.rename(columns={'COD_DR':'NRO DOC','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_ENTRANTE':'HT INGRESO'})
+        self.tabla_drF = self.tabla_0.loc[0:99, ['NRO DOC','REMITENTE','HT INGRESO','FECHA INGRESO SEFA','ACCION_1','ESPECIALISTA_1','FECHA ULTIMO MOV.','ASUNTO']]
+      
+        # Información para las listas desplegables
+        self.listatipodoc = sorted(list(set(self.tabla_0['TIPO DOC'])))
+        self.listaremitente = sorted(list(set(self.tabla_0['REMITENTE'])))
+
+        # Armando rejilla con los filtros
+        self.rejilla_dr = (
+
+            ('L', 0, 0, 'Nro registro Siged'),
+            ('EE', 0, 1),
+
+            ('L', 1, 0, 'Tipo de documento'),
+            ('CXP', 1, 1, 39, self.listatipodoc, '', 'readonly'),
+
+            ('L', 0, 2, 'Remitente'),
+            ('CXE', 0, 3, 39, self.listaremitente, '', 'normal'),
+
+            ('L', 1, 2, 'Número de doc'),
+            ('EE', 1, 3)
+
+        )
+
+        # Agregando rejilla a la ventana
+        self.c1 = Cuadro(self)
+        self.c1.agregar_rejilla(self.rejilla_dr)
+        self.c15 = Cuadro(self)
+        self.c15.agregar_rejilla(self.rejilla_b)
+        self.frame_vitrina_dr = Cuadro(self)
+        # Creando vitrina
+        self.v1 = Vitrina_busqueda(self, self.tabla_drF, self.ver_dr, 
+                                   self.asociar_dr_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
+
     #----------------------------------------------------------------------  
     def Buscardr(self):
         """"""
@@ -395,14 +443,6 @@ class Doc_emitidos_busqueda(funcionalidades_ospa):
         # Franja inferior
         self.cde16 = Cuadro(self)
         self.cde16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
-
-    #----------------------------------------------------------------------
-
-    def doc_emitido(self):
-        """"""
-        self.desaparecer()
-        # LargoxAncho
-        subframe = ventanas_vista.Doc_emitidos_vista(self, 550, 1090, "Registro Documento Emitido")
 
     #----------------------------------------------------------------------
 
@@ -2229,7 +2269,9 @@ class Pendientes_eq1_trabajar(funcionalidades_ospa):
 
     def Complementopeq1t(self,filtro0):
 
+
         tabla_filtro2 = filtro0.loc[:, ['NRO DOC','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','FECHA ULTIMO MOV.','ESPECIALISTA','ASUNTO']]
+        
         if len(tabla_filtro2.index) > 100:
             tabla_filtro3 = tabla_filtro2.head(100)
         else:
@@ -2415,6 +2457,7 @@ class Pendientes_eq2_calificarrpta(funcionalidades_ospa):
     def Complementopeq2t(self,filtro0):
 
         tabla_filtro2 = filtro0.loc[:, ['NRO DOC','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','FECHA ULTIMO MOV.','ESPECIALISTA_1','ESPECIALISTA','ASUNTO']]
+
         if len(tabla_filtro2.index) > 100:
             tabla_filtro3 = tabla_filtro2.head(100)
         else:
@@ -2454,6 +2497,7 @@ class Pendientes_eq2_calificarrpta(funcionalidades_ospa):
         self.vpeq2t = Vitrina_pendientes(self, self.tabla_peq2tF, self.ver_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_peq2_vitrina)
         self.peq2t16 = Cuadro(self)
         self.peq2t16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
+
 
 class Pendientes_eq2_programaciones(funcionalidades_ospa):
     """"""

@@ -11,6 +11,9 @@ texto_bienvenida = None
 
 # 0. Tablas relacionales
 id_b_ospa = '13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4'
+id_usuarios = '12gzaAx7GkEUDjEmiJG693in8ADyCPxej5cUv9YA2vyY'
+base_usuario = Base_de_datos(id_usuarios, 'Usuario')
+base_datos_usuario = Base_de_datos(id_usuarios, 'Datos_de_usuario')
 base_relacion_docs = Base_de_datos(id_b_ospa, 'RELACION_DOCS')
 base_relacion_docs_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_RELACION_D')
 base_relacion_dr_ep =  Base_de_datos(id_b_ospa, 'RELACION_DR-EP')
@@ -20,7 +23,9 @@ base_relacion_de_ep_hist =  Base_de_datos(id_b_ospa, 'HISTORIAL_RELACION_DE-EP')
 base_relacion_mp_ep =  Base_de_datos(id_b_ospa, 'RELACION_MP-EP')
 base_relacion_mp_ep_hist =  Base_de_datos(id_b_ospa, 'HISTORIAL_RELACION_MP-EP')
 base_parametros_dep = Base_de_datos(id_b_ospa, 'PARAMETROS')
+       
 tabla_parametros_dep = base_parametros_dep.generar_dataframe()
+
 # 1. Bases de datos principales
 # Documentos recibidos
 b_dr_cod = Base_de_datos(id_b_ospa, 'DOCS_R')
@@ -82,6 +87,15 @@ ancho_v_busqueda_peq2_vitrina = 1180
 
 
 
+alto_logo = 50
+ancho_logo = 280
+
+alto_ventana_secundaria = 413
+ancho_ventana_secundaria = 403
+
+alto_franja_inferior_1 = 52
+ancho_franja_inferior_1 = 400
+
 # 4.1 Bases de datos
 id_parametros = '1NPg8Q0O_NqQ6bkRhy4ow17x2XJ08r6Ev3R6X80WmZ3c'
 base_parametros = Base_de_datos(id_parametros, 'PARAMETROS')
@@ -127,16 +141,22 @@ tabla_de_dr_cod = b_dr_cod.generar_dataframe()
 tabla_de_dr_completa = b_dr.generar_dataframe()
 tabla_de_dr_resumen = tabla_de_dr_completa.drop(['VIA_RECEPCION', 'HT_ENTRANTE', 'TIPO_REMITENTE', 'CATEGORIA_REMITENTE',
                                             'F_ING_OEFA', 'TIPO_DOC', 'ESPECIALISTA_1', 'ESPECIALISTA_2',
-                                            'TIPO_RESPUESTA', 'RESPUESTA',
-                                            'FECHA_ULTIMO_MOV'], axis=1)
+                                            'ACCION_1', 'F_ASIGNACION_1', 'F_ASIGNACION_2', 'TIPO_RESPUESTA', 'RESPUESTA',
+                                            'F_EJECUCION_1', 'F_EJECUCION_2',
+                                            'FECHA_ULTIMO_MOV', 'USUARIO'], axis=1)
 
 # 5.2 Documentos emitidos
 tabla_de_de_cod = b_de_cod.generar_dataframe()
 tabla_de_de_completa = b_de.generar_dataframe()
-tabla_de_de_resumen =  tabla_de_de_completa.drop(['HT_SALIDA', 'FECHA_PROYECTO_FINAL',
+tabla_de_de_resumen =  tabla_de_de_completa.drop(['HT_SALIDA', 'FECHA_PROYECTO_FINAL', 
                                                     'FECHA_FIRMA', 'TIPO_DOC', 'CATEGORIA_DESTINATARIO',
-                                                    'MARCO_PEDIDO', 'FECHA_ULTIMO_MOV',
-                                                    'PLAZO', 'ESTADO_DOCE', 'ESPECIALISTA'], axis=1)
+                                                    'MARCO_PEDIDO', 'FECHA_ULTIMO_MOV', 
+                                                    'PLAZO', 'ESTADO_DOCE', 'ESPECIALISTA', 'USUARIO',
+                                                    'FECHA_PROYECTO_REIT',	'SE_EMITIO_REIT', 	'TIPO_DOC_REIT',
+                                                    'NUM_DOC_REIT', 'FECHA_FIRMA_REIT', 'FECHA_NOTIFICACION_REIT',
+                                                    'FECHA_PROYECTO_OCI', 'SE_EMITIO_OCI', 'TIPO_DOC_OCI', 'NUM_DOC_OCI',
+                                                    'FECHA_FIRMA_OCI', 'FECHA_NOTIFICACION_OCI'], axis=1)
+
 # 5.3 Extremos de problema
 tabla_de_ep_cod = b_ep_cod.generar_dataframe()
 tabla_de_ep_completa = b_ep.generar_dataframe()
@@ -145,7 +165,7 @@ tabla_de_ep_resumen = tabla_de_ep_completa.drop(['OCURRENCIA', 'EXTENSION', 'TIP
                                                 'TIPO_EFA', 'CATEGORIA_EFA',
                                                 'CARACTERISTICA 1', 'CARACTERISTICA 2', 'TIPO CAUSA',
                                                 'PRIORIDAD', 'PUNTAJE', 
-                                                'CODIGO SINADA', 'ACTIVIDAD', 'FECHA_ULTIMO_MOV'], axis=1)
+                                                'CODIGO SINADA', 'ACTIVIDAD', 'FECHA_ULTIMO_MOV', 'USUARIO'], axis=1)
 
 # 5.4 Macroproblemas
 tabla_de_mp_cod = b_mp_cod.generar_dataframe()

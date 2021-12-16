@@ -14,7 +14,7 @@ class Aplicacion(object):
 
         self.root = parent
         self.root.withdraw()
-        subFrame = logueo.logueo1_Ingreso_de_usuario(self, 492, 403, "ASPA - Versión 0.0", False)
+        subFrame = logueo.logueo1_Ingreso_de_usuario(self, 584, 453, "ASPA - Versión 0.0", False)
         
         # LargoxAncho
         # subFrame = vista_dr.Doc_recibidos_vista(self, 650, 1100,'Documentos recibidos')
@@ -23,7 +23,7 @@ class Aplicacion(object):
 #----------------------------------------------------------------------
 def main():
     root = Tk()
-    root.iconbitmap('images/S_de_Sefa.ico')
+    root.iconbitmap('images/A_de_ASPA.ico')
     app = Aplicacion(root)
     root.mainloop()
 
