@@ -102,14 +102,16 @@
 - [ ] Revisar tablas de datos y realizar la comparación con las tablas actuales
 
 ## A mediano plazo
-
+- [ ] Implementación de diccionario de datos para selección de columnas
 ### ventanas_vista
 - [ ] Programar: Selección automática de documento emitido en función de Destinatario
 - [ ] Programar: Selección automática de especialista equipo 2 en función al EP
 - [ ] Investigar: Ventana emergente con resultado de calculadora
+- [ ] Investigar: Cálculo de plazo en días hábiles para el vencimiento
 ### ventanas_busqueda
 - [ ] Programar: Eliminar de la vitrina de búsqueda los objetos ya asociados
 - [ ] Programar: Abstracción de métodos e inclusión en funcionalidades_ospa
+- [ ] Programar: Se podrán agregar EP a DE (EP solo dentro de los DR asociados)
 
 ### Logueo y administración
 - [ ] Evaluar combinar los archivos administracion y logueo
