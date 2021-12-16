@@ -7,6 +7,9 @@ from modulos import variables_globales as vg
 import datetime as dt
 
 # Parámetros ventana
+alto_ventana_secundaria = vg.alto_ventana_secundaria
+ancho_ventana_secundaria = vg.ancho_ventana_secundaria
+
 ancho_v_vista = vg.ancho_v_vista
 alto_v_vista = vg.alto_v_vista
 ancho_v_vista_vitrina = vg.ancho_v_vista_vitrina
@@ -16,6 +19,9 @@ ancho_v_busqueda = vg.ancho_v_busqueda
 alto_v_busqueda = vg.alto_v_busqueda
 ancho_v_busqueda_vitrina = vg.ancho_v_busqueda_vitrina
 alto_v_busqueda_vitrina = vg.alto_v_busqueda_vitrina
+
+alto_franja_inferior_1 = vg.alto_franja_inferior_1
+ancho_franja_inferior_1 = vg.ancho_franja_inferior_1
 
 # 1. Bases
 b_dr = vg.b_dr
@@ -57,7 +63,7 @@ class funcionalidades_ospa(Ventana):
         self.destruir()
         texto_bienvenida = vg.texto_bienvenida
         # LargoxAncho
-        subFrame = menus.inicio_app_OSPA(self, 434, 403, texto_bienvenida)
+        subFrame = menus.inicio_app_OSPA(self, alto_ventana_secundaria, ancho_ventana_secundaria, texto_bienvenida)
         
     #----------------------------------------------------------------------
     def guardar_objeto(self, rejilla_datos, 
@@ -79,6 +85,7 @@ class funcionalidades_ospa(Ventana):
         base_cod_objeto = base_codigo_objeto
         tabla_objeto_clase = base_objeto.generar_dataframe()
         ahora = str(dt.datetime.now())
+        usuario = vg.cod_usuario
 	
 	    # A. Existe un código en la rejilla
         if self.nuevo == False:
@@ -105,7 +112,7 @@ class funcionalidades_ospa(Ventana):
             # Pestaña 2:       
             # Cambio los datos de una fila
             # Código interno del aplicativo + Código del usuario del DR + Hora de modificación
-            lista_a_sobreescribir = [id_interno_objeto_clase] + [nuevo_cod_objeto_clase] + datos_ingresados + [hora_de_modificacion]
+            lista_a_sobreescribir = [id_interno_objeto_clase] + [nuevo_cod_objeto_clase] + datos_ingresados + [hora_de_modificacion] + [usuario]
             base_objeto.cambiar_los_datos_de_una_fila(nuevo_cod_objeto_clase, lista_a_sobreescribir) # Se sobreescribe la información
             
             # Pestaña 3
@@ -134,7 +141,7 @@ class funcionalidades_ospa(Ventana):
                 # Pestaña 1: Código Único
                 # Creo el código único
                 if cod_entrada == "COD_DR":
-                    base_cod_objeto.agregar_codigo(cod_objeto_ingresado, ahora)
+                    base_cod_objeto.agregar_codigo(cod_objeto_ingresado, ahora, usuario)
                 elif cod_entrada == "COD_EP":
                     departamento = datos_ingresados[2]
 	                # Obtención de sigla de departamento
@@ -151,7 +158,7 @@ class funcionalidades_ospa(Ventana):
                     else:
         	            numero_codigo = "-" + str(numero_problemas)
                     cod_objeto_ingresado = sigla_cod_interno + numero_codigo
-                    base_cod_objeto.agregar_codigo(cod_objeto_ingresado, ahora, departamento)
+                    base_cod_objeto.agregar_codigo(cod_objeto_ingresado, ahora, departamento, usuario)
                 elif cod_entrada == "COD_MP":
                     tabla_objeto_clase = base_cod_objeto.generar_dataframe()
                     numero_mp = len(tabla_objeto_clase.index) + 1
@@ -162,9 +169,9 @@ class funcionalidades_ospa(Ventana):
                     else:
         	            numero_mp = "-" + str(numero_mp)
                     cod_objeto_ingresado = "MP" + numero_mp
-                    base_cod_objeto.agregar_codigo(cod_objeto_ingresado, ahora)
+                    base_cod_objeto.agregar_codigo(cod_objeto_ingresado, ahora, usuario)
                 else:
-                    base_cod_objeto.agregar_nuevo_codigo(cod_objeto_ingresado, ahora)
+                    base_cod_objeto.agregar_nuevo_codigo(cod_objeto_ingresado, ahora, usuario)
 
                 # Descargo el código único
                 lista_descargada_codigo = base_cod_objeto.listar_datos_de_fila(ahora) # Se trae la info
@@ -174,7 +181,7 @@ class funcionalidades_ospa(Ventana):
                 id_objeto = lista_descargada_codigo[0]
                 cod_objeto = lista_descargada_codigo[3]
                 # Creo el vector a subir 
-                lista_a_cargar = [id_objeto] + [cod_objeto] + datos_ingresados + [ahora]
+                lista_a_cargar = [id_objeto] + [cod_objeto] + datos_ingresados + [ahora] + [usuario]
                 base_objeto.agregar_datos(lista_a_cargar) # Se sube la info
 
                 # Pestaña 3
@@ -244,10 +251,10 @@ class funcionalidades_ospa(Ventana):
 
         # Se agrega el botón y título del Frame
         frame_vitrina.agregar_button(0, 0, texto_boton, funcion_boton)
-        frame_vitrina.agregar_titulo(0, 1,'                                         ')
-        frame_vitrina.agregar_titulo(0, 2, texto_titulo)
-        frame_vitrina.agregar_titulo(0, 3,'                              ')
-        frame_vitrina.agregar_titulo(0, 4,'                              ')
+        frame_vitrina.agregar_titulo_2(0, 1,'                                         ')
+        frame_vitrina.agregar_titulo_2(0, 2, texto_titulo)
+        frame_vitrina.agregar_titulo_2(0, 3,'                              ')
+        frame_vitrina.agregar_titulo_2(0, 4,'                              ')
 
         if nuevo == False:
             # Obtengo el código del usuario que heredo
@@ -354,8 +361,10 @@ class funcionalidades_ospa(Ventana):
         texto_documento = 'Documento emitido: ' + id_usuario
 
         lb1 = b_de.listar_datos_de_fila(id_usuario)
-        lista_para_insertar = [lb1[2], lb1[3], lb1[4], lb1[5], lb1[6], 
-                                lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], lb1[12]]
+        lista_para_insertar = [lb1[2], lb1[3], lb1[4], lb1[5], lb1[6], lb1[7],
+                                lb1[8], lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14],
+                                lb1[15], lb1[16], lb1[17], lb1[18], lb1[19], lb1[20],
+                                lb1[21], lb1[22], lb1[23], lb1[24], lb1[25], lb1[26]]
         self.desaparecer()
         subframe = ventanas_vista.Doc_emitidos_vista(self, alto_v_vista, ancho_v_vista, texto_documento, True,
                                                      nuevo=False, lista=lista_para_insertar, id_objeto = id_usuario)
@@ -368,6 +377,15 @@ class funcionalidades_ospa(Ventana):
         texto_ep = "Nuevo extremo de problema"
         # LargoxAncho
         SubFrame = ventanas_vista.Extremo_problemas_vista(self, alto_v_vista, ancho_v_vista, texto_ep, True)
+    
+    #----------------------------------------------------------------------
+    def nuevo_n_ep(self):
+        
+        self.desaparecer()
+
+        texto_ep = "Nuevo extremo de problema"
+        # LargoxAncho
+        SubFrame = ventanas_vista.N_Extremo_problemas_vista(self, alto_v_vista, ancho_v_vista, texto_ep, True)
     
     #----------------------------------------------------------------------
     def busqueda_ep(self):
