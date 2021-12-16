@@ -102,7 +102,7 @@ class Ventana(Toplevel):
         self.box_y = (self.box_sh - self.alto)/2
         self.geometry('%dx%d+%d+%d' % (self.ancho, self.alto, self.box_x, self.box_y))
         self.menu = MenuSefa(self)
-        self.iconbitmap('images/S_de_Sefa.ico')
+        self.iconbitmap('images/A_de_ASPA.ico')
         self.title(self.titulo)
         self.config(background= formato.fondo)
 
@@ -293,9 +293,28 @@ class Cuadro(Frame):
             self.z, 
             text= self.texto,
             font= formato.tipo_de_letra_titulo,
-            bg = formato.fondo
+            bg = formato.fondo,
+            fg = formato.color_letra_titulo
             )
         self.etiqueta.grid(row= self.y, column=self.x, sticky='news', pady=8, padx=8)
+        self.lista_de_objetos.append((self.etiqueta))
+
+    #----------------------------------------------------------------------
+    def agregar_titulo_2(self, y, x, texto):
+        """Método de la clase Cuadro. \n
+        Permite agregar un título centrado al Frame creado con la Clase Cuadro."""
+    
+        self.y= y
+        self.x= x
+        self.texto= texto
+        self.etiqueta = Label(
+            self.z, 
+            text= self.texto,
+            font= formato.tipo_de_letra_titulo_2,
+            bg = formato.fondo,
+            fg = formato.color_letra_titulo_2
+            )
+        self.etiqueta.grid(row= self.y, column=self.x, sticky='w', pady=4, padx=8)
         self.lista_de_objetos.append((self.etiqueta))
 
     #----------------------------------------------------------------------
@@ -492,7 +511,8 @@ class Cuadro(Frame):
         self.imagen_2 = ImageTk.PhotoImage(self.imagen_cargada_2)
         self.imagen_3 = ImageTk.PhotoImage(self.imagen_cargada_3)
         
-        self.texto_titulo = Label(self.z, text= self.titulo, font= formato.tipo_de_letra_titulo, bg = formato.fondo)
+        self.texto_titulo = Label(self.z, text= self.titulo, 
+                                    font= formato.tipo_de_letra_titulo, bg = formato.fondo, fg = formato.color_letra_titulo)
         self.imagen_label_1 = Label(self.z, image=self.imagen_1, bg = formato.fondo)
         self.imagen_label_2 = Label(self.z, image=self.imagen_2, bg = formato.fondo, cursor="hand2")
         self.imagen_label_3 = Label(self.z, image=self.imagen_3, bg = formato.fondo, cursor="hand2")
@@ -506,7 +526,7 @@ class Cuadro(Frame):
         self.imagen_label_3.bind("<Button-1>", self.funcion_2)
 
         self.imagen_label_1.grid(sticky = "w", row = 0, column= 0)
-        self.texto_vacio.grid(sticky = "e", padx= 300, row = 0, column = 1)
+        self.texto_vacio.grid(sticky = "e", padx= 280, row = 0, column = 1)
         self.imagen_label_2.grid(sticky = "e", row = 0, column = 2)
         self.imagen_label_3.grid(sticky = "e", row = 0, column = 3)
 
@@ -530,11 +550,11 @@ class Cuadro(Frame):
         self.imagen_cargada = self.imagen_cargada.resize((self.ancho_imagen, self.largo_imagen), 
                                                          Image.ANTIALIAS)
         self.imagen = ImageTk.PhotoImage(self.imagen_cargada)
-        self.imagen_label = Label(self.z, image=self.imagen, bg = formato.fondo)
-        self.espacio = Label(self.z, text= "       ", font= formato.tipo_de_letra_titulo,
+        self.imagen_label = Label(self.window, image=self.imagen, bg = formato.fondo, relief = SUNKEN)
+        self.espacio = Label(self.window, text= "   ", font= formato.tipo_de_letra,
                              bg = formato.fondo)
-        self.espacio.pack(side = "top")
-        self.imagen_label.pack(side='bottom')
+        self.espacio.pack()
+        self.imagen_label.pack(side="bottom", fill="both", expand=True)
         self.lista_de_objetos.append((self.imagen_label))
         
     #----------------------------------------------------------------------
@@ -542,7 +562,7 @@ class Cuadro(Frame):
 
         titulo_ventana = titulo
         self.agregar_franja_superior("Logo_OSPA.png", "Inicio.png", "Salida.png", titulo_ventana,
-                                    49, 202, 40, 40, 40, 40,
+                                    50, 280, 40, 40, 40, 40,
                                     funcion_1, funcion_2)
     
     #----------------------------------------------------------------------
@@ -584,12 +604,12 @@ class Cuadro(Frame):
 
         self.y= y
         self.x= x
-        self.data = StringVar()
+        data = StringVar()
         n_columnas = int(numero_de_columnas_unidas)
-        self.entrada = Entry(self.z, textvariable=self.data, bg= formato.fondo, width = ancho)
+        self.entrada = Entry(self.z, textvariable=data, bg= formato.fondo, width = ancho)
         self.entrada.grid(row= self.y, column=self.x, columnspan= n_columnas, pady=4, padx=8)
         self.lista_de_objetos.append((self.entrada))
-        self.lista_de_datos.append((self.data))
+        self.lista_de_datos.append((data))
 
     #----------------------------------------------------------------------
     def agregar_entry_password(self, y, x):
@@ -989,7 +1009,15 @@ class Cuadro(Frame):
 
         for i,row in self.tabla.iterrows():
             
-            if row[0] == 'L':
+            if row[0] == 'T':
+
+                self.agregar_titulo(row[1], row[2], row[3])
+            
+            elif row[0] == 'T2':
+
+                self.agregar_titulo_2(row[1], row[2], row[3])
+
+            elif row[0] == 'L':
 
                 self.agregar_label(row[1], row[2], row[3])
 
@@ -1751,8 +1779,8 @@ class Vitrina_busqueda(Frame):
             encabezado = Label(
                 self.frame_dentro_del_canvas, 
                 text=row[1],
-                font=formato.tipo_de_letra_tabla,
-                fg = formato.color_negro,
+                font=formato.tipo_de_letra_tabla_encabezado,
+                fg = formato.color_blanco,
                 width= 19,#se modifico estaba con 21 
                 height=1, 
                 relief='groove',
