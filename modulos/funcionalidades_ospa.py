@@ -470,12 +470,35 @@ class funcionalidades_ospa(Ventana):
         self.tipo_base = tipo_base
 
         if self.tipo_base == 'dr':
-            tabla_renombrada = self.tabla.rename(columns={'COD_DR':'NRO DOC','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_ENTRANTE':'HT INGRESO'})
+            tabla_renombrada = self.tabla.rename(columns={'COD_DR':'NRO DOC','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_ENTRANTE':'HT INGRESO','ACCION_1':'INDICACION'})
             tabla_renombrada['FECHA INGRESO SEFA'] = pd.to_datetime(tabla_renombrada['FECHA INGRESO SEFA'], dayfirst=True)
             tabla_renombrada2 = tabla_renombrada.sort_values(by='FECHA INGRESO SEFA', ascending=True)
             tabla_renombrada2['FECHA INGRESO SEFA'] = tabla_renombrada2['FECHA INGRESO SEFA'].dt.strftime('%d/%m/%Y')
         
-            return tabla_renombrada2     
+            return tabla_renombrada2
+        elif self.tipo_base == 'de':
+            tabla_renombrada = self.tabla.rename(columns={'COD_DE':'HT','DETALLE_REQUERIMIENTO':'DETALLE','ESTADO_DOCE':'ESTADO','NUM_DOC':'NRO DOCUMENTO','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_SALIDA':'HT SALIDA','FECHA_FIRMA':'FECHA FIRMA','FECHA_NOTIFICACION':'FECHA NOTIFICACION','FECHA_PROYECTO_FINAL':'FECHA PROYECTO'})
+            tabla_renombrada['FECHA ULTIMO MOV.'] = pd.to_datetime(tabla_renombrada['FECHA ULTIMO MOV.'], dayfirst=True)
+            tabla_renombrada2 = tabla_renombrada.sort_values(by='FECHA ULTIMO MOV.', ascending=True)
+            tabla_renombrada2['FECHA ULTIMO MOV.'] = tabla_renombrada2['FECHA ULTIMO MOV.'].dt.strftime('%d/%m/%Y')
+        
+            return tabla_renombrada2
+
+        elif self.tipo_base == 'ep':
+            tabla_renombrada = self.tabla.rename(columns={'COD_EP':'CODIGO EXTREMO','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','AGENTE CONTAMINANTE':'AGENT. CONTAMI.','COMPONENTE AMBIENTAL':'COMPONEN. AMBIE.'})
+            tabla_renombrada['FECHA ULTIMO MOV.'] = pd.to_datetime(tabla_renombrada['FECHA ULTIMO MOV.'], dayfirst=True)
+            tabla_renombrada2 = tabla_renombrada.sort_values(by='FECHA ULTIMO MOV.', ascending=True)
+            tabla_renombrada2['FECHA ULTIMO MOV.'] = tabla_renombrada2['FECHA ULTIMO MOV.'].dt.strftime('%d/%m/%Y')
+        
+            return tabla_renombrada2    
+
+        elif self.tipo_base == 'mp':
+            tabla_renombrada = self.tabla.rename(columns={'COD_MP':'COD. MACROPROBLEMA','NOMBRE_DEL_PROBLEMA':'NOMBRE PROBLEMA','FECHA_DE_CREACION':'FECHA CREACION'})
+            tabla_renombrada['FECHA CREACION'] = pd.to_datetime(tabla_renombrada['FECHA CREACION'], dayfirst=True)
+            tabla_renombrada2 = tabla_renombrada.sort_values(by='FECHA CREACION', ascending=True)
+            tabla_renombrada2['FECHA CREACION'] = tabla_renombrada2['FECHA CREACION'].dt.strftime('%d/%m/%Y')
+        
+            return tabla_renombrada2 
         else:
             print("Hola")
 #----------------------------------------------------------------------
@@ -486,7 +509,19 @@ class funcionalidades_ospa(Ventana):
 
         if self.tipo_base == 'dr':
             tabla_seleccionada = self.tabla.loc[:,['NRO DOC','REMITENTE','HT INGRESO','FECHA INGRESO SEFA','INDICACION','FECHA ULTIMO MOV.','ASUNTO']]
-            return tabla_seleccionada      
+            return tabla_seleccionada
+        elif self.tipo_base == 'de':
+            tabla_seleccionada = self.tabla.loc[:,['HT','DESTINATARIO','TIPO DOC','NRO DOCUMENTO','FECHA ULTIMO MOV.','ESTADO','CATEGORIA','DETALLE']]
+            return tabla_seleccionada
+        elif self.tipo_base == 'ep':
+            tabla_seleccionada = self.tabla.loc[:,['CODIGO EXTREMO','AGENT. CONTAMI.','COMPONEN. AMBIE.','ACTIVIDAD','DEPARTAMENTO','EFA','ESTADO','FECHA ULTIMO MOV.','DESCRIPCION']]
+            return tabla_seleccionada
+        elif self.tipo_base == 'mp':
+            tabla_seleccionada = self.tabla.loc[:,['COD. MACROPROBLEMA','FECHA CREACION','NOMBRE PROBLEMA','ESTADO','DESCRIPCION']]
+            return tabla_seleccionada
+        elif self.tipo_base == 'pf':
+            tabla_seleccionada = self.tabla.loc[:,['HT','DESTINATARIO','ESPECIALISTA','FECHA PROYECTO','CATEGORIA','DETALLE']]
+            return tabla_seleccionada
         else:
             print("Hola")
 
@@ -508,3 +543,47 @@ class funcionalidades_ospa(Ventana):
         self.destruir()
         texto_b_ep = "Búsqueda de extremos de problemas"
         SubFrame = ventanas_busqueda.Extremos(self, alto_v_busqueda, ancho_v_busqueda, texto_b_ep, False)
+#----------------------------------------------------------------------
+    def actualizar_peq1(self):
+
+        self.destruir()
+        texto_b_peq1 = "Documentos pendientes de trabajar - Equipo 1"
+        SubFrame = ventanas_busqueda.Pendientes_eq1_trabajar(self, alto_v_busqueda, ancho_v_busqueda, texto_b_peq1, False)
+#----------------------------------------------------------------------
+    def actualizar_peq2(self):
+
+        self.destruir()
+        texto_b_peq2 = "Pendientes de calificar respuesta"
+        SubFrame = ventanas_busqueda.Pendientes_eq2_calificarrpta(self, alto_v_busqueda, ancho_v_busqueda, texto_b_peq2, False)
+
+#----------------------------------------------------------------------
+    def actualizar_bmp(self):
+
+        self.destruir()
+        texto_b_mp = "Búsqueda de Macroproblemas"
+        SubFrame = ventanas_busqueda.Macroproblemas(self, alto_v_busqueda, ancho_v_busqueda, texto_b_mp, False)
+#----------------------------------------------------------------------
+    def actualizar_pf(self):
+
+        self.destruir()
+        texto_b_pf = "Documentos pendientes de firma"
+        SubFrame = ventanas_busqueda.Pendientes_jefe_firma(self, alto_v_busqueda, ancho_v_busqueda, texto_b_pf, False)
+
+#----------------------------------------------------------------------
+    def actualizar_pasignar(self):
+
+        self.destruir()
+        texto_b_pa = "Documentos pendientes de asignar"
+        SubFrame = ventanas_busqueda.Pendientes_jefe_asignar(self, alto_v_busqueda, ancho_v_busqueda, texto_b_pa, False)
+#----------------------------------------------------------------------
+    def actualizar_preiter(self):
+
+        self.destruir()
+        texto_b_proci = "Documentos pendientes de reiterar/comunicación al OCI"
+        SubFrame = ventanas_busqueda.Pendientes_por_reiterar(self, alto_v_busqueda, ancho_v_busqueda, texto_b_proci, False)
+#----------------------------------------------------------------------
+    def actualizar_programaciones(self):
+
+        self.destruir()
+        texto_b_progra = "Programaciones"
+        SubFrame = ventanas_busqueda.Pendientes_eq2_programaciones(self, alto_v_busqueda, ancho_v_busqueda, texto_b_progra, False)

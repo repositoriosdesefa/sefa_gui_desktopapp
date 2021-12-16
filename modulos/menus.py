@@ -167,7 +167,7 @@ class Menu_busquedas(inicio_app_OSPA):
 
         texto_b_de = "Búsqueda de documentos emitidos"
         # LargoxAncho
-        SubFrame = ventanas_busqueda.Doc_emitidos_busqueda(self, alto_v_busqueda, ancho_v_busqueda, False)
+        SubFrame = ventanas_busqueda.Doc_emitidos_busqueda(self, alto_v_busqueda, ancho_v_busqueda, texto_b_de, False)
     
     #----------------------------------------------------------------------
     def n_busqueda_ep(self):
@@ -229,7 +229,7 @@ class Menu_admin(inicio_app_OSPA):
 
         self.desaparecer()
         # LargoxAncho
-        SubFrame = ventanas_busqueda.Pendientes_por_reiterar(self, 560, 1090, "Documentos pendientes de reiterar/comunicar al OCI")
+        SubFrame = ventanas_busqueda.Pendientes_por_reiterar(self, 550, 1300, "Documentos pendientes de reiterar/comunicar al OCI")
 
 # V. Menú Equipo 1
 class Inicio_eq1(inicio_app_OSPA):

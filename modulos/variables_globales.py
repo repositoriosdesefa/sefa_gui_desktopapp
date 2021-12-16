@@ -70,9 +70,16 @@ alto_v_vista_vitrina = 120
 ancho_v_busqueda = 1300
 alto_v_busqueda = 568
 ancho_v_busqueda_vitrina = 950
-ancho_v_busqueda_de_vitrina = 1020
-ancho_v_busqueda_ep_vitrina = 1020
+ancho_v_busqueda_de_vitrina = 1065
+ancho_v_busqueda_ep_vitrina = 1210
+ancho_v_busqueda_peq1_vitrina = 1040
+ancho_v_busqueda_pf_vitrina = 1000
+ancho_v_busqueda_mp_vitrina = 800
+ancho_v_busqueda_mpf_vitrina = 800
 alto_v_busqueda_vitrina = 240
+ancho_v_busqueda_prei_vitrina = 1065
+ancho_v_busqueda_peq2_vitrina = 1180
+
 
 
 # 4.1 Bases de datos
@@ -120,16 +127,15 @@ tabla_de_dr_cod = b_dr_cod.generar_dataframe()
 tabla_de_dr_completa = b_dr.generar_dataframe()
 tabla_de_dr_resumen = tabla_de_dr_completa.drop(['VIA_RECEPCION', 'HT_ENTRANTE', 'TIPO_REMITENTE', 'CATEGORIA_REMITENTE',
                                             'F_ING_OEFA', 'TIPO_DOC', 'ESPECIALISTA_1', 'ESPECIALISTA_2',
-                                            'INDICACION', 'TIPO_RESPUESTA', 'RESPUESTA',
-                                            'FECHA_ULTIMO_MOV', 'FECHA_ASIGNACION'], axis=1)
+                                            'TIPO_RESPUESTA', 'RESPUESTA',
+                                            'FECHA_ULTIMO_MOV'], axis=1)
 
 # 5.2 Documentos emitidos
 tabla_de_de_cod = b_de_cod.generar_dataframe()
 tabla_de_de_completa = b_de.generar_dataframe()
 tabla_de_de_resumen =  tabla_de_de_completa.drop(['HT_SALIDA', 'FECHA_PROYECTO_FINAL',
                                                     'FECHA_FIRMA', 'TIPO_DOC', 'CATEGORIA_DESTINATARIO',
-                                                    'MARCO_PEDIDO', 'FECHA_ULTIMO_MOV', 'FECHA_ASIGNACION',
-                                                    'DOCUMENTO_ELABORADO', 'DOCUMENTO_FIRMADO', 'DOCUMENTO_NOTIFICADO',
+                                                    'MARCO_PEDIDO', 'FECHA_ULTIMO_MOV',
                                                     'PLAZO', 'ESTADO_DOCE', 'ESPECIALISTA'], axis=1)
 # 5.3 Extremos de problema
 tabla_de_ep_cod = b_ep_cod.generar_dataframe()

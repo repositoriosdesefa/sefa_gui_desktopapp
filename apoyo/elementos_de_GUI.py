@@ -811,7 +811,7 @@ class Cuadro(Frame):
             self.x_3 = int(x + 4)
 
         tabla_dependiente = tabla
-        lista_inicial =  list(set(tabla[columna_1]))
+        lista_inicial =  sorted(list(set(tabla[columna_1])))
 
         primer_dato = StringVar()
         segundo_dato = StringVar()
@@ -1943,7 +1943,7 @@ class Vitrina_busquedaep(Frame):
                 self.frame_dentro_del_canvas, 
                 text=row[1],
                 font=formato.tipo_de_letra_tablaep,
-                fg = formato.color_negro,
+                fg = formato.color_blanco,
                 width= 18,#se modifico 
                 height=1, 
                 relief='groove',
@@ -1955,7 +1955,7 @@ class Vitrina_busquedaep(Frame):
             self.frame_dentro_del_canvas,
             text='OPCIONES',
             font=formato.tipo_de_letra_tablaep,
-            fg = formato.color_negro,
+            fg = formato.color_blanco,
             width= 14, #se modifico 
             height=1, 
             relief='groove',
@@ -2130,7 +2130,7 @@ class Vitrina_pendientes(Frame):
     """"""
 
     #----------------------------------------------------------------------
-    def __init__(self, window, tabla, funcion1, height=100, width=1600):
+    def __init__(self, window, tabla, funcion1, height=100, width=1800):
         """Constructor"""
 
         self.window = window
@@ -2178,7 +2178,7 @@ class Vitrina_pendientes(Frame):
                 self.frame_dentro_del_canvas, 
                 text=row[1],
                 font=formato.tipo_de_letra_tabla,
-                fg = formato.color_negro,
+                fg = formato.color_blanco,
                 width= 22,#se modifico estaba con 21 
                 height=1, 
                 relief='groove',
@@ -2190,7 +2190,7 @@ class Vitrina_pendientes(Frame):
             self.frame_dentro_del_canvas,
             text='OPCIONES',
             font=formato.tipo_de_letra_tabla,
-            fg = formato.color_negro,
+            fg = formato.color_blanco,
             width= 10, #se modifico
             height=1, 
             relief='groove',
