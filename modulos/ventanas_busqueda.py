@@ -67,7 +67,7 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
         # Generamos el dataframe a filtrar
         self.tabla_inicial0 = b_dr_tabla
         self.tabla_0 = self.tabla_inicial0.rename(columns={'COD_DR':'NRO DOC','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_ENTRANTE':'HT INGRESO'})
-        self.tabla_drF = self.tabla_0.loc[0:99, ['NRO DOC','REMITENTE','HT INGRESO','FECHA INGRESO SEFA','INDICACION','ESPECIALISTA_1','FECHA ULTIMO MOV.','ASUNTO']]
+        self.tabla_drF = self.tabla_0.loc[0:99, ['NRO DOC','REMITENTE','HT INGRESO','FECHA INGRESO SEFA','ACCION_1','ESPECIALISTA_1','FECHA ULTIMO MOV.','ASUNTO']]
         
         # Información para las listas desplegables
         self.listatipodoc = sorted(list(set(self.tabla_0['TIPO DOC'])))
@@ -139,7 +139,7 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
         # Generamos el dataframe a filtrar 
         self.tabla_inicial0 = b_dr_tabla
         self.tabla_0 = self.tabla_inicial0.rename(columns={'COD_DR':'NRO DOC','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_ENTRANTE':'HT INGRESO'})
-        self.tabla_drF = self.tabla_0.loc[0:99, ['NRO DOC','REMITENTE','HT INGRESO','FECHA INGRESO SEFA','INDICACION','ESPECIALISTA_1','FECHA ULTIMO MOV.','ASUNTO']]
+        self.tabla_drF = self.tabla_0.loc[0:99, ['NRO DOC','REMITENTE','HT INGRESO','FECHA INGRESO SEFA','ACCION_1','ESPECIALISTA_1','FECHA ULTIMO MOV.','ASUNTO']]
       
         # Información para las listas desplegables
         self.listatipodoc = sorted(list(set(self.tabla_0['TIPO DOC'])))
@@ -230,7 +230,7 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
 
     def Complementodr(self,filtro0):
 
-        tabla_filtro2 = filtro0.loc[:, ['NRO DOC','REMITENTE','HT INGRESO','FECHA INGRESO SEFA','INDICACION','ESPECIALISTA_1','FECHA ULTIMO MOV.','ASUNTO']]
+        tabla_filtro2 = filtro0.loc[:, ['NRO DOC','REMITENTE','HT INGRESO','FECHA INGRESO SEFA','ACCION_1','ESPECIALISTA_1','FECHA ULTIMO MOV.','ASUNTO']]
         if len(tabla_filtro2.index) > 100:
             tabla_filtro3 = tabla_filtro2.head(100)
         else:
@@ -412,7 +412,7 @@ class Doc_emitidos_busqueda(funcionalidades_ospa):
             ('B', 5, 6, 'Actualizar', self.actualizar),
             ('B', 5, 7, 'Volver', self.volver),
             ('B', 5, 8, 'Inicio', self.inicio_app),
-            ('B', 5, 9, 'Emitir doc', self.doc_emitido)
+            ('B', 5, 9, 'Emitir doc', self.nuevo_de)
         )
         
         # Agregando rejilla de botones a la ventana
@@ -422,7 +422,7 @@ class Doc_emitidos_busqueda(funcionalidades_ospa):
 
         # Creando vitrina
         self.vde1 = Vitrina_busqueda(self, self.tabla_drF, self.ver_de, 
-                                    self.asociar_de_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
+                                    self.asociar_de_dr, height=alto_v_busqueda_vitrina, width=int(ancho_v_busqueda_vitrina+200))
         
         # Franja inferior
         self.cde16 = Cuadro(self)
@@ -485,14 +485,6 @@ class Doc_emitidos_busqueda(funcionalidades_ospa):
         # Creando vitrina
         self.vde1 = Vitrina_busqueda(self, self.tabla_drF, self.ver_de, 
                                     self.asociar_de_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
-
-    #----------------------------------------------------------------------
-
-    def doc_emitido(self):
-        """"""
-        self.desaparecer()
-        # LargoxAncho
-        subframe = ventanas_vista.Doc_emitidos_vista(self, 550, 1090, "Registro Documento Emitido")
 
     #----------------------------------------------------------------------
 
@@ -2481,7 +2473,7 @@ class Pendientes_eq1_trabajar(funcionalidades_ospa):
         self.tabla_inicial0 = b_dr_tabla
         self.tabla_inicial1 = self.tabla_inicial0.query("TIPO_RESPUESTA!='No'")
         self.tabla_peq1t = self.tabla_inicial1.rename(columns={'COD_DR':'NRO DOC','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_ENTRANTE':'HT INGRESO'})
-        self.tabla_peq1tF = self.tabla_peq1t.loc[0:99, ['NRO DOC','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','FECHA ULTIMO MOV.','INDICACION','ASUNTO']]
+        self.tabla_peq1tF = self.tabla_peq1t.loc[0:99, ['NRO DOC','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','FECHA ULTIMO MOV.','ACCION_1','ASUNTO']]
  
         # Información para las listas desplegables
         self.peq1ttipodoc = list(set(self.tabla_peq1t['TIPO DOC']))
@@ -2594,7 +2586,7 @@ class Pendientes_eq1_trabajar(funcionalidades_ospa):
 
     def Complementopeq1t(self,filtro0):
 
-        tabla_filtro2 = filtro0.loc[:, ['NRO DOC','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','FECHA ULTIMO MOV.','INDICACION','ASUNTO']]
+        tabla_filtro2 = filtro0.loc[:, ['NRO DOC','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','FECHA ULTIMO MOV.','ACCION_1','ASUNTO']]
         if len(tabla_filtro2.index) > 100:
             tabla_filtro3 = tabla_filtro2.head(100)
         else:
@@ -2641,7 +2633,7 @@ class Pendientes_eq1_trabajar(funcionalidades_ospa):
         self.tabla_inicial0 = b_dr_tabla
         self.tabla_inicial1 = self.tabla_inicial0.query("TIPO_RESPUESTA!='No'")
         self.tabla_peq1t = self.tabla_inicial1.rename(columns={'COD_DR':'NRO DOC','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_ENTRANTE':'HT INGRESO'})
-        self.tabla_peq1tF = self.tabla_peq1t.loc[0:99, ['NRO DOC','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','FECHA ULTIMO MOV.','INDICACION','ASUNTO']]
+        self.tabla_peq1tF = self.tabla_peq1t.loc[0:99, ['NRO DOC','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','FECHA ULTIMO MOV.','ACCION_1','ASUNTO']]
  
         # Información para las listas desplegables
         self.peq1ttipodoc = list(set(self.tabla_peq1t['TIPO DOC']))
@@ -2693,7 +2685,7 @@ class Pendientes_eq2_calificarrpta(funcionalidades_ospa):
         self.tabla_inicial1 = self.tabla_inicial0.query("TIPO_RESPUESTA=='Si'")
         #self.tabla_inicial2 = self.tabla_inicial1.query("RESPUESTA==' ' or RESPUESTA==''")
         self.tabla_peq2t = self.tabla_inicial1.rename(columns={'COD_DR':'NRO DOC','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_ENTRANTE':'HT INGRESO'})
-        self.tabla_peq2tF = self.tabla_peq2t.loc[0:99, ['NRO DOC','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','FECHA ULTIMO MOV.','ESPECIALISTA_1','INDICACION','ASUNTO']]
+        self.tabla_peq2tF = self.tabla_peq2t.loc[0:99, ['NRO DOC','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','FECHA ULTIMO MOV.','ESPECIALISTA_1','ACCION_1','ASUNTO']]
  
         # Información para las listas desplegables
         self.peq2ttipodoc = list(set(self.tabla_peq2t['TIPO DOC']))
@@ -2817,7 +2809,7 @@ class Pendientes_eq2_calificarrpta(funcionalidades_ospa):
 
     def Complementopeq2t(self,filtro0):
 
-        tabla_filtro2 = filtro0.loc[:, ['NRO DOC','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','FECHA ULTIMO MOV.','ESPECIALISTA_1','INDICACION','ASUNTO']]
+        tabla_filtro2 = filtro0.loc[:, ['NRO DOC','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','FECHA ULTIMO MOV.','ESPECIALISTA_1','ACCION_1','ASUNTO']]
         if len(tabla_filtro2.index) > 100:
             tabla_filtro3 = tabla_filtro2.head(100)
         else:
@@ -2865,7 +2857,7 @@ class Pendientes_eq2_calificarrpta(funcionalidades_ospa):
         self.tabla_inicial1 = self.tabla_inicial0.query("TIPO_RESPUESTA=='Si'")
         #self.tabla_inicial2 = self.tabla_inicial1.query("RESPUESTA=='' or RESPUESTA==' '")
         self.tabla_peq2t = self.tabla_inicial1.rename(columns={'COD_DR':'NRO DOC','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_ENTRANTE':'HT INGRESO'})
-        self.tabla_peq2tF = self.tabla_peq2t.loc[0:99, ['NRO DOC','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','FECHA ULTIMO MOV.','ESPECIALISTA_1','INDICACION','ASUNTO']]
+        self.tabla_peq2tF = self.tabla_peq2t.loc[0:99, ['NRO DOC','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','FECHA ULTIMO MOV.','ESPECIALISTA_1','ACCION_1','ASUNTO']]
  
         # Información para las listas desplegables
         self.peq2ttipodoc = list(set(self.tabla_peq2t['TIPO DOC']))

@@ -7,6 +7,11 @@ from modulos import administracion as adm
 from modulos import menus
 from modulos import variables_globales as vg
 
+alto_logo = vg.alto_logo
+ancho_logo = vg.ancho_logo
+alto_ventana_secundaria = vg.alto_ventana_secundaria
+ancho_ventana_secundaria = vg.ancho_ventana_secundaria
+
 class logueo1_Ingreso_de_usuario(Ventana):
     """"""
     
@@ -16,10 +21,12 @@ class logueo1_Ingreso_de_usuario(Ventana):
         
         Ventana.__init__(self, *args)
 
+        c0 = Cuadro(self)
+        c0.agregar_label(0, 0,' ')
+        c0.agregar_imagen(1,0,'Logo_OSPA.png',ancho_logo, alto_logo)
         c1 = Cuadro(self)
-        c1.agregar_label(0,0,' ')
-        c1.agregar_imagen(1,0,'Logo_OSPA.png',300, 80)
-        c1.agregar_titulo(2,0,'ASPA - Acceso')
+        c1.agregar_label(0, 0,' ')
+        c1.agregar_imagen(1, 0,'Icono_OSPA.png', 150, 150)
 
         self.c2 = Cuadro(self)
         rejilla = (
@@ -43,7 +50,7 @@ class logueo1_Ingreso_de_usuario(Ventana):
         c4.agregar_rejilla(rejilla2)
 
         c5 = Cuadro(self)
-        c5.agregar_franja_inferior('Franja_Inferior_OSPA.png', 70, 400)
+        c5.agregar_franja_inferior('Franja_Inferior_OSPA.png', 60, 450)
 
     #----------------------------------------------------------------------
     def comprobar_datos(self):
@@ -53,8 +60,8 @@ class logueo1_Ingreso_de_usuario(Ventana):
         correo = datos_ingresados[0]
         contrasenna = datos_ingresados[1]
 
-        b1 = Base_de_datos('12gzaAx7GkEUDjEmiJG693in8ADyCPxej5cUv9YA2vyY', 'Usuario')
-        b2 = Base_de_datos('12gzaAx7GkEUDjEmiJG693in8ADyCPxej5cUv9YA2vyY', 'Datos_de_usuario')
+        b1 = vg.base_usuario
+        b2 = vg.base_datos_usuario
 
         if b1.contar_coincidencias(correo) == 0:
             messagebox.showerror('Error al ingresar datos', 'Usted ha ingresado un correo electrónico no registrado.')
@@ -78,7 +85,7 @@ class logueo1_Ingreso_de_usuario(Ventana):
         vg.texto_bienvenida = "Bienvenido " + vg.usuario
         texto_bienvenida = vg.texto_bienvenida
         self.desaparecer()
-        subframe = menus.inicio_app_OSPA(self, 434, 403, texto_bienvenida, False)
+        subframe = menus.inicio_app_OSPA(self, alto_ventana_secundaria, ancho_ventana_secundaria, texto_bienvenida, False)
     
     #----------------------------------------------------------------------
     def ir_a_recuperar_contrasena(self, event):
