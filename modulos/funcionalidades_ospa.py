@@ -452,7 +452,7 @@ class funcionalidades_ospa(Ventana):
         texto_documento = 'Macroproblema: ' + id_usuario
 
         lb1 = b_mp.listar_datos_de_fila(id_usuario)
-        lista_para_insertar = [lb1[2], lb1[3], lb1[4]]
+        lista_para_insertar = [lb1[2], lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8]]
 
         self.desaparecer()
         subframe = ventanas_vista.Macroproblemas_vista(self, alto_v_vista, ancho_v_vista, texto_documento, True,

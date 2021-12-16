@@ -108,6 +108,7 @@
 - [ ] Programar: Selección automática de especialista equipo 2 en función al EP
 - [ ] Investigar: Ventana emergente con resultado de calculadora
 - [ ] Investigar: Cálculo de plazo en días hábiles para el vencimiento
+- [ ] Investigar: Cálculo de Estado de Documentos Emitidos (En Plazo, Vencido)
 ### ventanas_busqueda
 - [ ] Programar: Eliminar de la vitrina de búsqueda los objetos ya asociados
 - [ ] Programar: Abstracción de métodos e inclusión en funcionalidades_ospa

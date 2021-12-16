@@ -168,4 +168,4 @@ tabla_de_ep_resumen = tabla_de_ep_completa.drop(['OCURRENCIA', 'EXTENSION', 'TIP
 # 5.4 Macroproblemas
 tabla_de_mp_cod = b_mp_cod.generar_dataframe()
 tabla_de_mp_completa = b_mp.generar_dataframe()
-tabla_de_mp_resumen = tabla_de_mp_completa.drop(['FECHA_ULTIMO_MOV'], axis=1)
+tabla_de_mp_resumen = tabla_de_mp_completa.drop(['FECHA_ULTIMO_MOV', 'USUARIO', 'COMPONENTE', 'AGENTE'], axis=1)

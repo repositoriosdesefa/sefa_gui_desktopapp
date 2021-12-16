@@ -953,11 +953,11 @@ class Extremo_problemas_vista(funcionalidades_ospa):
         self.vitrina_1 = self.generar_vitrina(self.nuevo, 
                                                 self.frame_vitrina_1,
                                                 '(+) Agregar', self.no_asociar,
-                                                'Documentos recibidos asociados',
+                                                'Macroproblemas asociados',
                                                 self.cod_usuario_ep, self.tabla_de_ep_cod, 
-                                                self.tabla_de_dr, self.tabla_relacion_dr_ep, 
-                                                "ID_EP", "ID_DR", "COD_EP", 
-                                                self.ver_dr, self.eliminar_dr_y_actualizar)
+                                                self.tabla_de_mp, self.tabla_relacion_mp_ep, 
+                                                "ID_EP", "ID_MP", "COD_EP", 
+                                                self.ver_mp, self.eliminar_mp_y_actualizar)
         
         # III.5 Frame de vitrina 2
         self.frame_vitrina_2 = Cuadro(self.frame_principal)
@@ -975,11 +975,12 @@ class Extremo_problemas_vista(funcionalidades_ospa):
         self.vitrina_3 = self.generar_vitrina(self.nuevo, 
                                                 self.frame_vitrina_3,
                                                 '(+) Agregar', self.no_asociar,
-                                                'Macroproblemas asociados',
+                                                'Documentos recibidos asociados',
                                                 self.cod_usuario_ep, self.tabla_de_ep_cod, 
-                                                self.tabla_de_mp, self.tabla_relacion_mp_ep, 
-                                                "ID_EP", "ID_MP", "COD_EP", 
-                                                self.ver_mp, self.eliminar_mp_y_actualizar)
+                                                self.tabla_de_dr, self.tabla_relacion_dr_ep, 
+                                                "ID_EP", "ID_DR", "COD_EP", 
+                                                self.ver_dr, self.eliminar_dr_y_actualizar)
+
 
     #----------------------------------------------------------------------
     def guardar_y_actualizar_ep(self):
@@ -1013,11 +1014,11 @@ class Extremo_problemas_vista(funcionalidades_ospa):
         self.vitrina_1 = self.generar_vitrina(self.nuevo, 
                                                 self.frame_vitrina_1,
                                                 '(+) Agregar', self.no_asociar,
-                                                'Documentos recibidos asociados',
+                                                'Macroproblemas asociados',
                                                 self.cod_usuario_ep, self.tabla_de_ep_cod, 
-                                                self.tabla_de_dr, self.tabla_relacion_dr_ep, 
-                                                "ID_EP", "ID_DR", "COD_EP", 
-                                                self.ver_dr, self.eliminar_dr_y_actualizar)
+                                                self.tabla_de_mp, self.tabla_relacion_mp_ep, 
+                                                "ID_EP", "ID_MP", "COD_EP", 
+                                                self.ver_mp, self.eliminar_mp_y_actualizar)
         
         # III.5 Frame de vitrina 2
         self.frame_vitrina_2.eliminar_cuadro()
@@ -1035,11 +1036,11 @@ class Extremo_problemas_vista(funcionalidades_ospa):
         self.vitrina_3 = self.generar_vitrina(self.nuevo, 
                                                 self.frame_vitrina_3,
                                                 '(+) Agregar', self.no_asociar,
-                                                'Macroproblemas asociados',
+                                                'Documentos recibidos asociados',
                                                 self.cod_usuario_ep, self.tabla_de_ep_cod, 
-                                                self.tabla_de_mp, self.tabla_relacion_mp_ep, 
-                                                "ID_EP", "ID_MP", "COD_EP", 
-                                                self.ver_mp, self.eliminar_mp_y_actualizar)
+                                                self.tabla_de_dr, self.tabla_relacion_dr_ep, 
+                                                "ID_EP", "ID_DR", "COD_EP", 
+                                                self.ver_dr, self.eliminar_dr_y_actualizar)
 
 
     #----------------------------------------------------------------------
@@ -1103,6 +1104,7 @@ class Macroproblemas_vista(funcionalidades_ospa):
         self.cod_usuario_mp = id_objeto
         self.id_objeto_ingresado = id_objeto
         self.tipo_objeto = tipo_objeto
+        self.cod_tipo_objeto = 'COD_' + str(tipo_objeto)
         # Parámetros de vitrina
         self.vitrina_1 = None
         self.vitina_2 = None
@@ -1117,45 +1119,102 @@ class Macroproblemas_vista(funcionalidades_ospa):
         # III. Títulos e imagen
         # III.1 Frame de Título
         titulos = Cuadro(self.frame_principal)
-        titulos.agregar_franja_superior_ospa('Detalle de macroproblema', 
+        titulos.agregar_franja_superior_ospa('Macroproblema', 
                                             self.inicio_app, self.cerrar_sesion)
 
         # III.2 Frame de rejillas
         self.frame_rejilla = Cuadro(self.frame_principal)
         if self.nuevo == False: # Estamos en una ficha creada
-            self.tabla_de_mp_cod = b_mp_cod.generar_dataframe()
             self.cod_usuario_mp = id_objeto
             self.lista_para_insertar = lista
+
+            self.tabla_de_mp_cod = b_mp_cod.generar_dataframe()
+
+            creador = b_mp_cod.obtener_usuario(base_datos_usuario, self.id_objeto_ingresado,  self.cod_tipo_objeto)
+            fecha_creacion = b_mp_cod.obtener_valor_columna_con_codigo_unico(self.cod_tipo_objeto, self.id_objeto_ingresado, 'F_CREACION')
+
+            ultimo_nombre = b_mp.obtener_usuario(base_datos_usuario, self.id_objeto_ingresado,  self.cod_tipo_objeto)
+            fecha_ultimo =  b_mp.obtener_valor_columna_con_codigo_unico(self.cod_tipo_objeto, self.id_objeto_ingresado, 'FECHA_ULTIMO_MOV')
+
+
             rejilla_mp = [
+                #Sección 1: Detalle
+                ('T2', 0, 0, 'Detalle'),
 
-                ('L', 0, 0, 'Código de macroproblema'),
-                ('L', 0, 1, str(self.cod_usuario_mp)),
+                ('L', 1, 0, 'Código'),
+                ('L', 1, 1, str(self.cod_usuario_mp)),
 
-                ('L', 1, 0, 'Nombre del problema'),
-                ('EL', 1, 1, 110, 3),
+                ('L', 2, 0, 'Estado'),
+                ('CX', 2, 1, estado_problemas),
 
-                ('L', 2, 0, 'Descripción'),
-                ('ST', 2, 1),
+                ('L', 2, 2, 'Avance'),
+                ('E', 2, 3),
 
-                ('L', 3, 0, 'Observaciones'),
-                ('EL', 3, 1, 110, 3)
+                ('L', 3, 0, 'Agente contaminante'),
+                ('CX', 3, 1, agente_conta),
+
+                ('L', 3, 2, 'Componente ambiental'),
+                ('CX', 3, 3, componente_amb),
+
+                #Sección 2: Contenido
+                ('T2', 4, 0, 'Contenido'),
+
+                ('L', 5, 0, 'Nombre'),
+                ('EL', 5, 1, 112, 3),
+
+                ('L', 6, 0, 'Descripción'),
+                ('ST', 6, 1),
+
+                ('L', 7, 0, 'Observaciones'),
+                ('EL', 7, 1, 112, 3),
+
+                #Sección 2: Datos
+                ('T2', 8, 0, 'Datos'),
+
+                ('L', 9, 0, 'Creado por:'),
+                ('L', 9, 1, str(creador)),
+
+                ('L', 9, 2, 'Actualizado por:'),
+                ('L', 9, 3, str(ultimo_nombre)),
+
+                ('L', 10, 0, 'Fecha creación:'),
+                ('L', 10, 1, str(fecha_creacion)),
+
+                ('L', 10, 2, 'Fecha actualización:'),
+                ('L', 10, 3, str(fecha_ultimo))
 
             ]
             self.frame_rejilla.agregar_rejilla(rejilla_mp)
             self.frame_rejilla.insertar_lista_de_datos(self.lista_para_insertar)
         else:
             rejilla_mp_nuevo = [
-                ('L', 0, 0, ''),
-                ('L', 0, 1, ''),
+                #Sección 1: Detalle
+                ('T2', 0, 0, 'Detalle'),
 
-                ('L', 1, 0, 'Nombre del problema'),
-                ('EL', 1, 1, 110, 3),
+                ('L', 1, 0, 'Estado'),
+                ('CXP', 1, 1, 39, estado_problemas, 'ABIERTO', "readonly"),
 
-                ('L', 2, 0, 'Descripción'),
-                ('ST', 2, 1),
+                ('L', 1, 2, 'Avance'),
+                ('E', 1, 3),
 
-                ('L', 3, 0, 'Observaciones'),
-                ('EL', 3, 1, 110, 3)
+                ('L', 2, 0, 'Agente contaminante'),
+                ('CX', 2, 1, agente_conta),
+
+                ('L', 2, 2, 'Componente ambiental'),
+                ('CX', 2, 3, componente_amb),
+
+                #Sección 2: Contenido
+                ('T2', 3, 0, 'Contenido'),
+
+                ('L', 4, 0, 'Nombre'),
+                ('EL', 4, 1, 112, 3),
+
+                ('L', 5, 0, 'Descripción'),
+                ('ST', 5, 1),
+
+                ('L', 6, 0, 'Observaciones'),
+                ('EL', 6, 1, 112, 3)
+
             ]
             # Se inserta rejilla nueva
             self.frame_rejilla.agregar_rejilla(rejilla_mp_nuevo)
@@ -1283,7 +1342,7 @@ class N_Extremo_problemas_vista(funcionalidades_ospa):
                 ('T2', 0, 0, titulo_cod_problema),
 
                 ('L', 1, 0, 'Estado'),
-                ('CXP', 1, 1, 39, estado_problemas, 'ABIERTO', "readonly"),
+                ('CX', 1, 1, estado_problemas),
 
                 # Sección 2: Origen
                 ('T2', 2, 0, 'Origen'),
@@ -1452,11 +1511,11 @@ class N_Extremo_problemas_vista(funcionalidades_ospa):
         self.vitrina_1 = self.generar_vitrina(self.nuevo, 
                                                 self.frame_vitrina_1,
                                                 '(+) Agregar', self.no_asociar,
-                                                'Documentos recibidos asociados',
+                                                'Macroproblemas asociados',
                                                 self.cod_usuario_ep, self.tabla_de_ep_cod, 
-                                                self.tabla_de_dr, self.tabla_relacion_dr_ep, 
-                                                "ID_EP", "ID_DR", "COD_EP", 
-                                                self.ver_dr, self.eliminar_dr_y_actualizar)
+                                                self.tabla_de_mp, self.tabla_relacion_mp_ep, 
+                                                "ID_EP", "ID_MP", "COD_EP", 
+                                                self.ver_mp, self.eliminar_mp_y_actualizar)
         
         # III.5 Frame de vitrina 2
         self.frame_vitrina_2 = Cuadro(self.frame_principal)
@@ -1474,11 +1533,12 @@ class N_Extremo_problemas_vista(funcionalidades_ospa):
         self.vitrina_3 = self.generar_vitrina(self.nuevo, 
                                                 self.frame_vitrina_3,
                                                 '(+) Agregar', self.no_asociar,
-                                                'Macroproblemas asociados',
+                                                'Documentos recibidos asociados',
                                                 self.cod_usuario_ep, self.tabla_de_ep_cod, 
-                                                self.tabla_de_mp, self.tabla_relacion_mp_ep, 
-                                                "ID_EP", "ID_MP", "COD_EP", 
-                                                self.ver_mp, self.eliminar_mp_y_actualizar)
+                                                self.tabla_de_dr, self.tabla_relacion_dr_ep, 
+                                                "ID_EP", "ID_DR", "COD_EP", 
+                                                self.ver_dr, self.eliminar_dr_y_actualizar)
+
 
     #----------------------------------------------------------------------
     def guardar_y_actualizar_ep(self):
@@ -1512,11 +1572,11 @@ class N_Extremo_problemas_vista(funcionalidades_ospa):
         self.vitrina_1 = self.generar_vitrina(self.nuevo, 
                                                 self.frame_vitrina_1,
                                                 '(+) Agregar', self.no_asociar,
-                                                'Documentos recibidos asociados',
+                                                'Macroproblemas asociados',
                                                 self.cod_usuario_ep, self.tabla_de_ep_cod, 
-                                                self.tabla_de_dr, self.tabla_relacion_dr_ep, 
-                                                "ID_EP", "ID_DR", "COD_EP", 
-                                                self.ver_dr, self.eliminar_dr_y_actualizar)
+                                                self.tabla_de_mp, self.tabla_relacion_mp_ep, 
+                                                "ID_EP", "ID_MP", "COD_EP", 
+                                                self.ver_mp, self.eliminar_mp_y_actualizar)
         
         # III.5 Frame de vitrina 2
         self.frame_vitrina_2.eliminar_cuadro()
@@ -1534,13 +1594,13 @@ class N_Extremo_problemas_vista(funcionalidades_ospa):
         self.vitrina_3 = self.generar_vitrina(self.nuevo, 
                                                 self.frame_vitrina_3,
                                                 '(+) Agregar', self.no_asociar,
-                                                'Macroproblemas asociados',
+                                                'Documentos recibidos asociados',
                                                 self.cod_usuario_ep, self.tabla_de_ep_cod, 
-                                                self.tabla_de_mp, self.tabla_relacion_mp_ep, 
-                                                "ID_EP", "ID_MP", "COD_EP", 
-                                                self.ver_mp, self.eliminar_mp_y_actualizar)
+                                                self.tabla_de_dr, self.tabla_relacion_dr_ep, 
+                                                "ID_EP", "ID_DR", "COD_EP", 
+                                                self.ver_dr, self.eliminar_dr_y_actualizar)
 
-
+        
     #----------------------------------------------------------------------
     def eliminar_dr_y_actualizar(self, id_objeto):
         # Se elimina el DR
