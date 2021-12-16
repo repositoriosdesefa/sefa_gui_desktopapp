@@ -80,7 +80,7 @@ alto_v_busqueda_vitrina = 240
 alto_logo = 50
 ancho_logo = 280
 
-alto_ventana_secundaria = 408
+alto_ventana_secundaria = 413
 ancho_ventana_secundaria = 403
 
 alto_franja_inferior_1 = 52

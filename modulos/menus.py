@@ -123,14 +123,14 @@ class Menu_jefe(inicio_app_OSPA):
         
         self.desaparecer()
         # LargoxAncho
-        SubFrame = ventanas_busqueda.Pendientes_jefe_asignar(self, 500, 1000, "Documentos pendientes de asignar")
+        SubFrame = ventanas_busqueda.Pendientes_jefe_asignar(self, alto_v_busqueda, ancho_v_busqueda, "Documentos pendientes de asignar")
     
     #----------------------------------------------------------------------
     def jefe_firma(self):
         
         self.desaparecer()
         # LargoxAncho
-        SubFrame = ventanas_busqueda.Pendientes_jefe_firma(self, 550, 1300, "Documentos pendientes de firma")
+        SubFrame = ventanas_busqueda.Pendientes_jefe_firma(self, alto_v_busqueda, ancho_v_busqueda, "Documentos pendientes de firma")
     
     #----------------------------------------------------------------------
     def ver_menu_busquedas(self):
@@ -168,7 +168,8 @@ class Menu_busquedas(inicio_app_OSPA):
         c1.agregar_label(9, 1,' ')
 
         c2 = Cuadro(self)
-        c2.agregar_button(0, 1, "Volver", self.volver_anterior)
+        c2.agregar_button(0, 0,  "Volver", self.volver_anterior)
+        c2.agregar_label(1, 0,' ')
 
         c3 = Cuadro(self)
         c3.agregar_franja_inferior('Franja_Inferior_OSPA.png', alto_franja_inferior_1, ancho_franja_inferior_1)
@@ -256,15 +257,16 @@ class Menu_admin(inicio_app_OSPA):
 
         self.desaparecer()
         # LargoxAncho
-        SubFrame = ventanas_vista.Doc_recibidos_vista(self, 650, 1150, 
-                    "Registra de un nuevo documento recibido")
+        SubFrame = ventanas_vista.Doc_recibidos_vista(self, alto_v_vista, ancho_v_vista, 
+                    "Registro de un nuevo documento recibido")
 
     #----------------------------------------------------------------------
     def Pendientes_reiterar(self):
 
         self.desaparecer()
         # LargoxAncho
-        SubFrame = ventanas_busqueda.Pendientes_por_reiterar(self, 560, 1090, "Documentos pendientes de reiterar/comunicar al OCI")
+        SubFrame = ventanas_busqueda.Pendientes_por_reiterar(self, alto_v_busqueda, ancho_v_busqueda, 
+                    "Documentos pendientes de reiterar/comunicar al OCI")
 
 # V. Menú Equipo 1
 class Inicio_eq1(inicio_app_OSPA):
@@ -290,7 +292,8 @@ class Inicio_eq1(inicio_app_OSPA):
         c1.agregar_label(9, 0,' ')
 
         c2 = Cuadro(self)
-        c2.agregar_button(5, 0, "Volver", self.volver_anterior)
+        c2.agregar_label(0, 0,' ')
+        c2.agregar_button(1, 0, "Volver", self.volver_anterior)
 
         c3 = Cuadro(self)
         c3.agregar_franja_inferior('Franja_Inferior_OSPA.png', alto_franja_inferior_1, ancho_franja_inferior_1)
@@ -301,7 +304,7 @@ class Inicio_eq1(inicio_app_OSPA):
 
         self.desaparecer()
         # LargoxAncho
-        SubFrame = ventanas_busqueda.Pendientes_eq1_trabajar(self, 560, 1150, "Documentos pendientes de trabajar")
+        SubFrame = ventanas_busqueda.Pendientes_eq1_trabajar(self, alto_v_busqueda, ancho_v_busqueda, "Documentos pendientes de trabajar")
 
 # VI. Menú Equipo 2
 class Inicio_eq2(inicio_app_OSPA):
@@ -317,19 +320,18 @@ class Inicio_eq2(inicio_app_OSPA):
         c0.agregar_imagen(1, 0,'Logo_OSPA.png', ancho_logo, alto_logo)
         
         c1 = Cuadro(self)
-        c1.agregar_label(1, 0,' ')
         c1.agregar_label(2, 0,' ')
         c1.agregar_label(3, 0,' ')
-        c1.agregar_label(2, 0,'Seguimiento al problema')
-        c1.agregar_button(2, 1, "Ir", self.busqueda_ep)
-        c1.agregar_label(3, 0,'Calificación de respuesta')
-        c1.agregar_button(3, 1, "Ir", self.pendientes_eq2)
-        c1.agregar_label(4, 0,'Programaciones')
-        c1.agregar_button(4, 1, "Ir", self.pendientes_prog)
-        c1.agregar_label(5, 0,'Creación de macroproblema')
-        c1.agregar_button(5, 1, "Ir", self.nuevo_mp)
-        c1.agregar_label(6, 0,' ')
-        c1.agregar_label(6, 1,' ')
+        c1.agregar_label(4, 0,'Seguimiento al problema')
+        c1.agregar_button(4, 1, "Ir", self.busqueda_ep)
+        c1.agregar_label(5, 0,'Calificación de respuesta')
+        c1.agregar_button(5, 1, "Ir", self.pendientes_eq2)
+        c1.agregar_label(6, 0,'Programaciones')
+        c1.agregar_button(6, 1, "Ir", self.pendientes_prog)
+        c1.agregar_label(7, 0,'Creación de macroproblema')
+        c1.agregar_button(7, 1, "Ir", self.nuevo_mp)
+        c1.agregar_label(8, 0,' ')
+        c1.agregar_label(9, 0,' ')
 
         c2 = Cuadro(self)
         c2.agregar_button(7, 0, "Volver", self.volver_anterior)
@@ -344,7 +346,7 @@ class Inicio_eq2(inicio_app_OSPA):
 
         self.desaparecer()
         # LargoxAncho
-        SubFrame = ventanas_busqueda.Pendientes_eq2_calificarrpta(self, 580, 1300, 
+        SubFrame = ventanas_busqueda.Pendientes_eq2_calificarrpta(self, alto_v_busqueda, ancho_v_busqueda, 
                     "Documentos pendientes de calificar respuesta")
 
     #----------------------------------------------------------------------
@@ -352,5 +354,5 @@ class Inicio_eq2(inicio_app_OSPA):
 
         self.desaparecer()
         # LargoxAncho
-        SubFrame = ventanas_busqueda.Pendientes_eq2_programaciones(self, 580, 1300, 
+        SubFrame = ventanas_busqueda.Pendientes_eq2_programaciones(self, alto_v_busqueda, ancho_v_busqueda, 
                     "Programaciones")
