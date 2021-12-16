@@ -78,7 +78,7 @@ ancho_v_busqueda_vitrina = 950
 ancho_v_busqueda_de_vitrina = 1065
 ancho_v_busqueda_ep_vitrina = 1210
 ancho_v_busqueda_peq1_vitrina = 1040
-ancho_v_busqueda_pf_vitrina = 1000
+ancho_v_busqueda_pf_vitrina = 900
 ancho_v_busqueda_mp_vitrina = 800
 ancho_v_busqueda_mpf_vitrina = 800
 alto_v_busqueda_vitrina = 240
@@ -168,4 +168,4 @@ tabla_de_ep_resumen = tabla_de_ep_completa.drop(['OCURRENCIA', 'EXTENSION', 'TIP
 # 5.4 Macroproblemas
 tabla_de_mp_cod = b_mp_cod.generar_dataframe()
 tabla_de_mp_completa = b_mp.generar_dataframe()
-tabla_de_mp_resumen = tabla_de_mp_completa.drop(['FECHA_DE_CREACION', 'FECHA_ULTIMO_MOV'], axis=1)
+tabla_de_mp_resumen = tabla_de_mp_completa.drop(['FECHA_ULTIMO_MOV'], axis=1)
