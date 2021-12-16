@@ -74,8 +74,18 @@ alto_v_vista_vitrina = 120
 
 ancho_v_busqueda = 1300
 alto_v_busqueda = 568
-ancho_v_busqueda_vitrina = 1075
+ancho_v_busqueda_vitrina = 950
+ancho_v_busqueda_de_vitrina = 1065
+ancho_v_busqueda_ep_vitrina = 1210
+ancho_v_busqueda_peq1_vitrina = 1040
+ancho_v_busqueda_pf_vitrina = 1000
+ancho_v_busqueda_mp_vitrina = 800
+ancho_v_busqueda_mpf_vitrina = 800
 alto_v_busqueda_vitrina = 240
+ancho_v_busqueda_prei_vitrina = 1065
+ancho_v_busqueda_peq2_vitrina = 1180
+
+
 
 alto_logo = 50
 ancho_logo = 280
@@ -146,6 +156,7 @@ tabla_de_de_resumen =  tabla_de_de_completa.drop(['HT_SALIDA', 'FECHA_PROYECTO_F
                                                     'NUM_DOC_REIT', 'FECHA_FIRMA_REIT', 'FECHA_NOTIFICACION_REIT',
                                                     'FECHA_PROYECTO_OCI', 'SE_EMITIO_OCI', 'TIPO_DOC_OCI', 'NUM_DOC_OCI',
                                                     'FECHA_FIRMA_OCI', 'FECHA_NOTIFICACION_OCI'], axis=1)
+
 # 5.3 Extremos de problema
 tabla_de_ep_cod = b_ep_cod.generar_dataframe()
 tabla_de_ep_completa = b_ep.generar_dataframe()
