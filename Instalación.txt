@@ -1,0 +1,2 @@
+# En el CMD
+pyinstaller --hidden-import babel.numbers --noconsole --icon=A_de_ASPA.ico gui.py
