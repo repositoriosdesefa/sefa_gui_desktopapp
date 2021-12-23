@@ -1819,8 +1819,7 @@ class Pendientes_jefe_asignar(funcionalidades_ospa):
         self.frame_vitrina_jpa = Cuadro(self)
         # Creando vitrina
         self.vjpa = Vitrina_pendientes(self, self.tabla_jpaF, self.ver_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_mp_vitrina)
-        
-    
+         
 class Pendientes_por_reiterar(funcionalidades_ospa):
     """"""
     #----------------------------------------------------------------------
@@ -2039,7 +2038,7 @@ class Pendientes_eq1_trabajar(funcionalidades_ospa):
         # Generamos el dataframe a filtrar
         b_dr_tabla = b_dr.generar_dataframe()
         self.tabla_inicial0 = b_dr_tabla
-        self.tabla_inicial1 = self.tabla_inicial0.query("F_EJECUCION_1!=''")
+        self.tabla_inicial1 = self.tabla_inicial0.query("F_EJECUCION_1==''")
         self.tabla_inicial2 = self.tabla_inicial1.query("ESPECIALISTA_1!=''")
         self.tabla_peq1t = self.tabla_inicial2.rename(columns={'COD_DR':'NRO DOC','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_ENTRANTE':'HT INGRESO','ESPECIALISTA_1':'ESPECIALISTA'})
         self.tabla_peq1t['FECHA ULTIMO MOV.'] = pd.to_datetime(self.tabla_peq1t['FECHA ULTIMO MOV.'], dayfirst=True)
@@ -2047,8 +2046,6 @@ class Pendientes_eq1_trabajar(funcionalidades_ospa):
         self.tabla_renombrada2['FECHA ULTIMO MOV.'] = self.tabla_renombrada2['FECHA ULTIMO MOV.'].dt.strftime('%d/%m/%Y')
         self.tabla_peq1tF0 = self.tabla_renombrada2.loc[:, ['NRO DOC','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','FECHA ULTIMO MOV.','ESPECIALISTA','ASUNTO']]
         self.tabla_peq1tF = self.tabla_peq1tF0.head(100)
-
-
 
         # Información para las listas desplegables
         self.peq1ttipodoc = list(set(self.tabla_peq1t['TIPO DOC']))
@@ -2222,7 +2219,7 @@ class Pendientes_eq2_calificarrpta(funcionalidades_ospa):
         # Generamos el dataframe a filtrar
         b_dr_tabla = b_dr.generar_dataframe()
         self.tabla_inicial0 = b_dr_tabla
-        self.tabla_inicial1 = self.tabla_inicial0.query("F_EJECUCION_2!=''")
+        self.tabla_inicial1 = self.tabla_inicial0.query("F_EJECUCION_2==''")
         self.tabla_inicial2 = self.tabla_inicial1.query("ESPECIALISTA_2!=''")
         self.tabla_peq2t = self.tabla_inicial2.rename(columns={'COD_DR':'NRO DOC','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_ENTRANTE':'HT INGRESO','ESPECIALISTA_2':'ESPECIALISTA'})
         self.tabla_peq2t['FECHA INGRESO SEFA'] = pd.to_datetime(self.tabla_peq2t['FECHA INGRESO SEFA'], dayfirst=True)
