@@ -1,6 +1,7 @@
 from tkinter import Message, messagebox
 import datetime as dt
 import pandas as pd
+import numpy as np
 from apoyo.elementos_de_GUI import Cuadro, Ventana, Vitrina_busqueda, Vitrina_busquedaep, Vitrina_pendientes
 from apoyo.manejo_de_bases import Base_de_datos
 from modulos import ventanas_vista, menus
@@ -297,8 +298,8 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
                     cod_relacion = id_interno_de + "/" + lista_ep[indice]
                     datos_insertar = [cod_relacion, id_interno_de, lista_ep[indice], 'ACTIVO', hora_de_modificacion] 
                     base_relacion_de_ep.agregar_datos(datos_insertar)
-            else:
-                messagebox.showinfo("¡Atención!", "El registro ha sido asociado con éxito")
+            #else:
+            #    messagebox.showinfo("¡Atención!", "El registro ha sido asociado con éxito")
 
 class Doc_emitidos_busqueda(funcionalidades_ospa):
     """"""
@@ -1481,8 +1482,13 @@ class Pendientes_jefe_firma(funcionalidades_ospa):
             self.id_objeto_ingresado = id_objeto
 
         # Generamos el dataframe a filtrar
-        b_de_tabla = b_de.generar_dataframe()     
-        self.tabla_inicial1 =  b_de_tabla.query("FECHA_FIRMA==''")
+        self.b_de_tabla = b_de.generar_dataframe()
+        conditionlist = [(self.b_de_tabla['FECHA_FIRMA'] == '') & (self.b_de_tabla['FECHA_PROYECTO_FINAL'] != ''),
+        (self.b_de_tabla['FECHA_FIRMA_REIT'] == '') & (self.b_de_tabla['FECHA_PROYECTO_REIT'] != ''),
+        (self.b_de_tabla['FECHA_FIRMA_OCI'] == '') & (self.b_de_tabla['FECHA_PROYECTO_OCI'] != '')]
+        choicelist = ['CUENTA', 'CUENTA', 'CUENTA']
+        self.b_de_tabla['AUXILIAR'] = np.select(conditionlist, choicelist, default='NO CUENTA')
+        self.tabla_inicial1 =  self.b_de_tabla.query("AUXILIAR=='CUENTA'")
         self.tabla_inicial2 =  self.tabla_inicial1.query("FECHA_PROYECTO_FINAL!=''")
         self.tabla_renombrada = self.renombrar_encabezados(self.tabla_inicial2, tipo_base = 'de')
         self.tabla_seleccionada = self.seleccionar_encabezados(self.tabla_renombrada, tipo_base = 'pf')
@@ -1556,7 +1562,6 @@ class Pendientes_jefe_firma(funcionalidades_ospa):
         self.destinpfirma = self.listas_filtropfirma[2]
         self.espepfirma = self.listas_filtropfirma[3]
         self.detallepfirma = self.listas_filtropfirma[4] #
-
         self.filtro0 = self.tabla_renombrada
         self.filtro0['NRO DOCUMENTO']=self.filtro0['NRO DOCUMENTO'].apply(str)
         # Filtrando datos por palabras exactas
@@ -1734,7 +1739,7 @@ class Pendientes_jefe_asignar(funcionalidades_ospa):
         self.remitentejpa = self.listas_filtro_jpa[2]
         self.nrodocjpa = self.listas_filtro_jpa[3]
 
-        self.filtro0 = self.tabla_jpa
+        self.filtro0 = self.tabla_renombrada2
         self.filtro0['NUM_DOC']=self.filtro0['NUM_DOC'].apply(str)
         # Filtrando datos por palabras exactas
 

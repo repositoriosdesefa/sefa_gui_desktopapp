@@ -519,7 +519,11 @@ class funcionalidades_ospa(Ventana):
         
             return tabla_renombrada2
         elif self.tipo_base == 'pf':
-            tabla_renombrada = self.tabla.rename(columns={'COD_DE':'HT','DETALLE_REQUERIMIENTO':'DETALLE','ESTADO_DOCE':'ESTADO','NUM_DOC':'NRO DOCUMENTO','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_SALIDA':'HT SALIDA','FECHA_FIRMA':'FECHA FIRMA','FECHA_NOTIFICACION':'FECHA NOTIFICACION','FECHA_PROYECTO_FINAL':'FECHA PROYECTO'})
+            tabla_renombrada = self.tabla.rename(columns={'COD_DE':'HT','DETALLE_REQUERIMIENTO':'DETALLE','ESTADO_DOCE':'ESTADO','NUM_DOC':'NRO DOCUMENTO',
+            'FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_SALIDA':'HT SALIDA',
+            'FECHA_FIRMA':'FECHA FIRMA','FECHA_NOTIFICACION':'FECHA NOTIFICACION',
+            'FECHA_PROYECTO_FINAL':'FECHA PROYECTO','FECHA_PROYECTO_REIT':'PROYE REIT',
+            'FECHA_PROYECTO_OCI':'FECHA PROYECTO OCI'})
             tabla_renombrada['FECHA PROYECTO'] = pd.to_datetime(tabla_renombrada['FECHA PROYECTO'], dayfirst=True)
             tabla_renombrada2 = tabla_renombrada.sort_values(by='FECHA PROYECTO', ascending=True)
             tabla_renombrada2['FECHA PROYECTO'] = tabla_renombrada2['FECHA PROYECTO'].dt.strftime('%d/%m/%Y')
@@ -546,7 +550,7 @@ class funcionalidades_ospa(Ventana):
             tabla_seleccionada = self.tabla.loc[:,['COD. MACROPROBLEMA','FECHA ULTIMO MOV.','NOMBRE PROBLEMA','ESTADO','DESCRIPCION']]
             return tabla_seleccionada
         elif self.tipo_base == 'pf':
-            tabla_seleccionada = self.tabla.loc[:,['HT','DESTINATARIO','ESPECIALISTA','FECHA PROYECTO','CATEGORIA','DETALLE']]
+            tabla_seleccionada = self.tabla.loc[:,['HT','DESTINATARIO','CATEGORIA','ESPECIALISTA','FECHA PROYECTO','DETALLE']]
             return tabla_seleccionada
         else:
             print("Hola")

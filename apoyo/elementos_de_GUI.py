@@ -129,10 +129,12 @@ class Ventana(Toplevel):
     #----------------------------------------------------------------------
     def volver(self):
         """"""
-        self.desaparecer()
-        self.ventana_anterior.aparecer()
-
-
+        try: 
+            self.desaparecer()
+            self.ventana_anterior.aparecer()
+        except:
+            self.aparecer()
+            messagebox.showinfo("Error", "Use el botón de inicio")
     #----------------------------------------------------------------------
     def destruir(self):
         """"""
