@@ -3,7 +3,6 @@
 ########################################################
 
 # GENERALES
-
 fondo = '#ffffff'
 #fondo = '#f0f0f0'
 tipo_de_letra = 'helvetica 8'
@@ -13,14 +12,12 @@ tipo_de_letra_titulo_2 = 'helvetica 12 bold'
 color_letra_titulo_2 = '#1d85bf'
 
 # BOTONES
-
 boton_cuando_pasa_cursor = '#b5c8e5'
 boton_sin_que_pase_cursor = '#144ca4'
 letras_del_boton = '#ffffff'
 letras_del_boton_cuando_pasa_cursor = '#000000'
 
 # TABLAS (Escenario)
-
 fondo_encabezados_de_tabla = '#1d85bf'
 color_negro = '#000000'
 color_blanco = '#ffffff'
@@ -29,8 +26,11 @@ tipo_de_letra_tabla = 'helvetica 7'
 fondo_valores_de_tabla = '#ffffff'
 
 # TABLAS EP (Escenario)
-
 tipo_de_letra_tablaep = 'helvetica 7'
 boton_sin_que_pase_cursor_macro = '#8CCD3A'
 letras_del_boton_macro = '#000000'
 boton_cuando_pasa_cursor_macro = '#ccf6a0'
+
+# Colores OEFA
+azul1_oefa = '#144aa7'
+azul2_oefa = '#1d85bf'
