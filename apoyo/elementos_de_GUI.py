@@ -101,7 +101,8 @@ class Ventana(Toplevel):
         self.box_x = (self.box_sw - self.ancho)/2
         self.box_y = (self.box_sh - self.alto)/2
         self.geometry('%dx%d+%d+%d' % (self.ancho, self.alto, self.box_x, self.box_y))
-        self.menu = MenuSefa(self)
+        self.menu = self
+        #self.menu = MenuSefa(self)
         self.iconbitmap('images/A_de_ASPA.ico')
         self.title(self.titulo)
         self.config(background= formato.fondo)
