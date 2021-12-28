@@ -893,7 +893,7 @@ class Extremo_problemas_vista(funcionalidades_ospa):
                 ('EL', 14, 3, 47, 1),
 
                 ('L', 15, 0, 'Actividad'),
-                ('CXDEP3', 15, 1, 44, tabla_parametros_act, "Doble",
+                ('CXDEP3', 15, 1, 44, tabla_parametros, "Doble",
                  'ACTIVIDAD', 'Característica 1', 'CARACTERÍSTICA 1', 'Característica 2', 'CARACTERÍSTICA 2'),
 
                 ('L', 16, 2, 'RUC/DNI'),
@@ -989,7 +989,7 @@ class Extremo_problemas_vista(funcionalidades_ospa):
                 ('EL', 14, 3, 47, 1),
 
                 ('L', 15, 0, 'Actividad'),
-                ('CXDEP3', 15, 1, 44, tabla_parametros_act, "Doble",
+                ('CXDEP3', 15, 1, 44, tabla_parametros, "Doble",
                  'ACTIVIDAD', 'Característica 1', 'CARACTERÍSTICA 1', 'Característica 2', 'CARACTERÍSTICA 2'),
 
                 ('L', 16, 2, 'RUC/DNI'),
