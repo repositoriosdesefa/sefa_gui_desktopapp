@@ -160,9 +160,9 @@ tabla_de_ep_cod = b_ep_cod.generar_dataframe()
 tabla_de_ep_completa = b_ep.generar_dataframe()
 tabla_de_ep_resumen = tabla_de_ep_completa.drop(['OCURRENCIA', 'EXTENSION', 'TIPO DE AFECTACION',
                                                 'PROVINCIA', 'DESCRIPCION', 'TIPO DE UBICACION', 'DISTRITO', 
-                                                'TIPO_EFA', 'CATEGORIA_EFA',
-                                                'CARACTERISTICA 1', 'CARACTERISTICA 2', 'TIPO CAUSA',
-                                                'PRIORIDAD', 'PUNTAJE',  'USUARIO',
+                                                'TIPO_EFA', 'CATEGORIA_EFA', 'GEO_ESTE', 'GEO_NORTE',
+                                                'CARACTERISTICA 1', 'CARACTERISTICA 2', 'TIPO CAUSA', 'COD_ADMINISTRADO',
+                                                'PRIORIDAD', 'PUNTAJE',  'USUARIO', 'ADMINISTRADO', 'TIPO_ADMINISTRADO',
                                                 'CODIGO SINADA', 'ACTIVIDAD', 'FECHA_ULTIMO_MOV', 'USUARIO'], axis=1)
 
 # 5.4 Macroproblemas
