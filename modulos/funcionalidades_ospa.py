@@ -324,7 +324,7 @@ class funcionalidades_ospa(Ventana):
             texto_pantalla = "Documento recibido que se asociará: " + id_objeto_ingresado
 
             # Genero la nueva ventana
-            self.desaparecer()
+            self.destruir()
             SubFrame = ventanas_busqueda.Doc_recibidos_busqueda(self, alto_v_busqueda, ancho_v_busqueda, texto_pantalla, 
                                                                 nuevo=False, id_objeto = id_objeto_ingresado, tipo_objeto_anterior = tipo_objeto_pantalla)
 
@@ -341,7 +341,7 @@ class funcionalidades_ospa(Ventana):
         lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], 
                                  lb1[12], lb1[13], lb1[14], lb1[15], lb1[16],  lb1[17], lb1[18], lb1[19], lb1[20]]
         
-        self.desaparecer()
+        self.destruir()
         subframe = ventanas_vista.Doc_recibidos_vista(self, alto_v_vista, ancho_v_vista, texto_documento, True,
                                                       nuevo=False, lista=lista_para_insertar, id_objeto = id_objeto_ingresado)
 
@@ -364,7 +364,7 @@ class funcionalidades_ospa(Ventana):
             texto_pantalla = "Documento recibido que se asociará: " + id_objeto_ingresado
 
             # Genero la nueva ventana
-            self.desaparecer()
+            self.destruir()
             SubFrame = ventanas_busqueda.Doc_emitidos_busqueda(self, alto_v_busqueda, ancho_v_busqueda, texto_pantalla, 
                                                                 nuevo=False, id_objeto = id_objeto_ingresado, tipo_objeto_anterior = tipo_objeto_pantalla)
 
@@ -382,7 +382,7 @@ class funcionalidades_ospa(Ventana):
                                 lb1[8], lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14],
                                 lb1[15], lb1[16], lb1[17], lb1[18], lb1[19], lb1[20],
                                 lb1[21], lb1[22], lb1[23], lb1[24], lb1[25], lb1[26]]
-        self.desaparecer()
+        self.destruir()
         subframe = ventanas_vista.Doc_emitidos_vista(self, alto_v_vista, ancho_v_vista, texto_documento, True,
                                                      nuevo=False, lista=lista_para_insertar, id_objeto = id_usuario)
     
@@ -405,7 +405,7 @@ class funcionalidades_ospa(Ventana):
             texto_pantalla = "Extremo de problema que se asociará: " + id_objeto_ingresado
 
             # Genero la nueva ventana
-            self.desaparecer()
+            self.destruir()
             SubFrame = ventanas_busqueda.Extremos(self, alto_v_busqueda, ancho_v_busqueda, texto_pantalla, 
                                                   nuevo=False, id_objeto = id_objeto_ingresado, tipo_objeto_anterior = tipo_objeto_pantalla)
 
@@ -424,7 +424,7 @@ class funcionalidades_ospa(Ventana):
                                lb1[15], lb1[16], lb1[17], lb1[18], lb1[19], lb1[20],
                                lb1[21], lb1[22], lb1[23], lb1[24], lb1[25]]
 
-        self.desaparecer()
+        self.destruir()
         subframe = ventanas_vista.Extremo_problemas_vista(self, alto_v_vista, ancho_v_vista, texto_documento, True,
                                         nuevo=False, lista=lista_para_insertar, id_objeto = id_usuario)
     
@@ -447,7 +447,7 @@ class funcionalidades_ospa(Ventana):
             texto_pantalla = "Macroproblema que se asociará: " + id_objeto_ingresado
 
             # Genero la nueva ventana
-            self.desaparecer()
+            self.destruir()
             SubFrame = ventanas_busqueda.Macroproblemas(self, alto_v_busqueda, ancho_v_busqueda, texto_pantalla, 
                                                         nuevo=False, id_objeto = id_objeto_ingresado, tipo_objeto_anterior = tipo_objeto_pantalla)
 
@@ -463,7 +463,7 @@ class funcionalidades_ospa(Ventana):
         lb1 = b_mp.listar_datos_de_fila(id_usuario)
         lista_para_insertar = [lb1[2], lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8]]
 
-        self.desaparecer()
+        self.destruir()
         subframe = ventanas_vista.Macroproblemas_vista(self, alto_v_vista, ancho_v_vista, texto_documento, True,
                                                         nuevo=False, lista=lista_para_insertar, id_objeto = id_usuario)
     
