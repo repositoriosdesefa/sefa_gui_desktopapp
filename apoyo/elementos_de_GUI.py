@@ -581,7 +581,7 @@ class Cuadro(Frame):
         nombre_entry = "valor" + self.fila + self.columna 
 
         self.data = StringVar(name=nombre_entry)
-        self.entrada = Entry(self.z, textvariable=self.data, bg= formato.fondo, width= 42)
+        self.entrada = Entry(self.z, textvariable=self.data, bg= formato.fondo, width= 47)
         self.entrada.grid(row= self.y, column=self.x, pady=4, padx=8)
         self.lista_de_objetos.append((self.entrada))
         self.lista_de_datos.append((self.data))
@@ -594,7 +594,7 @@ class Cuadro(Frame):
         self.y= y
         self.x= x
         self.data = StringVar()
-        self.entrada = Entry(self.z, textvariable=self.data, bg= formato.fondo, width= 42)
+        self.entrada = Entry(self.z, textvariable=self.data, bg= formato.fondo, width= 47)
         self.entrada.grid(row= self.y, column=self.x, pady=4, padx=8)
         self.lista_de_objetos.append((self.entrada))
         self.lista_de_datos.append((self.data))
@@ -621,7 +621,7 @@ class Cuadro(Frame):
         self.y= y
         self.x= x
         self.data = StringVar()
-        self.entrada = Entry(self.z, textvariable=self.data, bg= formato.fondo, width= 43, show='*')
+        self.entrada = Entry(self.z, textvariable=self.data, bg= formato.fondo, width= 47, show='*')
         self.entrada.grid(row= self.y, column=self.x, pady=4, padx=8)
         self.lista_de_objetos.append((self.entrada))
         self.lista_de_datos.append((self.data))
@@ -635,7 +635,7 @@ class Cuadro(Frame):
         self.x= x
         self.text_area = sc.ScrolledText(self.z, 
                             wrap = WORD, 
-                            width = 110, 
+                            width = 120, 
                             height = 2, 
                             font = ("Helvetica", 8),
                             bg= formato.fondo)
@@ -702,7 +702,7 @@ class Cuadro(Frame):
         self.y = y
         self.x = x
         self.listadesplegable = listadesplegable
-        self.combo = ttk.Combobox(self.z, state="readonly", width=39)
+        self.combo = ttk.Combobox(self.z, state="readonly", width=44)
         self.combo.grid(row = self.y, column = self.x, pady=4, padx=8)
         self.combo["values"] = self.listadesplegable
         self.combo.set(' ')
@@ -785,7 +785,7 @@ class Cuadro(Frame):
         self.y = y
         self.x = x
         self.listadesplegable = listadesplegable
-        self.combo = ttk.Combobox(self.z, state="readonly", width=39)
+        self.combo = ttk.Combobox(self.z, state="readonly", width=44)
         self.combo.grid(row = self.y, column = self.x, pady=4, padx=8)
         self.combo["values"] = self.listadesplegable
         self.combo.set('')
@@ -927,8 +927,8 @@ class Cuadro(Frame):
         self.x = x
 
         # No es necesario crear un StringVar()
-        self.cal = DateEntry(self.z, width=39, background='darkblue',
-                            foreground='white', borderwidth=1)
+        self.cal = DateEntry(self.z, width=44, background= formato.azul2_oefa,
+                            foreground='white', borderwidth=1, date_pattern = 'dd/mm/YYYY')
         
         self.cal.grid(row = self.y, column = self.x, pady=4, padx=8)
         #self.cal.set_date()
@@ -948,8 +948,8 @@ class Cuadro(Frame):
         self.x = x
 
         # No es necesario crear un StringVar()
-        cal = DateEntry(self.z, width=39, background='darkblue',
-                            foreground='white', borderwidth=1)
+        cal = DateEntry(self.z, width = 44, background= formato.azul2_oefa,
+                            foreground='white', borderwidth=1, date_pattern = 'dd/mm/YYYY')
         
         cal.grid(row = self.y, column = self.x, pady=4, padx=8)
         cal.delete(0, "end")

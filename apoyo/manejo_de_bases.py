@@ -220,7 +220,7 @@ class Base_de_datos():
         # Con dos datos adicionales
         else:
             dato_2 = dato_adicional
-            dato_3 = dato_adicional
+            dato_3 = dato_adicional_2
             self.lista_de_datos_completos = self.datos_obligatorios + [dato_unico] + [dato_2] + [dato_3]
             
         self.worksheet.append_row(self.lista_de_datos_completos)

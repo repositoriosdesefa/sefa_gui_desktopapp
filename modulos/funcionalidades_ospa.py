@@ -60,10 +60,17 @@ class funcionalidades_ospa(Ventana):
     #----------------------------------------------------------------------
     def inicio_app(self, evento = None):
         """"""
-        self.destruir()
-        texto_bienvenida = vg.texto_bienvenida
-        # LargoxAncho
-        subFrame = menus.inicio_app_OSPA(self, alto_ventana_secundaria, ancho_ventana_secundaria, texto_bienvenida)
+        # Confirmación
+        pregunta = "¿Está seguro de que desea volver a la pantalla de inicio? \n ¡Todo cambio no guardado se perderá!"
+        confirmacion = messagebox.askyesno("Inicio ASPA", pregunta)
+
+        if confirmacion == True:
+            self.destruir()
+            texto_bienvenida = vg.texto_bienvenida
+            # LargoxAncho
+            subFrame = menus.inicio_app_OSPA(self, alto_ventana_secundaria, ancho_ventana_secundaria, texto_bienvenida)
+        else:
+            messagebox.showinfo("¡Importante!", "No olvides guardar tus cambios")
         
     #----------------------------------------------------------------------
     def guardar_objeto(self, rejilla_datos, 
@@ -200,6 +207,7 @@ class funcionalidades_ospa(Ventana):
                         tabla_objeto_clase, tabla_a_objeto_a_eliminar, 
                         base_relacion_objetos, base_relacion_hist):
         """"""
+
         # Objeto de Frame
         codigo_objeto = cod_objeto_clase
         cod_objeto = cod_entrada
@@ -209,34 +217,43 @@ class funcionalidades_ospa(Ventana):
         cod_a_eliminar = cod_salida
         # Base de relación
         b_relacion_objetos = base_relacion_objetos
-
-        # Filtro las tablas para obtener el ID interno
-        tabla_codigo_objeto_filtrada = tabla_objeto[tabla_objeto[cod_objeto]==codigo_objeto]
-        id_interno_objeto_clase = tabla_codigo_objeto_filtrada.iloc[0,0] # ID de frame
-        tabla_codigo_a_eliminar = tabla_a_objeto_a_eliminar[tabla_a_objeto_a_eliminar[cod_a_eliminar]==codigo_a_eliminar]
-        id_interno_objeto_a_eliminar = tabla_codigo_a_eliminar.iloc[0,0] # ID de vitrina
         
-        # ID de relación
-        if cod_objeto == "COD_DR":
-            id_relacion_objetos = id_interno_objeto_clase + "/" + id_interno_objeto_a_eliminar
-        elif cod_objeto == "COD_DE" and cod_salida == "COD_DR":
-            id_relacion_objetos = id_interno_objeto_a_eliminar + "/" + id_interno_objeto_clase
-        elif cod_objeto == "COD_DE" and cod_salida == "COD_EP":
-            id_relacion_objetos = id_interno_objeto_clase + "/" + id_interno_objeto_a_eliminar
-        elif cod_objeto == "COD_EP":
-            id_relacion_objetos = id_interno_objeto_a_eliminar + "/" + id_interno_objeto_clase
-        else:
-            id_relacion_objetos = id_interno_objeto_clase + "/" + id_interno_objeto_a_eliminar
-        # Se cambia dato en tabla de relación
-        b_relacion_objetos.cambiar_un_dato_de_una_fila(id_relacion_objetos, 4,'ELIMINADO')
+        # Confirmación
+        pregunta = "¿Está seguro de eliminar la asociación con el código: " + str(codigo_a_eliminar) + "?"
+        confirmacion = messagebox.askyesno("Eliminar asociación", pregunta)
 
-        # Actualización de historial
-        datos_modificados = base_relacion_objetos.listar_datos_de_fila(id_relacion_objetos)
-        hora = str(dt.datetime.now())
-        datos_a_cargar_hist = datos_modificados + [hora]
-        base_relacion_hist.agregar_datos(datos_a_cargar_hist)
-        # Confirmación de eliminación de documento emitido
-        messagebox.showinfo("¡Documento emitido eliminado!", "El registro se ha desasociado correctamente")
+        if confirmacion == True:
+
+            # Filtro las tablas para obtener el ID interno
+            tabla_codigo_objeto_filtrada = tabla_objeto[tabla_objeto[cod_objeto]==codigo_objeto]
+            id_interno_objeto_clase = tabla_codigo_objeto_filtrada.iloc[0,0] # ID de frame
+            tabla_codigo_a_eliminar = tabla_a_objeto_a_eliminar[tabla_a_objeto_a_eliminar[cod_a_eliminar]==codigo_a_eliminar]
+            id_interno_objeto_a_eliminar = tabla_codigo_a_eliminar.iloc[0,0] # ID de vitrina
+        
+            # ID de relación
+            if cod_objeto == "COD_DR":
+                id_relacion_objetos = id_interno_objeto_clase + "/" + id_interno_objeto_a_eliminar
+            elif cod_objeto == "COD_DE" and cod_salida == "COD_DR":
+                id_relacion_objetos = id_interno_objeto_a_eliminar + "/" + id_interno_objeto_clase
+            elif cod_objeto == "COD_DE" and cod_salida == "COD_EP":
+                id_relacion_objetos = id_interno_objeto_clase + "/" + id_interno_objeto_a_eliminar
+            elif cod_objeto == "COD_EP":
+                id_relacion_objetos = id_interno_objeto_a_eliminar + "/" + id_interno_objeto_clase
+            else:
+                id_relacion_objetos = id_interno_objeto_clase + "/" + id_interno_objeto_a_eliminar
+            # Se cambia dato en tabla de relación
+            b_relacion_objetos.cambiar_un_dato_de_una_fila(id_relacion_objetos, 4,'ELIMINADO')
+
+            # Actualización de historial
+            datos_modificados = base_relacion_objetos.listar_datos_de_fila(id_relacion_objetos)
+            hora = str(dt.datetime.now())
+            datos_a_cargar_hist = datos_modificados + [hora]
+            base_relacion_hist.agregar_datos(datos_a_cargar_hist)
+            # Confirmación de eliminación de documento emitido
+            messagebox.showinfo("¡Asociación eliminada!", "El registro se ha desasociado correctamente")
+        
+        else:
+            messagebox.showinfo("Elimianr asociación", "El registro NO se ha desasociado")
 
     #----------------------------------------------------------------------
     def generar_vitrina(self, nuevo, 
@@ -291,7 +308,7 @@ class funcionalidades_ospa(Ventana):
     #----------------------------------------------------------------------
     def nuevo_dr(self):
         
-        self.desaparecer()
+        self.destruir()
 
         texto_dr = "Nuevo documento Recibido"
         # LargoxAncho
@@ -321,8 +338,8 @@ class funcionalidades_ospa(Ventana):
         texto_documento = 'Documento recibido: ' + id_objeto_ingresado
 
         lb1 = b_dr.listar_datos_de_fila(id_objeto_ingresado)
-        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], lb1[9], lb1[10], 
-                                 lb1[11], lb1[12], lb1[13], lb1[14], lb1[15], lb1[16],  lb1[17], lb1[18]]
+        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], 
+                                 lb1[12], lb1[13], lb1[14], lb1[15], lb1[16],  lb1[17], lb1[18], lb1[19], lb1[20]]
         
         self.desaparecer()
         subframe = ventanas_vista.Doc_recibidos_vista(self, alto_v_vista, ancho_v_vista, texto_documento, True,
@@ -331,7 +348,7 @@ class funcionalidades_ospa(Ventana):
     #----------------------------------------------------------------------
     def nuevo_de(self):
         
-        self.desaparecer()
+        self.destruir()
 
         texto_de = "Nuevo documento emitido"
         # LargoxAncho
@@ -372,20 +389,11 @@ class funcionalidades_ospa(Ventana):
     #----------------------------------------------------------------------
     def nuevo_ep(self):
         
-        self.desaparecer()
+        self.destruir()
 
         texto_ep = "Nuevo extremo de problema"
         # LargoxAncho
         SubFrame = ventanas_vista.Extremo_problemas_vista(self, alto_v_vista, ancho_v_vista, texto_ep, True)
-    
-    #----------------------------------------------------------------------
-    def nuevo_n_ep(self):
-        
-        self.desaparecer()
-
-        texto_ep = "Nuevo extremo de problema"
-        # LargoxAncho
-        SubFrame = ventanas_vista.N_Extremo_problemas_vista(self, alto_v_vista, ancho_v_vista, texto_ep, True)
     
     #----------------------------------------------------------------------
     def busqueda_ep(self):
@@ -411,9 +419,10 @@ class funcionalidades_ospa(Ventana):
         texto_documento = 'Extremo de problema: ' + id_usuario
 
         lb1 = b_ep.listar_datos_de_fila(id_usuario)
-        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], 
-                                lb1[8], lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], 
-                                lb1[14], lb1[15], lb1[16], lb1[17], lb1[18], lb1[19], lb1[20]]
+        lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8],
+                               lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14],
+                               lb1[15], lb1[16], lb1[17], lb1[18], lb1[19], lb1[20],
+                               lb1[21], lb1[22], lb1[23], lb1[24], lb1[25]]
 
         self.desaparecer()
         subframe = ventanas_vista.Extremo_problemas_vista(self, alto_v_vista, ancho_v_vista, texto_documento, True,
@@ -422,7 +431,7 @@ class funcionalidades_ospa(Ventana):
     #----------------------------------------------------------------------
     def nuevo_mp(self):
         
-        self.desaparecer()
+        self.destruir()
 
         texto_mp = "Creación de macroproblemas"
         # LargoxAncho
@@ -471,17 +480,22 @@ class funcionalidades_ospa(Ventana):
     
     #----------------------------------------------------------------------
     def cerrar_sesion(self, evento = None):
-
-        self.destruir()
         
-        vg.cod_usuario = None
-        vg.usuario = None
-        vg.oficina = None
-        vg.texto_bienvenida = None
-        
-        subFrame = logueo.logueo1_Ingreso_de_usuario(self, 584, 453, "ASPA - Versión 0.0", False)
+        # Confirmación
+        pregunta = "¿Está seguro de que desea cerrar sesión? \n ¡Todo cambio no guardado se perderá!"
+        confirmacion = messagebox.askyesno("ASPA", pregunta)
 
-#----------------------------------------------------------------------
+        if confirmacion == True:
+            self.destruir()
+            vg.cod_usuario = None
+            vg.usuario = None
+            vg.oficina = None
+            vg.texto_bienvenida = None
+            subFrame = logueo.logueo1_Ingreso_de_usuario(self, 584, 453, "ASPA - Versión 0.0", False)
+        else:
+            messagebox.showinfo("¡Importante!", "No olvides guardar tus cambios")
+
+    #----------------------------------------------------------------------
     def renombrar_encabezados(self, tabla, tipo_base = None):
 
         self.tabla = tabla
