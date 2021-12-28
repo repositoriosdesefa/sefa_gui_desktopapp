@@ -22,10 +22,8 @@ base_relacion_de_ep =  Base_de_datos(id_b_ospa, 'RELACION_DE-EP')
 base_relacion_de_ep_hist =  Base_de_datos(id_b_ospa, 'HISTORIAL_RELACION_DE-EP')
 base_relacion_mp_ep =  Base_de_datos(id_b_ospa, 'RELACION_MP-EP')
 base_relacion_mp_ep_hist =  Base_de_datos(id_b_ospa, 'HISTORIAL_RELACION_MP-EP')
-base_parametros_dep = Base_de_datos(id_b_ospa, 'PARAMETROS')
+base_parametros = Base_de_datos(id_b_ospa, 'PARAMETROS')
        
-tabla_parametros_dep = base_parametros_dep.generar_dataframe()
-
 # 1. Bases de datos principales
 # Documentos recibidos
 b_dr_cod = Base_de_datos(id_b_ospa, 'DOCS_R')
@@ -88,45 +86,36 @@ ancho_v_busqueda_peq2_vitrina = 1180
 alto_logo = 50
 ancho_logo = 280
 
-alto_ventana_secundaria = 413
+alto_ventana_secundaria = 418
 ancho_ventana_secundaria = 403
 
 alto_franja_inferior_1 = 52
 ancho_franja_inferior_1 = 400
 
 # 4.1 Bases de datos
-id_parametros = '1NPg8Q0O_NqQ6bkRhy4ow17x2XJ08r6Ev3R6X80WmZ3c'
-base_parametros = Base_de_datos(id_parametros, 'PARAMETROS')
 tabla_parametros = base_parametros.generar_dataframe()
-base_parametros_act = Base_de_datos(id_parametros, 'Datos de actividad')
-tabla_parametros_act = base_parametros_act.generar_dataframe()
 # 4.2 Desplegables en Drive
+combo_vacio = ()
 agente_conta = list(set(tabla_parametros['AGENTE CALCULADORA']))
 componente_amb = list(set(tabla_parametros['COMPONENTE CALCULADORA']))
 actividad_eco = list(set(tabla_parametros['ACTIVIDAD CALCULADORA']))
 extension = list(set(tabla_parametros['EXTENSION CALCULADORA']))
 ubicacion = list(set(tabla_parametros['UBICACION CALCULADORA']))
 ocurrencia = list(set(tabla_parametros['OCURRENCIA CALCULADORA']))
-# 4.4 Desplegables en Local
-combo_vacio = ()
-tipo_afectacion = ('AGENTE CONTAMINANTE', 'EXTRACCIÓN DE RECURSOS')
-estado_problemas = ('ABIERTA', 'CERRADO')
-tipo_causa = ('CAUSA DESCONOCIDA', 'CAUSA NATURAL', 'CAUSA HUMANA')
-tipo_ingreso = ('DIRECTO', 'DERIVACION-SUBDIRECCION', 
-                'DERIVACION-SUPERVISION', 'DERIVACION-SINADA')
-tipo_documento = ('OFICIO', 'MEMORANDO', 'CARTA', 'OFICIO CIRCULAR','MEMORANDO CIRCULAR', 'CARTA CIRCULAR',
-                  'INFORME', 'RESOLUCIÓN', 'CÉDULA DE NOTIFICACIÓN', 'INFORME MÚLTIPLE', 'OTROS')
-especialista = ('Zurita, Carolina', 'López, José')
-tipo_indicacion = ('No corresponde', 'Archivar', 'Actualizar', 'Crear')
-si_no = ('Si', 'No')
-tipo_respuesta = ('Ejecutó supervisión','Solicitó información a administrado',
-                  'Ejecutó acción de evaluación', 'Inició PAS', 'Administrado en adecuación / formalización',
-                  'Programó supervisión', 'Programó acción de evaluación', 'No es competente',
-                  'No corresponde lo solicitado', 'En evaluación de la EFA', 'Otros')
-categorias = ('Pedido de información', 'Pedido de información adicional', 'Pedido de información urgente',
-              'Reiterativo', 'Oficio a OCI')
-marco_pedido = ('EFA', 'OEFA',
-                'Colaboración', 'Delegación', 'Conocimiento')
+tipo_afectacion = list(set(tabla_parametros['T_AFECTACION']))
+tipo_administrado = list(set(tabla_parametros['T_ADMINISTRADO']))
+estado_problemas = list(set(tabla_parametros['ESTADO_PROBLEMAS']))
+tipo_causa = list(set(tabla_parametros['T_CAUSA']))
+tipo_ingreso = list(set(tabla_parametros['T_INGRESO']))
+tipo_documento = list(set(tabla_parametros['T_DOC']))
+especialista_1 = list(set(tabla_parametros['ESPECIALISTA_1']))
+tipo_accion_1 = list(set(tabla_parametros['T_ACCION_1']))
+especialista_2 = list(set(tabla_parametros['ESPECIALISTA_2']))
+tipo_accion_2 = list(set(tabla_parametros['T_ACCION_2']))
+si_no = list(set(tabla_parametros['SI_NO']))
+tipo_respuesta = list(set(tabla_parametros['T_RPTA']))
+categorias = list(set(tabla_parametros['CATEGORIAS_PEDIDO']))
+marco_pedido = list(set(tabla_parametros['MARCO_PEDIDO']))
 
 # 5. Tablas resumen
 # 5.0 Relaciones

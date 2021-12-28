@@ -56,39 +56,29 @@ departamento_ospa = vg.departamento_ospa
 # 4. Parámetros
 # 4.1 Bases de datos
 tabla_parametros = vg.tabla_parametros
-tabla_parametros_act = vg.tabla_parametros_act
 # 4.2 Desplegables en Drive
-agente_conta = list(set(tabla_parametros['AGENTE CALCULADORA']))
-componente_amb = list(set(tabla_parametros['COMPONENTE CALCULADORA']))
-actividad_eco = list(set(tabla_parametros['ACTIVIDAD CALCULADORA']))
-extension = list(set(tabla_parametros['EXTENSION CALCULADORA']))
-ubicacion = list(set(tabla_parametros['UBICACION CALCULADORA']))
-ocurrencia = list(set(tabla_parametros['OCURRENCIA CALCULADORA']))
-# 4.4 Desplegables en Local
 combo_vacio = ()
-tipo_afectacion = ('AGENTE CONTAMINANTE', 'EXTRACCIÓN DE RECURSOS')
-tipo_administrado = ('PERSONA NATURAL', 'PERSONA JURÍDICA')
-estado_problemas = ('ABIERTO', 'CERRADO')
-tipo_causa = ('CAUSA DESCONOCIDA', 'CAUSA NATURAL', 'CAUSA HUMANA')
-tipo_ingreso = ('DIRECTO', 'DERIVACION-SUBDIRECCION', 
-                'DERIVACION-SUPERVISION', 'DERIVACION-SINADA')
-tipo_documento = ('OFICIO', 'MEMORANDO', 'CARTA', 'OFICIO CIRCULAR','MEMORANDO CIRCULAR', 'CARTA CIRCULAR',
-                  'INFORME', 'RESOLUCIÓN', 'CÉDULA DE NOTIFICACIÓN', 'INFORME MÚLTIPLE', 'OTROS')
-especialista_1 = ('Zurita, Carolina', 'López, José')
-tipo_accion_1 = ('Actualizar', 'Crear', 'No corresponde', 'Archivar')
+agente_conta = vg.agente_conta
+componente_amb = vg.componente_amb
+actividad_eco = vg.actividad_eco
+extension = vg.extension
+ubicacion = vg.ubicacion
+ocurrencia = vg.ocurrencia
+tipo_afectacion = vg.tipo_afectacion
+tipo_administrado =vg.tipo_administrado
+estado_problemas = vg.estado_problemas
+tipo_causa = vg.tipo_causa
+tipo_ingreso = vg.tipo_ingreso
+tipo_documento = vg.tipo_documento
+especialista_1 = vg.especialista_1
+tipo_accion_1 = vg.tipo_accion_1
+especialista_2 = vg.especialista_2
+tipo_accion_2 = vg.tipo_accion_2
+si_no = vg.si_no
+tipo_respuesta = vg.tipo_respuesta
+categorias = vg.categorias
+marco_pedido = vg.marco_pedido
 
-especialista_2 = ('Melendez, Assur', 'Cueto, María Mónica', 'Gamarra, Ibon', 'Guevara, Sandra', 'Terrones, Leslie')
-tipo_accion_2 = ('Archivo por insumo de cierre', 'Archivo por conocimiento', 'Archivo - Insumo de seguimiento')
-
-si_no = ('Si', 'No')
-tipo_respuesta = ('Ejecutó supervisión','Solicitó información a administrado',
-                  'Ejecutó acción de evaluación', 'Inició PAS', 'Administrado en adecuación / formalización',
-                  'Programó supervisión', 'Programó acción de evaluación', 'No es competente',
-                  'No corresponde lo solicitado', 'En evaluación de la EFA', 'Otros')
-categorias = ('Pedido de información', 'Pedido de información adicional', 'Pedido de información urgente',
-              'Traslado de Información', 'Programación')
-marco_pedido = ('EFA', 'OEFA',
-                'Colaboración', 'Delegación', 'Conocimiento')
 
 # 5. Tablas resumen
 # 5.0 Relaciones

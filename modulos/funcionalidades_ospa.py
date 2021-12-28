@@ -38,7 +38,6 @@ b_mp_cod = vg.b_mp_cod
 b_mp_hist = vg.b_mp_hist
 # 2. Tablas
 tabla_parametros = vg.tabla_parametros
-tabla_parametros_dep = vg.tabla_parametros_dep
 
 class funcionalidades_ospa(Ventana):
     #----------------------------------------------------------------------
@@ -152,7 +151,7 @@ class funcionalidades_ospa(Ventana):
                 elif cod_entrada == "COD_EP":
                     departamento = datos_ingresados[2]
 	                # Obtención de sigla de departamento
-                    tabla_siglas_filtrada = tabla_parametros_dep[tabla_parametros_dep['DEPARTAMENTO']==departamento]
+                    tabla_siglas_filtrada = tabla_parametros[tabla_parametros['DEPARTAMENTO']==departamento]
                     sigla_cod_interno = tabla_siglas_filtrada.iloc[0,1]
 		            # Obtención de número de extremo
                     tabla_objeto_clase = base_cod_objeto.generar_dataframe()
@@ -317,7 +316,7 @@ class funcionalidades_ospa(Ventana):
     #----------------------------------------------------------------------
     def busqueda_dr(self):
         """"""
-        if self.nuevo != True:
+        if self.nuevo == False:
 
             id_objeto_ingresado = self.id_objeto_ingresado
             tipo_objeto_pantalla = self.tipo_objeto
@@ -328,9 +327,17 @@ class funcionalidades_ospa(Ventana):
             SubFrame = ventanas_busqueda.Doc_recibidos_busqueda(self, alto_v_busqueda, ancho_v_busqueda, texto_pantalla, 
                                                                 nuevo=False, id_objeto = id_objeto_ingresado, tipo_objeto_anterior = tipo_objeto_pantalla)
 
+        elif self.nuevo == None:
+
+            texto_pantalla = "Búsqueda de Documento Recibido"
+
+            # Genero la nueva ventana
+            self.destruir()
+            SubFrame = ventanas_busqueda.Doc_recibidos_busqueda(self, alto_v_busqueda, ancho_v_busqueda, texto_pantalla)
+           
         else:
             # En caso no estuviera guardado la ficha
-            messagebox.showerror("¡Guardar!", "Antes de asociar un documento emitido, por favor guarde la información registrada")
+            messagebox.showerror("¡Guardar!", "Antes de asociar, asegurate de guardar lo registrado")
  
     #----------------------------------------------------------------------
     def ver_dr(self, id_objeto_ingresado):
@@ -357,7 +364,7 @@ class funcionalidades_ospa(Ventana):
    #----------------------------------------------------------------------
     def busqueda_de(self):
         """"""
-        if self.nuevo != True: 
+        if self.nuevo == False: 
 
             id_objeto_ingresado = self.id_objeto_ingresado
             tipo_objeto_pantalla = self.tipo_objeto
@@ -367,10 +374,17 @@ class funcionalidades_ospa(Ventana):
             self.destruir()
             SubFrame = ventanas_busqueda.Doc_emitidos_busqueda(self, alto_v_busqueda, ancho_v_busqueda, texto_pantalla, 
                                                                 nuevo=False, id_objeto = id_objeto_ingresado, tipo_objeto_anterior = tipo_objeto_pantalla)
+        elif self.nuevo == None:
 
+            # Genero la nueva ventana
+            texto_pantalla = "Búsqueda de documentos emitidos"
+
+            self.destruir()
+            SubFrame = ventanas_busqueda.Doc_emitidos_busqueda(self, alto_v_busqueda, ancho_v_busqueda, texto_pantalla)
+   
         else:
             # En caso no estuviera guardado la ficha
-            messagebox.showerror("¡Guardar!", "Antes de asociar un documento emitido, por favor guarde la información registrada")
+            messagebox.showerror("¡Guardar!", "Antes de asociar, asegurate de guardar lo registrado")
 
     #----------------------------------------------------------------------
     def ver_de(self, id_usuario):
@@ -398,7 +412,7 @@ class funcionalidades_ospa(Ventana):
     #----------------------------------------------------------------------
     def busqueda_ep(self):
         """"""
-        if self.nuevo != True:
+        if self.nuevo == False:
 
             id_objeto_ingresado = self.id_objeto_ingresado
             tipo_objeto_pantalla = self.tipo_objeto
@@ -409,10 +423,18 @@ class funcionalidades_ospa(Ventana):
             SubFrame = ventanas_busqueda.Extremos(self, alto_v_busqueda, ancho_v_busqueda, texto_pantalla, 
                                                   nuevo=False, id_objeto = id_objeto_ingresado, tipo_objeto_anterior = tipo_objeto_pantalla)
 
+        elif self.nuevo == None:
+            
+            # Genero la nueva ventana
+            texto_pantalla = "Búsqueda de extremos de problema"
+
+            self.destruir()
+            SubFrame = ventanas_busqueda.Extremos(self, alto_v_busqueda, ancho_v_busqueda, texto_pantalla)
+
         else:
             # En caso no estuviera guardado la ficha
-            messagebox.showerror("¡Guardar!", "Antes de asociar un documento emitido, por favor guarde la información registrada")
- 
+            messagebox.showerror("¡Guardar!", "Antes de asociar, asegurate de guardar lo registrado")
+        
     #----------------------------------------------------------------------
     def ver_ep(self, id_usuario):
         """"""
@@ -440,7 +462,7 @@ class funcionalidades_ospa(Ventana):
     #----------------------------------------------------------------------
     def busqueda_mp(self):
         """"""
-        if self.nuevo != True:
+        if self.nuevo == False:
             # En caso exista un código insertado en la rejilla
             id_objeto_ingresado = self.id_objeto_ingresado
             tipo_objeto_pantalla = self.tipo_objeto
@@ -450,11 +472,20 @@ class funcionalidades_ospa(Ventana):
             self.destruir()
             SubFrame = ventanas_busqueda.Macroproblemas(self, alto_v_busqueda, ancho_v_busqueda, texto_pantalla, 
                                                         nuevo=False, id_objeto = id_objeto_ingresado, tipo_objeto_anterior = tipo_objeto_pantalla)
+        
+        elif self.nuevo == None:
 
+            self.destruir()
+
+            # Genero la nueva ventana
+            texto_pantalla = "Búsqueda de macroproblemas"
+
+            SubFrame = ventanas_busqueda.Macroproblemas(self, alto_v_busqueda, ancho_v_busqueda, texto_pantalla)
+  
         else:
             # En caso no estuviera guardado la ficha
-            messagebox.showerror("¡Guardar!", "Antes de asociar un documento emitido, por favor guarde la información registrada")
-
+            messagebox.showerror("¡Guardar!", "Antes de asociar, asegurate de guardar lo registrado")
+    
     #----------------------------------------------------------------------
     def ver_mp(self, id_usuario):
         """"""
@@ -491,18 +522,18 @@ class funcionalidades_ospa(Ventana):
             vg.usuario = None
             vg.oficina = None
             vg.texto_bienvenida = None
-            subFrame = logueo.logueo1_Ingreso_de_usuario(self, 584, 453, "ASPA - Versión 0.0", False)
+            subFrame = logueo.logueo1_Ingreso_de_usuario(self, 590, 453, "ASPA - Versión 0.0", False)
         else:
             messagebox.showinfo("¡Importante!", "No olvides guardar tus cambios")
 
-    #----------------------------------------------------------------------
+        #----------------------------------------------------------------------
     def renombrar_encabezados(self, tabla, tipo_base = None):
 
         self.tabla = tabla
         self.tipo_base = tipo_base
 
         if self.tipo_base == 'dr':
-            tabla_renombrada = self.tabla.rename(columns={'COD_DR':'NRO DOC','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_ENTRANTE':'HT INGRESO','ACCION_1':'INDICACION'})
+            tabla_renombrada = self.tabla.rename(columns={'COD_DR':'NRO DOC','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_ENTRANTE':'HT INGRESO','ACCION_1':'INDICACION','APORTE_DOC':'APORTE DOC.'})
             tabla_renombrada['FECHA INGRESO SEFA'] = pd.to_datetime(tabla_renombrada['FECHA INGRESO SEFA'], dayfirst=True)
             tabla_renombrada['FECHA ULTIMO MOV.'] = pd.to_datetime(tabla_renombrada['FECHA ULTIMO MOV.'], dayfirst=True)
             tabla_renombrada2 = tabla_renombrada.sort_values(by='FECHA INGRESO SEFA', ascending=True)
@@ -552,7 +583,7 @@ class funcionalidades_ospa(Ventana):
         self.tipo_base = tipo_base
 
         if self.tipo_base == 'dr':
-            tabla_seleccionada = self.tabla.loc[:,['NRO DOC','REMITENTE','HT INGRESO','FECHA INGRESO SEFA','INDICACION','FECHA ULTIMO MOV.','ASUNTO']]
+            tabla_seleccionada = self.tabla.loc[:,['NRO DOC','REMITENTE','HT INGRESO','FECHA INGRESO SEFA','INDICACION','FECHA ULTIMO MOV.','APORTE DOC.']]
             return tabla_seleccionada
         elif self.tipo_base == 'de':
             tabla_seleccionada = self.tabla.loc[:,['HT','DESTINATARIO','TIPO DOC','NRO DOCUMENTO','FECHA ULTIMO MOV.','ESTADO','CATEGORIA','DETALLE']]

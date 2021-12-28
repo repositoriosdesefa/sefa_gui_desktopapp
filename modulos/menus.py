@@ -227,10 +227,13 @@ class Menu_busquedas(inicio_app_OSPA):
 class Menu_admin(inicio_app_OSPA):
     
     #----------------------------------------------------------------------
-    def __init__(self, *args):
+    def __init__(self, *args, nuevo = None):
         """Constructor"""
         
         Ventana.__init__(self, *args)
+        
+        # Información sobre la ventana
+        self.nuevo = nuevo
 
         c0 = Cuadro(self)
         c0.agregar_label(0, 0, ' ')
@@ -242,7 +245,7 @@ class Menu_admin(inicio_app_OSPA):
         c1.agregar_label(6, 0,'Envío de reiterativo / OCI')
         c1.agregar_button(7, 0, "Ir", self.Pendientes_reiterar)
         c1.agregar_label(8, 0,'Notificación de documentos')
-        c1.agregar_button(9, 0, "Ir", self.busqueda_de)
+        c1.agregar_button(9, 0, "Ir", self.Pendientes_notificar)
 
         c2 = Cuadro(self)
         c2.agregar_label(0, 0, ' ')
@@ -268,16 +271,29 @@ class Menu_admin(inicio_app_OSPA):
 
         SubFrame = ventanas_busqueda.Pendientes_por_reiterar(self, alto_v_busqueda, ancho_v_busqueda, 
                     "Documentos pendientes de reiterar/comunicar al OCI")
+    
+    #----------------------------------------------------------------------
+    def Pendientes_notificar(self):
+
+        self.desaparecer()
+        # LargoxAncho
+
+        SubFrame = ventanas_busqueda.Pendientes_notificar(self, alto_v_busqueda, ancho_v_busqueda, 
+                    "Documentos pendientes de notificación")
+
 
 
 # V. Menú Equipo 1
 class Inicio_eq1(inicio_app_OSPA):
     
     #----------------------------------------------------------------------
-    def __init__(self, *args):
+    def __init__(self, *args, nuevo = None):
         """Constructor"""
         
         Ventana.__init__(self, *args)
+
+        # Información sobre la ventana
+        self.nuevo = nuevo
 
         c0 = Cuadro(self)
         c0.agregar_label(0, 1, ' ')
@@ -311,10 +327,13 @@ class Inicio_eq1(inicio_app_OSPA):
 class Inicio_eq2(inicio_app_OSPA):
     
     #----------------------------------------------------------------------
-    def __init__(self, *args):
+    def __init__(self, *args, nuevo = None):
         """Constructor"""
         
         Ventana.__init__(self, *args)
+
+        # Información sobre la ventana
+        self.nuevo = nuevo
 
         c0 = Cuadro(self)
         c0.agregar_label(0, 0, ' ')
