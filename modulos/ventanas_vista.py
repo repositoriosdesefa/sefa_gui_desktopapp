@@ -176,7 +176,7 @@ class Doc_recibidos_vista(funcionalidades_ospa):
             rejilla_dr = [
 
                 # Sección 1: Detalle
-                ('T2', 0, 0, 'Detalle'),   
+                ('T2', 0, 0, 'Ingreso'),   
                 
                 ('L', 1, 0, 'Tipo de documento'),
                 ('CX', 1, 1, tipo_documento),
@@ -185,7 +185,7 @@ class Doc_recibidos_vista(funcionalidades_ospa):
                 ('E', 1, 3),
 
                 ('L', 2, 0, 'Asunto'),
-                ('EL', 2, 1, 112, 3),
+                ('EL', 2, 1, 122, 3),
 
                 ('L', 3, 0, 'Fecha de recepción OEFA'),
                 ('D', 3, 1),
@@ -200,20 +200,20 @@ class Doc_recibidos_vista(funcionalidades_ospa):
                 ('E', 4, 3),
 
                 ('L', 5, 0, 'Tipo Remitente'),
-                ('CXDEP3', 5, 1, 39, tabla_directorio, "Doble",
+                ('CXDEP3', 5, 1, 44, tabla_directorio, "Doble",
                 'Tipo de entidad u oficina', 'Categoría Remitente', 'EFA_OSPA', 'Remitente', 'Entidad u oficina'),
 
                 ('L', 6, 2, '¿Es respuesta?'),
                 ('CX', 6, 3, si_no),
 
-                # Sección 2: Contenido (Equipo 1)
-                ('T2', 7, 0, 'Contenido'),   
+                ('L', 7, 0, 'Fecha asignación'),
+                ('DE', 7, 1),
 
-                ('L', 8, 0, 'Fecha asignación'),
-                ('DE', 8, 1),
+                ('L', 7, 2, 'Especialista Eq. 1'),
+                ('CX', 7, 3, especialista_1),
 
-                ('L', 8, 2, 'Especialista Eq. 1'),
-                ('CX', 8, 3, especialista_1),
+                # Sección 2: Análisis Equipo 1
+                ('T2', 8, 0, 'Aporte'),   
 
                 ('L', 9, 0, 'Fecha de ejecución'),
                 ('DE', 9, 1),
@@ -224,14 +224,14 @@ class Doc_recibidos_vista(funcionalidades_ospa):
                 ('L', 10, 0, 'Aporte del documento'),
                 ('ST', 10, 1),
 
-                # Sección 3: Contenido (Equipo 1)
-                ('T2', 11, 0, 'Acciones'),  
+                ('L', 11, 0, 'Fecha asignación'),
+                ('DE', 11, 1),
 
-                ('L', 12, 0, 'Fecha asignación'),
-                ('DE', 12, 1),
+                ('L', 11, 2, 'Especialista Eq. 2'),
+                ('CX', 11, 3, especialista_2),
 
-                ('L', 12, 2, 'Especialista Eq. 2'),
-                ('CX', 12, 3, especialista_2),
+                # Sección 3: Contenido (Equipo 2)
+                ('T2', 12, 0, 'Respuesta'),  
 
                 ('L', 13, 0, 'Fecha de ejecución'),
                 ('DE', 13, 1),
@@ -261,7 +261,7 @@ class Doc_recibidos_vista(funcionalidades_ospa):
             rejilla_dr_nuevo = [
             
                 # Sección 1: Detalle
-                ('T2', 0, 0, 'Detalle'),   
+                ('T2', 0, 0, 'Ingreso'),   
                 
                 ('L', 1, 0, 'Tipo de documento'),
                 ('CX', 1, 1, tipo_documento),
@@ -270,7 +270,7 @@ class Doc_recibidos_vista(funcionalidades_ospa):
                 ('E', 1, 3),
 
                 ('L', 2, 0, 'Asunto'),
-                ('EL', 2, 1, 112, 3),
+                ('EL', 2, 1, 122, 3),
 
                 ('L', 3, 0, 'Fecha de recepción OEFA'),
                 ('D', 3, 1),
@@ -285,20 +285,20 @@ class Doc_recibidos_vista(funcionalidades_ospa):
                 ('E', 4, 3),
 
                 ('L', 5, 0, 'Tipo Remitente'),
-                ('CXDEP3', 5, 1, 39, tabla_directorio, "Doble",
+                ('CXDEP3', 5, 1, 44, tabla_directorio, "Doble",
                 'Tipo de entidad u oficina', 'Categoría Remitente', 'EFA_OSPA', 'Remitente', 'Entidad u oficina'),
 
                 ('L', 6, 2, '¿Es respuesta?'),
                 ('CX', 6, 3, si_no),
 
-                # Sección 2: Contenido (Equipo 1)
-                ('T2', 7, 0, 'Contenido'),   
+                ('L', 7, 0, 'Fecha asignación'),
+                ('DE', 7, 1),
 
-                ('L', 8, 0, 'Fecha asignación'),
-                ('DE', 8, 1),
+                ('L', 7, 2, 'Especialista Eq. 1'),
+                ('CX', 7, 3, especialista_1),
 
-                ('L', 8, 2, 'Especialista Eq. 1'),
-                ('CX', 8, 3, especialista_1),
+                # Sección 2: Análisis Equipo 1
+                ('T2', 8, 0, 'Análisis'),   
 
                 ('L', 9, 0, 'Fecha de ejecución'),
                 ('DE', 9, 1),
@@ -309,14 +309,14 @@ class Doc_recibidos_vista(funcionalidades_ospa):
                 ('L', 10, 0, 'Aporte del documento'),
                 ('ST', 10, 1),
 
-                # Sección 3: Contenido (Equipo 1)
-                ('T2', 11, 0, 'Acciones'),  
+                ('L', 11, 0, 'Fecha asignación'),
+                ('DE', 11, 1),
 
-                ('L', 12, 0, 'Fecha asignación'),
-                ('DE', 12, 1),
+                ('L', 11, 2, 'Especialista Eq. 2'),
+                ('CX', 11, 3, especialista_2),
 
-                ('L', 12, 2, 'Especialista Eq. 2'),
-                ('CX', 12, 3, especialista_2),
+                # Sección 3: Contenido (Equipo 2)
+                ('T2', 12, 0, 'Acciones'),  
 
                 ('L', 13, 0, 'Fecha de ejecución'),
                 ('DE', 13, 1),
@@ -330,6 +330,7 @@ class Doc_recibidos_vista(funcionalidades_ospa):
         # III.3 Frame de botón de rejilla
         f_boton = Cuadro(self.frame_principal)
         f_boton.agregar_button(0, 1, 'Guardar', self.guardar_y_actualizar_dr)
+        f_boton.agregar_button(0, 2, 'Nuevo', self.ingresar_nuevo_dr)
 
         # III.4 Frame de vitrina 1
         self.frame_vitrina_1 = Cuadro(self.frame_principal)
@@ -362,6 +363,18 @@ class Doc_recibidos_vista(funcionalidades_ospa):
                             b_dr_cod, b_dr, b_dr_hist, self.ver_dr)
         # Actualización de tabla de código y visualización
         self.tabla_de_dr_cod = b_dr_cod.generar_dataframe()
+
+    #----------------------------------------------------------------------
+    def ingresar_nuevo_dr(self):
+        
+        # Confirmación
+        pregunta = "¿Está seguro de que desea abrir un nuevo formulario? \n ¡Solo hágalo si desea registrar un nuevo documento!"
+        confirmacion = messagebox.askyesno("Nuevo registro de documento", pregunta)
+
+        if confirmacion == True:
+            self.nuevo_dr()
+        else:
+            messagebox.showinfo("¡Importante!", "Siempre guarda tus cambios")
 
     #----------------------------------------------------------------------
     def eliminar_de_y_actualizar(self, id_objeto):
@@ -482,155 +495,47 @@ class Doc_emitidos_vista(funcionalidades_ospa):
             fecha_ultimo =  b_de.obtener_valor_columna_con_codigo_unico(self.cod_tipo_objeto, self.id_objeto_ingresado, 'FECHA_ULTIMO_MOV')
 
             rejilla_de = [
-                ('T2', 0, 0, 'Detalle'),
+                # Sección 1: Emisión
+                ('T2', 0, 0, 'Emisión'),
 
-                ('L', 0, 0, 'HT de documento'),
-                ('E', 0, 1),
+                ('L', 1, 0, 'HT de salida'),
+                ('E', 1, 1),
 
-                ('L', 0, 2, 'Categoría'),
-                ('CX', 0, 3, categorias),
+                ('L', 1, 2, 'Fecha de proyecto'),
+                ('DE', 1, 3), 
 
-                ('L', 1, 0, 'Tipo Destinatario'),
-                ('CXDEP3', 1, 1, 39, tabla_directorio, "Doble",
+                ('L', 2, 0, 'Categoría'),
+                ('CX', 2, 1, categorias),
+
+                ('L', 2, 2, 'Especialista'),
+                ('CX', 2, 3, especialista_2), 
+
+                ('L', 3, 0, 'Tipo Destinatario'),
+                ('CXDEP3', 3, 1, 44, tabla_directorio, "Doble",
                 'Tipo de entidad u oficina', 'Categoría Destinatario', 'EFA_OSPA', 'Destinatario', 'Entidad u oficina'),
 
-                ('L', 2, 2, 'Marco de pedido'),
-                ('CX', 2, 3, marco_pedido),
+                ('L', 4, 2, 'Marco de pedido'),
+                ('CX', 4, 3, marco_pedido),
 
-                # Sección 2: Documento
-                ('T2', 3, 0, 'Elaboración'),
+                # Sección 2: Contenido de Documento
+                ('T2', 5, 0, 'Documento'),
 
-                ('L', 3, 0, 'Fecha de proyecto'),
-                ('DE', 3, 1), 
+                ('L', 6, 0, 'Tipo de documento'),
+                ('CX', 6, 1, tipo_documento),
 
-                ('L', 3, 2, 'HT Salida'),
-                ('E', 3, 3), 
+                ('L', 6, 2, 'N° de documento'),
+                ('E', 6, 3),
 
-                ('L', 4, 0, 'Tipo de documento'),
-                ('CX', 4, 1, tipo_documento),
+                ('L', 7, 0, 'Fecha de firma'),
+                ('DE', 7, 1), 
 
-                ('L', 4, 2, 'N° de documento'),
-                ('E', 4, 3),
-
-                ('L', 5, 0, 'Fecha de firma'),
-                ('DE', 5, 1), 
-
-                ('L', 5, 2, 'Fecha de notificación'),
-                ('DE', 5, 3),
-
-                # Sección 3: Contenido
-                ('T2', 6, 0, 'Contenido'),
-
-                ('L', 7, 0, 'Detalle de requerimiento'),
-                ('ST', 7, 1),
-
-                # Sección 4: Reiterativo
-                ('T2', 8, 0, 'Reiterativo'),
-
-                ('L', 9, 0, 'Fecha de proyecto'),
-                ('DE', 9, 1), 
-
-                ('L', 9, 2, '¿Se emitió?'),
-                ('CX', 9, 3, si_no), 
-
-                ('L', 10, 0, 'Tipo de documento'),
-                ('CX', 10, 1, tipo_documento),
-
-                ('L', 10, 2, 'N° de documento'),
-                ('E', 10, 3),
-
-                ('L', 11, 0, 'Fecha de firma'),
-                ('DE', 11, 1), 
-
-                ('L', 11, 2, 'Fecha de notificación'),
-                ('DE', 11, 3),
-
-                # Sección 5: OCI
-                ('T2', 12, 0, 'OCI'),
-
-                ('L', 13, 0, 'Fecha de proyecto'),
-                ('DE', 13, 1), 
-
-                ('L', 13, 2, '¿Se emitió?'),
-                ('CX', 13, 3, si_no), 
-
-                ('L', 14, 0, 'Tipo de documento'),
-                ('CX', 14, 1, tipo_documento),
-
-                ('L', 14, 2, 'N° de documento'),
-                ('E', 14, 3),
-
-                ('L', 15, 0, 'Fecha de firma'),
-                ('DE', 15, 1), 
-
-                ('L', 15, 2, 'Fecha de notificación'),
-                ('DE', 15, 3),
-                
-                # Sección 6: Datos
-                ('T2', 16, 0, 'Datos'),
-
-                ('L', 17, 0, 'Creado por:'),
-                ('L', 17, 1, str(creador)),
-
-                ('L', 17, 2, 'Actualizado por:'),
-                ('L', 17, 3, str(ultimo_nombre)),
-
-                ('L', 18, 0, 'Fecha creación:'),
-                ('L', 18, 1, str(fecha_creacion)),
-
-                ('L', 18, 2, 'Fecha actualización:'),
-                ('L', 18, 3, str(fecha_ultimo))
-            ]
-            
-            self.frame_rejilla.agregar_rejilla(rejilla_de)
-            self.frame_rejilla.insertar_lista_de_datos(self.lista_para_insertar)
-
-        else:
-            rejilla_de_nuevo = [
-            
-                ('T2', 0, 0, 'Detalle'),
-
-                ('L', 0, 0, 'HT de documento'),
-                ('E', 0, 1),
-
-                ('L', 0, 2, 'Categoría'),
-                ('CX', 0, 3, categorias),
-
-                ('L', 1, 0, 'Tipo Destinatario'),
-                ('CXDEP3', 1, 1, 39, tabla_directorio, "Doble",
-                'Tipo de entidad u oficina', 'Categoría Destinatario', 'EFA_OSPA', 'Destinatario', 'Entidad u oficina'),
-
-                ('L', 2, 2, 'Marco de pedido'),
-                ('CX', 2, 3, marco_pedido),
-
-                # Sección 2: Documento
-                ('T2', 3, 0, 'Elaboración'),
-
-                ('L', 4, 0, 'Especialista'),
-                ('CX', 4, 1, especialista_2), 
-
-                ('L', 4, 2, 'Fecha de elaboración'),
-                ('DE', 4, 3), 
-
-                ('L', 5, 0, 'Tipo de documento'),
-                ('CX', 5, 1, tipo_documento),
-
-                ('L', 5, 2, 'N° de documento'),
-                ('E', 5, 3),
-
-                ('L', 6, 0, 'Fecha de firma'),
-                ('DE', 6, 1), 
-
-                ('L', 6, 2, 'Fecha de notificación'),
-                ('DE', 6, 3),
-
-                # Sección 3: Contenido
-                ('T2', 7, 0, 'Elaboración'),
+                ('L', 7, 2, 'Fecha de notificación'),
+                ('DE', 7, 3),
 
                 ('L', 8, 0, 'Detalle de requerimiento'),
                 ('ST', 8, 1),
 
-                # Sección 4: Reiterativo
+                # Sección 3: Reiterativo
                 ('T2', 9, 0, 'Reiterativo'),
 
                 ('L', 10, 0, 'Fecha de proyecto'),
@@ -651,7 +556,110 @@ class Doc_emitidos_vista(funcionalidades_ospa):
                 ('L', 12, 2, 'Fecha de notificación'),
                 ('DE', 12, 3),
 
-                # Sección 5: OCI
+                # Sección 4: OCI
+                ('T2', 13, 0, 'OCI'),
+
+                ('L', 14, 0, 'Fecha de proyecto'),
+                ('DE', 14, 1), 
+
+                ('L', 14, 2, '¿Se emitió?'),
+                ('CX', 14, 3, si_no), 
+
+                ('L', 15, 0, 'Tipo de documento'),
+                ('CX', 15, 1, tipo_documento),
+
+                ('L', 15, 2, 'N° de documento'),
+                ('E', 15, 3),
+
+                ('L', 16, 0, 'Fecha de firma'),
+                ('DE', 16, 1), 
+
+                ('L', 16, 2, 'Fecha de notificación'),
+                ('DE', 16, 3),
+                
+                # Sección 5: Datos
+                ('T2', 17, 0, 'Datos'),
+
+                ('L', 18, 0, 'Creado por:'),
+                ('L', 18, 1, str(creador)),
+
+                ('L', 18, 2, 'Actualizado por:'),
+                ('L', 18, 3, str(ultimo_nombre)),
+
+                ('L', 19, 0, 'Fecha creación:'),
+                ('L', 19, 1, str(fecha_creacion)),
+
+                ('L', 19, 2, 'Fecha actualización:'),
+                ('L', 19, 3, str(fecha_ultimo))
+            ]
+            
+            self.frame_rejilla.agregar_rejilla(rejilla_de)
+            self.frame_rejilla.insertar_lista_de_datos(self.lista_para_insertar)
+
+        else:
+            rejilla_de_nuevo = [
+                # Sección 1: Emisión
+                ('T2', 0, 0, 'Emisión'),
+
+                ('L', 1, 0, 'HT de salida'),
+                ('E', 1, 1),
+
+                ('L', 1, 2, 'Fecha de proyecto'),
+                ('DE', 1, 3), 
+
+                ('L', 2, 0, 'Categoría'),
+                ('CX', 2, 1, categorias),
+
+                ('L', 2, 2, 'Especialista'),
+                ('CX', 2, 3, especialista_2), 
+
+                ('L', 3, 0, 'Tipo Destinatario'),
+                ('CXDEP3', 3, 1, 44, tabla_directorio, "Doble",
+                'Tipo de entidad u oficina', 'Categoría Destinatario', 'EFA_OSPA', 'Destinatario', 'Entidad u oficina'),
+
+                ('L', 4, 2, 'Marco de pedido'),
+                ('CX', 4, 3, marco_pedido),
+
+                # Sección 2: Contenido de Documento
+                ('T2', 5, 0, 'Documento'),
+
+                ('L', 6, 0, 'Tipo de documento'),
+                ('CX', 6, 1, tipo_documento),
+
+                ('L', 6, 2, 'N° de documento'),
+                ('E', 6, 3),
+
+                ('L', 7, 0, 'Fecha de firma'),
+                ('DE', 7, 1), 
+
+                ('L', 7, 2, 'Fecha de notificación'),
+                ('DE', 7, 3),
+
+                ('L', 8, 0, 'Detalle de requerimiento'),
+                ('ST', 8, 1),
+
+                # Sección 3: Reiterativo
+                ('T2', 9, 0, 'Reiterativo'),
+
+                ('L', 10, 0, 'Fecha de proyecto'),
+                ('DE', 10, 1), 
+
+                ('L', 10, 2, '¿Se emitió?'),
+                ('CX', 10, 3, si_no), 
+
+                ('L', 11, 0, 'Tipo de documento'),
+                ('CX', 11, 1, tipo_documento),
+
+                ('L', 11, 2, 'N° de documento'),
+                ('E', 11, 3),
+
+                ('L', 12, 0, 'Fecha de firma'),
+                ('DE', 12, 1), 
+
+                ('L', 12, 2, 'Fecha de notificación'),
+                ('DE', 12, 3),
+
+                # Sección 4: OCI
                 ('T2', 13, 0, 'OCI'),
 
                 ('L', 14, 0, 'Fecha de proyecto'),
@@ -671,7 +679,7 @@ class Doc_emitidos_vista(funcionalidades_ospa):
 
                 ('L', 16, 2, 'Fecha de notificación'),
                 ('DE', 16, 3)
-            
+                
             ]
             
             self.frame_rejilla.agregar_rejilla(rejilla_de_nuevo)
@@ -817,13 +825,13 @@ class Extremo_problemas_vista(funcionalidades_ospa):
         self.frame_rejilla = Cuadro(self.frame_principal)
         # En caso exista precedente, se inserta en la rejilla
         if self.nuevo == False: # Estamos en una ficha creada
+            self.id_objeto_ingresado = id_objeto
+            self.lista_para_insertar = lista
 
             self.tabla_de_ep_cod = b_ep_cod.generar_dataframe()
             self.tabla_relacion_de_ep = base_relacion_de_ep.generar_dataframe()
             self.tabla_relacion_dr_ep = base_relacion_dr_ep.generar_dataframe()
             self.tabla_relacion_mp_ep = base_relacion_mp_ep.generar_dataframe()
-            self.cod_usuario_dr = id_objeto
-            self.lista_para_insertar = lista
 
             creador = b_ep_cod.obtener_usuario(base_datos_usuario, self.id_objeto_ingresado,  self.cod_tipo_objeto)
             fecha_creacion = b_ep_cod.obtener_valor_columna_con_codigo_unico(self.cod_tipo_objeto, self.id_objeto_ingresado, 'F_CREACION')
@@ -831,113 +839,176 @@ class Extremo_problemas_vista(funcionalidades_ospa):
             ultimo_nombre = b_ep.obtener_usuario(base_datos_usuario, self.id_objeto_ingresado,  self.cod_tipo_objeto)
             fecha_ultimo =  b_ep.obtener_valor_columna_con_codigo_unico(self.cod_tipo_objeto, self.id_objeto_ingresado, 'FECHA_ULTIMO_MOV')
 
+            titulo_cod_problema = 'Código: ' + str(self.cod_usuario_ep)
             rejilla_ep = [
-                ('L', 0, 0, 'Código de problema'),
-                ('L', 0, 1, str(self.cod_usuario_ep)),
+                # Sección 1: Estado
+                ('T2', 0, 0, titulo_cod_problema),
 
-                ('L', 0, 2, 'Código SINADA'),
-                ('EL', 0, 3, 35, 1),
+                ('L', 1, 0, 'Estado'),
+                ('CX', 1, 1, estado_problemas),
 
-                ('L', 0, 4, 'Estado'),
-                ('CXP', 0, 5, 32, estado_problemas, '', "readonly"),
+                # Sección 2: Origen
+                ('T2', 2, 0, 'Origen'),
 
-                ('L', 1, 0, 'Departamento'),
-                ('CXDEP3', 1, 1, 32, tabla_lista_efa, "Triple", 
+                ('L', 3, 0, 'Código SINADA'),
+                ('EL', 3, 1, 47, 1),
+
+                # Sección 3: Ubigeo
+                ('T2', 4, 0, 'Ubicación'),
+
+                ('L', 5, 0, 'Departamento'),
+                ('CXDEP3', 5, 1, 44, tabla_lista_efa, "Doble", 
                 'DEPARTAMENTO ', 'Provincia', 'PROVINCIA ', 'Distrito', 'DISTRITO '),
 
-                ('L', 2, 0, 'Tipo de ubicación'),
-                ('CXP', 2, 1, 32, ubicacion, '', "readonly"),
+                ('L', 6, 2, 'Tipo de ubicación'),
+                ('CX', 6, 3, ubicacion),
 
-                ('L', 2, 2, 'Extensión'),
-                ('CXP', 2, 3, 32, extension, '', "readonly"),
+                ('L', 7, 0, 'Georreferencia Este'),
+                ('EL', 7, 1, 47, 1),
 
-                ('L', 2, 4, 'Ocurrencia'),
-                ('CXP', 2, 5, 32, ocurrencia, '', "readonly"),
+                ('L', 7, 2, 'Georreferencia Norte'),
+                ('EL', 7, 3, 47, 1),
 
-                ('L', 3, 0, 'Tipo de afectación'),
-                ('CXP', 3, 1, 32, tipo_afectacion, '', "readonly"),
+                ('L', 8, 0, 'Extensión'),
+                ('CX', 8, 1, extension),
+
+                ('L', 8, 2, 'Ocurrencia'),
+                ('CX', 8, 3, ocurrencia),
+
+                # Sección 4: Descripción de problema
+                ('T2', 9, 0, 'Caracterización'),
+
+                ('L', 10, 0, 'Tipo de afectación'),
+                ('CX', 10, 1, tipo_afectacion),
                 
-                ('L', 3, 2, 'Agente contaminante'),
-                ('CXP', 3, 3, 32, agente_conta, '', "readonly"),
+                ('L', 10, 2, 'Agente contaminante'),
+                ('CX', 10, 3, agente_conta),
 
-                ('L', 3, 4, 'Descripción'),
-                ('STP', 3, 5, 33, 2),
+                ('L', 11, 0, 'Tipo de causa'),
+                ('CX', 11, 1, tipo_causa),
 
-                ('L', 4, 0, 'Tipo de causa'),
-                ('CXP', 4, 1, 32, tipo_causa, '', "readonly"),
+                ('L', 11, 2, 'Descripción'),
+                ('STP', 11, 3, 45, 2),
 
-                ('L', 4, 2, 'Componente ambiental'),
-                ('CXP', 4, 3, 32, componente_amb, '', "readonly"),
+                ('L', 12, 0, 'Componente ambiental'),
+                ('CX', 12, 1, componente_amb),
+
+                # Sección 4: Administrado
+                ('T2', 13, 0, 'Administrado'),
                 
-                ('L', 5, 0, 'Actividad'),
-                ('CXDEP3', 5, 1, 32, tabla_parametros_act, "Triple",
+                ('L', 14, 0, 'Tipo'),
+                ('CX', 14, 1, tipo_administrado),
+
+                ('L', 14, 2, 'Administrado'),
+                ('EL', 14, 3, 47, 1),
+
+                ('L', 15, 0, 'Actividad'),
+                ('CXDEP3', 15, 1, 44, tabla_parametros_act, "Doble",
                  'ACTIVIDAD', 'Característica 1', 'CARACTERÍSTICA 1', 'Característica 2', 'CARACTERÍSTICA 2'),
 
-                ('L', 6, 0, 'Tipo de EFA'),
-                ('CXDEP3', 6, 1, 32, tabla_directorio, "Triple",
+                ('L', 16, 2, 'RUC/DNI'),
+                ('EL', 16, 3, 47, 1),
+
+                # Sección 5: 
+                ('T2', 17, 0, 'EFA'),
+                ('L', 18, 0, 'Tipo de EFA'),
+                ('CXDEP3', 18, 1, 44, tabla_directorio, "Doble",
                 'TIPO_OFICINA', 'Categoría EFA', 'EFA_OSPA', 'EFA', 'Entidad u oficina'),
+            
+                # Sección 6: Datos
+                ('T2', 20, 0, 'Datos'),
 
-                ('L', 7, 0, 'Creado por:'),
-                ('L', 7, 1, str(creador)),
+                ('L', 21, 0, 'Creado por:'),
+                ('L', 21, 1, str(creador)),
 
-                ('L', 7, 4, 'Actualizado por:'),
-                ('L', 7, 5, str(ultimo_nombre)),
+                ('L', 21, 2, 'Actualizado por:'),
+                ('L', 21, 3, str(ultimo_nombre)),
 
-                ('L', 8, 0, 'Fecha creación:'),
-                ('L', 8, 1, str(fecha_creacion)),
+                ('L', 22, 0, 'Fecha creación:'),
+                ('L', 22, 1, str(fecha_creacion)),
 
-                ('L', 8, 4, 'Fecha actualización:'),
-                ('L', 8, 5, str(fecha_ultimo))
+                ('L', 22, 2, 'Fecha actualización:'),
+                ('L', 22, 3, str(fecha_ultimo))
 
             ]
             # Se inserta rejilla con datos
             self.frame_rejilla.agregar_rejilla(rejilla_ep)
             self.frame_rejilla.insertar_lista_de_datos(self.lista_para_insertar)
+
         else:
             rejilla_ep_nuevo = [
-                ('L', 0, 0, ' '),
-                ('L', 0, 1, ' '),
-                
-                ('L', 0, 2, 'Código SINADA'),
-                ('EL', 0, 3, 35, 1),
+                # Sección 1: Estado
+                ('T2', 0, 0, 'Código'),
 
-                ('L', 0, 4, 'Estado'),
-                ('CXP', 0, 5, 32, estado_problemas, '', "readonly"),
+                ('L', 1, 0, 'Estado'),
+                ('CXP', 1, 1, 44, estado_problemas, 'ABIERTO', "readonly"),
 
-                ('L', 1, 0, 'Departamento'),
-                ('CXDEP3', 1, 1, 32, tabla_lista_efa, "Triple", 
+                # Sección 2: Origen
+                ('T2', 2, 0, 'Origen'),
+
+                ('L', 3, 0, 'Código SINADA'),
+                ('EL', 3, 1, 47, 1),
+
+                # Sección 3: Ubigeo
+                ('T2', 4, 0, 'Ubicación'),
+
+                ('L', 5, 0, 'Departamento'),
+                ('CXDEP3', 5, 1, 44, tabla_lista_efa, "Doble", 
                 'DEPARTAMENTO ', 'Provincia', 'PROVINCIA ', 'Distrito', 'DISTRITO '),
 
-                ('L', 2, 0, 'Tipo de ubicación'),
-                ('CXP', 2, 1, 32, ubicacion, '', "readonly"),
+                ('L', 6, 2, 'Tipo de ubicación'),
+                ('CX', 6, 3, ubicacion),
 
-                ('L', 2, 2, 'Extensión'),
-                ('CXP', 2, 3, 32, extension, '', "readonly"),
+                ('L', 7, 0, 'Georreferencia Este'),
+                ('EL', 7, 1, 47, 1),
 
-                ('L', 2, 4, 'Ocurrencia'),
-                ('CXP', 2, 5, 32, ocurrencia, '', "readonly"),
+                ('L', 7, 2, 'Georreferencia Norte'),
+                ('EL', 7, 3, 47, 1),
 
-                ('L', 3, 0, 'Tipo de afectación'),
-                ('CXP', 3, 1, 32, tipo_afectacion, '', "readonly"),
+                ('L', 8, 0, 'Extensión'),
+                ('CX', 8, 1, extension),
+
+                ('L', 8, 2, 'Ocurrencia'),
+                ('CX', 8, 3, ocurrencia),
+
+                # Sección 4: Descripción de problema
+                ('T2', 9, 0, 'Caracterización'),
+
+                ('L', 10, 0, 'Tipo de afectación'),
+                ('CX', 10, 1, tipo_afectacion),
                 
-                ('L', 3, 2, 'Agente contaminante'),
-                ('CXP', 3, 3, 32, agente_conta, '', "readonly"),
+                ('L', 10, 2, 'Agente contaminante'),
+                ('CX', 10, 3, agente_conta),
 
-                ('L', 3, 4, 'Descripción'),
-                ('STP', 3, 5, 33, 2),
+                ('L', 11, 0, 'Tipo de causa'),
+                ('CX', 11, 1, tipo_causa),
 
-                ('L', 4, 0, 'Tipo de causa'),
-                ('CXP', 4, 1, 32, tipo_causa, '', "readonly"),
+                ('L', 11, 2, 'Descripción'),
+                ('STP', 11, 3, 45, 2),
 
-                ('L', 4, 2, 'Componente ambiental'),
-                ('CXP', 4, 3, 32, componente_amb, '', "readonly"),
+                ('L', 12, 0, 'Componente ambiental'),
+                ('CX', 12, 1, componente_amb),
+
+                # Sección 4: Administrado
+                ('T2', 13, 0, 'Administrado'),
                 
-                ('L', 5, 0, 'Actividad'),
-                ('CXDEP3', 5, 1, 32, tabla_parametros_act, "Triple",
+                ('L', 14, 0, 'Tipo'),
+                ('CX', 14, 1, tipo_administrado),
+
+                ('L', 14, 2, 'Administrado'),
+                ('EL', 14, 3, 47, 1),
+
+                ('L', 15, 0, 'Actividad'),
+                ('CXDEP3', 15, 1, 44, tabla_parametros_act, "Doble",
                  'ACTIVIDAD', 'Característica 1', 'CARACTERÍSTICA 1', 'Característica 2', 'CARACTERÍSTICA 2'),
 
-                ('L', 6, 0, 'Tipo de EFA'),
-                ('CXDEP3', 6, 1, 32, tabla_directorio, "Triple",
+                ('L', 16, 2, 'RUC/DNI'),
+                ('EL', 16, 3, 47, 1),
+
+                # Sección 5: EFA
+                ('T2', 17, 0, 'EFA'),
+                ('L', 18, 0, 'Tipo de EFA'),
+                ('CXDEP3', 18, 1, 44, tabla_directorio, "Doble",
                 'TIPO_OFICINA', 'Categoría EFA', 'EFA_OSPA', 'EFA', 'Entidad u oficina')
             ]
             # Se inserta rejilla nueva
@@ -946,7 +1017,6 @@ class Extremo_problemas_vista(funcionalidades_ospa):
         # III.3 Frame de botón de rejilla
         f_boton = Cuadro(self.frame_principal)
         f_boton.agregar_button(0, 1, 'Guardar', self.guardar_y_actualizar_ep)
-        f_boton.agregar_button(0, 2, 'Alterno', self.nuevo_n_ep)
         
         # III.4 Frame de vitrina 1
         self.frame_vitrina_1 = Cuadro(self.frame_principal)
@@ -1042,7 +1112,7 @@ class Extremo_problemas_vista(funcionalidades_ospa):
                                                 "ID_EP", "ID_DR", "COD_EP", 
                                                 self.ver_dr, self.eliminar_dr_y_actualizar)
 
-
+        
     #----------------------------------------------------------------------
     def eliminar_dr_y_actualizar(self, id_objeto):
         # Se elimina el DR
@@ -1160,13 +1230,13 @@ class Macroproblemas_vista(funcionalidades_ospa):
                 ('T2', 4, 0, 'Contenido'),
 
                 ('L', 5, 0, 'Nombre'),
-                ('EL', 5, 1, 112, 3),
+                ('EL', 5, 1, 122, 3),
 
                 ('L', 6, 0, 'Descripción'),
                 ('ST', 6, 1),
 
                 ('L', 7, 0, 'Observaciones'),
-                ('EL', 7, 1, 112, 3),
+                ('EL', 7, 1, 122, 3),
 
                 #Sección 2: Datos
                 ('T2', 8, 0, 'Datos'),
@@ -1192,7 +1262,7 @@ class Macroproblemas_vista(funcionalidades_ospa):
                 ('T2', 0, 0, 'Detalle'),
 
                 ('L', 1, 0, 'Estado'),
-                ('CXP', 1, 1, 39, estado_problemas, 'ABIERTO', "readonly"),
+                ('CXP', 1, 1, 44, estado_problemas, 'ABIERTO', "readonly"),
 
                 ('L', 1, 2, 'Avance'),
                 ('E', 1, 3),
@@ -1207,13 +1277,13 @@ class Macroproblemas_vista(funcionalidades_ospa):
                 ('T2', 3, 0, 'Contenido'),
 
                 ('L', 4, 0, 'Nombre'),
-                ('EL', 4, 1, 112, 3),
+                ('EL', 4, 1, 122, 3),
 
                 ('L', 5, 0, 'Descripción'),
                 ('ST', 5, 1),
 
                 ('L', 6, 0, 'Observaciones'),
-                ('EL', 6, 1, 112, 3)
+                ('EL', 6, 1, 122, 3)
 
             ]
             # Se inserta rejilla nueva
@@ -1275,370 +1345,3 @@ class Macroproblemas_vista(funcionalidades_ospa):
                                                 self.tabla_de_ep, self.tabla_relacion_mp_ep, 
                                                 "ID_MP", "ID_EP", "COD_MP", 
                                                 self.ver_ep, self.eliminar_ep_y_actualizar)
-
-class N_Extremo_problemas_vista(funcionalidades_ospa):
-    """"""
-    
-    #----------------------------------------------------------------------
-    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None,  tipo_objeto = "EP"):
-        """Constructor"""
-
-        Ventana.__init__(self, *args)
-         # Determinar la ventana principal a partir si es (o no) scrollable
-        if self.scrollable_ventana == True:
-            self.frame_principal = self.scrollframe
-        else:
-            self.frame_principal = self
-        
-        # 0. Almacenamos información heredada
-        self.nuevo = nuevo
-        self.cod_usuario_ep = id_objeto
-        self.id_objeto_ingresado = id_objeto
-        self.tipo_objeto = tipo_objeto
-        self.cod_tipo_objeto = 'COD_' + str(tipo_objeto)
-        # Parámetros de vitrina
-        self.vitrina_1 = None
-        self.vitina_2 = None
-
-        # Tablas para vitrina
-        # 0. Tablas de código de objeto
-        self.tabla_de_ep_cod = tabla_de_ep_cod
-        # II.1 Lista de DR
-        self.tabla_de_dr =  tabla_de_dr_resumen
-        self.tabla_relacion_dr_ep = tabla_relacion_dr_ep
-        # II.2 Lista de DE
-        self.tabla_de_de =  tabla_de_de_resumen
-        self.tabla_relacion_de_ep = tabla_relacion_de_ep
-        # II.3 Lista de MP
-        self.tabla_de_mp = tabla_de_mp_resumen
-        self.tabla_relacion_mp_ep = tabla_relacion_mp_ep
-
-        # III. Títulos e imagen
-        # III.1 Frame de Título
-        titulos = Cuadro(self.frame_principal)
-        titulos.agregar_franja_superior_ospa('Detalle de extremo de problema', 
-                                            self.inicio_app, self.cerrar_sesion)
-        # III.2 Frame de rejillas
-        self.frame_rejilla = Cuadro(self.frame_principal)
-        # En caso exista precedente, se inserta en la rejilla
-        if self.nuevo == False: # Estamos en una ficha creada
-            self.id_objeto_ingresado = id_objeto
-            self.lista_para_insertar = lista
-
-            self.tabla_de_ep_cod = b_ep_cod.generar_dataframe()
-            self.tabla_relacion_de_ep = base_relacion_de_ep.generar_dataframe()
-            self.tabla_relacion_dr_ep = base_relacion_dr_ep.generar_dataframe()
-            self.tabla_relacion_mp_ep = base_relacion_mp_ep.generar_dataframe()
-
-            creador = b_ep_cod.obtener_usuario(base_datos_usuario, self.id_objeto_ingresado,  self.cod_tipo_objeto)
-            fecha_creacion = b_ep_cod.obtener_valor_columna_con_codigo_unico(self.cod_tipo_objeto, self.id_objeto_ingresado, 'F_CREACION')
-
-            ultimo_nombre = b_ep.obtener_usuario(base_datos_usuario, self.id_objeto_ingresado,  self.cod_tipo_objeto)
-            fecha_ultimo =  b_ep.obtener_valor_columna_con_codigo_unico(self.cod_tipo_objeto, self.id_objeto_ingresado, 'FECHA_ULTIMO_MOV')
-
-            titulo_cod_problema = 'Código: ' + str(self.cod_usuario_ep)
-            rejilla_ep = [
-                # Sección 1: Estado
-                ('T2', 0, 0, titulo_cod_problema),
-
-                ('L', 1, 0, 'Estado'),
-                ('CX', 1, 1, estado_problemas),
-
-                # Sección 2: Origen
-                ('T2', 2, 0, 'Origen'),
-
-                ('L', 3, 0, 'Código SINADA'),
-                ('EL', 3, 1, 42, 1),
-
-                # Sección 3: Ubigeo
-                ('T2', 4, 0, 'Ubicación'),
-
-                ('L', 5, 0, 'Departamento'),
-                ('CXDEP3', 5, 1, 39, tabla_lista_efa, "Doble", 
-                'DEPARTAMENTO ', 'Provincia', 'PROVINCIA ', 'Distrito', 'DISTRITO '),
-
-                ('L', 6, 2, 'Tipo de ubicación'),
-                ('CX', 6, 3, ubicacion),
-
-                ('L', 7, 0, 'Georreferencia Este'),
-                ('EL', 7, 1, 42, 1),
-
-                ('L', 7, 2, 'Georreferencia Norte'),
-                ('EL', 7, 3, 42, 1),
-
-                ('L', 8, 0, 'Extensión'),
-                ('CX', 8, 1, extension),
-
-                ('L', 8, 2, 'Ocurrencia'),
-                ('CX', 8, 3, ocurrencia),
-
-                # Sección 4: Descripción de problema
-                ('T2', 9, 0, 'Caracterización'),
-
-                ('L', 10, 0, 'Tipo de afectación'),
-                ('CX', 10, 1, tipo_afectacion),
-                
-                ('L', 10, 2, 'Agente contaminante'),
-                ('CX', 10, 3, agente_conta),
-
-                ('L', 11, 0, 'Tipo de causa'),
-                ('CX', 11, 1, tipo_causa),
-
-                ('L', 11, 2, 'Descripción'),
-                ('STP', 11, 3, 40, 2),
-
-                ('L', 12, 0, 'Componente ambiental'),
-                ('CX', 12, 1, componente_amb),
-
-                # Sección 4: Administrado
-                ('T2', 13, 0, 'Administrado'),
-                
-                ('L', 14, 0, 'Tipo'),
-                ('CX', 14, 1, tipo_administrado),
-
-                ('L', 14, 2, 'Administrado'),
-                ('EL', 14, 3, 42, 1),
-
-                ('L', 15, 0, 'Actividad'),
-                ('CXDEP3', 15, 1, 39, tabla_parametros_act, "Doble",
-                 'ACTIVIDAD', 'Característica 1', 'CARACTERÍSTICA 1', 'Característica 2', 'CARACTERÍSTICA 2'),
-
-                # Sección 5: 
-                ('T2', 17, 0, 'EFA'),
-                ('L', 18, 0, 'Tipo de EFA'),
-                ('CXDEP3', 18, 1, 39, tabla_directorio, "Doble",
-                'TIPO_OFICINA', 'Categoría EFA', 'EFA_OSPA', 'EFA', 'Entidad u oficina'),
-            
-                # Sección 6: Datos
-                ('L', 7, 0, 'Creado por:'),
-                ('L', 7, 1, str(creador)),
-
-                ('L', 7, 4, 'Actualizado por:'),
-                ('L', 7, 5, str(ultimo_nombre)),
-
-                ('L', 8, 0, 'Fecha creación:'),
-                ('L', 8, 1, str(fecha_creacion)),
-
-                ('L', 8, 4, 'Fecha actualización:'),
-                ('L', 8, 5, str(fecha_ultimo))
-            ]
-            # Se inserta rejilla con datos
-            self.frame_rejilla.agregar_rejilla(rejilla_ep)
-            self.frame_rejilla.insertar_lista_de_datos(self.lista_para_insertar)
-
-        else:
-            rejilla_ep_nuevo = [
-                # Sección 1: Estado
-                ('T2', 0, 0, 'Código'),
-
-                ('L', 1, 0, 'Estado'),
-                ('CXP', 1, 1, 39, estado_problemas, 'ABIERTO', "readonly"),
-
-                # Sección 2: Origen
-                ('T2', 2, 0, 'Origen'),
-
-                ('L', 3, 0, 'Código SINADA'),
-                ('EL', 3, 1, 42, 1),
-
-                # Sección 3: Ubigeo
-                ('T2', 4, 0, 'Ubicación'),
-
-                ('L', 5, 0, 'Departamento'),
-                ('CXDEP3', 5, 1, 39, tabla_lista_efa, "Doble", 
-                'DEPARTAMENTO ', 'Provincia', 'PROVINCIA ', 'Distrito', 'DISTRITO '),
-
-                ('L', 6, 2, 'Tipo de ubicación'),
-                ('CX', 6, 3, ubicacion),
-
-                ('L', 7, 0, 'Georreferencia Este'),
-                ('EL', 7, 1, 42, 1),
-
-                ('L', 7, 2, 'Georreferencia Norte'),
-                ('EL', 7, 3, 42, 1),
-
-                ('L', 8, 0, 'Extensión'),
-                ('CX', 8, 1, extension),
-
-                ('L', 8, 2, 'Ocurrencia'),
-                ('CX', 8, 3, ocurrencia),
-
-                # Sección 4: Descripción de problema
-                ('T2', 9, 0, 'Caracterización'),
-
-                ('L', 10, 0, 'Tipo de afectación'),
-                ('CX', 10, 1, tipo_afectacion),
-                
-                ('L', 10, 2, 'Agente contaminante'),
-                ('CX', 10, 3, agente_conta),
-
-                ('L', 11, 0, 'Tipo de causa'),
-                ('CX', 11, 1, tipo_causa),
-
-                ('L', 11, 2, 'Descripción'),
-                ('STP', 11, 3, 40, 2),
-
-                ('L', 12, 0, 'Componente ambiental'),
-                ('CX', 12, 1, componente_amb),
-
-                # Sección 4: Administrado
-                ('T2', 13, 0, 'Administrado'),
-                
-                ('L', 14, 0, 'Tipo'),
-                ('CX', 14, 1, tipo_administrado),
-
-                ('L', 14, 2, 'Administrado'),
-                ('EL', 14, 3, 42, 1),
-
-                ('L', 15, 0, 'Actividad'),
-                ('CXDEP3', 15, 1, 39, tabla_parametros_act, "Doble",
-                 'ACTIVIDAD', 'Característica 1', 'CARACTERÍSTICA 1', 'Característica 2', 'CARACTERÍSTICA 2'),
-
-                # Sección 5: EFA
-                ('T2', 17, 0, 'EFA'),
-                ('L', 18, 0, 'Tipo de EFA'),
-                ('CXDEP3', 18, 1, 39, tabla_directorio, "Doble",
-                'TIPO_OFICINA', 'Categoría EFA', 'EFA_OSPA', 'EFA', 'Entidad u oficina')
-            ]
-            # Se inserta rejilla nueva
-            self.frame_rejilla.agregar_rejilla(rejilla_ep_nuevo)
-
-        # III.3 Frame de botón de rejilla
-        f_boton = Cuadro(self.frame_principal)
-        f_boton.agregar_button(0, 1, 'Guardar', self.guardar_y_actualizar_ep)
-        
-        # III.4 Frame de vitrina 1
-        self.frame_vitrina_1 = Cuadro(self.frame_principal)
-        self.vitrina_1 = self.generar_vitrina(self.nuevo, 
-                                                self.frame_vitrina_1,
-                                                '(+) Agregar', self.no_asociar,
-                                                'Macroproblemas asociados',
-                                                self.cod_usuario_ep, self.tabla_de_ep_cod, 
-                                                self.tabla_de_mp, self.tabla_relacion_mp_ep, 
-                                                "ID_EP", "ID_MP", "COD_EP", 
-                                                self.ver_mp, self.eliminar_mp_y_actualizar)
-        
-        # III.5 Frame de vitrina 2
-        self.frame_vitrina_2 = Cuadro(self.frame_principal)
-        self.vitrina_2 = self.generar_vitrina(self.nuevo, 
-                                                self.frame_vitrina_2,
-                                                '(+) Agregar', self.no_asociar,
-                                                'Documentos emitidos asociados',
-                                                self.cod_usuario_ep, self.tabla_de_ep_cod, 
-                                                self.tabla_de_de, self.tabla_relacion_de_ep, 
-                                                "ID_EP", "ID_DE", "COD_EP", 
-                                                self.ver_de, self.eliminar_de_y_actualizar)
-        
-        # III.5 Frame de vitrina 3
-        self.frame_vitrina_3 = Cuadro(self.frame_principal)
-        self.vitrina_3 = self.generar_vitrina(self.nuevo, 
-                                                self.frame_vitrina_3,
-                                                '(+) Agregar', self.no_asociar,
-                                                'Documentos recibidos asociados',
-                                                self.cod_usuario_ep, self.tabla_de_ep_cod, 
-                                                self.tabla_de_dr, self.tabla_relacion_dr_ep, 
-                                                "ID_EP", "ID_DR", "COD_EP", 
-                                                self.ver_dr, self.eliminar_dr_y_actualizar)
-
-
-    #----------------------------------------------------------------------
-    def guardar_y_actualizar_ep(self):
-        
-        # Agregamos el objeto
-        self.guardar_objeto(self.frame_rejilla,
-                            self.cod_usuario_ep, "COD_EP", self.tabla_de_ep_cod,
-                            b_ep_cod, b_ep, b_ep_hist, self.ver_ep)
-        # Actualización de tabla de código y visualización
-        self.tabla_de_ep_cod = b_ep_cod.generar_dataframe()
-
-    #----------------------------------------------------------------------
-    def actualizar_vitrinas_ep(self):
-        
-        # 0. Elimino los últimos frame
-        # Frame 2
-        self.frame_vitrina_2.eliminar_cuadro()
-        if self.vitrina_2 != None:
-            self.vitrina_2.eliminar_posible_vitrina()
-        # Frame 3
-        self.frame_vitrina_3.eliminar_cuadro()
-        if self.vitrina_3 != None:
-            self.vitrina_3.eliminar_posible_vitrina()
-
-        # I. Situo las ventanas actualizadas
-        # I.1 Ventana de documentos emitidos
-        self.frame_vitrina_1.eliminar_cuadro()
-        if self.vitrina_1 != None: 
-            self.vitrina_1.eliminar_posible_vitrina()
-        
-        self.vitrina_1 = self.generar_vitrina(self.nuevo, 
-                                                self.frame_vitrina_1,
-                                                '(+) Agregar', self.no_asociar,
-                                                'Macroproblemas asociados',
-                                                self.cod_usuario_ep, self.tabla_de_ep_cod, 
-                                                self.tabla_de_mp, self.tabla_relacion_mp_ep, 
-                                                "ID_EP", "ID_MP", "COD_EP", 
-                                                self.ver_mp, self.eliminar_mp_y_actualizar)
-        
-        # III.5 Frame de vitrina 2
-        self.frame_vitrina_2.eliminar_cuadro()
-        self.vitrina_2 = self.generar_vitrina(self.nuevo, 
-                                                self.frame_vitrina_2,
-                                                '(+) Agregar', self.no_asociar,
-                                                'Documentos emitidos asociados',
-                                                self.cod_usuario_ep, self.tabla_de_ep_cod, 
-                                                self.tabla_de_de, self.tabla_relacion_de_ep, 
-                                                "ID_EP", "ID_DE", "COD_EP", 
-                                                self.ver_de, self.eliminar_de_y_actualizar)
-        
-        # III.5 Frame de vitrina 3
-        self.frame_vitrina_3.eliminar_cuadro()
-        self.vitrina_3 = self.generar_vitrina(self.nuevo, 
-                                                self.frame_vitrina_3,
-                                                '(+) Agregar', self.no_asociar,
-                                                'Documentos recibidos asociados',
-                                                self.cod_usuario_ep, self.tabla_de_ep_cod, 
-                                                self.tabla_de_dr, self.tabla_relacion_dr_ep, 
-                                                "ID_EP", "ID_DR", "COD_EP", 
-                                                self.ver_dr, self.eliminar_dr_y_actualizar)
-
-        
-    #----------------------------------------------------------------------
-    def eliminar_dr_y_actualizar(self, id_objeto):
-        # Se elimina el DR
-        self.eliminar_objeto(self.cod_usuario_ep, "COD_EP", id_objeto, "COD_DR",
-                            self.tabla_de_ep_cod, tabla_de_dr_cod, 
-                            base_relacion_dr_ep, base_relacion_dr_ep_hist)
-        
-        # Se actualiza tabla de relaciones
-        self.tabla_relacion_dr_ep = base_relacion_dr_ep.generar_dataframe()
-        # Se actualiza la vista de vitrinas
-        self.actualizar_vitrinas_ep()
-
-    
-    #----------------------------------------------------------------------
-    def eliminar_de_y_actualizar(self, id_objeto):
-        # Se elimina el DE
-        self.eliminar_objeto(self.cod_usuario_ep, "COD_EP", id_objeto, "COD_DE",
-                            self.tabla_de_ep_cod, tabla_de_de_cod, 
-                            base_relacion_de_ep, base_relacion_de_ep_hist)
-        
-        # Se actualiza tabla de relaciones
-        self.tabla_relacion_de_ep = base_relacion_de_ep.generar_dataframe()
-        # Se actualiza la vista de vitrinas
-        self.actualizar_vitrinas_ep()
-
-    #----------------------------------------------------------------------
-    def eliminar_mp_y_actualizar(self, id_objeto):
-        # Se elimina el DE
-        self.eliminar_objeto(self.cod_usuario_ep, "COD_EP", id_objeto, "COD_MP",
-                            self.tabla_de_ep_cod, tabla_de_mp_cod, 
-                            base_relacion_mp_ep, base_relacion_mp_ep_hist)
-        
-        # Se actualiza tabla de relaciones
-        self.tabla_relacion_mp_ep = base_relacion_mp_ep.generar_dataframe()
-        # Se actualiza la vista de vitrinas
-        self.actualizar_vitrinas_ep()
-
-    #----------------------------------------------------------------------
-    def no_asociar(self):
-        messagebox.showerror("Error",
-                            'Para asociar un documento, hágalo desde la vista de documentos')
