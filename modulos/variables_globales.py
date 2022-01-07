@@ -9,58 +9,63 @@ usuario = None
 oficina = None
 texto_bienvenida = None
 
-# 0. Tablas relacionales
-id_b_ospa = '13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4'
+# 0. ID de Bases de Datos
 id_usuarios = '12gzaAx7GkEUDjEmiJG693in8ADyCPxej5cUv9YA2vyY'
-base_usuario = Base_de_datos(id_usuarios, 'Usuario')
-base_datos_usuario = Base_de_datos(id_usuarios, 'Datos_de_usuario')
-base_relacion_docs = Base_de_datos(id_b_ospa, 'RELACION_DOCS')
-base_relacion_docs_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_RELACION_D')
-base_relacion_dr_ep =  Base_de_datos(id_b_ospa, 'RELACION_DR-EP')
-base_relacion_dr_ep_hist =  Base_de_datos(id_b_ospa, 'HISTORIAL_RELACION_DR-EP')
-base_relacion_de_ep =  Base_de_datos(id_b_ospa, 'RELACION_DE-EP')
-base_relacion_de_ep_hist =  Base_de_datos(id_b_ospa, 'HISTORIAL_RELACION_DE-EP')
-base_relacion_mp_ep =  Base_de_datos(id_b_ospa, 'RELACION_MP-EP')
-base_relacion_mp_ep_hist =  Base_de_datos(id_b_ospa, 'HISTORIAL_RELACION_MP-EP')
-base_parametros = Base_de_datos(id_b_ospa, 'PARAMETROS')
-       
+id_b_docs = "1wDGtiCiT92K1lP62SQ0nBr_nuBQiHlJ17CPysdVMPM8"
+id_b_problemas = "1YQjdeoEharOx54rsNoehLOTaCVF8-kubhTr2Vs7-xhk"
+id_b_parametros = "1La4fmSRGUEzo5143VFNJmNwDFnzZkQUkm6EyRPtJnZ0"
+id_b_directorio_efa = "1pjHXiz15Zmw-49Nr4o1YdXJnddUX74n7Tbdf5SH7Lb0"
+id_b_lista_efa = "1ephi7hS0tHRQQq5nlkV141ZCY54FUfkw13EeKn310Y4"
+
 # 1. Bases de datos principales
 # Documentos recibidos
-b_dr_cod = Base_de_datos(id_b_ospa, 'DOCS_R')
-b_dr = Base_de_datos(id_b_ospa, 'DOC_RECIBIDOS')
-b_dr_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_DR')
+b_dr_cod = Base_de_datos(id_b_docs, 'DOCS_R')
+b_dr = Base_de_datos(id_b_docs, 'DOC_RECIBIDOS')
+b_dr_hist = Base_de_datos(id_b_docs, 'HISTORIAL_DR')
 # Documentos emitidos
-b_de_cod = Base_de_datos(id_b_ospa, 'DOCS_E')
-b_de = Base_de_datos(id_b_ospa, 'DOC_EMITIDOS')
-b_de_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_DE')
+b_de_cod = Base_de_datos(id_b_docs, 'DOCS_E')
+b_de = Base_de_datos(id_b_docs, 'DOC_EMITIDOS')
+b_de_hist = Base_de_datos(id_b_docs, 'HISTORIAL_DE')
+# Relación de documentos
+base_relacion_docs = Base_de_datos(id_b_docs, 'RELACION_DOCS')
+base_relacion_docs_hist = Base_de_datos(id_b_docs, 'HISTORIAL_RELACION_D')
 # Extremo de problemas
-b_ep_cod = Base_de_datos(id_b_ospa, 'EXT_P')
-b_ep = Base_de_datos(id_b_ospa, 'EXT_PROBLEMA')
-b_ep_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_EP')
+b_ep_cod = Base_de_datos(id_b_problemas, 'EXT_P')
+b_ep = Base_de_datos(id_b_problemas, 'EXT_PROBLEMA')
+b_ep_hist = Base_de_datos(id_b_problemas, 'HISTORIAL_EP')
 # Macro problemas
-b_mp_cod = Base_de_datos(id_b_ospa, 'MC_P')
-b_mp = Base_de_datos(id_b_ospa, 'MACROPROBLEMA')
-b_mp_hist = Base_de_datos(id_b_ospa, 'HISTORIAL_MP')
-# Administrados
-b_adm = Base_de_datos(id_b_ospa, 'ADMINISTRADOS')
+b_mp_cod = Base_de_datos(id_b_problemas, 'MC_P')
+b_mp = Base_de_datos(id_b_problemas, 'MACROPROBLEMA')
+b_mp_hist = Base_de_datos(id_b_problemas, 'HISTORIAL_MP')
+# Relación de problemas
+base_relacion_mp_ep =  Base_de_datos(id_b_problemas, 'RELACION_MP-EP')
+base_relacion_mp_ep_hist =  Base_de_datos(id_b_problemas, 'HISTORIAL_RELACION_MP-EP')
 
 # 2. Bases de datos complementarias
-# 2.1 Directorio de Oficinas
-id_b_efa = '1pjHXiz15Zmw-49Nr4o1YdXJnddUX74n7Tbdf5SH7Lb0'
-b_efa = Base_de_datos(id_b_efa, 'Directorio')
+# 2.0 Usuarios y parámetros
+base_usuario = Base_de_datos(id_usuarios, 'Usuario')
+base_datos_usuario = Base_de_datos(id_usuarios, 'Datos_de_usuario')
+base_parametros = Base_de_datos(id_b_parametros, 'PARAMETROS')
+
+# 2.1 Directorio de Oficinas y Lista de EFA
+b_efa = Base_de_datos(id_b_directorio_efa, 'Directorio')
+b_lista_efa = Base_de_datos(id_b_lista_efa, 'Lista de EFA')
+
+# 2.3 Relaciones auxiliares
+base_relacion_dr_ep =  Base_de_datos(id_b_parametros, 'RELACION_DR-EP')
+base_relacion_dr_ep_hist =  Base_de_datos(id_b_parametros, 'HISTORIAL_RELACION_DR-EP')
+base_relacion_de_ep =  Base_de_datos(id_b_parametros, 'RELACION_DE-EP')
+base_relacion_de_ep_hist =  Base_de_datos(id_b_parametros, 'HISTORIAL_RELACION_DE-EP')
+       
+# 3. Listas dependientes
+# 3.1 Directorio de SEFA
 tabla_directorio = b_efa.generar_dataframe()
 tabla_directorio_efa = tabla_directorio[tabla_directorio['TIPO_OFICINA']!="OTRO"]
 tabla_directorio_efa_final = tabla_directorio_efa[tabla_directorio_efa['Tipo de entidad u oficina']!="T_EFA_DIR"]
-# 2.1 Ubigeo
-id_lista_efa = "1ephi7hS0tHRQQq5nlkV141ZCY54FUfkw13EeKn310Y4"
-b_lista_efa = Base_de_datos(id_lista_efa, 'Lista de EFA')
-tabla_lista_efa = b_lista_efa.generar_dataframe()
-
-# 3. Listas dependientes
-# 21. Lista de EFA
 lista_efa_dependiente = tabla_directorio.loc[:,['Tipo de entidad u oficina', 'EFA ABREVIADO', 'Departamento', 'Entidad u oficina', 'EFA_OSPA']]
 lista_efa_ospa = sorted(list(lista_efa_dependiente['EFA_OSPA'].unique()))
 # 3.2 Ubigeo
+tabla_lista_efa = b_lista_efa.generar_dataframe()
 tabla_departamento_efa = tabla_lista_efa.loc[:, ['DEP_OSPA', 'PROV_DIST_OSPA']]
 departamento_ospa = sorted(list(tabla_lista_efa['DEP_OSPA'].unique()))
 
@@ -86,7 +91,7 @@ ancho_v_busqueda_peq2_vitrina = 1180
 alto_logo = 50
 ancho_logo = 280
 
-alto_ventana_secundaria = 418
+alto_ventana_secundaria = 430
 ancho_ventana_secundaria = 403
 
 alto_franja_inferior_1 = 52
