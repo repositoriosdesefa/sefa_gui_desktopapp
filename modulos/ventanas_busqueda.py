@@ -26,7 +26,6 @@ ancho_v_busqueda_franja = ancho_v_busqueda - 3
 alto_v_busqueda_franja = 78
 
 # 1. Bases
-id_b_ospa = vg.id_b_ospa
 b_dr = vg.b_dr
 #b_dr_tabla = b_dr.generar_dataframe()
 b_dr_cod = vg.b_dr_cod
@@ -40,9 +39,9 @@ b_ep_hist = vg.b_ep_hist
 b_mp = vg.b_mp
 b_mp_cod = vg.b_mp_cod
 b_mp_hist = vg.b_mp_hist
-b_adm = vg.b_adm
-b_adm_tabla = b_adm.generar_dataframe()
 tabla_lista_efa = vg.tabla_lista_efa
+#b_adm = vg.b_adm
+#b_adm_tabla = b_adm.generar_dataframe()
 
 # 2. Tablas relacionales
 base_relacion_docs = vg.base_relacion_docs
@@ -1279,13 +1278,13 @@ class Administrados(funcionalidades_ospa):
             self.cod_doc_ad = id_objeto
         
         # Renombramos los encabezados
-        self.ad = b_adm_tabla
-        self.tabla_ad = self.ad.rename(columns={'ID_AD':'ID ADMINISTRADO','NOMBRE_O_RAZON_SOCIAL':'NOMBRE / RAZON SOCIAL','CATEGORÍA':'TIPO','DNI_RUC':'DNI / RUC'})
-        self.tabla_adF = self.tabla_ad.loc[0:99, ['ID ADMINISTRADO','NOMBRE / RAZON SOCIAL','TIPO','DNI / RUC']]
+        #self.ad = b_adm_tabla
+        #self.tabla_ad = self.ad.rename(columns={'ID_AD':'ID ADMINISTRADO','NOMBRE_O_RAZON_SOCIAL':'NOMBRE / RAZON SOCIAL','CATEGORÍA':'TIPO','DNI_RUC':'DNI / RUC'})
+        #self.tabla_adF = self.tabla_ad.loc[0:99, ['ID ADMINISTRADO','NOMBRE / RAZON SOCIAL','TIPO','DNI / RUC']]
         
         # Listas para desplegables
-        self.listaAD = list(set(self.tabla_ad['NOMBRE / RAZON SOCIAL']))
-        self.listaTIPO= list(set(self.tabla_ad['TIPO']))
+        #self.listaAD = list(set(self.tabla_ad['NOMBRE / RAZON SOCIAL']))
+        #self.listaTIPO= list(set(self.tabla_ad['TIPO']))
 
         # Agregando logo del ospa a la ventana y título
         self.ad0 = Cuadro(self)
@@ -1421,17 +1420,17 @@ class Administrados(funcionalidades_ospa):
         self.ad2.eliminar_cuadro()
         self.frame_vitrina_ad.eliminar_cuadro()
         # Actualizando data
-        b_adm = vg.b_adm
-        b_adm_tabla = b_adm.generar_dataframe()
+        #b_adm = vg.b_adm
+        #b_adm_tabla = b_adm.generar_dataframe()
         
         # Generamos el dataframe a filtrar 
-        self.ad = b_adm_tabla
-        self.tabla_ad = self.ad.rename(columns={'ID_AD':'ID ADMINISTRADO','NOMBRE_O_RAZON_SOCIAL':'NOMBRE / RAZON SOCIAL','CATEGORÍA':'TIPO','DNI_RUC':'DNI / RUC'})
-        self.tabla_adF = self.tabla_ad.loc[0:99, ['ID ADMINISTRADO','NOMBRE / RAZON SOCIAL','TIPO','DNI / RUC']]
+        #self.ad = b_adm_tabla
+        #self.tabla_ad = self.ad.rename(columns={'ID_AD':'ID ADMINISTRADO','NOMBRE_O_RAZON_SOCIAL':'NOMBRE / RAZON SOCIAL','CATEGORÍA':'TIPO','DNI_RUC':'DNI / RUC'})
+        #self.tabla_adF = self.tabla_ad.loc[0:99, ['ID ADMINISTRADO','NOMBRE / RAZON SOCIAL','TIPO','DNI / RUC']]
         
         # Información para las listas desplegables
-        self.listaAD = list(set(self.tabla_ad['NOMBRE / RAZON SOCIAL']))
-        self.listaTIPO= list(set(self.tabla_ad['TIPO']))
+        #self.listaAD = list(set(self.tabla_ad['NOMBRE / RAZON SOCIAL']))
+        #self.listaTIPO= list(set(self.tabla_ad['TIPO']))
         # Armando rejilla con los filtros
 
         self.rejilla_ad = (

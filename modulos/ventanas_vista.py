@@ -1189,6 +1189,7 @@ class Macroproblemas_vista(funcionalidades_ospa):
             self.lista_para_insertar = lista
 
             self.tabla_de_mp_cod = b_mp_cod.generar_dataframe()
+            self.tabla_relacion_mp_ep = base_relacion_mp_ep.generar_dataframe()
 
             creador = b_mp_cod.obtener_usuario(base_datos_usuario, self.id_objeto_ingresado,  self.cod_tipo_objeto)
             fecha_creacion = b_mp_cod.obtener_valor_columna_con_codigo_unico(self.cod_tipo_objeto, self.id_objeto_ingresado, 'F_CREACION')
