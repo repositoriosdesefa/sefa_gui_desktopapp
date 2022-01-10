@@ -21,6 +21,7 @@ ancho_v_busqueda_mp_vitrina = vg.ancho_v_busqueda_mp_vitrina
 ancho_v_busqueda_mpf_vitrina = vg.ancho_v_busqueda_mpf_vitrina
 ancho_v_busqueda_prei_vitrina = vg.ancho_v_busqueda_prei_vitrina
 ancho_v_busqueda_peq2_vitrina = vg.ancho_v_busqueda_peq2_vitrina
+ancho_v_busqueda_progr_vitrina = vg.ancho_v_busqueda_progr_vitrina
 
 ancho_v_busqueda_franja = ancho_v_busqueda - 3
 alto_v_busqueda_franja = 78
@@ -94,10 +95,13 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
             ('L', 1, 0, 'Tipo de documento'),
             ('CXP', 1, 1, 44, self.listatipodoc, '', 'readonly'),
 
+            ('L', 1, 2, 'Nro de documento'),
+            ('EE', 1, 3),
+
             ('L', 0, 2, 'Remitente'),
             ('CXE', 0, 3, 44, self.listaremitente, '', 'normal'),
 
-            ('L', 0, 4, 'Palabra clave aporte doc.'),
+            ('L', 0, 4, 'Palabra clave asunto doc.'),
             ('EE', 0, 5)
 
         )
@@ -134,8 +138,8 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
         self.listas_filtro = self.rejilla_1.obtener_lista_de_datos()
         self.ht = self.listas_filtro[0]
         self.tipodoc = self.listas_filtro[1]
-        self.remitente = self.listas_filtro[2]
-        self.nrodoc = self.listas_filtro[3]
+        self.nrodoc = self.listas_filtro[2]
+        self.remitente = self.listas_filtro[3]
         self.aporte = self.listas_filtro[4]
 
         self.filtro0 = self.tabla_renombrada
@@ -147,12 +151,6 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
         if len(self.tipodoc)>0 :
             filtro="`TIPO DOC`=="+"'"+self.tipodoc+"' "
 
-        if len(self.nrodoc)>0 :
-            if len(filtro)>0 :
-                filtro = filtro+" & "
-            else:
-                filtro
-            filtro=filtro+"NUM_DOC=="+"'"+self.nrodoc+"' "
         
         self.mostrarDatosdr(filtro)
 
@@ -171,10 +169,16 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
             self.filtro0['HT INGRESO']=self.filtro0['HT INGRESO'].apply(str)
             self.filtro0 = self.filtro0[self.filtro0['HT INGRESO'].str.contains(self.ht)]
             self.Complementodr(self.filtro0)
+
+        if len(self.nrodoc)>0: # Filtro por palabra clave
+            self.vdr.Eliminar_vitrina()
+            self.filtro0['NUM_DOC']=self.filtro0['NUM_DOC'].apply(str)
+            self.filtro0 = self.filtro0[self.filtro0['NUM_DOC'].str.contains(self.nrodoc)]
+            self.Complementodr(self.filtro0)
             
         if len(self.aporte)>0: # Filtro por palabra clave
             self.vdr.Eliminar_vitrina()
-            self.filtro0 = self.filtro0[self.filtro0['APORTE DOC.'].str.contains(self.aporte)]
+            self.filtro0 = self.filtro0[self.filtro0['ASUNTO'].str.contains(self.aporte)]
             self.Complementodr(self.filtro0)
 
         if len(filtro)>0:
@@ -263,7 +267,7 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
             if valor_repetido != True:
             
                 # GUARDAR RELACION
-                b0 = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'RELACION_DOCS')
+                b0 = Base_de_datos('1wDGtiCiT92K1lP62SQ0nBr_nuBQiHlJ17CPysdVMPM8', 'RELACION_DOCS')
 
                 # Pestaña 1: Código Único
                 datos_insertar = [id_relacion_doc,self.IDDR_FINAL,id_interno_de,'ACTIVO',hora_de_modificacion]
@@ -543,7 +547,7 @@ class Doc_emitidos_busqueda(funcionalidades_ospa):
             if valor_repetido == False:
             
                 # GUARDAR RELACION
-                b0 = Base_de_datos('13EgFGcKnHUomMtjBlgZOlPIg_cb4N3aGpkYH13zG6-4', 'RELACION_DOCS')
+                b0 = Base_de_datos('1wDGtiCiT92K1lP62SQ0nBr_nuBQiHlJ17CPysdVMPM8', 'RELACION_DOCS')
 
                 # Pestaña 1: Código Único
                 datos_insertar = [id_relacion_doc,id_interno_dr, self.IDDE_FINAL,'ACTIVO',hora_de_modificacion]
@@ -1557,13 +1561,17 @@ class Pendientes_jefe_firma(funcionalidades_ospa):
         self.pfirma15.agregar_rejilla(self.rejilla_2_pfirma)
         self.frame_vitrina_pfirma = Cuadro(self)
 
-        # Creando vitrina
-        self.vpfirma = Vitrina_pendientes(self, self.tabla_pfirmaF, 
-                                                    self.ver_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_pf_vitrina)
-        
-        # Franja inferior
-        self.pfirma16 = Cuadro(self)
-        self.pfirma16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
+
+        if len(self.tabla_pfirmaF.index) > 0:
+            self.vpfirma = Vitrina_pendientes(self, self.tabla_pfirmaF, self.ver_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina) 
+            return self.vpfirma
+        else:
+            self.frame_vitrina_pfirma = Cuadro(self)
+            self.frame_vitrina_pfirma.agregar_label(1, 2, '                  0 documentos pendientes de firmar')
+
+             # Franja inferior
+            self.pfirma16 = Cuadro(self)
+            self.pfirma16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
 
     #----------------------------------------------------------------------
 
@@ -1680,18 +1688,14 @@ class Pendientes_jefe_asignar(funcionalidades_ospa):
 
         # Generamos el dataframe a filtrar
         self.tabla_inicial0 = b_dr.generar_dataframe()
-        self.tabla_inicial1 = self.tabla_inicial0.query("F_ASIGNACION_1=='' or ESPECIALISTA_1==''")
-        self.tabla_jpa = self.tabla_inicial1.rename(columns={'COD_DR':'NRO DOCUMENTO','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_ENTRANTE':'HT INGRESO','APORTE_DOC':'APORTE DOC.'})
-        self.tabla_jpa['FECHA INGRESO SEFA'] = pd.to_datetime(self.tabla_jpa['FECHA INGRESO SEFA'], dayfirst=True)
-        self.tabla_renombrada2 = self.tabla_jpa.sort_values(by='FECHA INGRESO SEFA', ascending=True)
-        self.tabla_renombrada2['FECHA INGRESO SEFA'] = self.tabla_renombrada2['FECHA INGRESO SEFA'].dt.strftime('%d/%m/%Y')
-        self.tabla_jpa0 = self.tabla_renombrada2.loc[:, ['NRO DOCUMENTO','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','APORTE DOC.']]
-        self.tabla_jpaF = self.tabla_jpa0.head(100)
-
+        self.tabla_inicial1 = self.tabla_inicial0.query("F_ASIGNACION_1=='' or ESPECIALISTA_1==' ' or ESPECIALISTA_1==''")
+        self.tabla_renombrada = self.renombrar_encabezados( self.tabla_inicial1, tipo_base = 'dr')
+        self.tabla_seleccionada = self.seleccionar_encabezados(self.tabla_renombrada, tipo_base = 'paj')
+        self.tabla_jpaF = self.tabla_seleccionada.head(100)
 
         # Información para las listas desplegables
-        self.jpatipodoc = sorted(list(set(self.tabla_jpa['TIPO DOC'])))
-        self.jparemitente = sorted(list(set(self.tabla_jpa['REMITENTE'])))
+        self.jpatipodoc = sorted(list(set(self.tabla_inicial1['TIPO_DOC'])))
+        self.jparemitente = sorted(list(set(self.tabla_inicial1['REMITENTE'])))
 
 
         # Agregando logo del ospa a la ventana y título
@@ -1715,8 +1719,8 @@ class Pendientes_jefe_asignar(funcionalidades_ospa):
             ('L', 1, 2, 'Número de doc'),
             ('EE', 1, 3),
 
-            ('L', 1, 4, 'Palabra clave aporte doc.'),
-            ('EE', 1, 5)
+            ('L', 0, 4, 'Palabra clave asunto doc.'),
+            ('EE', 0, 5)
 
         )
 
@@ -1738,12 +1742,16 @@ class Pendientes_jefe_asignar(funcionalidades_ospa):
 
         self.frame_vitrina_jpa = Cuadro(self)
 
-        # Creando vitrina
-        self.vjpa = Vitrina_pendientes(self, self.tabla_jpaF, self.ver_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_mp_vitrina)
+        if len(self.tabla_jpaF.index) > 0:
+            self.vjpa = Vitrina_pendientes(self, self.tabla_jpaF, self.ver_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina) 
+            return self.vjpa
+        else:
+            self.frame_vitrina_jpa = Cuadro(self)
+            self.frame_vitrina_jpa.agregar_label(1, 2, '                  0 documentos pendientes de asignar')
 
         # Franja inferior
-        self.jpa16 = Cuadro(self)
-        self.jpa16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
+            self.jpa16 = Cuadro(self)
+            self.jpa16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
   
     #----------------------------------------------------------------------
 
@@ -1757,7 +1765,7 @@ class Pendientes_jefe_asignar(funcionalidades_ospa):
         self.nrodocjpa = self.listas_filtro_jpa[3]
         self.aporte = self.listas_filtro_jpa[4]
 
-        self.filtro0 = self.tabla_renombrada2
+        self.filtro0 = self.tabla_renombrada
         self.filtro0['NUM_DOC']=self.filtro0['NUM_DOC'].apply(str)
         # Filtrando datos por palabras exactas
 
@@ -1765,12 +1773,6 @@ class Pendientes_jefe_asignar(funcionalidades_ospa):
         if len(self.tipodocjpa)>0 :
             filtro="`TIPO DOC`=="+"'"+self.tipodocjpa+"' "
 
-        if len(self.nrodocjpa)>0 :
-            if len(filtro)>0 :
-                filtro = filtro+" & "
-            else:
-                filtro
-            filtro=filtro+"NUM_DOC=="+"'"+self.nrodocjpa+"' "
         
         self.mostrarDatosjpa(filtro)
 
@@ -1778,7 +1780,7 @@ class Pendientes_jefe_asignar(funcionalidades_ospa):
 
     def mostrarDatosjpa(self, filtro):
 
-        self.filtro0 = self.tabla_renombrada2
+        self.filtro0 = self.tabla_renombrada
         
         if len(self.remitentejpa)>0: # Filtro por palabra clave
             self.vjpa.Eliminar_vitrina()
@@ -1791,9 +1793,15 @@ class Pendientes_jefe_asignar(funcionalidades_ospa):
             self.filtro0 = self.filtro0[self.filtro0['HT INGRESO'].str.contains(self.htjpa)]
             self.Complementojpa(self.filtro0)
 
+        if len(self.nrodocjpa)>0: # Filtro por palabra clave
+            self.vjpa.Eliminar_vitrina()
+            self.filtro0['NRO DOC']=self.filtro0['NRO DOC'].apply(str)
+            self.filtro0 = self.filtro0[self.filtro0['NRO DOC'].str.contains(self.nrodocjpa)]
+            self.Complementojpa(self.filtro0)
+
         if len(self.aporte)>0: # Filtro por palabra clave
             self.vjpa.Eliminar_vitrina()
-            self.filtro0 = self.filtro0[self.filtro0['APORTE DOC.'].str.contains(self.aporte)]
+            self.filtro0 = self.filtro0[self.filtro0['ASUNTO'].str.contains(self.aporte)]
             self.Complementojpa(self.filtro0)
 
         if len(filtro)>0:
@@ -1810,7 +1818,9 @@ class Pendientes_jefe_asignar(funcionalidades_ospa):
 
     def Complementojpa(self,filtro0):
 
-        tabla_filtro2 = filtro0.loc[:, ['NRO DOCUMENTO','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','APORTE DOC.']]
+        self.tabla_seleccionada = self.seleccionar_encabezados(filtro0, tipo_base = 'paj')
+        tabla_filtro2 = self.tabla_seleccionada.loc[:]
+
         if len(tabla_filtro2.index) > 100:
             tabla_filtro3 = tabla_filtro2.head(100)
         else:
@@ -1818,7 +1828,7 @@ class Pendientes_jefe_asignar(funcionalidades_ospa):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_jpa.eliminar_cuadro()
             self.frame_vitrina_jpa = Cuadro(self)
-            self.vjpa = Vitrina_pendientes(self, tabla_filtro3, self.ver_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_mp_vitrina)
+            self.vjpa = Vitrina_pendientes(self, tabla_filtro3, self.ver_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
             
         else:
             self.frame_vitrina_jpa.eliminar_cuadro()
@@ -1841,7 +1851,7 @@ class Pendientes_jefe_asignar(funcionalidades_ospa):
         self.jpa15.agregar_rejilla(self.rejilla_jpa2)
         self.frame_vitrina_jpa = Cuadro(self)
         # Creando vitrina
-        self.vjpa = Vitrina_pendientes(self, self.tabla_jpaF, self.ver_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_mp_vitrina)
+        self.vjpa = Vitrina_pendientes(self, self.tabla_jpaF, self.ver_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
         
     
 class Pendientes_por_reiterar(funcionalidades_ospa):
@@ -1921,12 +1931,18 @@ class Pendientes_por_reiterar(funcionalidades_ospa):
         self.ppr15.agregar_rejilla(self.rejilla_2_ppr)
         self.frame_vitrina_ppr = Cuadro(self)
 
-        # Creando vitrina
-        self.vppr = Vitrina_pendientes(self, self.tabla_pprF, self.ver_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_prei_vitrina)
+        
+        if len(self.tabla_pprF.index) > 0:
+            self.vppr = Vitrina_pendientes(self, self.tabla_pprF, self.ver_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_prei_vitrina)
 
+            return self.vppr
+        else:
+            self.frame_vitrina_ppr = Cuadro(self)
+            self.frame_vitrina_ppr.agregar_label(1, 2, '                  0 documentos pendientes de reiterar/OCI')
+       
         # Franja inferior
-        self.ppr16 = Cuadro(self)
-        self.ppr16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
+            self.ppr16 = Cuadro(self)
+            self.ppr16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
 
     #----------------------------------------------------------------------
 
@@ -2007,20 +2023,16 @@ class Pendientes_por_reiterar(funcionalidades_ospa):
             tabla_filtro3 = tabla_filtro2
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_ppr.eliminar_cuadro()
-            self.ppr16.eliminar_cuadro()
+           
             self.frame_vitrina_ppr = Cuadro(self)
             self.vppr = Vitrina_pendientes(self, tabla_filtro3, self.ver_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_prei_vitrina)
-            self.ppr16 = Cuadro(self)
-            self.ppr16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
-
+            
         else:
             self.frame_vitrina_ppr.eliminar_cuadro()
-            self.ppr16.eliminar_cuadro()
+            
             self.frame_vitrina_ppr = Cuadro(self)
             self.frame_vitrina_ppr.agregar_label(1, 2, '                  0 documentos encontrados')
-            self.ppr16 = Cuadro(self)
-            self.ppr16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
-
+            
     #----------------------------------------------------------------------
 
     def limpiar_ppr(self):
@@ -2029,7 +2041,6 @@ class Pendientes_por_reiterar(funcionalidades_ospa):
         self.ppr1.eliminar_cuadro()
         self.vppr.Eliminar_vitrina()
         self.ppr15.eliminar_cuadro()
-        self.ppr16.eliminar_cuadro()
         self.frame_vitrina_ppr.eliminar_cuadro()
         # Agregando rejilla a la ventana
         self.ppr1 = Cuadro(self)
@@ -2039,9 +2050,7 @@ class Pendientes_por_reiterar(funcionalidades_ospa):
         self.frame_vitrina_ppr = Cuadro(self)
         # Creando vitrina
         self.vppr = Vitrina_pendientes(self, self.tabla_pprF, self.ver_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_prei_vitrina)
-        self.ppr16 = Cuadro(self)
-        self.ppr16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
-
+       
     #----------------------------------------------------------------------
 
 class Pendientes_eq1_trabajar(funcionalidades_ospa):
@@ -2062,13 +2071,13 @@ class Pendientes_eq1_trabajar(funcionalidades_ospa):
         # Generamos el dataframe a filtrar
         b_dr_tabla = b_dr.generar_dataframe()
         self.tabla_inicial0 = b_dr_tabla
-        self.tabla_inicial1 = self.tabla_inicial0.query("F_EJECUCION_1!=''")
-        self.tabla_inicial2 = self.tabla_inicial1.query("ESPECIALISTA_1!=''")
+        self.tabla_inicial1 = self.tabla_inicial0.query("F_EJECUCION_1==''")
+        self.tabla_inicial2 = self.tabla_inicial1.query("ESPECIALISTA_1!='' or ESPECIALISTA_1!=' '")
         self.tabla_peq1t = self.tabla_inicial2.rename(columns={'COD_DR':'NRO DOC','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_ENTRANTE':'HT INGRESO','ESPECIALISTA_1':'ESPECIALISTA','APORTE_DOC':'APORTE DOC.'})
         self.tabla_peq1t['FECHA ULTIMO MOV.'] = pd.to_datetime(self.tabla_peq1t['FECHA ULTIMO MOV.'], dayfirst=True)
         self.tabla_renombrada2 = self.tabla_peq1t.sort_values(by='FECHA ULTIMO MOV.', ascending=True)
         self.tabla_renombrada2['FECHA ULTIMO MOV.'] = self.tabla_renombrada2['FECHA ULTIMO MOV.'].dt.strftime('%d/%m/%Y')
-        self.tabla_peq1tF0 = self.tabla_renombrada2.loc[:, ['NRO DOC','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','FECHA ULTIMO MOV.','ESPECIALISTA','APORTE DOC.']]
+        self.tabla_peq1tF0 = self.tabla_renombrada2.loc[:, ['NRO DOC','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','FECHA ULTIMO MOV.','ESPECIALISTA','ASUNTO']]
         self.tabla_peq1tF = self.tabla_peq1tF0.head(100)
 
 
@@ -2101,7 +2110,7 @@ class Pendientes_eq1_trabajar(funcionalidades_ospa):
             ('L', 0, 4, 'Especialista'),
             ('CXP', 0, 5, 44, self.peq1espec, '', 'readonly'),
 
-            ('L', 1, 4, 'Palabra clave aporte doc.'),
+            ('L', 1, 4, 'Palabra clave asunto doc.'),
             ('EE', 1, 5),
 
         )
@@ -2124,12 +2133,20 @@ class Pendientes_eq1_trabajar(funcionalidades_ospa):
 
         self.frame_vitrina_peq1t = Cuadro(self)
 
+        if len(self.tabla_peq1tF.index) > 0:
+            self.vpeq1t = Vitrina_pendientes(self, self.tabla_peq1tF, self.ver_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_peq1_vitrina)
+
+            return self.vjpa
+        else:
+            self.frame_vitrina_peq1t = Cuadro(self)
+            self.frame_vitrina_peq1t.agregar_label(1, 2, '                  0 documentos pendientes de trabajar')
+
+
         # Creando vitrina 
-        self.vpeq1t = Vitrina_pendientes(self, self.tabla_peq1tF, self.ver_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_peq1_vitrina)
 
         # Franja inferior
-        self.peq1t16 = Cuadro(self)
-        self.peq1t16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
+            self.peq1t16 = Cuadro(self)
+            self.peq1t16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
 
     #----------------------------------------------------------------------
 
@@ -2184,7 +2201,7 @@ class Pendientes_eq1_trabajar(funcionalidades_ospa):
 
         if len(self.aporte)>0: # Filtro por palabra clave
             self.vpeq1t.Eliminar_vitrina()
-            self.filtro0 = self.filtro0[self.filtro0['APORTE DOC.'].str.contains(self.aporte)]
+            self.filtro0 = self.filtro0[self.filtro0['ASUNTO'].str.contains(self.aporte)]
             self.Complementopeq1t(self.filtro0)
 
         if len(filtro)>0:
@@ -2202,7 +2219,7 @@ class Pendientes_eq1_trabajar(funcionalidades_ospa):
     def Complementopeq1t(self,filtro0):
 
 
-        tabla_filtro2 = filtro0.loc[:, ['NRO DOC','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','FECHA ULTIMO MOV.','ESPECIALISTA','APORTE DOC.']]
+        tabla_filtro2 = filtro0.loc[:, ['NRO DOC','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','FECHA ULTIMO MOV.','ESPECIALISTA','ASUNTO']]
         
         if len(tabla_filtro2.index) > 100:
             tabla_filtro3 = tabla_filtro2.head(100)
@@ -2254,15 +2271,15 @@ class Pendientes_eq2_calificarrpta(funcionalidades_ospa):
         # Generamos el dataframe a filtrar
         b_dr_tabla = b_dr.generar_dataframe()
         self.tabla_inicial0 = b_dr_tabla
-        self.tabla_inicial1 = self.tabla_inicial0.query("F_EJECUCION_2!=''")
-        self.tabla_inicial2 = self.tabla_inicial1.query("ESPECIALISTA_2!=''")
+        self.tabla_inicial1 = self.tabla_inicial0.query("F_EJECUCION_2==''")
+        self.tabla_inicial2 = self.tabla_inicial1.query("ESPECIALISTA_2!='' or ESPECIALISTA_2!=' '")
         self.tabla_peq2t = self.tabla_inicial2.rename(columns={'COD_DR':'NRO DOC','F_ING_SEFA':'FECHA INGRESO SEFA','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_ENTRANTE':'HT INGRESO','ESPECIALISTA_2':'ESPECIALISTA','APORTE_DOC':'APORTE DOC.'})
         self.tabla_peq2t['FECHA INGRESO SEFA'] = pd.to_datetime(self.tabla_peq2t['FECHA INGRESO SEFA'], dayfirst=True)
         self.tabla_peq2t['FECHA ULTIMO MOV.'] = pd.to_datetime(self.tabla_peq2t['FECHA ULTIMO MOV.'], dayfirst=True)
         self.tabla_renombrada2 = self.tabla_peq2t.sort_values(by='FECHA INGRESO SEFA', ascending=True)
         self.tabla_renombrada2['FECHA INGRESO SEFA'] = self.tabla_renombrada2['FECHA INGRESO SEFA'].dt.strftime('%d/%m/%Y')
         self.tabla_renombrada2['FECHA ULTIMO MOV.'] = self.tabla_renombrada2['FECHA ULTIMO MOV.'].dt.strftime('%d/%m/%Y')
-        self.tabla_peq2tF0 = self.tabla_peq2t.loc[:, ['NRO DOC','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','FECHA ULTIMO MOV.','ESPECIALISTA_1','ESPECIALISTA','APORTE DOC.']]
+        self.tabla_peq2tF0 = self.tabla_peq2t.loc[:, ['NRO DOC','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','FECHA ULTIMO MOV.','ESPECIALISTA_1','ESPECIALISTA','ASUNTO']]
         self.tabla_peq2tF = self.tabla_peq2tF0.head(100)
 
         # Información para las listas desplegables
@@ -2293,7 +2310,7 @@ class Pendientes_eq2_calificarrpta(funcionalidades_ospa):
             ('L', 0, 4, 'Especialista'),    
             ('CXP', 0, 5, 44, self.peq2tespecialista, '', 'readonly'),
 
-            ('L', 1, 4, 'Palabra clave aporte doc.'),
+            ('L', 1, 4, 'Palabra clave asunto doc.'),
             ('EE', 1, 5),
 
         )
@@ -2316,12 +2333,20 @@ class Pendientes_eq2_calificarrpta(funcionalidades_ospa):
 
         self.frame_vitrina_peq2t = Cuadro(self)
 
+        if len(self.tabla_peq2tF.index) > 0:
+            self.vpeq2t = Vitrina_pendientes(self, self.tabla_peq2tF, self.ver_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_peq2_vitrina)
+
+            return self.vpeq2t
+        else:
+            self.frame_vitrina_peq2t = Cuadro(self)
+            self.frame_vitrina_peq2t.agregar_label(1, 2, '                  0 documentos pendientes de trabajar')
+
+
         # Creando vitrina 
-        self.vpeq2t = Vitrina_pendientes(self, self.tabla_peq2tF, self.ver_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_peq2_vitrina)
 
         # Franja inferior
-        self.peq2t16 = Cuadro(self)
-        self.peq2t16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
+            self.peq2t16 = Cuadro(self)
+            self.peq2t16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
 
     #----------------------------------------------------------------------
 
@@ -2347,7 +2372,7 @@ class Pendientes_eq2_calificarrpta(funcionalidades_ospa):
                 filtro = filtro+" & "
             else:
                 filtro
-            filtro=filtro+"ESPECIALISTA_2=="+"'"+self.especialistapeq2t+"' "
+            filtro=filtro+"ESPECIALISTA=="+"'"+self.especialistapeq2t+"' "
         
         self.mostrarDatospeq2t(filtro)
 
@@ -2364,7 +2389,7 @@ class Pendientes_eq2_calificarrpta(funcionalidades_ospa):
 
         if len(self.aporte)>0: # Filtro por palabra clave
             self.vpeq2t.Eliminar_vitrina()
-            self.filtro0 = self.filtro0[self.filtro0['APORTE DOC.'].str.contains(self.aporte)]
+            self.filtro0 = self.filtro0[self.filtro0['ASUNTO'].str.contains(self.aporte)]
             self.Complementopeq2t(self.filtro0)
 
         if len(self.nrodocpeq2t)>0: # Filtro por palabra clave
@@ -2393,7 +2418,7 @@ class Pendientes_eq2_calificarrpta(funcionalidades_ospa):
 
     def Complementopeq2t(self,filtro0):
 
-        tabla_filtro2 = filtro0.loc[:, ['NRO DOC','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','FECHA ULTIMO MOV.','ESPECIALISTA_1','ESPECIALISTA','APORTE DOC.']]
+        tabla_filtro2 = filtro0.loc[:, ['NRO DOC','FECHA INGRESO SEFA','REMITENTE','HT INGRESO','FECHA ULTIMO MOV.','ESPECIALISTA_1','ESPECIALISTA','ASUNTO']]
 
         if len(tabla_filtro2.index) > 100:
             tabla_filtro3 = tabla_filtro2.head(100)
@@ -2467,7 +2492,7 @@ class Pendientes_eq2_programaciones(funcionalidades_ospa):
         # Armando rejilla con los filtros
         self.rejilla_peq2pr = (
 
-            ('L', 0, 0, 'Remitente'),
+            ('L', 0, 0, 'Destinatario'),
             ('CXE', 0, 1, 44, self.peq2prremitente, '', 'normal'),
 
             ('L', 1, 0, 'Especialista'),
@@ -2497,7 +2522,7 @@ class Pendientes_eq2_programaciones(funcionalidades_ospa):
         self.frame_vitrina_peq2pr = Cuadro(self)
 
         # Creando vitrina 
-        self.vpeq2pr = Vitrina_pendientes(self, self.tabla_peq2prF, self.ver_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_mp_vitrina)
+        self.vpeq2pr = Vitrina_pendientes(self, self.tabla_peq2prF, self.ver_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_progr_vitrina)
         
         # Franja inferior
         self.peq2pr16 = Cuadro(self)

@@ -564,14 +564,14 @@ class funcionalidades_ospa(Ventana):
         
             return tabla_renombrada2
         elif self.tipo_base == 'pf':
-            tabla_renombrada = self.tabla.rename(columns={'COD_DE':'HT','DETALLE_REQUERIMIENTO':'DETALLE','ESTADO_DOCE':'ESTADO','NUM_DOC':'NRO DOCUMENTO',
-            'FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','TIPO_DOC':'TIPO DOC','HT_SALIDA':'HT SALIDA',
+            tabla_renombrada = self.tabla.rename(columns={'COD_DE':'HT','DETALLE_REQUERIMIENTO':'DETALLE','ESTADO_DOCE':'ESTADO',
+            'FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','HT_SALIDA':'HT SALIDA',
             'FECHA_FIRMA':'FECHA FIRMA','FECHA_NOTIFICACION':'FECHA NOTIFICACION',
             'FECHA_PROYECTO_FINAL':'FECHA PROYECTO','FECHA_PROYECTO_REIT':'PROYE REIT',
             'FECHA_PROYECTO_OCI':'FECHA PROYECTO OCI'})
-            tabla_renombrada['FECHA PROYECTO'] = pd.to_datetime(tabla_renombrada['FECHA PROYECTO'], dayfirst=True)
-            tabla_renombrada2 = tabla_renombrada.sort_values(by='FECHA PROYECTO', ascending=True)
-            tabla_renombrada2['FECHA PROYECTO'] = tabla_renombrada2['FECHA PROYECTO'].dt.strftime('%d/%m/%Y')
+            tabla_renombrada['FECHA ULTIMO MOV.'] = pd.to_datetime(tabla_renombrada['FECHA ULTIMO MOV.'], dayfirst=True)
+            tabla_renombrada2 = tabla_renombrada.sort_values(by='FECHA ULTIMO MOV.', ascending=True)
+            tabla_renombrada2['FECHA ULTIMO MOV.'] = tabla_renombrada2['FECHA ULTIMO MOV.'].dt.strftime('%d/%m/%Y')
         
             return tabla_renombrada2
         else:
@@ -583,7 +583,7 @@ class funcionalidades_ospa(Ventana):
         self.tipo_base = tipo_base
 
         if self.tipo_base == 'dr':
-            tabla_seleccionada = self.tabla.loc[:,['NRO DOC','REMITENTE','HT INGRESO','FECHA INGRESO SEFA','INDICACION','FECHA ULTIMO MOV.','APORTE DOC.']]
+            tabla_seleccionada = self.tabla.loc[:,['NRO DOC','REMITENTE','HT INGRESO','FECHA INGRESO SEFA','INDICACION','FECHA ULTIMO MOV.','ASUNTO']]
             return tabla_seleccionada
         elif self.tipo_base == 'de':
             tabla_seleccionada = self.tabla.loc[:,['HT','DESTINATARIO','TIPO DOC','NRO DOCUMENTO','FECHA ULTIMO MOV.','ESTADO','CATEGORIA','DETALLE']]
@@ -595,7 +595,10 @@ class funcionalidades_ospa(Ventana):
             tabla_seleccionada = self.tabla.loc[:,['COD. MACROPROBLEMA','FECHA ULTIMO MOV.','NOMBRE PROBLEMA','ESTADO','DESCRIPCION']]
             return tabla_seleccionada
         elif self.tipo_base == 'pf':
-            tabla_seleccionada = self.tabla.loc[:,['HT','DESTINATARIO','CATEGORIA','ESPECIALISTA','FECHA PROYECTO','DETALLE']]
+            tabla_seleccionada = self.tabla.loc[:,['HT','DESTINATARIO','FECHA ULTIMO MOV.','CATEGORIA','ESPECIALISTA','DETALLE']]
+            return tabla_seleccionada
+        elif self.tipo_base == 'paj':
+            tabla_seleccionada = self.tabla.loc[:,['NRO DOC','REMITENTE','HT INGRESO','FECHA INGRESO SEFA','FECHA ULTIMO MOV.','ASUNTO']]
             return tabla_seleccionada
         else:
             print("Hola")
