@@ -117,3 +117,14 @@
 ### Logueo y administración
 - [ ] Evaluar combinar los archivos administracion y logueo
 - [ ] Simplificar funciones con elementos comunes // Posible creación de la class Usuario.
+
+### Observaciones del piloto
+- [ ] Búsqueda por ht que transforme las minúsculas en mayúsculas.
+- [ ] Búsqueda por código en pantalla de extremos que sea por palabra clave.
+- [ ] Revisión de conversión de los antiguos códigos a los nuevos.
+- [ ] Evaluar si nos quedamos con la forma de creación de códigos antigua o nueva.
+- [ ] Revisar la creación de nuevos códigos debido a que existen correlativos largos.
+- [ ] Colocar los nombres en los botones para el menú en lugar del "Ir".
+- [ ] Agrandar el tamaño de los desplegables que contienen EFA.
+- [ ] Duplicar los datos a la hora de crear extremos similares.
+- [ ] Evaluar trabajo paralelo entre el equipo 1 y 2.
