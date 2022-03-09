@@ -11,10 +11,7 @@
 
 ## 30/03/2022
 - [ ] Cambiar la búsqueda por problemas
-- [ ] Cambiar el orden de la tabla de búsqueda de acuerdo a lo solicitado por el equipo Ospa
 - [ ] En las vistas donde incluya a los problemas, debe aparecer su descripción
-- [ ] La búsqueda por HT que permita las minúsculas
-- [ ] La búsqueda por código de extremo sea por palabra clave
 - [ ] Colocar los nombres de los módulos en los botones en lugar del "Ir"
 - [ ] Ampliar el ancho de las listas desplegables que contienen EFA
 - [ ] Permitir el copiar y pegar de la HT
@@ -26,5 +23,8 @@
 - [ ] Agregar valores predeterminados en las listas desplegables
 - [ ] Elaborar cronograma para trasladar los documentos recibidos a la base del aplicativo
 
+## Terminadas
 
-
+- [x] Cambiar el orden de la tabla de búsqueda de acuerdo a lo solicitado por el equipo Ospa
+- [x] La búsqueda por HT que permita las minúsculas
+- [x] La búsqueda por código de extremo sea por palabra clave
