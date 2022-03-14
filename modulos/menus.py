@@ -2,9 +2,9 @@ import datetime as dt
 
 from tkinter import messagebox
 
-from modulos.funcionalidades_ospa import funcionalidades_ospa
+from apoyo.funcionalidades_ospa import funcionalidades_ospa
 from modulos import ventanas_busqueda, ventanas_vista
-from modulos import variables_globales as vg
+import apoyo.datos_frecuentes as vg
 
 from apoyo.elementos_de_GUI import Cuadro, Ventana
 
