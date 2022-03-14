@@ -5,8 +5,8 @@ from tkinter import messagebox
 from tkinter.constants import TRUE
 
 from modulos import ventanas_busqueda
-from modulos import variables_globales as vg
-from modulos.funcionalidades_ospa import funcionalidades_ospa
+import apoyo.datos_frecuentes as vg
+from apoyo.funcionalidades_ospa import funcionalidades_ospa
 from apoyo.elementos_de_GUI import Cuadro, Ventana
 
 # Parámetros ventana
