@@ -5,8 +5,8 @@ import numpy as np
 from apoyo.elementos_de_GUI import Cuadro, Ventana, Vitrina_busqueda, Vitrina_busquedaep, Vitrina_pendientes
 from apoyo.manejo_de_bases import Base_de_datos
 from modulos import ventanas_vista, menus
-from modulos import variables_globales as vg
-from modulos.funcionalidades_ospa import funcionalidades_ospa
+import apoyo.datos_frecuentes as vg
+from apoyo.funcionalidades_ospa import funcionalidades_ospa
 
 # Parámetros ventana 
 ancho_v_busqueda = vg.ancho_v_busqueda
