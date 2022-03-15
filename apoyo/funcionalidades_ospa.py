@@ -1,6 +1,6 @@
 from tkinter import  messagebox
 import pandas as pd
-from apoyo.elementos_de_GUI import  Ventana, Vitrina_vista
+from apoyo.elementos_de_GUI import  Ventana, Vitrina
 from modulos import menus, ventanas_busqueda, ventanas_vista, logueo
 import apoyo.datos_frecuentes as vg
 
@@ -292,7 +292,7 @@ class funcionalidades_ospa(Ventana):
             # Tabla de documentos emitidos filtrada
             tabla_vitrina = tabla_filtrada.drop([id_salida], axis=1)
             if len(tabla_vitrina.index) > 0:
-                self.vitrina = Vitrina_vista(self.frame_principal, tabla_vitrina, funcion_ver, funcion_eliminar, 
+                self.vitrina = Vitrina(self.frame_principal, tabla_vitrina, funcion_ver, funcion_eliminar, funcion3 = None, tipo_vitrina = 'Modelo2',
                                              height=alto_v_vista_vitrina, width=ancho_v_vista_vitrina) 
                 return self.vitrina
             else:
