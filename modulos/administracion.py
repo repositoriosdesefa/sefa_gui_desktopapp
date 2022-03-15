@@ -155,7 +155,7 @@ class Administrar_usuarios(Ventana):
         
         if len(tabla_de_usuarios.index) > 0:
             tabla_de_usuarios = tabla_de_usuarios.drop(['Nombres', 'Apellidos', 'Contraseña', 'Estado'], axis=1)
-            self.v1 = Vitrina(self.f2, tabla_de_usuarios, self.ver_usuario, self.enviar_contrasenna_al_correo, self.eliminar_usuario, height=120, width=1100)
+            self.v1 = Vitrina(self.f2, tabla_de_usuarios, self.ver_usuario, self.enviar_contrasenna_al_correo, self.eliminar_usuario, tipo_vitrina = "Modelo1", height=120, width=1100)
         else:
             self.c2 = Cuadro(self.f2)
             self.c2.agregar_label(0,0,' ')
@@ -388,7 +388,7 @@ class Administar_eliminados(Ventana):
         
         if len(tabla_de_usuarios.index) > 0:
             tabla_de_usuarios = tabla_de_usuarios.drop(['Nombres', 'Apellidos', 'Contraseña', 'Estado'], axis=1)
-            self.v1 = Vitrina(self.f2, tabla_de_usuarios, self.activar_usuario, self.activar_usuario, self.activar_usuario, height=120, width=1100)
+            self.v1 = Vitrina(self.f2, tabla_de_usuarios, self.activar_usuario, self.activar_usuario, self.activar_usuario, tipo_vitrina='Modelo1', height=120, width=1100)
         else:
             self.c2 = Cuadro(self.f2)
             self.c2.agregar_label(0,0,' ')
