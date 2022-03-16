@@ -3,6 +3,7 @@
 ## Ordenar código
 - [x] Trasladar el archivo variables globales a datos frecuentes
 - [x] Trasladar el archivo funcionalidades_ospa a carpeta de Apoyo
+- [x] Modificación del código Vitrina para diferentes pantallas.
 
 ## Programar
 - [ ] Adecuar la vista de problemas de acuerdo al prototipo conversado
