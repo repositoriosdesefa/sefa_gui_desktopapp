@@ -8,12 +8,11 @@
 ## Programar
 - [ ] 1) Adecuar la vista de problemas de acuerdo al prototipo conversado
 - [ ] 2) Adecuar el resto de pantallas de acuerdo al cambio
-- [ ] Automatizar el estado general
-- [ ] Automatizar el puntaje de la calculadora, Investigar: Ventana emergente con resultado de calculadora
-- [ ] Investigar: Cálculo de plazo en días hábiles para el vencimiento
+- [ ] 3) Automatizar el estado general
+- [ ] 4) Automatizar el puntaje de la calculadora, Investigar: Ventana emergente con resultado de calculadora
+- [ ] 5) Investigar: Cálculo de plazo en días hábiles para el vencimiento
 - [ ] Cambiar la búsqueda por problemas
 - [ ] En las vistas donde incluya a los problemas, debe aparecer su descripción
-- [ ] Colocar los nombres de los módulos en los botones en lugar del "Ir"
 - [ ] Ampliar el ancho de las listas desplegables que contienen EFA
 - [ ] Permitir el copiar y pegar de la HT
 - [ ] Agregar el botón volver
@@ -25,3 +24,4 @@
 - [x] Cambiar el orden de la tabla de búsqueda de acuerdo a lo solicitado por el equipo Ospa
 - [x] La búsqueda por HT que permita las minúsculas
 - [x] La búsqueda por código de extremo sea por palabra clave
+- [x] Colocar los nombres de los módulos en los botones en lugar del "Ir"
