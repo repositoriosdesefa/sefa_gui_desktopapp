@@ -11,11 +11,11 @@
 - [ ] 3) Automatizar el estado general
 - [ ] 4) Automatizar el puntaje de la calculadora, Investigar: Ventana emergente con resultado de calculadora
 - [ ] 5) Investigar: Cálculo de plazo en días hábiles para el vencimiento
+- [ ] 6) Agregar el botón volver
 - [ ] Cambiar la búsqueda por problemas
 - [ ] En las vistas donde incluya a los problemas, debe aparecer su descripción
 - [ ] Ampliar el ancho de las listas desplegables que contienen EFA
 - [ ] Permitir el copiar y pegar de la HT
-- [ ] Agregar el botón volver
 - [ ] Revisar el tiempo de carga del aplicativo
 - [ ] Revisión de la conversión realizada a los códigos de problema de la base antigua
 - [ ] Agregar valores predeterminados en las listas desplegables
