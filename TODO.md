@@ -20,10 +20,9 @@
 - [ ] Cambiar la búsqueda por problemas
 - [ ] En las vistas donde incluya a los problemas, debe aparecer su descripción
 - [ ] Ampliar el ancho de las listas desplegables que contienen EFA
-- [ ] Revisar el tiempo de carga del aplicativo
 - [ ] Revisión de la conversión realizada a los códigos de problema de la base antigua
 - [ ] Elaborar cronograma para trasladar los documentos recibidos a la base del aplicativo
-
+- [ ] Revisar el tiempo de carga del aplicativo
 
 ## Otros pendientes
 - [ ] Permitir el copiar y pegar de la HT
