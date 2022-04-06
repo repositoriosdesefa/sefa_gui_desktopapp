@@ -6,9 +6,8 @@
 - [x] Modificación de la clase Vitrina para diferentes pantallas.
 
 ## Programar
-- [ ] Adecuar la vista de problemas de acuerdo al prototipo conversado
-- [x] Modificar el menú
-- [ ] Adecuar el resto de pantallas de acuerdo al cambio
+- [ ] 1) Adecuar la vista de problemas de acuerdo al prototipo conversado
+- [ ] 2) Adecuar el resto de pantallas de acuerdo al cambio
 - [ ] Automatizar el estado general
 - [ ] Automatizar el puntaje de la calculadora, Investigar: Ventana emergente con resultado de calculadora
 - [ ] Investigar: Cálculo de plazo en días hábiles para el vencimiento
@@ -22,6 +21,7 @@
 - [ ] Revisión de la conversión realizada a los códigos de problema de la base antigua
 - [ ] Agregar valores predeterminados en las listas desplegables
 - [ ] Elaborar cronograma para trasladar los documentos recibidos a la base del aplicativo
+- [x] Modificar el menú
 - [x] Cambiar el orden de la tabla de búsqueda de acuerdo a lo solicitado por el equipo Ospa
 - [x] La búsqueda por HT que permita las minúsculas
 - [x] La búsqueda por código de extremo sea por palabra clave
