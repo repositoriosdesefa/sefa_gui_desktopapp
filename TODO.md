@@ -6,8 +6,8 @@
 - [x] Modificación de la clase Vitrina para diferentes pantallas.
 
 ## Programar
-- [ ] Adecuar la vista de problemas de acuerdo al prototipo conversado (29/03/2022)
-- [ ] Modificar el menú (29/03/2022)
+- [ ] Adecuar la vista de problemas de acuerdo al prototipo conversado
+- [x] Modificar el menú
 - [ ] Adecuar el resto de pantallas de acuerdo al cambio
 - [ ] Automatizar el estado general
 - [ ] Automatizar el puntaje de la calculadora, Investigar: Ventana emergente con resultado de calculadora
