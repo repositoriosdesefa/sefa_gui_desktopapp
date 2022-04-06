@@ -6,6 +6,11 @@
 - [x] Modificación de la clase Vitrina para diferentes pantallas.
 
 ## Programar
+- [x] Modificar el menú
+- [x] Cambiar el orden de la tabla de búsqueda de acuerdo a lo solicitado por el equipo Ospa
+- [x] La búsqueda por HT que permita las minúsculas
+- [x] La búsqueda por código de extremo sea por palabra clave
+- [x] Colocar los nombres de los módulos en los botones en lugar del "Ir"
 - [ ] 1) Adecuar la vista de problemas de acuerdo al prototipo conversado
 - [ ] 2) Adecuar el resto de pantallas de acuerdo al cambio
 - [ ] 3) Automatizar el estado general
@@ -15,13 +20,11 @@
 - [ ] Cambiar la búsqueda por problemas
 - [ ] En las vistas donde incluya a los problemas, debe aparecer su descripción
 - [ ] Ampliar el ancho de las listas desplegables que contienen EFA
-- [ ] Permitir el copiar y pegar de la HT
 - [ ] Revisar el tiempo de carga del aplicativo
 - [ ] Revisión de la conversión realizada a los códigos de problema de la base antigua
-- [ ] Agregar valores predeterminados en las listas desplegables
 - [ ] Elaborar cronograma para trasladar los documentos recibidos a la base del aplicativo
-- [x] Modificar el menú
-- [x] Cambiar el orden de la tabla de búsqueda de acuerdo a lo solicitado por el equipo Ospa
-- [x] La búsqueda por HT que permita las minúsculas
-- [x] La búsqueda por código de extremo sea por palabra clave
-- [x] Colocar los nombres de los módulos en los botones en lugar del "Ir"
+
+
+## Otros pendientes
+- [ ] Permitir el copiar y pegar de la HT
+- [ ] Agregar valores predeterminados en las listas desplegables
