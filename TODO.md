@@ -22,7 +22,7 @@
 - [ ] Ampliar el ancho de las listas desplegables que contienen EFA
 - [ ] Revisión de la conversión realizada a los códigos de problema de la base antigua
 - [ ] Elaborar cronograma para trasladar los documentos recibidos a la base del aplicativo
-- [ ] Revisar el tiempo de carga del aplicativo
+- [ ] Revisar el tiempo de carga del aplicativo (Dante)
 
 ## Otros pendientes
 - [ ] Permitir el copiar y pegar de la HT
