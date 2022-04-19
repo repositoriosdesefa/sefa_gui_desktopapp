@@ -13,10 +13,10 @@
 - [x] Colocar los nombres de los módulos en los botones en lugar del "Ir"
 - [x] 1) Adecuar la vista de problemas de acuerdo al prototipo conversado
 - [x] 2) Adecuar el resto de pantallas de acuerdo al cambio
-- [ ] 3) Automatizar el puntaje de la calculadora, Investigar: Ventana emergente con resultado de calculadora
-- [ ] 4) Investigar: Cálculo de plazo en días hábiles para el vencimiento
-- [ ] 5) Automatizar el estado general
-- [ ] 6) Agregar el botón volver
+- [ ] 3) Investigar: Cálculo de plazo en días hábiles para el vencimiento
+- [ ] 4) Automatizar el estado general
+- [ ] 5) Agregar el botón volver
+- [ ] 6) Automatizar el puntaje de la calculadora, Investigar: Ventana emergente con resultado de calculadora
 - [ ] Cambiar la búsqueda por problemas
 - [ ] En las vistas donde incluya a los problemas, debe aparecer su descripción
 - [ ] Ampliar el ancho de las listas desplegables que contienen EFA
