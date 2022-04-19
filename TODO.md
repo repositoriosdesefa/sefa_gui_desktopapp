@@ -11,11 +11,11 @@
 - [x] La búsqueda por HT que permita las minúsculas
 - [x] La búsqueda por código de extremo sea por palabra clave
 - [x] Colocar los nombres de los módulos en los botones en lugar del "Ir"
-- [ ] 1) Adecuar la vista de problemas de acuerdo al prototipo conversado
-- [ ] 2) Adecuar el resto de pantallas de acuerdo al cambio
-- [ ] 3) Automatizar el estado general
-- [ ] 4) Automatizar el puntaje de la calculadora, Investigar: Ventana emergente con resultado de calculadora
-- [ ] 5) Investigar: Cálculo de plazo en días hábiles para el vencimiento
+- [x] 1) Adecuar la vista de problemas de acuerdo al prototipo conversado
+- [x] 2) Adecuar el resto de pantallas de acuerdo al cambio
+- [ ] 3) Automatizar el puntaje de la calculadora, Investigar: Ventana emergente con resultado de calculadora
+- [ ] 4) Investigar: Cálculo de plazo en días hábiles para el vencimiento
+- [ ] 5) Automatizar el estado general
 - [ ] 6) Agregar el botón volver
 - [ ] Cambiar la búsqueda por problemas
 - [ ] En las vistas donde incluya a los problemas, debe aparecer su descripción
