@@ -5,12 +5,13 @@ from apoyo.elementos_de_GUI import Cuadro, Ventana
 from apoyo.manejo_de_bases import Base_de_datos, Correo_electronico
 from modulos import administracion as adm
 from modulos import menus
-from modulos import variables_globales as vg
+import apoyo.datos_frecuentes as vg
 
 alto_logo = vg.alto_logo
 ancho_logo = vg.ancho_logo
 alto_ventana_secundaria = vg.alto_ventana_secundaria
 ancho_ventana_secundaria = vg.ancho_ventana_secundaria
+
 
 class logueo1_Ingreso_de_usuario(Ventana):
     """"""

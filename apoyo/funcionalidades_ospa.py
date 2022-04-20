@@ -1,9 +1,9 @@
 from tkinter import  messagebox
 import pandas as pd
-from apoyo.elementos_de_GUI import  Ventana, Vitrina_vista
+from apoyo.elementos_de_GUI import  Ventana, Vitrina
 from modulos import menus, ventanas_busqueda, ventanas_vista, logueo
-from modulos import variables_globales as vg
-
+import apoyo.datos_frecuentes as vg
+import webbrowser
 import datetime as dt
 
 # Parámetros ventana
@@ -30,12 +30,16 @@ b_dr_hist = vg.b_dr_hist
 b_de = vg.b_de
 b_de_cod = vg.b_de_cod
 b_de_hist = vg.b_de_hist
-b_ep = vg.b_ep
+b_pr = vg.b_pr
+b_pr_cod = vg.b_pr_cod
+b_pr_hist = vg.b_pr_hist
 b_ep_cod = vg.b_ep_cod
+b_ep = vg.b_ep
 b_ep_hist = vg.b_ep_hist
 b_mp = vg.b_mp
 b_mp_cod = vg.b_mp_cod
 b_mp_hist = vg.b_mp_hist
+base_relacion_ep_pr = vg.base_relacion_ep_pr
 # 2. Tablas
 tabla_parametros = vg.tabla_parametros
 
@@ -92,7 +96,8 @@ class funcionalidades_ospa(Ventana):
         tabla_objeto_clase = base_objeto.generar_dataframe()
         ahora = str(dt.datetime.now())
         usuario = vg.cod_usuario
-	
+        
+        
 	    # A. Existe un código en la rejilla
         if self.nuevo == False:
             # Pestaña 1: Obtengo el ID interno a partir del código de usuario
@@ -113,7 +118,7 @@ class funcionalidades_ospa(Ventana):
             # Actualizo las tablas en la web
             hora_de_modificacion = ahora
             # Se actualiza código interno
-            base_objeto.cambiar_un_dato_de_una_fila(cod_objeto_clase, 4, nuevo_cod_objeto_clase)
+            base_objeto.cambiar_un_dato_de_una_fila(cod_objeto_clase, 4, nuevo_cod_objeto_clase) #revisar
 
             # Pestaña 2:       
             # Cambio los datos de una fila
@@ -131,6 +136,8 @@ class funcionalidades_ospa(Ventana):
 
 	    # B. Es un código nuevo
         else:
+            id_objeto_ingresado3 = self.id_objeto_ingresado
+            print(id_objeto_ingresado3)
             # Caso especial para DR
             if cod_entrada =="COD_DR":
                 cod_objeto_ingresado = datos_ingresados[0] + " " + datos_ingresados[1]
@@ -148,12 +155,12 @@ class funcionalidades_ospa(Ventana):
                 # Creo el código único
                 if cod_entrada == "COD_DR":
                     base_cod_objeto.agregar_codigo(cod_objeto_ingresado, ahora, usuario)
-                elif cod_entrada == "COD_EP":
+                elif cod_entrada == "COD_PR":
                     departamento = datos_ingresados[2]
 	                # Obtención de sigla de departamento
                     tabla_siglas_filtrada = tabla_parametros[tabla_parametros['DEPARTAMENTO']==departamento]
                     sigla_cod_interno = tabla_siglas_filtrada.iloc[0,1]
-		            # Obtención de número de extremo
+		            # Obtención de número de problema
                     tabla_objeto_clase = base_cod_objeto.generar_dataframe()
                     tabla_codigo_ep_filtrada = tabla_objeto_clase[tabla_objeto_clase['DEPARTAMENTO']==departamento]
                     numero_problemas = len(tabla_codigo_ep_filtrada.index) + 1
@@ -163,6 +170,7 @@ class funcionalidades_ospa(Ventana):
                         numero_codigo = "-0" + str(numero_problemas)
                     else:
         	            numero_codigo = "-" + str(numero_problemas)
+
                     cod_objeto_ingresado = sigla_cod_interno + numero_codigo
                     base_cod_objeto.agregar_codigo(cod_objeto_ingresado, ahora, departamento, usuario)
                 elif cod_entrada == "COD_MP":
@@ -234,9 +242,9 @@ class funcionalidades_ospa(Ventana):
                 id_relacion_objetos = id_interno_objeto_clase + "/" + id_interno_objeto_a_eliminar
             elif cod_objeto == "COD_DE" and cod_salida == "COD_DR":
                 id_relacion_objetos = id_interno_objeto_a_eliminar + "/" + id_interno_objeto_clase
-            elif cod_objeto == "COD_DE" and cod_salida == "COD_EP":
+            elif cod_objeto == "COD_DE" and cod_salida == "COD_PR":
                 id_relacion_objetos = id_interno_objeto_clase + "/" + id_interno_objeto_a_eliminar
-            elif cod_objeto == "COD_EP":
+            elif cod_objeto == "COD_PR":
                 id_relacion_objetos = id_interno_objeto_a_eliminar + "/" + id_interno_objeto_clase
             else:
                 id_relacion_objetos = id_interno_objeto_clase + "/" + id_interno_objeto_a_eliminar
@@ -266,7 +274,7 @@ class funcionalidades_ospa(Ventana):
         """"""
 
         # Se agrega el botón y título del Frame
-        frame_vitrina.agregar_button(0, 0, texto_boton, funcion_boton)
+        frame_vitrina.agregar_boton_grande(0, 0, texto_boton, funcion_boton, 16, color = "Modelo1")
         frame_vitrina.agregar_titulo_2(0, 1,'                                         ')
         frame_vitrina.agregar_titulo_2(0, 2, texto_titulo)
         frame_vitrina.agregar_titulo_2(0, 3,'                              ')
@@ -292,7 +300,7 @@ class funcionalidades_ospa(Ventana):
             # Tabla de documentos emitidos filtrada
             tabla_vitrina = tabla_filtrada.drop([id_salida], axis=1)
             if len(tabla_vitrina.index) > 0:
-                self.vitrina = Vitrina_vista(self.frame_principal, tabla_vitrina, funcion_ver, funcion_eliminar, 
+                self.vitrina = Vitrina(self.frame_principal, tabla_vitrina, funcion_ver, funcion_eliminar, funcion3 = None, tipo_vitrina = 'Modelo2',
                                              height=alto_v_vista_vitrina, width=ancho_v_vista_vitrina) 
                 return self.vitrina
             else:
@@ -405,10 +413,36 @@ class funcionalidades_ospa(Ventana):
         
         self.destruir()
 
-        texto_ep = "Nuevo extremo de problema"
+        texto_ep = "Nuevo problema"
         # LargoxAncho
-        SubFrame = ventanas_vista.Extremo_problemas_vista(self, alto_v_vista, ancho_v_vista, texto_ep, True)
+        SubFrame = ventanas_vista.Problemas_vista(self, alto_v_vista, ancho_v_vista, texto_ep, True)
+    #----------------------------------------------------------------------
+    def nuevo_extremo2(self):
+
+        if self.nuevo == False: 
+
+            id_objeto_ingresado = self.id_objeto_ingresado
+            tipo_objeto_pantalla = self.tipo_objeto
+            texto_ep = "Problema que se asociará: " + id_objeto_ingresado
+        
+            self.destruir()
+
+            # LargoxAncho
+            SubFrame = ventanas_vista.Extremo_vinculados(self, alto_v_vista, ancho_v_vista, texto_ep, True,
+             id_objeto = id_objeto_ingresado)
     
+        elif self.nuevo == None:
+
+            # Genero la nueva ventana
+            texto_pantalla = "Búsqueda de extremos de problemas"
+
+            self.destruir()
+            SubFrame = ventanas_vista.Extremo_vinculados(self, alto_v_vista, ancho_v_vista, texto_ep, True)
+   
+        else:
+            # En caso no estuviera guardado la ficha
+            messagebox.showerror("¡Guardar!", "Antes de asociar, asegurate de guardar lo registrado")
+            
     #----------------------------------------------------------------------
     def busqueda_ep(self):
         """"""
@@ -416,7 +450,7 @@ class funcionalidades_ospa(Ventana):
 
             id_objeto_ingresado = self.id_objeto_ingresado
             tipo_objeto_pantalla = self.tipo_objeto
-            texto_pantalla = "Extremo de problema que se asociará: " + id_objeto_ingresado
+            texto_pantalla = "Problema que se asociará: " + id_objeto_ingresado
 
             # Genero la nueva ventana
             self.destruir()
@@ -438,16 +472,27 @@ class funcionalidades_ospa(Ventana):
     #----------------------------------------------------------------------
     def ver_ep(self, id_usuario):
         """"""
+        texto_documento = 'Problema: ' + id_usuario
+
+        lb1 = b_pr.listar_datos_de_fila(id_usuario)
+        lista_para_insertar = [lb1[2], lb1[3], lb1[4], lb1[5], lb1[6]]
+
+        self.destruir()
+        subframe = ventanas_vista.Problemas_vista(self, alto_v_vista, ancho_v_vista, texto_documento, True,
+                                        nuevo=False, lista=lista_para_insertar, id_objeto = id_usuario)
+
+    #----------------------------------------------------------------------
+    def ver_ep2(self, id_usuario):
+        """"""
         texto_documento = 'Extremo de problema: ' + id_usuario
 
         lb1 = b_ep.listar_datos_de_fila(id_usuario)
         lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8],
                                lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14],
-                               lb1[15], lb1[16], lb1[17], lb1[18], lb1[19], lb1[20],
-                               lb1[21], lb1[22], lb1[23], lb1[24], lb1[25]]
+                               lb1[15], lb1[16], lb1[17], lb1[18], lb1[19], lb1[20]]
 
         self.destruir()
-        subframe = ventanas_vista.Extremo_problemas_vista(self, alto_v_vista, ancho_v_vista, texto_documento, True,
+        subframe = ventanas_vista.Extremo_vinculados(self, alto_v_vista, ancho_v_vista, texto_documento, True,
                                         nuevo=False, lista=lista_para_insertar, id_objeto = id_usuario)
     
     #----------------------------------------------------------------------
@@ -525,6 +570,12 @@ class funcionalidades_ospa(Ventana):
             subFrame = logueo.logueo1_Ingreso_de_usuario(self, 590, 453, "ASPA - Versión 0.0", False)
         else:
             messagebox.showinfo("¡Importante!", "No olvides guardar tus cambios")
+    
+     #----------------------------------------------------------------------
+    def LinkBD(self):
+
+        webbrowser.open("https://datastudio.google.com/u/0/reporting/6df9744f-15c8-4d44-86ab-5421643636fc/page/zMF5B?s=qNfv_U6QI-c")
+    
 
         #----------------------------------------------------------------------
     def renombrar_encabezados(self, tabla, tipo_base = None):
@@ -549,7 +600,7 @@ class funcionalidades_ospa(Ventana):
             return tabla_renombrada2
 
         elif self.tipo_base == 'ep':
-            tabla_renombrada = self.tabla.rename(columns={'COD_EP':'CODIGO EXTREMO','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.','AGENTE CONTAMINANTE':'AGENT. CONTAMI.','COMPONENTE AMBIENTAL':'COMPONEN. AMBIE.'})
+            tabla_renombrada = self.tabla.rename(columns={'COD_PR':'CODIGO EXTREMO','FECHA_ULTIMO_MOV':'FECHA ULTIMO MOV.'})
             tabla_renombrada['FECHA ULTIMO MOV.'] = pd.to_datetime(tabla_renombrada['FECHA ULTIMO MOV.'], dayfirst=True)
             tabla_renombrada2 = tabla_renombrada.sort_values(by='FECHA ULTIMO MOV.', ascending=True)
             tabla_renombrada2['FECHA ULTIMO MOV.'] = tabla_renombrada2['FECHA ULTIMO MOV.'].dt.strftime('%d/%m/%Y')
@@ -589,7 +640,7 @@ class funcionalidades_ospa(Ventana):
             tabla_seleccionada = self.tabla.loc[:,['HT','DESTINATARIO','TIPO DOC','NRO DOCUMENTO','FECHA ULTIMO MOV.','ESTADO','CATEGORIA','DETALLE']]
             return tabla_seleccionada
         elif self.tipo_base == 'ep':
-            tabla_seleccionada = self.tabla.loc[:,['CODIGO EXTREMO','AGENT. CONTAMI.','COMPONEN. AMBIE.','ACTIVIDAD','DEPARTAMENTO','EFA','ESTADO','FECHA ULTIMO MOV.','DESCRIPCION']]
+            tabla_seleccionada = self.tabla.loc[:,['CODIGO EXTREMO','DEPARTAMENTO','ESTADO','FECHA ULTIMO MOV.','DESCRIPCION']]
             return tabla_seleccionada
         elif self.tipo_base == 'mp':
             tabla_seleccionada = self.tabla.loc[:,['COD. MACROPROBLEMA','FECHA ULTIMO MOV.','NOMBRE PROBLEMA','ESTADO','DESCRIPCION']]
@@ -619,8 +670,8 @@ class funcionalidades_ospa(Ventana):
     def actualizar_ep(self):
 
         self.destruir()
-        texto_b_ep = "Búsqueda de extremos de problemas"
-        SubFrame = ventanas_busqueda.Extremos(self, alto_v_busqueda, ancho_v_busqueda, texto_b_ep, False)
+        texto_b_pr = "Búsqueda de extremos de problemas"
+        SubFrame = ventanas_busqueda.Extremos(self, alto_v_busqueda, ancho_v_busqueda, texto_b_pr, False)
 #----------------------------------------------------------------------
     def actualizar_peq1(self):
 

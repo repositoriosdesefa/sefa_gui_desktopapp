@@ -7,7 +7,7 @@ from random import choice
 
 from apoyo.elementos_de_GUI import Cuadro, Ventana, Vitrina
 from apoyo.manejo_de_bases import Base_de_datos, Correo_electronico
-import apoyo.datos_frecuentes as dfrec
+import apoyo.datos_frecuentes as vg
 
 from modulos.ventanas_vista import Doc_recibidos_vista
 from modulos import logueo
@@ -155,7 +155,7 @@ class Administrar_usuarios(Ventana):
         
         if len(tabla_de_usuarios.index) > 0:
             tabla_de_usuarios = tabla_de_usuarios.drop(['Nombres', 'Apellidos', 'Contraseña', 'Estado'], axis=1)
-            self.v1 = Vitrina(self.f2, tabla_de_usuarios, self.ver_usuario, self.enviar_contrasenna_al_correo, self.eliminar_usuario, height=120, width=1100)
+            self.v1 = Vitrina(self.f2, tabla_de_usuarios, self.ver_usuario, self.enviar_contrasenna_al_correo, self.eliminar_usuario, tipo_vitrina = "Modelo1", height=120, width=1100)
         else:
             self.c2 = Cuadro(self.f2)
             self.c2.agregar_label(0,0,' ')
@@ -203,7 +203,7 @@ class Pantalla_de_usuario(Ventana):
             ('L', 4, 0, 'Apellidos:'),
             ('E', 5, 0),
             ('L', 6, 0, 'Oficina:'),
-            ('CX', 7, 0, dfrec.oficinas)
+            ('CX', 7, 0, vg.oficinas)
         )
         
         self.c2 = Cuadro(self)
@@ -321,7 +321,7 @@ class Pantalla_de_usuario(Ventana):
         """"""
 
         longitud = 8
-        caracteres_posibles = dfrec.valores
+        caracteres_posibles = vg.valores
 
         p = ""
         p = p.join([choice(caracteres_posibles) for i in range(longitud)])
@@ -388,7 +388,7 @@ class Administar_eliminados(Ventana):
         
         if len(tabla_de_usuarios.index) > 0:
             tabla_de_usuarios = tabla_de_usuarios.drop(['Nombres', 'Apellidos', 'Contraseña', 'Estado'], axis=1)
-            self.v1 = Vitrina(self.f2, tabla_de_usuarios, self.activar_usuario, self.activar_usuario, self.activar_usuario, height=120, width=1100)
+            self.v1 = Vitrina(self.f2, tabla_de_usuarios, self.activar_usuario, self.activar_usuario, self.activar_usuario, tipo_vitrina='Modelo1', height=120, width=1100)
         else:
             self.c2 = Cuadro(self.f2)
             self.c2.agregar_label(0,0,' ')

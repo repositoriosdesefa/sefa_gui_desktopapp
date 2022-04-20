@@ -2,11 +2,11 @@ from tkinter import Message, messagebox
 import datetime as dt
 import pandas as pd
 import numpy as np
-from apoyo.elementos_de_GUI import Cuadro, Ventana, Vitrina_busqueda, Vitrina_busquedaep, Vitrina_pendientes
+from apoyo.elementos_de_GUI import Cuadro, Ventana, Vitrina
 from apoyo.manejo_de_bases import Base_de_datos
 from modulos import ventanas_vista, menus
-from modulos import variables_globales as vg
-from modulos.funcionalidades_ospa import funcionalidades_ospa
+import apoyo.datos_frecuentes as vg
+from apoyo.funcionalidades_ospa import funcionalidades_ospa
 
 # Parámetros ventana 
 ancho_v_busqueda = vg.ancho_v_busqueda
@@ -34,9 +34,9 @@ b_dr_hist = vg.b_dr_hist
 b_de = vg.b_de
 b_de_cod = vg.b_de_cod
 b_de_hist = vg.b_de_hist
-b_ep = vg.b_ep
-b_ep_cod = vg.b_ep_cod
-b_ep_hist = vg.b_ep_hist
+b_pr = vg.b_pr
+b_pr_cod = vg.b_pr_cod
+b_pr_hist = vg.b_pr_hist
 b_mp = vg.b_mp
 b_mp_cod = vg.b_mp_cod
 b_mp_hist = vg.b_mp_hist
@@ -47,13 +47,13 @@ tabla_lista_efa = vg.tabla_lista_efa
 # 2. Tablas relacionales
 base_relacion_docs = vg.base_relacion_docs
 base_relacion_d_hist = vg.base_relacion_docs_hist
-base_relacion_dr_ep =  vg.base_relacion_dr_ep
-base_relacion_dr_ep_hist =  vg.base_relacion_dr_ep_hist
-base_relacion_de_ep =  vg.base_relacion_de_ep
-base_relacion_de_ep_hist =  vg.base_relacion_de_ep_hist
-b_relacion_mp_ep =  vg.base_relacion_mp_ep
-b_relacion_mp_ep_tabla = b_relacion_mp_ep.generar_dataframe()
-base_relacion_mp_ep_hist =  vg.base_relacion_mp_ep_hist
+base_relacion_dr_pr =  vg.base_relacion_dr_pr
+base_relacion_dr_pr_hist =  vg.base_relacion_dr_pr_hist
+base_relacion_de_pr =  vg.base_relacion_de_pr
+base_relacion_de_pr_hist =  vg.base_relacion_de_pr_hist
+b_relacion_mp_pr =  vg.base_relacion_mp_pr
+b_relacion_mp_ep_tabla = b_relacion_mp_pr.generar_dataframe()
+base_relacion_mp_pr_hist =  vg.base_relacion_mp_pr_hist
 
 class Doc_recibidos_busqueda(funcionalidades_ospa):
     """"""
@@ -124,8 +124,8 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
         self.frame_vitrina_dr = Cuadro(self)
 
         # Creando vitrina
-        self.vdr = Vitrina_busqueda(self, self.tabla_drF, self.ver_dr, 
-                                   self.asociar_dr_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
+        self.vdr = Vitrina(self, self.tabla_drF, self.ver_dr, 
+                                   self.asociar_dr_de, funcion3 =None, tipo_vitrina = "Modelo3", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
         
         # Franja inferior
         self.franjai = Cuadro(self)
@@ -160,35 +160,35 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
         self.filtro0 = self.tabla_renombrada
         
         if len(self.remitente)>0: # Filtro por palabra clave
-            self.vdr.Eliminar_vitrina()
+            self.vdr.eliminar_vitrina2()
             self.filtro0 = self.filtro0[self.filtro0['REMITENTE'].str.contains(self.remitente)]
             self.Complementodr(self.filtro0)
 
         if len(self.ht)>0: # Filtro por palabra clave
-            self.vdr.Eliminar_vitrina()
+            self.vdr.eliminar_vitrina2()
             self.filtro0['HT INGRESO']=self.filtro0['HT INGRESO'].apply(str)
             self.filtro0 = self.filtro0[self.filtro0['HT INGRESO'].str.contains(self.ht)]
             self.Complementodr(self.filtro0)
 
         if len(self.nrodoc)>0: # Filtro por palabra clave
-            self.vdr.Eliminar_vitrina()
+            self.vdr.eliminar_vitrina2()
             self.filtro0['NUM_DOC']=self.filtro0['NUM_DOC'].apply(str)
             self.filtro0 = self.filtro0[self.filtro0['NUM_DOC'].str.contains(self.nrodoc)]
             self.Complementodr(self.filtro0)
             
         if len(self.aporte)>0: # Filtro por palabra clave
-            self.vdr.Eliminar_vitrina()
+            self.vdr.eliminar_vitrina2()
             self.filtro0 = self.filtro0[self.filtro0['ASUNTO'].str.contains(self.aporte)]
             self.Complementodr(self.filtro0)
 
         if len(filtro)>0:
 
-            self.vdr.Eliminar_vitrina()
+            self.vdr.eliminar_vitrina2()
             self.filtro1 = self.filtro0.query(filtro)
             self.Complementodr(self.filtro1)
 
         else:
-            self.vdr.Eliminar_vitrina()
+            self.vdr.eliminar_vitrina2()
             self.Complementodr(self.filtro0)
 
     #----------------------------------------------------------------------
@@ -205,19 +205,22 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
         if len(tabla_final.index) > 0:
             self.frame_vitrina_dr.eliminar_cuadro()
             self.frame_vitrina_dr = Cuadro(self)
-            self.vdr = Vitrina_busqueda(self, tabla_final, self.ver_dr, 
-                                   self.asociar_dr_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
+            self.vdr = Vitrina(self, tabla_final, self.ver_dr, 
+                                   self.asociar_dr_de, funcion3 =None, tipo_vitrina = "Modelo3", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
         else:
             self.frame_vitrina_dr.eliminar_cuadro()
             self.frame_vitrina_dr = Cuadro(self)
             self.frame_vitrina_dr.agregar_label(1, 2, '                  0 documentos encontrados')
-
+            self.frame_vitrina_dr.agregar_label(2, 2, ' ')
+            self.frame_vitrina_dr.agregar_label(3, 2, ' ')
+            self.frame_vitrina_dr.agregar_label(4, 2, ' ')
+            self.frame_vitrina_dr.agregar_label(5, 2, ' ')
     #----------------------------------------------------------------------
     def limpiar(self):
 
         # Eliminando campos
         self.rejilla_1.eliminar_cuadro()
-        self.vdr.Eliminar_vitrina()
+        self.vdr.eliminar_vitrina2()
         self.rejilla_2.eliminar_cuadro()
         self.frame_vitrina_dr.eliminar_cuadro()
         # Agregando rejilla a la ventana
@@ -227,8 +230,8 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
         self.rejilla_2.agregar_rejilla(self.rejilla_b)
         self.frame_vitrina_dr = Cuadro(self)
         # Creando vitrina
-        self.vdr = Vitrina_busqueda(self, self.tabla_drF, self.ver_dr, 
-                                   self.asociar_dr_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
+        self.vdr = Vitrina(self, self.tabla_drF, self.ver_dr, 
+                                   self.asociar_dr_de, funcion3 =None, tipo_vitrina = "Modelo3", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
 
     #----------------------------------------------------------------------
     def asociar_dr_de(self, x):
@@ -292,7 +295,7 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
                     
             # Asociación de extremos de problema de DR con DE
             # 1. Obtengo la tabla de relación entre DE y EP
-            tabla_de_dr_ep = base_relacion_dr_ep.generar_dataframe()
+            tabla_de_dr_ep = base_relacion_dr_pr.generar_dataframe()
             # 2. Filtro las relaciones que tiene el DE
             # Filtro para obtener las relaciones activas
             tabla_relacion_activos = tabla_de_dr_ep[tabla_de_dr_ep['ESTADO']=="ACTIVO"]
@@ -300,13 +303,13 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
             tabla_relacion_filtrada = tabla_relacion_activos[tabla_relacion_activos['ID_DR']==self.IDDR_FINAL]
             # 3. Obtengo el ID de los EP que están relacionados al DE
             # Me quedo con el vector a filtrar en forma de lista
-            lista_ep = list(tabla_relacion_filtrada['ID_EP'].unique())
+            lista_ep = list(tabla_relacion_filtrada['ID_PR'].unique())
             # 4. Concateno los ID de los EP relacionados al DE con el ID del DR
             if len(lista_ep) > 0:
                 for indice in range(len(lista_ep)):
                     cod_relacion = id_interno_de + "/" + lista_ep[indice]
                     datos_insertar = [cod_relacion, id_interno_de, lista_ep[indice], 'ACTIVO', hora_de_modificacion] 
-                    base_relacion_de_ep.agregar_datos(datos_insertar)
+                    base_relacion_de_pr.agregar_datos(datos_insertar)
             #else:
             #    messagebox.showinfo("¡Atención!", "El registro ha sido asociado con éxito")
 
@@ -390,8 +393,8 @@ class Doc_emitidos_busqueda(funcionalidades_ospa):
         self.frame_vitrina_1 = Cuadro(self)
 
         # Creando vitrina
-        self.vde1 = Vitrina_busqueda(self, self.tabla_deF, self.ver_de, 
-                                    self.asociar_de_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_de_vitrina)
+        self.vde1 = Vitrina(self, self.tabla_deF, self.ver_de, 
+                                    self.asociar_de_dr, funcion3 =None, tipo_vitrina = "Modelo3", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_de_vitrina)
         
         # Franja inferior
         self.cde16 = Cuadro(self)
@@ -443,40 +446,40 @@ class Doc_emitidos_busqueda(funcionalidades_ospa):
         self.filtro0 = self.tabla_renombrada
         
         if len(self.deid)>0: # Filtro por palabra clave
-            self.vde1.Eliminar_vitrina()
+            self.vde1.eliminar_vitrina2()
             self.filtro0['HT SALIDA']=self.filtro0['HT SALIDA'].apply(str)
             self.filtro0 = self.filtro0[self.filtro0['HT SALIDA'].str.contains(self.deid)]
             self.Complementode(self.filtro0)
 
         if len(self.dedoc)>0: # Filtro por palabra clave
-            self.vde1.Eliminar_vitrina()
+            self.vde1.eliminar_vitrina2()
             self.filtro0['NRO DOCUMENTO']=self.filtro0['NRO DOCUMENTO'].apply(str)
             self.filtro0 = self.filtro0[self.filtro0['NRO DOCUMENTO'].str.contains(self.dedoc)]
             self.Complementode(self.filtro0)
 
         if len(self.dedestin)>0: # Filtro por palabra clave
-            self.vde1.Eliminar_vitrina()
+            self.vde1.eliminar_vitrina2()
             self.filtro0 = self.filtro0[self.filtro0['DESTINATARIO'].str.contains(self.dedestin)]
             self.Complementode(self.filtro0)
 
         if len(self.deestado)>0: # Filtro por palabra clave
-            self.vde1.Eliminar_vitrina()
+            self.vde1.eliminar_vitrina2()
             self.filtro0 = self.filtro0[self.filtro0['ESTADO'].str.contains(self.deestado)]
             self.Complementode(self.filtro0)
 
         if len(self.detalle)>0: # Filtro por palabra clave
-            self.vde1.Eliminar_vitrina()
+            self.vde1.eliminar_vitrina2()
             self.filtro0 = self.filtro0[self.filtro0['DETALLE'].str.contains(self.detalle)]
             self.Complementode(self.filtro0)
   
         if len(filtro)>0:
 
-            self.vde1.Eliminar_vitrina()
+            self.vde1.eliminar_vitrina2()
             self.filtro1 = self.filtro0.query(filtro)
             self.Complementode(self.filtro1)
 
         else:
-            self.vde1.Eliminar_vitrina()
+            self.vde1.eliminar_vitrina2()
             self.Complementode(self.filtro0)
 
     #----------------------------------------------------------------------
@@ -491,7 +494,7 @@ class Doc_emitidos_busqueda(funcionalidades_ospa):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_1.eliminar_cuadro()
             self.frame_vitrina_1 = Cuadro(self)
-            self.vde1 = Vitrina_busqueda(self, tabla_filtro3, self.ver_de, self.asociar_de_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_de_vitrina)
+            self.vde1 = Vitrina(self, tabla_filtro3, self.ver_de, self.asociar_de_dr, funcion3 =None, tipo_vitrina = "Modelo3", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_de_vitrina)
            
         else:
             self.frame_vitrina_1.eliminar_cuadro()
@@ -504,7 +507,7 @@ class Doc_emitidos_busqueda(funcionalidades_ospa):
 
         # Eliminando campos
         self.cde1.eliminar_cuadro()
-        self.vde1.Eliminar_vitrina()
+        self.vde1.eliminar_vitrina2()
         self.cde15.eliminar_cuadro()
         self.frame_vitrina_1.eliminar_cuadro()
         # Agregando rejilla a la ventana
@@ -514,8 +517,8 @@ class Doc_emitidos_busqueda(funcionalidades_ospa):
         self.cde15.agregar_rejilla(self.rejilla_bde)
         self.frame_vitrina_1 = Cuadro(self)
         # Creando vitrina
-        self.vde1 = Vitrina_busqueda(self, self.tabla_deF, self.ver_de, 
-                                    self.asociar_de_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_de_vitrina)
+        self.vde1 = Vitrina(self, self.tabla_deF, self.ver_de, 
+                                    self.asociar_de_dr, funcion3 =None, tipo_vitrina = "Modelo3", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_de_vitrina)
         
     #----------------------------------------------------------------------
     def asociar_de_dr(self, x):
@@ -606,54 +609,54 @@ class Extremos(funcionalidades_ospa):
             self.id_usuario = lista
         
         # Renombramos los encabezados
-        b_ep_tabla = b_ep.generar_dataframe()
+        b_ep_tabla = b_pr.generar_dataframe()
         self.tabla_renombrada = self.renombrar_encabezados(b_ep_tabla, tipo_base = 'ep')
         self.tabla_seleccionada = self.seleccionar_encabezados(self.tabla_renombrada, tipo_base = 'ep')
         self.tabla_epF = self.tabla_seleccionada.head(100)
 
         # Listas para desplegables
-        self.listaAG = sorted(list(set(self.tabla_renombrada['AGENT. CONTAMI.'])))
-        self.listaCA = sorted(list(set(self.tabla_renombrada['COMPONEN. AMBIE.'])))
-        self.listaACT = sorted(list(set(self.tabla_renombrada['ACTIVIDAD'])))
-        self.listaTIPOUBI = sorted(list(set(self.tabla_renombrada['TIPO DE UBICACION'])))
-        self.listaOCURR = sorted(list(set(self.tabla_renombrada['OCURRENCIA'])))
-        self.listaEFA = sorted(list(set(self.tabla_renombrada['EFA'])))
+        #self.listaAG = sorted(list(set(self.tabla_renombrada['AGENT. CONTAMI.'])))
+        #self.listaCA = sorted(list(set(self.tabla_renombrada['COMPONEN. AMBIE.'])))
+        #self.listaACT = sorted(list(set(self.tabla_renombrada['ACTIVIDAD'])))
+        #self.listaTIPOUBI = sorted(list(set(self.tabla_renombrada['TIPO DE UBICACION'])))
+        #self.listaOCURR = sorted(list(set(self.tabla_renombrada['OCURRENCIA'])))
+        #self.listaEFA = sorted(list(set(self.tabla_renombrada['EFA'])))
 
         # Agregando logo del ospa a la ventana y título
         titulos = Cuadro(self)
-        titulos.agregar_franja_superior_ospa('Búsqueda de extremos de problemas', 
+        titulos.agregar_franja_superior_ospa('Búsqueda de problemas', 
                                             self.inicio_app, self.cerrar_sesion)
     
         # Armando rejilla con los filtros
         self.rejilla_ep = (
 
-            ('L', 0, 0, 'Agente contaminante'),
-            ('CXP', 0, 1, 44, self.listaAG, '', "readonly"),
+            #('L', 0, 0, 'Agente contaminante'),
+            #('CXP', 0, 1, 44, self.listaAG, '', "readonly"),
 
-            ('L', 0, 2, 'Componente ambiental'),
-            ('CXP', 0, 3, 44, self.listaCA, '', "readonly"),
+            #('L', 0, 2, 'Componente ambiental'),
+            #('CXP', 0, 3, 44, self.listaCA, '', "readonly"),
 
-            ('L', 0, 4, 'Actividad'),
-            ('CXP', 0, 5, 44, self.listaACT, '', "readonly"),
+            #('L', 0, 4, 'Actividad'),
+            #('CXP', 0, 5, 44, self.listaACT, '', "readonly"),
 
-            ('L', 1, 0, 'Departamento'),
-            ('CXDEP3', 1, 1, 44, tabla_lista_efa, "Triple",
+            ('L', 0, 0, 'Departamento'),
+            ('CXDEP3', 0, 1, 44, tabla_lista_efa, "Triple",
             'DEPARTAMENTO ', 'Provincia', 'PROVINCIA ', 'Distrito', 'DISTRITO '),
 
-            ('L', 2, 0, 'Tipo de ubicación'),
-            ('CXP', 2, 1, 44, self.listaTIPOUBI, '', "readonly"),
+            #('L', 2, 0, 'Tipo de ubicación'),
+            #('CXP', 2, 1, 44, self.listaTIPOUBI, '', "readonly"),
 
-            ('L', 2, 2, 'Ocurrencia'),
-            ('CXP', 2, 3, 44, self.listaOCURR, '', "readonly"),
+            #('L', 2, 2, 'Ocurrencia'),
+            #('CXP', 2, 3, 44, self.listaOCURR, '', "readonly"),
 
-            ('L', 2, 4, 'EFA'),
-            ('CXE', 2, 5, 44, self.listaEFA, '', "normal"),
+            #('L', 2, 4, 'EFA'),
+            #('CXE', 2, 5, 44, self.listaEFA, '', "normal"),
 
-            ('L', 3, 0, 'Palabra clave en descripción'),
-            ('EE', 3, 1),
+            ('L', 1, 0, 'Palabra clave en descripción'),
+            ('EE', 1, 1),
 
-            ('L', 3, 2, 'Código extremo'),
-            ('EE', 3, 3)
+            ('L', 1, 2, 'Código problema'),
+            ('EE', 1, 3)
 
         )
         
@@ -676,7 +679,7 @@ class Extremos(funcionalidades_ospa):
         self.frame_vitrina_ep = Cuadro(self)
 
         # Creando vitrina
-        self.vep = Vitrina_busquedaep(self, self.tabla_epF, self.ver_ep, self.asociar_ep, self.ver_mp_ep, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_ep_vitrina)
+        self.vep = Vitrina(self, self.tabla_epF, self.ver_ep, self.asociar_ep, self.ver_mp_ep, tipo_vitrina = "Modelo4", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_ep_vitrina)
         
         # Franja inferior
         self.ep3 = Cuadro(self)
@@ -688,44 +691,44 @@ class Extremos(funcionalidades_ospa):
         """"""
         # Obteniendo valores de la rejilla
         self.listas_filtroep = self.ep1.obtener_lista_de_datos()
-        self.AG = self.listas_filtroep[0]
-        self.CA = self.listas_filtroep[1]
-        self.ACTIVIDAD = self.listas_filtroep[2]
-        self.DEPART = self.listas_filtroep[3]
-        self.PROVI = self.listas_filtroep[4]
-        self.DISTR = self.listas_filtroep[5]
-        self.TIPOUBI = self.listas_filtroep[6]
-        self.OCURRE = self.listas_filtroep[7]
-        self.EFA = self.listas_filtroep[8]
-        self.CLAVE = self.listas_filtroep[9]
-        self.codigo = self.listas_filtroep[10]
+        #self.AG = self.listas_filtroep[0]
+        #self.CA = self.listas_filtroep[1]
+        #self.ACTIVIDAD = self.listas_filtroep[2]
+        self.DEPART = self.listas_filtroep[0]
+        self.PROVI = self.listas_filtroep[1]
+        self.DISTR = self.listas_filtroep[2]
+        #self.TIPOUBI = self.listas_filtroep[6]
+        #self.OCURRE = self.listas_filtroep[7]
+        #self.EFA = self.listas_filtroep[8]
+        self.CLAVE = self.listas_filtroep[3]
+        self.codigo = self.listas_filtroep[4]
 
         # Filtrando datos por palabras exactas
 
         filtro=""
-        if len(self.AG)>0 :
-            filtro="`AGENT. CONTAMI.`=="+"'"+self.AG+"' "
-    
-        if len(self.CA)>0 :
-            if len(filtro)>0 :
-                filtro = filtro+" & "
-            else:
-                filtro
-            filtro=filtro+"`COMPONEN. AMBIE.`=="+"'"+self.CA+"' "
-
-        if len(self.ACTIVIDAD)>0 :
-            if len(filtro)>0 :
-                filtro = filtro+" & "
-            else:
-                filtro
-            filtro=filtro+"ACTIVIDAD=="+"'"+self.ACTIVIDAD+"' "
-
         if len(self.DEPART)>0 :
-            if len(filtro)>0 :
-                filtro = filtro+" & "
-            else:
-                filtro
-            filtro=filtro+"DEPARTAMENTO=="+"'"+self.DEPART+"' "
+            filtro="DEPARTAMENTO=="+"'"+self.DEPART+"' "
+    
+        #if len(self.CA)>0 :
+        #    if len(filtro)>0 :
+        #        filtro = filtro+" & "
+        #    else:
+        #        filtro
+        #    filtro=filtro+"`COMPONEN. AMBIE.`=="+"'"+self.CA+"' "
+
+        #if len(self.ACTIVIDAD)>0 :
+        #    if len(filtro)>0 :
+        #        filtro = filtro+" & "
+        #    else:
+        #        filtro
+        #    filtro=filtro+"ACTIVIDAD=="+"'"+self.ACTIVIDAD+"' "
+
+        #if len(self.DEPART)>0 :
+        #    if len(filtro)>0 :
+        #        filtro = filtro+" & "
+        #    else:
+        #        filtro
+        #    filtro=filtro+"DEPARTAMENTO=="+"'"+self.DEPART+"' "
 
         if len(self.PROVI)>0 :
             if len(filtro)>0 :
@@ -741,19 +744,19 @@ class Extremos(funcionalidades_ospa):
                 filtro
             filtro=filtro+"DISTRITO=="+"'"+self.DISTR+"' "
 
-        if len(self.TIPOUBI)>0 :
-            if len(filtro)>0 :
-                filtro = filtro+" & "
-            else:
-                filtro
-            filtro=filtro+"`TIPO DE UBICACION`=="+"'"+self.TIPOUBI+"' "
+        #if len(self.TIPOUBI)>0 :
+        #    if len(filtro)>0 :
+        #        filtro = filtro+" & "
+        #    else:
+        #        filtro
+        #    filtro=filtro+"`TIPO DE UBICACION`=="+"'"+self.TIPOUBI+"' "
 
-        if len(self.OCURRE)>0 :
-            if len(filtro)>0 :
-                filtro = filtro+" & "
-            else:
-                filtro
-            filtro=filtro+"OCURRENCIA=="+"'"+self.OCURRE+"' "
+        #if len(self.OCURRE)>0 :
+        #    if len(filtro)>0 :
+        #        filtro = filtro+" & "
+        #    else:
+        #        filtro
+        #    filtro=filtro+"OCURRENCIA=="+"'"+self.OCURRE+"' "
 
         if len(self.codigo)>0 :
             if len(filtro)>0 :
@@ -770,24 +773,24 @@ class Extremos(funcionalidades_ospa):
 
         self.filtro0 = self.tabla_renombrada
         
-        if len(self.EFA)>0: # Filtro por palabra clave
-            self.vep.Eliminar_vitrina()
-            self.filtro0 = self.filtro0[self.filtro0['EFA'].str.contains(self.EFA)]
-            self.Complementoep(self.filtro0)
+        #if len(self.EFA)>0: # Filtro por palabra clave
+        #    self.vep.eliminar_vitrina2()
+        #    self.filtro0 = self.filtro0[self.filtro0['EFA'].str.contains(self.EFA)]
+        #    self.Complementoep(self.filtro0)
 
         if len(self.CLAVE)>0: # Filtro por palabra clave
-            self.vep.Eliminar_vitrina()
+            self.vep.eliminar_vitrina2()
             self.filtro0 = self.filtro0[self.filtro0['DESCRIPCION'].str.contains(self.CLAVE)]
             self.Complementoep(self.filtro0)
   
         if len(filtro)>0:
 
-            self.vep.Eliminar_vitrina()
+            self.vep.eliminar_vitrina2()
             self.filtro1 = self.filtro0.query(filtro)
             self.Complementoep(self.filtro1)
 
         else:
-            self.vep.Eliminar_vitrina()
+            self.vep.eliminar_vitrina2()
             self.Complementoep(self.filtro0)
 
     #----------------------------------------------------------------------
@@ -803,7 +806,7 @@ class Extremos(funcionalidades_ospa):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_ep.eliminar_cuadro()
             self.frame_vitrina_ep = Cuadro(self)
-            self.vep = Vitrina_busquedaep(self, tabla_filtro3, self.ver_ep, self.asociar_ep, self.ver_mp_ep, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_ep_vitrina)
+            self.vep = Vitrina(self, tabla_filtro3, self.ver_ep, self.asociar_ep, self.ver_mp_ep, tipo_vitrina = "Modelo4", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_ep_vitrina)
         else:
             self.frame_vitrina_ep.eliminar_cuadro()
             self.frame_vitrina_ep = Cuadro(self)
@@ -814,7 +817,7 @@ class Extremos(funcionalidades_ospa):
      
          # Eliminando campos
         self.ep1.eliminar_cuadro()
-        self.vep.Eliminar_vitrina()
+        self.vep.eliminar_vitrina2()
         self.ep2.eliminar_cuadro()
         self.frame_vitrina_ep.eliminar_cuadro()
         # Agregando rejilla a la ventana
@@ -823,19 +826,19 @@ class Extremos(funcionalidades_ospa):
         self.ep2 = Cuadro(self)
         self.ep2.agregar_rejilla(self.rejilla_ep2)
         self.frame_vitrina_ep = Cuadro(self)
-        self.vep = Vitrina_busquedaep(self, self.tabla_epF, self.ver_ep, self.asociar_ep, self.ver_mp_ep, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_ep_vitrina)
+        self.vep = Vitrina(self, self.tabla_epF, self.ver_ep, self.asociar_ep, self.ver_mp_ep, tipo_vitrina = "Modelo4", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_ep_vitrina)
           
     #----------------------------------------------------------------------
     def ver_mp_ep(self, x):
         """"""
         self.x = x
-        texto_documento = 'Extremo de problema: ' + x
+        texto_documento = 'Problema: ' + x
 
         tabla_codigo_de_filtrada = self.tabla_renombrada.query("`CODIGO EXTREMO`==@self.x")
         self.id_interno_ep = tabla_codigo_de_filtrada.iloc[0,0]
-        tabla_codigo_de_filtrada2 = tabla_codigo_de_filtrada['ID_EP'].tolist()
-        self.relacion_mp_ep = b_relacion_mp_ep.generar_dataframe()
-        relacion_activos = self.relacion_mp_ep[self.relacion_mp_ep.ID_EP.isin(tabla_codigo_de_filtrada2)]
+        tabla_codigo_de_filtrada2 = tabla_codigo_de_filtrada['ID_PR'].tolist()
+        self.relacion_mp_ep = b_relacion_mp_pr.generar_dataframe()
+        relacion_activos = self.relacion_mp_ep[self.relacion_mp_ep.ID_PR.isin(tabla_codigo_de_filtrada2)]
         relacion_activos2 = relacion_activos['ID_MP'].tolist()
 
 
@@ -855,7 +858,7 @@ class Extremos(funcionalidades_ospa):
             messagebox.showinfo("Error", "No tiene antecedente que pueda asociarse")
         else:
             #OBTENER EL ID INTERNO DEL EXTREMO DE PROBLEMA
-            self.IDEP = b_ep.listar_datos_de_fila(self.x)
+            self.IDEP = b_pr.listar_datos_de_fila(self.x)
             self.IDEP_FINAL = self.IDEP[0]
 
             #OBTENER EL ID USUARIO DEL OBJETO A ASOCIAR
@@ -864,13 +867,13 @@ class Extremos(funcionalidades_ospa):
             if self.tipo_objeto_anterior == "DR":
                 tabla_de_codigo_dr = b_dr.generar_dataframe()
                 tabla_codigo_de_filtrada = tabla_de_codigo_dr[tabla_de_codigo_dr.COD_DR == id_objeto_anterior]
-                base_relacion_objetos = base_relacion_dr_ep 
-                base_relacion_objetos_hist = base_relacion_dr_ep_hist
+                base_relacion_objetos = base_relacion_dr_pr 
+                base_relacion_objetos_hist = base_relacion_dr_pr_hist
             elif self.tipo_objeto_anterior == "MP":
                 tabla_de_codigo_dr = b_mp.generar_dataframe()
                 tabla_codigo_de_filtrada = tabla_de_codigo_dr[tabla_de_codigo_dr.COD_MP == id_objeto_anterior]
-                base_relacion_objetos = b_relacion_mp_ep
-                base_relacion_objetos_hist = base_relacion_mp_ep_hist
+                base_relacion_objetos = b_relacion_mp_pr
+                base_relacion_objetos_hist = base_relacion_mp_pr_hist
             else:
                 raise messagebox.showinfo("Error", "No puede asociar extremos de problema desde esta vista")
             
@@ -990,7 +993,7 @@ class Macroproblemas(funcionalidades_ospa):
         self.frame_vitrina_mp = Cuadro(self)
 
         # Creando vitrina
-        self.vmc = Vitrina_pendientes(self, self.tabla_mpF, self.ver_mp, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_mp_vitrina)
+        self.vmc = Vitrina(self, self.tabla_mpF, self.ver_mp, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_mp_vitrina)
 
         # Franja inferior
         self.mc3 = Cuadro(self)
@@ -1037,23 +1040,23 @@ class Macroproblemas(funcionalidades_ospa):
         self.filtro0 = self.tabla_renombrada
         
         if len(self.NOMBRE)>0: # Filtro por palabra clave
-            self.vmc.Eliminar_vitrina()
+            self.vmc.eliminar_vitrina2()
             self.filtro0 = self.filtro0[self.filtro0['NOMBRE PROBLEMA'].str.contains(self.NOMBRE)]
             self.Complementomc(self.filtro0)
 
         if len(self.DESCRIP)>0: # Filtro por palabra clave
-            self.vmc.Eliminar_vitrina()
+            self.vmc.eliminar_vitrina2()
             self.filtro0 = self.filtro0[self.filtro0['DESCRIPCION'].str.contains(self.DESCRIP)]
             self.Complementomc(self.filtro0)
   
         if len(filtro)>0:
 
-            self.vmc.Eliminar_vitrina()
+            self.vmc.eliminar_vitrina2()
             self.filtro1 = self.filtro0.query(filtro)
             self.Complementomc(self.filtro1)
 
         else:
-            self.vmc.Eliminar_vitrina()
+            self.vmc.eliminar_vitrina2()
             self.Complementomc(self.filtro0)
 
     #----------------------------------------------------------------------
@@ -1071,7 +1074,7 @@ class Macroproblemas(funcionalidades_ospa):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_mp.eliminar_cuadro()
             self.frame_vitrina_mp = Cuadro(self)
-            self.vmc = Vitrina_pendientes(self, tabla_filtro3, self.ver_mp, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_mp_vitrina)
+            self.vmc = Vitrina(self, tabla_filtro3, self.ver_mp, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_mp_vitrina)
             
         else:
             self.frame_vitrina_mp.eliminar_cuadro()
@@ -1083,7 +1086,7 @@ class Macroproblemas(funcionalidades_ospa):
      
          # Eliminando campos
         self.mc1.eliminar_cuadro()
-        self.vmc.Eliminar_vitrina()
+        self.vmc.eliminar_vitrina2()
         self.mc2.eliminar_cuadro()
         self.frame_vitrina_mp.eliminar_cuadro()
         # Agregando rejilla a la ventana
@@ -1093,7 +1096,7 @@ class Macroproblemas(funcionalidades_ospa):
         self.mc2.agregar_rejilla(self.rejilla_mp2)
         self.frame_vitrina_mp = Cuadro(self)
         # Creando vitrina
-        self.vmc = Vitrina_pendientes(self, self.tabla_mpF, self.ver_mp, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_mp_vitrina)
+        self.vmc = Vitrina(self, self.tabla_mpF, self.ver_mp, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_mp_vitrina)
         
 class Macroproblemas_filtrada(funcionalidades_ospa):
     """"""
@@ -1168,7 +1171,7 @@ class Macroproblemas_filtrada(funcionalidades_ospa):
         self.frame_vitrina_mp = Cuadro(self)
 
         # Creando vitrina
-        self.vmc = Vitrina_pendientes(self, self.tabla_mpF, self.ver_mp, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_mpf_vitrina)
+        self.vmc = Vitrina(self, self.tabla_mpF, self.ver_mp, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_mpf_vitrina)
 
         # Franja inferior
         self.mc3 = Cuadro(self)
@@ -1207,23 +1210,23 @@ class Macroproblemas_filtrada(funcionalidades_ospa):
         self.filtro0 = self.tabla_renombrada
         
         if len(self.NOMBREf)>0: # Filtro por palabra clave
-            self.vmc.Eliminar_vitrina()
+            self.vmc.eliminar_vitrina2()
             self.filtro0 = self.filtro0[self.filtro0['NOMBRE PROBLEMA'].str.contains(self.NOMBREf)]
             self.Complementomcf(self.filtro0)
 
         if len(self.DESCRIPf)>0: # Filtro por palabra clave
-            self.vmc.Eliminar_vitrina()
+            self.vmc.eliminar_vitrina2()
             self.filtro0 = self.filtro0[self.filtro0['DESCRIPCION'].str.contains(self.DESCRIPf)]
             self.Complementomcf(self.filtro0)
   
         if len(filtro)>0:
 
-            self.vmc.Eliminar_vitrina()
+            self.vmc.eliminar_vitrina2()
             self.filtro1 = self.filtro0.query(filtro)
             self.Complementomcf(self.filtro1)
 
         else:
-            self.vmc.Eliminar_vitrina()
+            self.vmc.eliminar_vitrina2()
             self.Complementomcf(self.filtro0)
 
     #----------------------------------------------------------------------
@@ -1240,7 +1243,7 @@ class Macroproblemas_filtrada(funcionalidades_ospa):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_mp.eliminar_cuadro()
             self.frame_vitrina_mp = Cuadro(self)
-            self.vmc = Vitrina_pendientes(self, tabla_filtro3, self.ver_mp, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_mpf_vitrina)
+            self.vmc = Vitrina(self, tabla_filtro3, self.ver_mp, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_mpf_vitrina)
             
         else:
             self.frame_vitrina_mp.eliminar_cuadro()
@@ -1252,7 +1255,7 @@ class Macroproblemas_filtrada(funcionalidades_ospa):
      
          # Eliminando campos
         self.mc1.eliminar_cuadro()
-        self.vmc.Eliminar_vitrina()
+        self.vmc.eliminar_vitrina2()
         self.mc2.eliminar_cuadro()
         self.frame_vitrina_mp.eliminar_cuadro()
         # Agregando rejilla a la ventana
@@ -1263,7 +1266,7 @@ class Macroproblemas_filtrada(funcionalidades_ospa):
 
         self.frame_vitrina_mp = Cuadro(self)
         # Creando vitrina
-        self.vmc = Vitrina_pendientes(self, self.tabla_mpF, self.ver_mp, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_mpf_vitrina)
+        self.vmc = Vitrina(self, self.tabla_mpF, self.ver_mp, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_mpf_vitrina)
       
 class Administrados(funcionalidades_ospa):
     """"""
@@ -1330,7 +1333,7 @@ class Administrados(funcionalidades_ospa):
         self.frame_vitrina_ad = Cuadro(self)
 
         # Creando vitrina
-        self.vad = Vitrina_busqueda(self, self.tabla_adF, self.ver_ad, self.funcion_de_asociar_ad, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_mp_vitrina)
+        self.vad = Vitrina(self, self.tabla_adF, self.ver_ad, self.funcion_de_asociar_ad, funcion3=None, tipo_vitrina = "Modelo3", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_mp_vitrina)
 
     #----------------------------------------------------------------------
     
@@ -1364,19 +1367,19 @@ class Administrados(funcionalidades_ospa):
         self.filtro0 = self.tabla_ad
         
         if len(self.ADMINI)>0: # Filtro por palabra clave
-            self.vad.Eliminar_vitrina()
+            self.vad.eliminar_vitrina2()
             self.filtro0 = self.filtro0[self.filtro0['NOMBRE / RAZON SOCIAL'].str.contains(self.ADMINI)]
             self.Complementoad(self.filtro0)
   
         if len(filtro)>0:
 
-            self.vad.Eliminar_vitrina()
+            self.vad.eliminar_vitrina2()
             self.filtro0['DNI / RUC']=self.filtro0['DNI / RUC'].apply(str)
             self.filtro1 = self.filtro0.query(filtro)
             self.Complementoad(self.filtro1)
 
         else:
-            self.vad.Eliminar_vitrina()
+            self.vad.eliminar_vitrina2()
             self.Complementoad(self.filtro0)
 
     #----------------------------------------------------------------------
@@ -1391,7 +1394,7 @@ class Administrados(funcionalidades_ospa):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_ad.eliminar_cuadro()
             self.frame_vitrina_ad = Cuadro(self)
-            self.vad = Vitrina_busqueda(self, tabla_filtro3, self.ver_ad, self.funcion_de_asociar_ad, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_mp_vitrina)
+            self.vad = Vitrina(self, tabla_filtro3, self.ver_ad, self.funcion_de_asociar_ad, funcion3=None, tipo_vitrina = "Modelo3", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_mp_vitrina)
         else:
             self.frame_vitrina_ad.eliminar_cuadro()
             self.frame_vitrina_ad = Cuadro(self)
@@ -1402,7 +1405,7 @@ class Administrados(funcionalidades_ospa):
      
          # Eliminando campos
         self.ad1.eliminar_cuadro()
-        self.vad.Eliminar_vitrina()
+        self.vad.eliminar_vitrina2()
         self.ad2.eliminar_cuadro()
         self.frame_vitrina_ad.eliminar_cuadro()
         # Agregando rejilla a la ventana
@@ -1413,14 +1416,14 @@ class Administrados(funcionalidades_ospa):
 
         self.frame_vitrina_ad = Cuadro(self)
         # Creando vitrina
-        self.vad = Vitrina_busqueda(self, self.tabla_adF, self.ver_ad, self.funcion_de_asociar_ad, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_mp_vitrina)
+        self.vad = Vitrina(self, self.tabla_adF, self.ver_ad, self.funcion_de_asociar_ad, funcion3=None, tipo_vitrina = "Modelo3", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_mp_vitrina)
 
     #----------------------------------------------------------------------
     def actualizar(self):
         
         # Eliminando campos
         self.ad1.eliminar_cuadro()
-        self.vad.Eliminar_vitrina()
+        self.vad.eliminar_vitrina2()
         self.ad2.eliminar_cuadro()
         self.frame_vitrina_ad.eliminar_cuadro()
         # Actualizando data
@@ -1457,7 +1460,7 @@ class Administrados(funcionalidades_ospa):
 
         self.frame_vitrina_ad = Cuadro(self)
         # Creando vitrina
-        self.vad = Vitrina_busqueda(self, self.tabla_adF, self.ver_ad, self.funcion_de_asociar_ad, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_mp_vitrina)
+        self.vad = Vitrina(self, self.tabla_adF, self.ver_ad, self.funcion_de_asociar_ad, funcion3=None, tipo_vitrina = "Modelo3", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_mp_vitrina)
 
     #----------------------------------------------------------------------
     def ver_ad(self, x):
@@ -1563,7 +1566,7 @@ class Pendientes_jefe_firma(funcionalidades_ospa):
 
 
         if len(self.tabla_pfirmaF.index) > 0:
-            self.vpfirma = Vitrina_pendientes(self, self.tabla_pfirmaF, self.ver_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina) 
+            self.vpfirma = Vitrina(self, self.tabla_pfirmaF, self.ver_dr, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina) 
             return self.vpfirma
         else:
             self.frame_vitrina_pfirma = Cuadro(self)
@@ -1608,29 +1611,29 @@ class Pendientes_jefe_firma(funcionalidades_ospa):
         self.filtro0 = self.tabla_renombrada
         
         if len(self.htpfirma)>0: # Filtro por palabra clave
-            self.vpfirma.Eliminar_vitrina()
+            self.vpfirma.eliminar_vitrina2()
             self.filtro0['HT SALIDA']=self.filtro0['HT SALIDA'].apply(str)
             self.filtro0 = self.filtro0[self.filtro0['HT SALIDA'].str.contains(self.htpfirma)]
             self.Complementopfirma(self.filtro0)
 
         if len(self.detallepfirma)>0: # Filtro por palabra clave
-            self.vpfirma.Eliminar_vitrina()
+            self.vpfirma.eliminar_vitrina2()
             self.filtro0 = self.filtro0[self.filtro0['DETALLE'].str.contains(self.detallepfirma)]
             self.Complementopfirma(self.filtro0)
 
         if len(self.destinpfirma)>0: # Filtro por palabra clave
-            self.vpfirma.Eliminar_vitrina()
+            self.vpfirma.eliminar_vitrina2()
             self.filtro0 = self.filtro0[self.filtro0['DESTINATARIO'].str.contains(self.destinpfirma)]
             self.Complementopfirma(self.filtro0)
   
         if len(filtro)>0:
 
-            self.vpfirma.Eliminar_vitrina()
+            self.vpfirma.eliminar_vitrina2()
             self.filtro1 = self.filtro0.query(filtro)
             self.Complementopfirma(self.filtro1)
 
         else:
-            self.vpfirma.Eliminar_vitrina()
+            self.vpfirma.eliminar_vitrina2()
             self.Complementopfirma(self.filtro0)
 
     #----------------------------------------------------------------------
@@ -1645,7 +1648,7 @@ class Pendientes_jefe_firma(funcionalidades_ospa):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_pfirma.eliminar_cuadro()
             self.frame_vitrina_pfirma = Cuadro(self)
-            self.vpfirma = Vitrina_pendientes(self, tabla_filtro3, self.ver_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_pf_vitrina)
+            self.vpfirma = Vitrina(self, tabla_filtro3, self.ver_de, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_pf_vitrina)
             
         else:
             self.frame_vitrina_pfirma.eliminar_cuadro()
@@ -1658,7 +1661,7 @@ class Pendientes_jefe_firma(funcionalidades_ospa):
 
         # Eliminando campos
         self.pfirma1.eliminar_cuadro()
-        self.vpfirma.Eliminar_vitrina()
+        self.vpfirma.eliminar_vitrina2()
         self.pfirma15.eliminar_cuadro()
         self.frame_vitrina_pfirma.eliminar_cuadro()
         # Agregando rejilla a la ventana
@@ -1669,7 +1672,7 @@ class Pendientes_jefe_firma(funcionalidades_ospa):
         self.frame_vitrina_pfirma = Cuadro(self)
        
         # Creando vitrina
-        self.vpfirma = Vitrina_pendientes(self, self.tabla_pfirmaF, self.ver_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_pf_vitrina)
+        self.vpfirma = Vitrina(self, self.tabla_pfirmaF, self.ver_de, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_pf_vitrina)
         
 class Pendientes_jefe_asignar(funcionalidades_ospa):
     """"""
@@ -1743,7 +1746,7 @@ class Pendientes_jefe_asignar(funcionalidades_ospa):
         self.frame_vitrina_jpa = Cuadro(self)
 
         if len(self.tabla_jpaF.index) > 0:
-            self.vjpa = Vitrina_pendientes(self, self.tabla_jpaF, self.ver_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina) 
+            self.vjpa = Vitrina(self, self.tabla_jpaF, self.ver_dr, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina) 
             return self.vjpa
         else:
             self.frame_vitrina_jpa = Cuadro(self)
@@ -1783,35 +1786,35 @@ class Pendientes_jefe_asignar(funcionalidades_ospa):
         self.filtro0 = self.tabla_renombrada
         
         if len(self.remitentejpa)>0: # Filtro por palabra clave
-            self.vjpa.Eliminar_vitrina()
+            self.vjpa.eliminar_vitrina2()
             self.filtro0 = self.filtro0[self.filtro0['REMITENTE'].str.contains(self.remitentejpa)]
             self.Complementojpa(self.filtro0)
 
         if len(self.htjpa)>0: # Filtro por palabra clave
-            self.vjpa.Eliminar_vitrina()
+            self.vjpa.eliminar_vitrina2()
             self.filtro0['HT INGRESO']=self.filtro0['HT INGRESO'].apply(str)
             self.filtro0 = self.filtro0[self.filtro0['HT INGRESO'].str.contains(self.htjpa)]
             self.Complementojpa(self.filtro0)
 
         if len(self.nrodocjpa)>0: # Filtro por palabra clave
-            self.vjpa.Eliminar_vitrina()
+            self.vjpa.eliminar_vitrina2()
             self.filtro0['NRO DOC']=self.filtro0['NRO DOC'].apply(str)
             self.filtro0 = self.filtro0[self.filtro0['NRO DOC'].str.contains(self.nrodocjpa)]
             self.Complementojpa(self.filtro0)
 
         if len(self.aporte)>0: # Filtro por palabra clave
-            self.vjpa.Eliminar_vitrina()
+            self.vjpa.eliminar_vitrina2()
             self.filtro0 = self.filtro0[self.filtro0['ASUNTO'].str.contains(self.aporte)]
             self.Complementojpa(self.filtro0)
 
         if len(filtro)>0:
 
-            self.vjpa.Eliminar_vitrina()
+            self.vjpa.eliminar_vitrina2()
             self.filtro1 = self.filtro0.query(filtro)
             self.Complementojpa(self.filtro1)
 
         else:
-            self.vjpa.Eliminar_vitrina()
+            self.vjpa.eliminar_vitrina2()
             self.Complementojpa(self.filtro0)
 
     #----------------------------------------------------------------------
@@ -1828,7 +1831,7 @@ class Pendientes_jefe_asignar(funcionalidades_ospa):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_jpa.eliminar_cuadro()
             self.frame_vitrina_jpa = Cuadro(self)
-            self.vjpa = Vitrina_pendientes(self, tabla_filtro3, self.ver_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
+            self.vjpa = Vitrina(self, tabla_filtro3, self.ver_dr, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
             
         else:
             self.frame_vitrina_jpa.eliminar_cuadro()
@@ -1840,7 +1843,7 @@ class Pendientes_jefe_asignar(funcionalidades_ospa):
         
         # Eliminando campos
         self.jpa1.eliminar_cuadro()
-        self.vjpa.Eliminar_vitrina()
+        self.vjpa.eliminar_vitrina2()
         self.jpa15.eliminar_cuadro()
         self.frame_vitrina_jpa.eliminar_cuadro()
 
@@ -1851,7 +1854,7 @@ class Pendientes_jefe_asignar(funcionalidades_ospa):
         self.jpa15.agregar_rejilla(self.rejilla_jpa2)
         self.frame_vitrina_jpa = Cuadro(self)
         # Creando vitrina
-        self.vjpa = Vitrina_pendientes(self, self.tabla_jpaF, self.ver_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
+        self.vjpa = Vitrina(self, self.tabla_jpaF, self.ver_dr, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
         
     
 class Pendientes_por_reiterar(funcionalidades_ospa):
@@ -1933,7 +1936,7 @@ class Pendientes_por_reiterar(funcionalidades_ospa):
 
         
         if len(self.tabla_pprF.index) > 0:
-            self.vppr = Vitrina_pendientes(self, self.tabla_pprF, self.ver_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_prei_vitrina)
+            self.vppr = Vitrina(self, self.tabla_pprF, self.ver_de, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_prei_vitrina)
 
             return self.vppr
         else:
@@ -1988,29 +1991,29 @@ class Pendientes_por_reiterar(funcionalidades_ospa):
         self.filtro0 = self.tabla_renombrada2
         
         if len(self.htppr)>0: # Filtro por palabra clave
-            self.vppr.Eliminar_vitrina()
+            self.vppr.eliminar_vitrina2()
             self.filtro0['HT_SALIDA']=self.filtro0['HT_SALIDA'].apply(str)
             self.filtro0 = self.filtro0[self.filtro0['HT_SALIDA'].str.contains(self.htppr)]
             self.Complementoppr(self.filtro0)
 
         if len(self.destinppr)>0: # Filtro por palabra clave
-            self.vppr.Eliminar_vitrina()
+            self.vppr.eliminar_vitrina2()
             self.filtro0 = self.filtro0[self.filtro0['DESTINATARIO'].str.contains(self.destinppr)]
             self.Complementoppr(self.filtro0)
 
         if len(self.espeppr)>0: # Filtro por palabra clave
-            self.vppr.Eliminar_vitrina()
+            self.vppr.eliminar_vitrina2()
             self.filtro0 = self.filtro0[self.filtro0['ESPECIALISTA'].str.contains(self.espeppr)]
             self.Complementoppr(self.filtro0)
   
         if len(filtro)>0:
 
-            self.vppr.Eliminar_vitrina()
+            self.vppr.eliminar_vitrina2()
             self.filtro1 = self.filtro0.query(filtro)
             self.Complementoppr(self.filtro1)
 
         else:
-            self.vppr.Eliminar_vitrina()
+            self.vppr.eliminar_vitrina2()
             self.Complementoppr(self.filtro0)
 
     #----------------------------------------------------------------------
@@ -2025,7 +2028,7 @@ class Pendientes_por_reiterar(funcionalidades_ospa):
             self.frame_vitrina_ppr.eliminar_cuadro()
            
             self.frame_vitrina_ppr = Cuadro(self)
-            self.vppr = Vitrina_pendientes(self, tabla_filtro3, self.ver_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_prei_vitrina)
+            self.vppr = Vitrina(self, tabla_filtro3, self.ver_de, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_prei_vitrina)
             
         else:
             self.frame_vitrina_ppr.eliminar_cuadro()
@@ -2039,7 +2042,7 @@ class Pendientes_por_reiterar(funcionalidades_ospa):
 
         # Eliminando campos
         self.ppr1.eliminar_cuadro()
-        self.vppr.Eliminar_vitrina()
+        self.vppr.eliminar_vitrina2()
         self.ppr15.eliminar_cuadro()
         self.frame_vitrina_ppr.eliminar_cuadro()
         # Agregando rejilla a la ventana
@@ -2049,7 +2052,7 @@ class Pendientes_por_reiterar(funcionalidades_ospa):
         self.ppr15.agregar_rejilla(self.rejilla_2_ppr)
         self.frame_vitrina_ppr = Cuadro(self)
         # Creando vitrina
-        self.vppr = Vitrina_pendientes(self, self.tabla_pprF, self.ver_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_prei_vitrina)
+        self.vppr = Vitrina(self, self.tabla_pprF, self.ver_de, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_prei_vitrina)
        
     #----------------------------------------------------------------------
 
@@ -2134,7 +2137,7 @@ class Pendientes_eq1_trabajar(funcionalidades_ospa):
         self.frame_vitrina_peq1t = Cuadro(self)
 
         if len(self.tabla_peq1tF.index) > 0:
-            self.vpeq1t = Vitrina_pendientes(self, self.tabla_peq1tF, self.ver_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_peq1_vitrina)
+            self.vpeq1t = Vitrina(self, self.tabla_peq1tF, self.ver_dr, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_peq1_vitrina)
 
             return self.vjpa
         else:
@@ -2183,35 +2186,35 @@ class Pendientes_eq1_trabajar(funcionalidades_ospa):
         self.filtro0 = self.tabla_renombrada2
         
         if len(self.remitentepeq1t)>0: # Filtro por palabra clave
-            self.vpeq1t.Eliminar_vitrina()
+            self.vpeq1t.eliminar_vitrina2()
             self.filtro0 = self.filtro0[self.filtro0['REMITENTE'].str.contains(self.remitentepeq1t)]
             self.Complementopeq1t(self.filtro0)
 
         if len(self.nrodocpeq1t)>0: # Filtro por palabra clave
-            self.vpeq1t.Eliminar_vitrina()
+            self.vpeq1t.eliminar_vitrina2()
             self.filtro0['NRO DOC']=self.filtro0['NRO DOC'].apply(str)
             self.filtro0 = self.filtro0[self.filtro0['NRO DOC'].str.contains(self.nrodocpeq1t)]
             self.Complementopeq1t(self.filtro0)
 
         if len(self.htpeq1t)>0: # Filtro por palabra clave
-            self.vpeq1t.Eliminar_vitrina()
+            self.vpeq1t.eliminar_vitrina2()
             self.filtro0['HT INGRESO']=self.filtro0['HT INGRESO'].apply(str)
             self.filtro0 = self.filtro0[self.filtro0['HT INGRESO'].str.contains(self.htpeq1t)]
             self.Complementopeq1t(self.filtro0)
 
         if len(self.aporte)>0: # Filtro por palabra clave
-            self.vpeq1t.Eliminar_vitrina()
+            self.vpeq1t.eliminar_vitrina2()
             self.filtro0 = self.filtro0[self.filtro0['ASUNTO'].str.contains(self.aporte)]
             self.Complementopeq1t(self.filtro0)
 
         if len(filtro)>0:
 
-            self.vpeq1t.Eliminar_vitrina()
+            self.vpeq1t.eliminar_vitrina2()
             self.filtro1 = self.filtro0.query(filtro)
             self.Complementopeq1t(self.filtro1)
 
         else:
-            self.vpeq1t.Eliminar_vitrina()
+            self.vpeq1t.eliminar_vitrina2()
             self.Complementopeq1t(self.filtro0)
 
     #----------------------------------------------------------------------
@@ -2228,7 +2231,7 @@ class Pendientes_eq1_trabajar(funcionalidades_ospa):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_peq1t.eliminar_cuadro()
             self.frame_vitrina_peq1t = Cuadro(self)
-            self.vpeq1t = Vitrina_pendientes(self, tabla_filtro3, self.ver_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_peq1_vitrina)
+            self.vpeq1t = Vitrina(self, tabla_filtro3, self.ver_dr, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_peq1_vitrina)
             
         else:
             self.frame_vitrina_peq1t.eliminar_cuadro()
@@ -2240,7 +2243,7 @@ class Pendientes_eq1_trabajar(funcionalidades_ospa):
         
         # Eliminando campos
         self.peq1t1.eliminar_cuadro()
-        self.vpeq1t.Eliminar_vitrina()
+        self.vpeq1t.eliminar_vitrina2()
         self.peq1t15.eliminar_cuadro()
         self.frame_vitrina_peq1t.eliminar_cuadro()
         # Agregando rejilla a la ventana
@@ -2251,7 +2254,7 @@ class Pendientes_eq1_trabajar(funcionalidades_ospa):
         self.frame_vitrina_peq1t = Cuadro(self)
         
         # Creando vitrina
-        self.vpeq1t = Vitrina_pendientes(self, self.tabla_peq1tF, self.ver_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_peq1_vitrina)
+        self.vpeq1t = Vitrina(self, self.tabla_peq1tF, self.ver_dr, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_peq1_vitrina)
         
 class Pendientes_eq2_calificarrpta(funcionalidades_ospa):
     """"""
@@ -2334,7 +2337,7 @@ class Pendientes_eq2_calificarrpta(funcionalidades_ospa):
         self.frame_vitrina_peq2t = Cuadro(self)
 
         if len(self.tabla_peq2tF.index) > 0:
-            self.vpeq2t = Vitrina_pendientes(self, self.tabla_peq2tF, self.ver_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_peq2_vitrina)
+            self.vpeq2t = Vitrina(self, self.tabla_peq2tF, self.ver_dr, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_peq2_vitrina)
 
             return self.vpeq2t
         else:
@@ -2383,35 +2386,35 @@ class Pendientes_eq2_calificarrpta(funcionalidades_ospa):
         self.filtro0 = self.tabla_renombrada2
         
         if len(self.remitentepeq2t)>0: # Filtro por palabra clave
-            self.vpeq2t.Eliminar_vitrina()
+            self.vpeq2t.eliminar_vitrina2()
             self.filtro0 = self.filtro0[self.filtro0['REMITENTE'].str.contains(self.remitentepeq2t)]
             self.Complementopeq2t(self.filtro0)
 
         if len(self.aporte)>0: # Filtro por palabra clave
-            self.vpeq2t.Eliminar_vitrina()
+            self.vpeq2t.eliminar_vitrina2()
             self.filtro0 = self.filtro0[self.filtro0['ASUNTO'].str.contains(self.aporte)]
             self.Complementopeq2t(self.filtro0)
 
         if len(self.nrodocpeq2t)>0: # Filtro por palabra clave
-            self.vpeq2t.Eliminar_vitrina()
+            self.vpeq2t.eliminar_vitrina2()
             self.filtro0['NRO DOC']=self.filtro0['NRO DOC'].apply(str)
             self.filtro0 = self.filtro0[self.filtro0['NRO DOC'].str.contains(self.nrodocpeq2t)]
             self.Complementopeq2t(self.filtro0)
 
         if len(self.htpeq2t)>0: # Filtro por palabra clave
-            self.vpeq2t.Eliminar_vitrina()
+            self.vpeq2t.eliminar_vitrina2()
             self.filtro0['HT INGRESO']=self.filtro0['HT INGRESO'].apply(str)
             self.filtro0 = self.filtro0[self.filtro0['HT INGRESO'].str.contains(self.htpeq2t)]
             self.Complementopeq2t(self.filtro0)
 
         if len(filtro)>0:
 
-            self.vpeq2t.Eliminar_vitrina()
+            self.vpeq2t.eliminar_vitrina2()
             self.filtro1 = self.filtro0.query(filtro)
             self.Complementopeq2t(self.filtro1)
 
         else:
-            self.vpeq2t.Eliminar_vitrina()
+            self.vpeq2t.eliminar_vitrina2()
             self.Complementopeq2t(self.filtro0)
 
     #----------------------------------------------------------------------
@@ -2427,7 +2430,7 @@ class Pendientes_eq2_calificarrpta(funcionalidades_ospa):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_peq2t.eliminar_cuadro()
             self.frame_vitrina_peq2t = Cuadro(self)
-            self.vpeq2t = Vitrina_pendientes(self, tabla_filtro3, self.ver_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_peq2_vitrina)
+            self.vpeq2t = Vitrina(self, tabla_filtro3, self.ver_dr, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_peq2_vitrina)
             
         else:
             self.frame_vitrina_peq2t.eliminar_cuadro()
@@ -2439,7 +2442,7 @@ class Pendientes_eq2_calificarrpta(funcionalidades_ospa):
         
         # Eliminando campos
         self.peq2t1.eliminar_cuadro()
-        self.vpeq2t.Eliminar_vitrina()
+        self.vpeq2t.eliminar_vitrina2()
         self.peq2t15.eliminar_cuadro()
         self.frame_vitrina_peq2t.eliminar_cuadro()
         # Agregando rejilla a la ventana
@@ -2449,7 +2452,7 @@ class Pendientes_eq2_calificarrpta(funcionalidades_ospa):
         self.peq2t15.agregar_rejilla(self.rejilla_peq2t2)
         self.frame_vitrina_peq2t = Cuadro(self)
         # Creando vitrina
-        self.vpeq2t = Vitrina_pendientes(self, self.tabla_peq2tF, self.ver_dr, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_peq2_vitrina)
+        self.vpeq2t = Vitrina(self, self.tabla_peq2tF, self.ver_dr, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_peq2_vitrina)
        
 
 class Pendientes_eq2_programaciones(funcionalidades_ospa):
@@ -2522,7 +2525,7 @@ class Pendientes_eq2_programaciones(funcionalidades_ospa):
         self.frame_vitrina_peq2pr = Cuadro(self)
 
         # Creando vitrina 
-        self.vpeq2pr = Vitrina_pendientes(self, self.tabla_peq2prF, self.ver_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_progr_vitrina)
+        self.vpeq2pr = Vitrina(self, self.tabla_peq2prF, self.ver_de, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_progr_vitrina)
         
         # Franja inferior
         self.peq2pr16 = Cuadro(self)
@@ -2560,18 +2563,18 @@ class Pendientes_eq2_programaciones(funcionalidades_ospa):
         self.filtro0 = self.tabla_renombrada2
         
         if len(self.remitentepeq2pr)>0: # Filtro por palabra clave
-            self.vpeq2pr.Eliminar_vitrina()
+            self.vpeq2pr.eliminar_vitrina2()
             self.filtro0 = self.filtro0[self.filtro0['DESTINATARIO'].str.contains(self.remitentepeq2pr)]
             self.Complementopeq2pr(self.filtro0)
 
         if len(filtro)>0:
 
-            self.vpeq2pr.Eliminar_vitrina()
+            self.vpeq2pr.eliminar_vitrina2()
             self.filtro1 = self.filtro0.query(filtro)
             self.Complementopeq2pr(self.filtro1)
 
         else:
-            self.vpeq2pr.Eliminar_vitrina()
+            self.vpeq2pr.eliminar_vitrina2()
             self.Complementopeq2pr(self.filtro0)
 
     #----------------------------------------------------------------------
@@ -2586,7 +2589,7 @@ class Pendientes_eq2_programaciones(funcionalidades_ospa):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_peq2pr.eliminar_cuadro()
             self.frame_vitrina_peq2pr = Cuadro(self)
-            self.vpeq2pr = Vitrina_pendientes(self, tabla_filtro3, self.ver_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_mp_vitrina)
+            self.vpeq2pr = Vitrina(self, tabla_filtro3, self.ver_de, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_mp_vitrina)
            
         else:
             self.frame_vitrina_peq2pr.eliminar_cuadro()
@@ -2598,7 +2601,7 @@ class Pendientes_eq2_programaciones(funcionalidades_ospa):
         
         # Eliminando campos
         self.peq2pr1.eliminar_cuadro()
-        self.vpeq2pr.Eliminar_vitrina()
+        self.vpeq2pr.eliminar_vitrina2()
         self.peq2pr15.eliminar_cuadro()
         self.frame_vitrina_peq2pr.eliminar_cuadro()
 
@@ -2609,7 +2612,7 @@ class Pendientes_eq2_programaciones(funcionalidades_ospa):
         self.peq2pr15.agregar_rejilla(self.rejilla_peq2pr2)
         self.frame_vitrina_peq2pr = Cuadro(self)
         # Creando vitrina
-        self.vpeq2pr = Vitrina_pendientes(self, self.tabla_peq2prF, self.ver_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_mp_vitrina)
+        self.vpeq2pr = Vitrina(self, self.tabla_peq2prF, self.ver_de, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_mp_vitrina)
      
 class Pendientes_notificar(funcionalidades_ospa):
     """"""
@@ -2690,8 +2693,8 @@ class Pendientes_notificar(funcionalidades_ospa):
         self.frame_vitrina_pfirma = Cuadro(self)
 
         # Creando vitrina
-        self.vpfirma = Vitrina_pendientes(self, self.tabla_pfirmaF, 
-                                                    self.ver_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_pf_vitrina)
+        self.vpfirma = Vitrina(self, self.tabla_pfirmaF, 
+                                                    self.ver_de, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_pf_vitrina)
         
         # Franja inferior
         self.pfirma16 = Cuadro(self)
@@ -2732,29 +2735,29 @@ class Pendientes_notificar(funcionalidades_ospa):
         self.filtro0 = self.tabla_renombrada
         
         if len(self.htpfirma)>0: # Filtro por palabra clave
-            self.vpfirma.Eliminar_vitrina()
+            self.vpfirma.eliminar_vitrina2()
             self.filtro0['HT SALIDA']=self.filtro0['HT SALIDA'].apply(str)
             self.filtro0 = self.filtro0[self.filtro0['HT SALIDA'].str.contains(self.htpfirma)]
             self.Complementopfirma(self.filtro0)
 
         if len(self.detallepfirma)>0: # Filtro por palabra clave
-            self.vpfirma.Eliminar_vitrina()
+            self.vpfirma.eliminar_vitrina2()
             self.filtro0 = self.filtro0[self.filtro0['DETALLE'].str.contains(self.detallepfirma)]
             self.Complementopfirma(self.filtro0)
 
         if len(self.destinpfirma)>0: # Filtro por palabra clave
-            self.vpfirma.Eliminar_vitrina()
+            self.vpfirma.eliminar_vitrina2()
             self.filtro0 = self.filtro0[self.filtro0['DESTINATARIO'].str.contains(self.destinpfirma)]
             self.Complementopfirma(self.filtro0)
   
         if len(filtro)>0:
 
-            self.vpfirma.Eliminar_vitrina()
+            self.vpfirma.eliminar_vitrina2()
             self.filtro1 = self.filtro0.query(filtro)
             self.Complementopfirma(self.filtro1)
 
         else:
-            self.vpfirma.Eliminar_vitrina()
+            self.vpfirma.eliminar_vitrina2()
             self.Complementopfirma(self.filtro0)
 
     #----------------------------------------------------------------------
@@ -2769,7 +2772,7 @@ class Pendientes_notificar(funcionalidades_ospa):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_pfirma.eliminar_cuadro()
             self.frame_vitrina_pfirma = Cuadro(self)
-            self.vpfirma = Vitrina_pendientes(self, tabla_filtro3, self.ver_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_pf_vitrina)
+            self.vpfirma = Vitrina(self, tabla_filtro3, self.ver_de, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_pf_vitrina)
             
         else:
             self.frame_vitrina_pfirma.eliminar_cuadro()
@@ -2782,7 +2785,7 @@ class Pendientes_notificar(funcionalidades_ospa):
 
         # Eliminando campos
         self.pfirma1.eliminar_cuadro()
-        self.vpfirma.Eliminar_vitrina()
+        self.vpfirma.eliminar_vitrina2()
         self.pfirma15.eliminar_cuadro()
         self.frame_vitrina_pfirma.eliminar_cuadro()
         # Agregando rejilla a la ventana
@@ -2793,5 +2796,5 @@ class Pendientes_notificar(funcionalidades_ospa):
         self.frame_vitrina_pfirma = Cuadro(self)
        
         # Creando vitrina
-        self.vpfirma = Vitrina_pendientes(self, self.tabla_pfirmaF, self.ver_de, height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_pf_vitrina)
+        self.vpfirma = Vitrina(self, self.tabla_pfirmaF, self.ver_de, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_pf_vitrina)
         

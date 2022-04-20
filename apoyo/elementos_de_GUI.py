@@ -85,7 +85,7 @@ class MenuSefa():
 class Ventana(Toplevel):
     """"""
     #----------------------------------------------------------------------
-    def __init__(self, ventana_anterior, alto = 300, ancho = 520, titulo = "Aplicativo de Sefa", scrollable_ventana = False):
+    def __init__(self, ventana_anterior, alto = 350, ancho = 520, titulo = "Aplicativo de Sefa", scrollable_ventana = False):
         """Constructor especial de la clase Ventana.\n
         Sirve para generar nuevas ventanas en una desktop app"""
 
@@ -402,22 +402,33 @@ class Cuadro(Frame):
         self.lista_de_objetos.append((self.boton))
 
     #----------------------------------------------------------------------
-    def agregar_boton_grande(self, y, x, texto, funcion, ancho):
+    def agregar_boton_grande(self, y, x, texto, funcion, ancho, color=None):
         """Método de la clase Cuadro. \n
         Permite agregar un botón al Frame creado con la Clase Cuadro."""
-
+        self.color = color
+        if self.color == "Modelo1":
+            self.colorboton = formato.boton_sin_que_pase_cursor
+            self.colorbotoncursor = formato.boton_cuando_pasa_cursor
+        elif self.color == "Modelo2":
+            self.colorboton = formato.boton_sin_que_pase_cursor2
+            self.colorbotoncursor = formato.boton_cuando_pasa_cursor2
+        else:
+            self.colorboton = formato.boton_sin_que_pase_cursor
+            self.colorbotoncursor = formato.boton_cuando_pasa_cursor
         #----------------------------------------------------------------------
-        def Efecto_de_boton(boton):
+        def Efecto_de_boton(boton, color, color2):
             """"""
+            color = self.colorboton
+            color2 = self.colorbotoncursor
             #----------------------------------------------------------------------
             def Pasar_sobre_boton(e):
                 """"""
-                boton['bg'] = formato.boton_cuando_pasa_cursor
+                boton['bg'] = color2
         
             #----------------------------------------------------------------------
             def Dejar_boton(e):
                 """"""
-                boton['bg'] = formato.boton_sin_que_pase_cursor
+                boton['bg'] = color
         
             boton.bind('<Enter>', Pasar_sobre_boton)
             boton.bind('<Leave>', Dejar_boton)
@@ -432,13 +443,13 @@ class Cuadro(Frame):
                         command=self.funcion,
                         font= formato.tipo_de_letra,
                         fg = formato.letras_del_boton,
-                        bg = formato.boton_sin_que_pase_cursor,
+                        bg = self.colorboton,
                         relief="flat",
                         cursor="hand2",
                         width = ancho
                         )
         self.boton.grid(row= self.y, column=self.x, pady=4, padx=8)
-        Efecto_de_boton(self.boton)
+        Efecto_de_boton(self.boton, color=self.colorboton, color2=self.colorbotoncursor)
         self.lista_de_objetos.append((self.boton))
 
     #----------------------------------------------------------------------
@@ -1360,7 +1371,7 @@ class Vitrina(Frame):
     """"""
 
     #----------------------------------------------------------------------
-    def __init__(self, window, tabla, funcion1, funcion2, funcion3, height=100, width=1600):
+    def __init__(self, window, tabla, funcion1, funcion2, funcion3, tipo_vitrina = None, height=100, width=1600):
         """Constructor"""
 
         self.window = window
@@ -1368,6 +1379,7 @@ class Vitrina(Frame):
         self.funcion1 = funcion1
         self.funcion2 = funcion2
         self.funcion3 = funcion3
+        self.tipo_vitrina = tipo_vitrina
         self.height = height
         self.width = width
         
@@ -1379,7 +1391,73 @@ class Vitrina(Frame):
         self.frame_base_encabezado = Frame(self.main_frame, bg = formato.fondo)
         self.frame_base_encabezado.pack()
 
-        self.canvas_encabezado = Canvas(self.frame_base_encabezado, height=23, width=self.width, bg = formato.fondo,  highlightthickness = 0)
+        if self.tipo_vitrina == "Modelo1":
+            self.height_ce=23
+            self.width_columnas = 25
+            self.formatoboton_c = formato.letras_del_boton
+            self.font_c = formato.tipo_de_letra_tabla
+            self.width_ol = 16
+            self.height_tabla = 1
+            self.boton_ver = 'VER'
+            self.height_botonver=5
+            self.width_botonver = 1
+            self.boton_elimiar = 'DEL'
+            self.height_botoneliminar= 1
+            self.width_botoneliminar = 5
+        elif self.tipo_vitrina == "Modelo2":
+            self.height_ce=25
+            self.width_columnas = 22
+            self.formatoboton_c = formato.color_negro
+            self.font_c = formato.tipo_de_letra_tabla
+            self.width_ol = 18
+            self.boton_ver = 'Detalle'
+            self.height_tabla = 2
+            self.height_botonver= 9
+            self.width_botonver = 2
+            self.boton_elimiar = 'Eliminar'
+            self.height_botoneliminar= 2
+            self.width_botoneliminar = 9
+        elif self.tipo_vitrina == "Modelo3":
+            self.height_ce=23
+            self.width_columnas = 19
+            self.formatoboton_c = formato.color_blanco
+            self.font_c = formato.tipo_de_letra_tabla
+            self.width_ol = 16
+            self.height_tabla = 2
+            self.boton_ver = 'VER'
+            self.height_botonver= 7
+            self.width_botonver = 2
+            self.boton_elimiar = 'Eliminar'
+            self.height_botoneliminar= 5
+            self.width_botoneliminar = 1
+        elif self.tipo_vitrina == "Modelo4":
+            self.height_ce=20
+            self.width_columnas = 18
+            self.formatoboton_c = formato.color_blanco
+            self.font_c = formato.tipo_de_letra_tablaep
+            self.width_ol = 14
+            self.height_tabla = 3
+            self.boton_ver = 'VER'
+            self.height_botonver= 5
+            self.width_botonver = 3
+            self.boton_elimiar = 'Eliminar'
+            self.height_botoneliminar= 5
+            self.width_botoneliminar = 1
+        else:
+            self.height_ce=23
+            self.width_columnas = 22
+            self.formatoboton_c = formato.color_blanco
+            self.font_c = formato.tipo_de_letra_tabla
+            self.width_ol = 10
+            self.height_tabla = 2
+            self.boton_ver = 'VER'
+            self.height_botonver= 10
+            self.width_botonver = 2
+            self.boton_elimiar = 'Eliminar'
+            self.height_botoneliminar= 5
+            self.width_botoneliminar = 1
+
+        self.canvas_encabezado = Canvas(self.frame_base_encabezado, height=self.height_ce, width=self.width, bg = formato.fondo,  highlightthickness = 0)
         self.canvas_encabezado.pack(side='left', fill='both', expand=True)
 
         self.empty_frame = Frame(self.frame_base_encabezado, width=12, bg = formato.fondo)
@@ -1406,9 +1484,9 @@ class Vitrina(Frame):
             encabezado = Label(
                 self.frame_dentro_del_canvas, 
                 text=row[1],
-                font=formato.tipo_de_letra_tabla,
-                fg = formato.letras_del_boton,
-                width= 25, 
+                font=self.font_c,
+                fg = self.formatoboton_c,
+                width= self.width_columnas, 
                 height=1, 
                 relief='groove',
                 bg=formato.fondo_encabezados_de_tabla
@@ -1418,15 +1496,39 @@ class Vitrina(Frame):
         opciones_label = Label(
             self.frame_dentro_del_canvas,
             text='Opciones',
-            font=formato.tipo_de_letra_tabla,
-            fg = formato.letras_del_boton,
-            width= 16, 
+            font=self.font_c,
+            fg = self.formatoboton_c,
+            width= self.width_ol, 
             height=1, 
             relief='groove',
             bg=formato.fondo_encabezados_de_tabla
             )
-        opciones_label.grid(row=0, column=len(columnas_de_tabla)+1)
+            
+        opciones_labelmacro = Label(
+            self.frame_dentro_del_canvas,
+            text='Macroproblema',
+            font=formato.tipo_de_letra_tablaep,
+            fg = formato.color_negro,
+            width= 14, #se modifico 
+            height=1, 
+            relief='groove',
+            bg=formato.fondo_encabezados_de_tabla
+            )
+        
+        # Espacio vacio al final
+        self.empty_frame_2 = Frame(self.window, height=15, width=self.width, bg = formato.fondo,  borderwidth = 3)
 
+        if self.tipo_vitrina == "Modelo4":
+            opciones_label.grid(row=0, column=len(columnas_de_tabla)+1)
+            opciones_labelmacro.grid(row=0, column=len(columnas_de_tabla)+2)
+
+        elif self.tipo_vitrina == "Modelo2":
+            opciones_label.grid(row=0, column=len(columnas_de_tabla)+1)
+            opciones_labelmacro.grid(row=0, column=len(columnas_de_tabla)+2)
+            self.empty_frame_2.pack(side='bottom', fill='both', expand=True)
+
+        else:
+            opciones_label.grid(row=0, column=len(columnas_de_tabla)+1)
         # Incluir elementos en el cuerpo de la tabla
 
         for i, row in self.tabla.iterrows():
@@ -1440,15 +1542,34 @@ class Vitrina(Frame):
             }
             tabla_valor = pd.DataFrame(elementos_valores)
             for i,row in tabla_valor.iterrows():
-                valor = Label(
-                    valores_subframe, 
-                    text=row[1],
-                    font=formato.tipo_de_letra_tabla,
-                    width=25, 
-                    height=1, 
-                    relief='groove',
-                    bg= formato.fondo_valores_de_tabla)
-                valor.grid(row=0, column=row[0])
+                if len(str(row[1])) > 35:
+                    texto_completo = str(row[1])
+                    texto_recortado = texto_completo[0:35]
+                    texto_tabla_vista = texto_recortado + "..."
+                    valor = Label(
+                        valores_subframe, 
+                        text = texto_tabla_vista,
+                        font = self.font_c,
+                        width = self.width_columnas, 
+                        height = self.height_tabla,
+                        relief='groove',
+                        bg = formato.fondo_valores_de_tabla,
+                        wraplength = 125, 
+                        justify="center")
+                    Hovertip_Sefa(valor, text = texto_completo)
+                    valor.grid(row=0, column=row[0])
+                else:
+                    valor = Label(
+                        valores_subframe, 
+                        text=row[1],
+                        font=self.font_c,
+                        width=self.width_columnas, 
+                        height=self.height_tabla, 
+                        relief='groove',
+                        bg= formato.fondo_valores_de_tabla,
+                        wraplength=125,
+                        justify="center")
+                    valor.grid(row=0, column=row[0])
 
             # Agregar botones
             
@@ -1456,18 +1577,15 @@ class Vitrina(Frame):
 
             boton_ver = Label(
                 valores_subframe,
-                text='VER',
-                font=formato.tipo_de_letra_tabla,
+                text=self.boton_ver,
+                font=self.font_c,
                 fg = formato.letras_del_boton,
-                width=5,
-                height=1,
+                width=self.height_botonver,
+                height=self.width_botonver,
                 relief='groove',
                 cursor="hand2",
                 bg=formato.boton_sin_que_pase_cursor
             )
-            boton_ver.grid(row=0, column=len(lista_de_valores)+1)
-            boton_ver.bind("<Button-1>",lambda e,argumento=argumento:self.funcion1(argumento))
-            self.Efecto_de_boton(boton_ver)
 
             boton_editar = Label(
                 valores_subframe,
@@ -1480,624 +1598,31 @@ class Vitrina(Frame):
                 cursor="hand2",
                 bg=formato.boton_sin_que_pase_cursor
             )
-            boton_editar.grid(row=0, column=len(lista_de_valores)+2)
-            boton_editar.bind("<Button-1>",lambda e,argumento=argumento:self.funcion2(argumento))
-            self.Efecto_de_boton(boton_editar)
-
+            
             boton_eliminar = Label(
                 valores_subframe,
-                text='DEL',
+                text=self.boton_elimiar,
                 font=formato.tipo_de_letra_tabla,
                 fg = formato.letras_del_boton,
-                width=5,
-                height=1,
+                width=self.width_botoneliminar,
+                height=self.height_botoneliminar,
                 relief='groove',
                 cursor="hand2",
                 bg=formato.boton_sin_que_pase_cursor
             )
-            boton_eliminar.grid(row=0, column=len(lista_de_valores)+3)
-            boton_eliminar.bind("<Button-1>",lambda e,argumento=argumento:self.funcion3(argumento))
-            self.Efecto_de_boton(boton_eliminar)
-
-    #----------------------------------------------------------------------
-    def Efecto_de_boton(self, boton):
-        """"""
-
-        #----------------------------------------------------------------------
-        def Pasar_sobre_boton(e):
-            """"""
-            boton['bg'] = formato.boton_cuando_pasa_cursor
-            boton['fg'] = formato.letras_del_boton_cuando_pasa_cursor
-
-        #----------------------------------------------------------------------
-        def Dejar_boton(e):
-            """"""
-            boton['bg'] = formato.boton_sin_que_pase_cursor
-            boton['fg'] = formato.letras_del_boton
-
-        boton.bind('<Enter>', Pasar_sobre_boton)
-        boton.bind('<Leave>', Dejar_boton)
-    
-    #----------------------------------------------------------------------
-    def eliminar_vitrina(self):
-        """"""  
-        self.main_frame.destroy()
-
-# VII. Vitrina Vista
-class Vitrina_vista(Frame):
-    """"""
-    #----------------------------------------------------------------------
-    def __init__(self, window, tabla, funcion1, funcion2, height = 100, width = 1600):
-        """Constructor"""
-
-        self.window = window
-        self.tabla = tabla
-        self.funcion1 = funcion1
-        self.funcion2 = funcion2
-        #self.funcion3 = funcion3
-        self.height = height
-        self.width = width
-        
-        self.main_frame = Frame(self.window, bg = formato.fondo)
-        self.main_frame.pack()
-
-        # Encabezados (entorno)
-
-        self.frame_base_encabezado = Frame(self.main_frame, bg = formato.fondo)
-        self.frame_base_encabezado.pack()
-
-        self.canvas_encabezado = Canvas(self.frame_base_encabezado, height=25, width=self.width, bg = formato.fondo,  highlightthickness = 0)
-        self.canvas_encabezado.pack(side='left', fill='both', expand=True)
-
-        self.empty_frame = Frame(self.frame_base_encabezado, width=12, bg = formato.fondo)
-        self.empty_frame.pack(side='right', fill='both', expand=True)
-
-        self.frame_dentro_del_canvas = Frame(self.canvas_encabezado, bg = formato.fondo) # Éste es el frame donde colocaremos los encabezados
-        
-        # Encabezado
-        self.canvas_encabezado.create_window(4, 4, window=self.frame_dentro_del_canvas, anchor='nw')
-
-        # Cuerpo de la tabla (entorno)
-
-        self.frame_con_scrollbar = VerticalScrolledFrame(self.main_frame, height=self.height, width=self.width)
-        self.frame_con_scrollbar.pack()
-
-        # Espacio vacio al final
-        self.empty_frame_2 = Frame(self.window, height=15, width=self.width, bg = formato.fondo,  borderwidth = 3)
-        self.empty_frame_2.pack(side='bottom', fill='both', expand=True)
-
-        # Incluir encabezados de la tabla
-
-        columnas_de_tabla = self.tabla.columns.values.tolist()
-        indice_de_columnas = range(len(columnas_de_tabla))
-        elementos_columnas = {
-            'index': indice_de_columnas,
-            'columnas': columnas_de_tabla
-            }
-        tabla_columna = pd.DataFrame(elementos_columnas)
-
-        for i,row in tabla_columna.iterrows():
-            encabezado = Label(
-                self.frame_dentro_del_canvas, 
-                text=row[1],
-                font=formato.tipo_de_letra_tabla,
-                fg = formato.color_negro,
-                width= 22, 
-                height = 1, 
-                relief='groove',
-                bg=formato.fondo_encabezados_de_tabla
-                )
-            encabezado.grid(row=0, column=row[0])
-    
-        opciones_label = Label(
-            self.frame_dentro_del_canvas,
-            text ='Opciones',
-            font = formato.tipo_de_letra_tabla,
-            fg = formato.color_negro,
-            width = 18,
-            height = 1, 
-            relief = 'groove',
-            bg=formato.fondo_encabezados_de_tabla
-            )
-        opciones_label.grid(row=0, column=len(columnas_de_tabla)+1)
-
-        # Incluir elementos en el cuerpo de la tabla
-
-        for i, row in self.tabla.iterrows():
-            valores_subframe = Frame(self.frame_con_scrollbar)
-            valores_subframe.pack()
-            lista_de_valores = row.values
-            indice_de_valores = range(len(lista_de_valores))
-            elementos_valores = {
-                'index': indice_de_valores,
-                'valores': lista_de_valores 
-            }
-
-            # Valores de tabla
-            tabla_valor = pd.DataFrame(elementos_valores)
-            for i,row in tabla_valor.iterrows():
-                if len(str(row[1])) > 35:
-                    texto_completo = str(row[1])
-                    texto_recortado = texto_completo[0:35]
-                    texto_tabla_vista = texto_recortado + "..."
-                    valor = Label(
-                        valores_subframe, 
-                        text = texto_tabla_vista,
-                        font = formato.tipo_de_letra_tabla,
-                        width = 22, 
-                        height = 2,
-                        relief='groove',
-                        bg = formato.fondo_valores_de_tabla,
-                        wraplength = 125, 
-                        justify="center")
-                    Hovertip_Sefa(valor, text = texto_completo)
-                    valor.grid(row=0, column=row[0])
-                else:
-                    valor = Label(
-                        valores_subframe, 
-                        text = row[1],
-                        font = formato.tipo_de_letra_tabla,
-                        width =22, 
-                        height = 2,
-                        relief='groove',
-                        bg= formato.fondo_valores_de_tabla,
-                        wraplength=125, 
-                        justify="center")
-                    valor.grid(row=0, column=row[0])
-
-            # Agregar botones
-            
-            argumento = lista_de_valores[0]
-
-            boton_ver = Label(
-                valores_subframe,
-                text='Detalle',
-                font=formato.tipo_de_letra_tabla,
-                fg = formato.letras_del_boton,
-                width=9,
-                height=2,
-                relief='groove',
-                cursor="hand2",
-                bg=formato.boton_sin_que_pase_cursor
-            )
-            boton_ver.grid(row=0, column=len(lista_de_valores)+1)
-            boton_ver.bind("<Button-1>", lambda e, argumento=argumento:self.funcion1(argumento))
-            self.Efecto_de_boton(boton_ver)
-
-            boton_eliminar = Label(
-                valores_subframe,
-                text='Eliminar',
-                font=formato.tipo_de_letra_tabla,
-                fg = formato.letras_del_boton,
-                width=9,
-                height=2,
-                relief='groove',
-                cursor="hand2",
-                bg=formato.boton_sin_que_pase_cursor
-            )
-            boton_eliminar.grid(row=0, column=len(lista_de_valores)+2)
-            boton_eliminar.bind("<Button-1>",lambda e,argumento=argumento:self.funcion2(argumento))
-            self.Efecto_de_boton(boton_eliminar)
-
-            #boton_editar = Label(
-            #    valores_subframe,
-            #    text='EDIT',
-            #    font=formato.tipo_de_letra_tabla,
-            #    fg = formato.letras_del_boton,
-            #    width=5,
-            #    height=1,
-            #    relief='groove',
-            #    cursor="hand2",
-            #    bg=formato.boton_sin_que_pase_cursor
-            #)
-            #boton_editar.grid(row=0, column=len(lista_de_valores)+2)
-            #boton_editar.bind("<Button-1>",lambda e,argumento=argumento:self.funcion2(argumento))
-            #self.Efecto_de_boton(boton_editar)
-
-    #----------------------------------------------------------------------
-    def Efecto_de_boton(self, boton):
-        """"""
-
-        #----------------------------------------------------------------------
-        def Pasar_sobre_boton(e):
-            """"""
-            boton['bg'] = formato.boton_cuando_pasa_cursor
-            boton['fg'] = formato.letras_del_boton_cuando_pasa_cursor
-
-        #----------------------------------------------------------------------
-        def Dejar_boton(e):
-            """"""
-            boton['bg'] = formato.boton_sin_que_pase_cursor
-            boton['fg'] = formato.letras_del_boton
-
-        boton.bind('<Enter>', Pasar_sobre_boton)
-        boton.bind('<Leave>', Dejar_boton)
-
-    #----------------------------------------------------------------------
-    def eliminar_vitrina(self):
-        """"""
-        self.main_frame.destroy()
-        self.main_frame = Frame(self.window)
-
-    #----------------------------------------------------------------------
-    def eliminar_posible_vitrina(self):
-        """"""
-        try:
-            self.eliminar_vitrina()
-        except AttributeError:
-            pass
-        else: 
-            self.eliminar_vitrina() 
-    
-# VIII. Vitrina Búsqueda
-class Vitrina_busqueda(Frame):
-    """"""
-
-    #----------------------------------------------------------------------
-    def __init__(self, window, tabla, funcion1, funcion2, height=100, width=1600):
-        """Constructor"""
-
-        self.window = window
-        self.tabla = tabla
-        self.funcion1 = funcion1
-        self.funcion2 = funcion2
-        #self.funcion3 = funcion3
-        self.height = height
-        self.width = width
-        
-        self.main_frame = Frame(self.window, bg = formato.fondo)
-        self.main_frame.pack()
-
-        # Encabezados (entorno)
-
-        self.frame_base_encabezado = Frame(self.main_frame, bg = formato.fondo)
-        self.frame_base_encabezado.pack()
-
-        self.canvas_encabezado = Canvas(self.frame_base_encabezado, height=23, width=self.width, bg = formato.fondo,  highlightthickness = 0)
-        self.canvas_encabezado.pack(side='left', fill='both', expand=True)
-
-        self.empty_frame = Frame(self.frame_base_encabezado, width=12)
-        self.empty_frame.pack(side='right', fill='both', expand=True)
-
-        self.frame_dentro_del_canvas = Frame(self.canvas_encabezado, bg = formato.fondo) # Éste es el frame donde colocaremos los encabezados
-
-        self.canvas_encabezado.create_window(4, 4, window=self.frame_dentro_del_canvas, anchor='nw')
-
-        # Cuerpo de la tabla (entorno)
-
-        self.frame_con_scrollbar = VerticalScrolledFrame(self.main_frame, height=self.height, width=self.width)
-        self.frame_con_scrollbar.pack()
-
-        # Incluir encabezados de la tabla
-
-        columnas_de_tabla = self.tabla.columns.values.tolist()
-        indice_de_columnas = range(len(columnas_de_tabla))
-        elementos_columnas = {
-            'index': indice_de_columnas,
-            'columnas': columnas_de_tabla
-            }
-        tabla_columna = pd.DataFrame(elementos_columnas)
-
-        for i,row in tabla_columna.iterrows():
-            encabezado = Label(
-                self.frame_dentro_del_canvas, 
-                text=row[1],
-                font=formato.tipo_de_letra_tabla,
-                fg = formato.color_blanco,
-                width= 19,#se modifico estaba con 21 
-                height=1, 
-                relief='groove',
-                bg=formato.fondo_encabezados_de_tabla
-                )
-            encabezado.grid(row=0, column=row[0])
-    
-        opciones_label = Label(
-            self.frame_dentro_del_canvas,
-            text='OPCIONES',
-            font=formato.tipo_de_letra_tabla,
-            fg = formato.color_blanco,
-            width= 16, #se modifico
-            height=1, 
-            relief='groove',
-            bg=formato.fondo_encabezados_de_tabla
-            )
-        opciones_label.grid(row=0, column=len(columnas_de_tabla)+1)
-
-        # Incluir elementos en el cuerpo de la tabla
-
-        for i, row in self.tabla.iterrows():
-            valores_subframe = Frame(self.frame_con_scrollbar)
-            valores_subframe.pack()
-            lista_de_valores = row.values
-            indice_de_valores = range(len(lista_de_valores))
-            elementos_valores = {
-                'index': indice_de_valores,
-                'valores': lista_de_valores 
-            }
-
-            # Valores de la tabla
-            tabla_valor = pd.DataFrame(elementos_valores)
-            for i,row in tabla_valor.iterrows():
-                if len(str(row[1])) > 35:
-                    texto_completo = str(row[1])
-                    texto_recortado = texto_completo[0:35]
-                    texto_tabla_vista = texto_recortado + "..."
-                    valor = Label(
-                        valores_subframe, 
-                        text= texto_tabla_vista,
-                        font=formato.tipo_de_letra_tabla,
-                        width= 19,#se modificó 
-                        height = 2,
-                        relief='groove',
-                        bg= formato.fondo_valores_de_tabla,
-                        wraplength=125, 
-                        justify="center")
-                    Hovertip_Sefa(valor, text = texto_completo)
-                    valor.grid(row=0, column=row[0])
-                else:
-                    valor = Label(
-                        valores_subframe, 
-                        text= row[1],
-                        font=formato.tipo_de_letra_tabla,
-                        width= 19,#se modificó 
-                        height = 2,
-                        relief='groove',
-                        bg= formato.fondo_valores_de_tabla,
-                        wraplength=125, 
-                        justify="center")
-                    valor.grid(row=0, column=row[0])
-
-            # Agregar botones
-            
-            argumento = lista_de_valores[0]
-
-            boton_ver = Label(
-                valores_subframe,
-                text='VER',
-                font=formato.tipo_de_letra_tabla,
-                fg = formato.letras_del_boton,
-                width=7,
-                height= 2,
-                relief='groove',
-                cursor="hand2",
-                bg=formato.boton_sin_que_pase_cursor
-            )
-            boton_ver.grid(row=0, column=len(lista_de_valores)+1)
-            boton_ver.bind("<Button-1>",lambda e,argumento=argumento:self.funcion1(argumento))
-            self.Efecto_de_boton(boton_ver)
-
-            #boton_editar = Label(
-            #    valores_subframe,
-            #    text='EDIT',
-            #    font=formato.tipo_de_letra_tabla,
-            #    fg = formato.letras_del_boton,
-            #    width=5,
-            #    height=1,
-            #    relief='groove',
-            #    cursor="hand2",
-            #    bg=formato.boton_sin_que_pase_cursor
-            #)
-            #boton_editar.grid(row=0, column=len(lista_de_valores)+2)
-            #boton_editar.bind("<Button-1>",lambda e,argumento=argumento:self.funcion2(argumento))
-            #self.Efecto_de_boton(boton_editar)
-
-            boton_eliminar = Label(
-                valores_subframe,
-                text='ASOCIAR',
-                font=formato.tipo_de_letra_tabla,
-                fg = formato.letras_del_boton,
-                width=8,
-                height= 2,
-                relief='groove',
-                cursor="hand2",
-                bg=formato.boton_sin_que_pase_cursor
-            )
-            boton_eliminar.grid(row=0, column=len(lista_de_valores)+2)
-            boton_eliminar.bind("<Button-1>",lambda e,argumento=argumento:self.funcion2(argumento))
-            self.Efecto_de_boton(boton_eliminar)
-
-    #----------------------------------------------------------------------
-    def Efecto_de_boton(self, boton):
-        """"""
-
-        #----------------------------------------------------------------------
-        def Pasar_sobre_boton(e):
-            """"""
-            boton['bg'] = formato.boton_cuando_pasa_cursor
-            boton['fg'] = formato.letras_del_boton_cuando_pasa_cursor
-
-        #----------------------------------------------------------------------
-        def Dejar_boton(e):
-            """"""
-            boton['bg'] = formato.boton_sin_que_pase_cursor
-            boton['fg'] = formato.letras_del_boton
-
-        boton.bind('<Enter>', Pasar_sobre_boton)
-        boton.bind('<Leave>', Dejar_boton)
-
-    #----------------------------------------------------------------------
-    def Eliminar_vitrina(self):
-        """"""
-        self.main_frame.destroy()
-
-# VIII.1 Vitrina Búsqueda de Extremos
-class Vitrina_busquedaep(Frame):
-    """"""
-
-    #----------------------------------------------------------------------
-    def __init__(self, window, tabla, funcion1, funcion2, funcion3, height=100, width=1600):
-        """Constructor"""
-
-        self.window = window
-        self.tabla = tabla
-        self.funcion1 = funcion1
-        self.funcion2 = funcion2
-        self.funcion3 = funcion3
-        self.height = height
-        self.width = width
-        
-        self.main_frame = Frame(self.window)
-        self.main_frame.pack()
-
-        # Encabezados (entorno)
-
-        self.frame_base_encabezado = Frame(self.main_frame, bg = formato.fondo)
-        self.frame_base_encabezado.pack()
-
-        self.canvas_encabezado = Canvas(self.frame_base_encabezado, height=20, width=self.width, bg = formato.fondo, highlightthickness = 0)
-        self.canvas_encabezado.pack(side='left', fill='both', expand=True)
-
-        self.empty_frame = Frame(self.frame_base_encabezado, width=12, bg = formato.fondo)
-        self.empty_frame.pack(side='right', fill='both', expand=True)
-
-        self.frame_dentro_del_canvas = Frame(self.canvas_encabezado, bg = formato.fondo) # Éste es el frame donde colocaremos los encabezados
-
-        self.canvas_encabezado.create_window(4, 4, window=self.frame_dentro_del_canvas, anchor='nw')
-
-        # Cuerpo de la tabla (entorno)
-
-        self.frame_con_scrollbar = VerticalScrolledFrame(self.main_frame, height=self.height, width=self.width)
-        self.frame_con_scrollbar.pack()
-
-        # Incluir encabezados de la tabla
-
-        columnas_de_tabla = self.tabla.columns.values.tolist()
-        indice_de_columnas = range(len(columnas_de_tabla))
-        elementos_columnas = {
-            'index': indice_de_columnas,
-            'columnas': columnas_de_tabla
-            }
-        tabla_columna = pd.DataFrame(elementos_columnas)
-
-        for i,row in tabla_columna.iterrows():
-            encabezado = Label(
-                self.frame_dentro_del_canvas, 
-                text=row[1],
-                font=formato.tipo_de_letra_tablaep,
-                fg = formato.color_blanco,
-                width= 18,#se modifico 
-                height=1, 
-                relief='groove',
-                bg=formato.fondo_encabezados_de_tabla
-                )
-            encabezado.grid(row=0, column=row[0])
-    
-        opciones_label = Label(
-            self.frame_dentro_del_canvas,
-            text='OPCIONES',
-            font=formato.tipo_de_letra_tablaep,
-            fg = formato.color_blanco,
-            width= 14, #se modifico 
-            height=1, 
-            relief='groove',
-            bg=formato.fondo_encabezados_de_tabla
-            )
-        opciones_label.grid(row=0, column=len(columnas_de_tabla)+1)
-
-        opciones_labelmacro = Label(
-            self.frame_dentro_del_canvas,
-            text='MACROPROBLEMA',
-            font=formato.tipo_de_letra_tablaep,
-            fg = formato.color_negro,
-            width= 14, #se modifico 
-            height=1, 
-            relief='groove',
-            bg=formato.fondo_encabezados_de_tabla
-            )
-        opciones_labelmacro.grid(row=0, column=len(columnas_de_tabla)+2)
-
-        # Incluir elementos en el cuerpo de la tabla
-
-        for i, row in self.tabla.iterrows():
-            valores_subframe = Frame(self.frame_con_scrollbar)
-            valores_subframe.pack()
-            lista_de_valores = row.values
-            indice_de_valores = range(len(lista_de_valores))
-            elementos_valores = {
-                'index': indice_de_valores,
-                'valores': lista_de_valores 
-            }
-
-            tabla_valor = pd.DataFrame(elementos_valores)
-            for i,row in tabla_valor.iterrows():
-                if len(str(row[1])) > 35:
-                    texto_completo = str(row[1])
-                    texto_recortado = texto_completo[0:35]
-                    texto_tabla_vista = texto_recortado + "..."
-                    valor = Label(
-                        valores_subframe, 
-                        text=texto_tabla_vista,
-                        font=formato.tipo_de_letra_tablaep,
-                        width=18,
-                        height=3,#se modifico  
-                        relief='groove',
-                        bg= formato.fondo_valores_de_tabla,
-                        wraplength=125, 
-                        justify="center")
-                    Hovertip_Sefa(valor, text = texto_completo)
-                    valor.grid(row=0, column=row[0])
-                else:
-                    valor = Label(
-                        valores_subframe, 
-                        text= row[1],
-                        font=formato.tipo_de_letra_tabla,
-                        width= 18,#se modificó 
-                        height = 3,
-                        relief='groove',
-                        bg= formato.fondo_valores_de_tabla,
-                        wraplength=125, 
-                        justify="center")
-                    valor.grid(row=0, column=row[0])
-
-            # Agregar botones
-            
-            argumento = lista_de_valores[0]
-
-            boton_ver = Label(
-                valores_subframe,
-                text='VER',
-                font=formato.tipo_de_letra_tablaep,
-                fg = formato.letras_del_boton,
-                width=5,
-                height=3,
-                relief='groove',
-                cursor="hand2",
-                bg=formato.boton_sin_que_pase_cursor
-            )
-            boton_ver.grid(row=0, column=len(lista_de_valores)+1)
-            boton_ver.bind("<Button-1>",lambda e,argumento=argumento:self.funcion1(argumento))
-            self.Efecto_de_boton(boton_ver)
-
-            #boton_editar = Label(
-            #    valores_subframe,
-            #    text='EDIT',
-            #    font=formato.tipo_de_letra_tabla,
-            #    fg = formato.letras_del_boton,
-            #    width=5,
-            #    height=1,
-            #    relief='groove',
-            #    cursor="hand2",
-            #    bg=formato.boton_sin_que_pase_cursor
-            #)
-            #boton_editar.grid(row=0, column=len(lista_de_valores)+2)
-            #boton_editar.bind("<Button-1>",lambda e,argumento=argumento:self.funcion2(argumento))
-            #self.Efecto_de_boton(boton_editar)
 
             boton_asociar = Label(
                 valores_subframe,
                 text='ASOCIAR',
-                font=formato.tipo_de_letra_tablaep,
+                font=self.font_c,
                 fg = formato.letras_del_boton,
                 width=8,
-                height=3,
+                height= self.width_botonver,
                 relief='groove',
                 cursor="hand2",
                 bg=formato.boton_sin_que_pase_cursor
             )
-            boton_asociar.grid(row=0, column=len(lista_de_valores)+2)
-            boton_asociar.bind("<Button-1>",lambda e,argumento=argumento:self.funcion2(argumento))
-            self.Efecto_de_boton(boton_asociar)
-
+            
             boton_macroproblema = Label(
                 valores_subframe,
                 text='VER MACROPR.',
@@ -2109,9 +1634,59 @@ class Vitrina_busquedaep(Frame):
                 cursor="hand2",
                 bg=formato.boton_sin_que_pase_cursor_macro
             )
-            boton_macroproblema.grid(row=0, column=len(lista_de_valores)+3)
-            boton_macroproblema.bind("<Button-1>",lambda e,argumento=argumento:self.funcion3(argumento))
-            self.Efecto_de_boton_macro(boton_macroproblema)
+            
+
+            if self.tipo_vitrina == "Modelo1":
+                boton_ver.grid(row=0, column=len(lista_de_valores)+1)
+                boton_ver.bind("<Button-1>",lambda e,argumento=argumento:self.funcion1(argumento))
+                self.Efecto_de_boton(boton_ver)
+
+                boton_editar.grid(row=0, column=len(lista_de_valores)+2)
+                boton_editar.bind("<Button-1>",lambda e,argumento=argumento:self.funcion2(argumento))
+                self.Efecto_de_boton(boton_editar)
+
+                boton_eliminar.grid(row=0, column=len(lista_de_valores)+3)
+                boton_eliminar.bind("<Button-1>",lambda e,argumento=argumento:self.funcion3(argumento))
+                self.Efecto_de_boton(boton_eliminar)
+            
+            elif self.tipo_vitrina == "Modelo2":
+                boton_ver.grid(row=0, column=len(lista_de_valores)+1)
+                boton_ver.bind("<Button-1>", lambda e, argumento=argumento:self.funcion1(argumento))
+                self.Efecto_de_boton(boton_ver)
+
+                boton_eliminar.grid(row=0, column=len(lista_de_valores)+2)
+                boton_eliminar.bind("<Button-1>",lambda e,argumento=argumento:self.funcion2(argumento))
+                self.Efecto_de_boton(boton_eliminar)
+
+            elif self.tipo_vitrina == "Modelo3":
+                boton_ver.grid(row=0, column=len(lista_de_valores)+1)
+                boton_ver.bind("<Button-1>",lambda e,argumento=argumento:self.funcion1(argumento))
+                self.Efecto_de_boton(boton_ver)
+
+                boton_asociar.grid(row=0, column=len(lista_de_valores)+2)
+                boton_asociar.bind("<Button-1>",lambda e,argumento=argumento:self.funcion2(argumento))
+                self.Efecto_de_boton(boton_asociar)
+
+            elif self.tipo_vitrina == "Modelo4":
+
+                boton_ver.grid(row=0, column=len(lista_de_valores)+1)
+                boton_ver.bind("<Button-1>",lambda e,argumento=argumento:self.funcion1(argumento))
+                self.Efecto_de_boton(boton_ver)
+
+                boton_asociar.grid(row=0, column=len(lista_de_valores)+2)
+                boton_asociar.bind("<Button-1>",lambda e,argumento=argumento:self.funcion2(argumento))
+                self.Efecto_de_boton(boton_asociar)
+
+                boton_macroproblema.grid(row=0, column=len(lista_de_valores)+3)
+                boton_macroproblema.bind("<Button-1>",lambda e,argumento=argumento:self.funcion3(argumento))
+                self.Efecto_de_boton_macro(boton_macroproblema)
+
+            else:
+                boton_ver.grid(row=0, column=len(lista_de_valores)+1)
+                boton_ver.bind("<Button-1>",lambda e,argumento=argumento:self.funcion1(argumento))
+                self.Efecto_de_boton(boton_ver)
+
+            
 
     #----------------------------------------------------------------------
     def Efecto_de_boton(self, boton):
@@ -2132,7 +1707,7 @@ class Vitrina_busquedaep(Frame):
         boton.bind('<Enter>', Pasar_sobre_boton)
         boton.bind('<Leave>', Dejar_boton)
 
-    #----------------------------------------------------------------------
+#----------------------------------------------------------------------
     def Efecto_de_boton_macro(self, boton):
         """"""
 
@@ -2152,166 +1727,20 @@ class Vitrina_busquedaep(Frame):
         boton.bind('<Leave>', Dejar_boton)
 
     #----------------------------------------------------------------------
-    def Eliminar_vitrina(self):
-        """"""
+    def eliminar_vitrina(self):
+        """"""  
         self.main_frame.destroy()
+        self.main_frame = Frame(self.window)
 
-# IX. Vitrina pendientes jefe
-class Vitrina_pendientes(Frame):
-    """"""
-
-    #----------------------------------------------------------------------
-    def __init__(self, window, tabla, funcion1, height=100, width=1800):
-        """Constructor"""
-
-        self.window = window
-        self.tabla = tabla
-        self.funcion1 = funcion1
-        #self.funcion3 = funcion3
-        self.height = height
-        self.width = width
-        
-        self.main_frame = Frame(self.window, bg = formato.fondo)
-        self.main_frame.pack()
-
-        # Encabezados (entorno)
-
-        self.frame_base_encabezado = Frame(self.main_frame, bg = formato.fondo)
-        self.frame_base_encabezado.pack()
-
-        self.canvas_encabezado = Canvas(self.frame_base_encabezado, height=23, width=self.width, bg = formato.fondo,  highlightthickness = 0)
-        self.canvas_encabezado.pack(side='left', fill='both', expand=True)
-
-        self.empty_frame = Frame(self.frame_base_encabezado, width=12, bg = formato.fondo)
-        self.empty_frame.pack(side='right', fill='both', expand=True)
-
-        self.frame_dentro_del_canvas = Frame(self.canvas_encabezado) # Éste es el frame donde colocaremos los encabezados
-
-        self.canvas_encabezado.create_window(4, 4, window=self.frame_dentro_del_canvas, anchor='nw')
-
-        # Cuerpo de la tabla (entorno)
-
-        self.frame_con_scrollbar = VerticalScrolledFrame(self.main_frame, height=self.height, width=self.width)
-        self.frame_con_scrollbar.pack()
-
-        # Incluir encabezados de la tabla
-
-        columnas_de_tabla = self.tabla.columns.values.tolist()
-        indice_de_columnas = range(len(columnas_de_tabla))
-        elementos_columnas = {
-            'index': indice_de_columnas,
-            'columnas': columnas_de_tabla
-            }
-        tabla_columna = pd.DataFrame(elementos_columnas)
-
-        for i,row in tabla_columna.iterrows():
-            encabezado = Label(
-                self.frame_dentro_del_canvas, 
-                text=row[1],
-                font=formato.tipo_de_letra_tabla,
-                fg = formato.color_blanco,
-                width= 22,#se modifico estaba con 21 
-                height=1, 
-                relief='groove',
-                bg=formato.fondo_encabezados_de_tabla
-                )
-            encabezado.grid(row=0, column=row[0])
-    
-        opciones_label = Label(
-            self.frame_dentro_del_canvas,
-            text='OPCIONES',
-            font=formato.tipo_de_letra_tabla,
-            fg = formato.color_blanco,
-            width= 10, #se modifico
-            height=1, 
-            relief='groove',
-            bg=formato.fondo_encabezados_de_tabla
-            )
-        opciones_label.grid(row=0, column=len(columnas_de_tabla)+1)
-
-        # Incluir elementos en el cuerpo de la tabla
-
-        for i, row in self.tabla.iterrows():
-            valores_subframe = Frame(self.frame_con_scrollbar)
-            valores_subframe.pack()
-            lista_de_valores = row.values
-            indice_de_valores = range(len(lista_de_valores))
-            elementos_valores = {
-                'index': indice_de_valores,
-                'valores': lista_de_valores 
-            }
-
-            # Valores de la tabla
-            tabla_valor = pd.DataFrame(elementos_valores)
-            for i,row in tabla_valor.iterrows():
-                if len(str(row[1])) > 35:
-                    texto_completo = str(row[1])
-                    texto_recortado = texto_completo[0:35]
-                    texto_tabla_vista = texto_recortado + "..."
-                    valor = Label(
-                        valores_subframe, 
-                        text= texto_tabla_vista,
-                        font=formato.tipo_de_letra_tabla,
-                        width= 22,#se modificó 
-                        height = 2,
-                        relief='groove',
-                        bg= formato.fondo_valores_de_tabla,
-                        wraplength=125, 
-                        justify="center")
-                    Hovertip_Sefa(valor, text = texto_completo)
-                    valor.grid(row=0, column=row[0])
-                else:
-                    valor = Label(
-                        valores_subframe, 
-                        text= row[1],
-                        font=formato.tipo_de_letra_tabla,
-                        width= 22,#se modificó 
-                        height = 2,
-                        relief='groove',
-                        bg= formato.fondo_valores_de_tabla,
-                        wraplength=125, 
-                        justify="center")
-                    valor.grid(row=0, column=row[0])
-
-            # Agregar botones
-            
-            argumento = lista_de_valores[0]
-
-            boton_ver = Label(
-                valores_subframe,
-                text='VER',
-                font=formato.tipo_de_letra_tabla,
-                fg = formato.letras_del_boton,
-                width=10,
-                height= 2,
-                relief='groove',
-                cursor="hand2",
-                bg=formato.boton_sin_que_pase_cursor
-            )
-            boton_ver.grid(row=0, column=len(lista_de_valores)+1)
-            boton_ver.bind("<Button-1>",lambda e,argumento=argumento:self.funcion1(argumento))
-            self.Efecto_de_boton(boton_ver)
-
-    #----------------------------------------------------------------------
-    def Efecto_de_boton(self, boton):
+    def eliminar_posible_vitrina(self):
         """"""
+        try:
+            self.eliminar_vitrina()
+        except AttributeError:
+            pass
+        else: 
+            self.eliminar_vitrina()
 
-        #----------------------------------------------------------------------
-        def Pasar_sobre_boton(e):
-            """"""
-            boton['bg'] = formato.boton_cuando_pasa_cursor
-            boton['fg'] = formato.letras_del_boton_cuando_pasa_cursor
-
-        #----------------------------------------------------------------------
-        def Dejar_boton(e):
-            """"""
-            boton['bg'] = formato.boton_sin_que_pase_cursor
-            boton['fg'] = formato.letras_del_boton
-
-        boton.bind('<Enter>', Pasar_sobre_boton)
-        boton.bind('<Leave>', Dejar_boton)
-
-    #----------------------------------------------------------------------
-    def Eliminar_vitrina(self):
+    def eliminar_vitrina2(self):
         """"""
         self.main_frame.destroy()
