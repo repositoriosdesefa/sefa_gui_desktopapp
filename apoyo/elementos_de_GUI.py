@@ -85,7 +85,7 @@ class MenuSefa():
 class Ventana(Toplevel):
     """"""
     #----------------------------------------------------------------------
-    def __init__(self, ventana_anterior, alto = 300, ancho = 520, titulo = "Aplicativo de Sefa", scrollable_ventana = False):
+    def __init__(self, ventana_anterior, alto = 350, ancho = 520, titulo = "Aplicativo de Sefa", scrollable_ventana = False):
         """Constructor especial de la clase Ventana.\n
         Sirve para generar nuevas ventanas en una desktop app"""
 
@@ -402,22 +402,33 @@ class Cuadro(Frame):
         self.lista_de_objetos.append((self.boton))
 
     #----------------------------------------------------------------------
-    def agregar_boton_grande(self, y, x, texto, funcion, ancho):
+    def agregar_boton_grande(self, y, x, texto, funcion, ancho, color=None):
         """Método de la clase Cuadro. \n
         Permite agregar un botón al Frame creado con la Clase Cuadro."""
-
+        self.color = color
+        if self.color == "Modelo1":
+            self.colorboton = formato.boton_sin_que_pase_cursor
+            self.colorbotoncursor = formato.boton_cuando_pasa_cursor
+        elif self.color == "Modelo2":
+            self.colorboton = formato.boton_sin_que_pase_cursor2
+            self.colorbotoncursor = formato.boton_cuando_pasa_cursor2
+        else:
+            self.colorboton = formato.boton_sin_que_pase_cursor
+            self.colorbotoncursor = formato.boton_cuando_pasa_cursor
         #----------------------------------------------------------------------
-        def Efecto_de_boton(boton):
+        def Efecto_de_boton(boton, color, color2):
             """"""
+            color = self.colorboton
+            color2 = self.colorbotoncursor
             #----------------------------------------------------------------------
             def Pasar_sobre_boton(e):
                 """"""
-                boton['bg'] = formato.boton_cuando_pasa_cursor
+                boton['bg'] = color2
         
             #----------------------------------------------------------------------
             def Dejar_boton(e):
                 """"""
-                boton['bg'] = formato.boton_sin_que_pase_cursor
+                boton['bg'] = color
         
             boton.bind('<Enter>', Pasar_sobre_boton)
             boton.bind('<Leave>', Dejar_boton)
@@ -432,13 +443,13 @@ class Cuadro(Frame):
                         command=self.funcion,
                         font= formato.tipo_de_letra,
                         fg = formato.letras_del_boton,
-                        bg = formato.boton_sin_que_pase_cursor,
+                        bg = self.colorboton,
                         relief="flat",
                         cursor="hand2",
                         width = ancho
                         )
         self.boton.grid(row= self.y, column=self.x, pady=4, padx=8)
-        Efecto_de_boton(self.boton)
+        Efecto_de_boton(self.boton, color=self.colorboton, color2=self.colorbotoncursor)
         self.lista_de_objetos.append((self.boton))
 
     #----------------------------------------------------------------------
@@ -1391,8 +1402,8 @@ class Vitrina(Frame):
             self.height_botonver=5
             self.width_botonver = 1
             self.boton_elimiar = 'DEL'
-            self.height_botoneliminar= 5
-            self.width_botoneliminar = 1
+            self.height_botoneliminar= 1
+            self.width_botoneliminar = 5
         elif self.tipo_vitrina == "Modelo2":
             self.height_ce=25
             self.width_columnas = 22
@@ -1504,9 +1515,18 @@ class Vitrina(Frame):
             bg=formato.fondo_encabezados_de_tabla
             )
         
+        # Espacio vacio al final
+        self.empty_frame_2 = Frame(self.window, height=15, width=self.width, bg = formato.fondo,  borderwidth = 3)
+
         if self.tipo_vitrina == "Modelo4":
             opciones_label.grid(row=0, column=len(columnas_de_tabla)+1)
             opciones_labelmacro.grid(row=0, column=len(columnas_de_tabla)+2)
+
+        elif self.tipo_vitrina == "Modelo2":
+            opciones_label.grid(row=0, column=len(columnas_de_tabla)+1)
+            opciones_labelmacro.grid(row=0, column=len(columnas_de_tabla)+2)
+            self.empty_frame_2.pack(side='bottom', fill='both', expand=True)
+
         else:
             opciones_label.grid(row=0, column=len(columnas_de_tabla)+1)
         # Incluir elementos en el cuerpo de la tabla

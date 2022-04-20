@@ -44,14 +44,14 @@ oficinas = [
 
 ancho_v_vista = 1025
 alto_v_vista = 600
-ancho_v_vista_vitrina = 950
+ancho_v_vista_vitrina = 895
 alto_v_vista_vitrina = 120
 
 ancho_v_busqueda = 1300
 alto_v_busqueda = 568
 ancho_v_busqueda_vitrina = 950
 ancho_v_busqueda_de_vitrina = 1065
-ancho_v_busqueda_ep_vitrina = 1210
+ancho_v_busqueda_ep_vitrina = 810
 ancho_v_busqueda_peq1_vitrina = 1040
 ancho_v_busqueda_pf_vitrina = 900
 ancho_v_busqueda_mp_vitrina = 800
@@ -64,7 +64,7 @@ ancho_v_busqueda_progr_vitrina = 710
 alto_logo = 50
 ancho_logo = 280
 
-alto_ventana_secundaria = 430
+alto_ventana_secundaria = 600
 ancho_ventana_secundaria = 403
 
 alto_franja_inferior_1 = 52
@@ -95,7 +95,11 @@ b_de_hist = Base_de_datos(id_b_docs, 'HISTORIAL_DE')
 # Relación de documentos
 base_relacion_docs = Base_de_datos(id_b_docs, 'RELACION_DOCS')
 base_relacion_docs_hist = Base_de_datos(id_b_docs, 'HISTORIAL_RELACION_D')
-# Extremo de problemas
+# Problemas
+b_pr_cod = Base_de_datos(id_b_problemas, 'PR_P')
+b_pr = Base_de_datos(id_b_problemas, 'PROBLEMA')
+b_pr_hist = Base_de_datos(id_b_problemas, 'HISTORIAL_PR')
+# Extremos Problemas
 b_ep_cod = Base_de_datos(id_b_problemas, 'EXT_P')
 b_ep = Base_de_datos(id_b_problemas, 'EXT_PROBLEMA')
 b_ep_hist = Base_de_datos(id_b_problemas, 'HISTORIAL_EP')
@@ -104,8 +108,8 @@ b_mp_cod = Base_de_datos(id_b_problemas, 'MC_P')
 b_mp = Base_de_datos(id_b_problemas, 'MACROPROBLEMA')
 b_mp_hist = Base_de_datos(id_b_problemas, 'HISTORIAL_MP')
 # Relación de problemas
-base_relacion_mp_ep =  Base_de_datos(id_b_problemas, 'RELACION_MP-EP')
-base_relacion_mp_ep_hist =  Base_de_datos(id_b_problemas, 'HISTORIAL_RELACION_MP-EP')
+base_relacion_mp_pr =  Base_de_datos(id_b_problemas, 'RELACION_MP-PR')
+base_relacion_mp_pr_hist =  Base_de_datos(id_b_problemas, 'HISTORIAL_RELACION_MP-PR')
 
 # 2. Bases de datos complementarias
 # 2.0 Usuarios y parámetros
@@ -118,10 +122,12 @@ b_efa = Base_de_datos(id_b_directorio_efa, 'Directorio')
 b_lista_efa = Base_de_datos(id_b_lista_efa, 'Lista de EFA')
 
 # 2.3 Relaciones auxiliares
-base_relacion_dr_ep =  Base_de_datos(id_b_parametros, 'RELACION_DR-EP')
-base_relacion_dr_ep_hist =  Base_de_datos(id_b_parametros, 'HISTORIAL_RELACION_DR-EP')
-base_relacion_de_ep =  Base_de_datos(id_b_parametros, 'RELACION_DE-EP')
-base_relacion_de_ep_hist =  Base_de_datos(id_b_parametros, 'HISTORIAL_RELACION_DE-EP')
+base_relacion_dr_pr =  Base_de_datos(id_b_parametros, 'RELACION_DR-PR')
+base_relacion_dr_pr_hist =  Base_de_datos(id_b_parametros, 'HISTORIAL_RELACION_DR-PR')
+base_relacion_de_pr =  Base_de_datos(id_b_parametros, 'RELACION_DE-PR')
+base_relacion_de_pr_hist =  Base_de_datos(id_b_parametros, 'HISTORIAL_RELACION_DE-PR')
+base_relacion_ep_pr =  Base_de_datos(id_b_parametros, 'RELACION_EP-PR')
+base_relacion_ep_pr_hist =  Base_de_datos(id_b_parametros, 'HISTORIAL_RELACION_EP-PR')
        
 # 3. Listas dependientes
 # 3.1 Directorio de SEFA
@@ -166,9 +172,10 @@ marco_pedido = list(set(tabla_parametros['MARCO_PEDIDO']))
 # 5. Tablas resumen
 # 5.0 Relaciones
 tabla_relacion_dr_de = base_relacion_docs.generar_dataframe()
-tabla_relacion_dr_ep = base_relacion_dr_ep.generar_dataframe()
-tabla_relacion_de_ep = base_relacion_de_ep.generar_dataframe()
-tabla_relacion_mp_ep = base_relacion_mp_ep.generar_dataframe()
+tabla_relacion_dr_pr = base_relacion_dr_pr.generar_dataframe()
+tabla_relacion_de_pr = base_relacion_de_pr.generar_dataframe()
+tabla_relacion_mp_pr = base_relacion_mp_pr.generar_dataframe()
+tabla_relacion_ep_pr = base_relacion_ep_pr.generar_dataframe()
 # 5.1 Documentos recibidos
 tabla_de_dr_cod = b_dr_cod.generar_dataframe()
 tabla_de_dr_completa = b_dr.generar_dataframe()
@@ -191,12 +198,18 @@ tabla_de_de_resumen =  tabla_de_de_completa.drop(['HT_SALIDA', 'FECHA_PROYECTO_F
                                                     'FECHA_FIRMA_OCI', 'FECHA_NOTIFICACION_OCI', 'PLAZO_REIT','FECHA_MAX_REIT',
                                                     'SEGUIMIENTO_REIT','FECHA_MAX','SEGUIMIENTO_DOC'], axis=1)
 
-# 5.3 Extremos de problema
-tabla_de_ep_cod = b_ep_cod.generar_dataframe()
+# 5.3 Problema
+tabla_de_ep_cod = b_pr_cod.generar_dataframe()
+tabla_de_pr_completa = b_pr.generar_dataframe()
+tabla_de_ep_resumen = tabla_de_pr_completa.drop(['DISTRITO', 
+                                                'USUARIO', 'FECHA_ULTIMO_MOV'], axis=1)
+
+# 5.3 Extremos
+tabla_de_ep2_cod = b_ep_cod.generar_dataframe()
 tabla_de_ep_completa = b_ep.generar_dataframe()
-tabla_de_ep_resumen = tabla_de_ep_completa.drop(['OCURRENCIA', 'EXTENSION', 'TIPO DE AFECTACION',
-                                                'PROVINCIA', 'DESCRIPCION', 'TIPO DE UBICACION', 'DISTRITO', 
-                                                'TIPO_EFA', 'CATEGORIA_EFA', 'GEO_ESTE', 'GEO_NORTE',
+tabla_de_ep2_resumen = tabla_de_ep_completa.drop(['OCURRENCIA', 'EXTENSION', 'TIPO DE AFECTACION',
+                                                'TIPO DE UBICACION','TIPO_EFA', 'CATEGORIA_EFA', 
+                                                'GEO_ESTE', 'GEO_NORTE',
                                                 'CARACTERISTICA 1', 'CARACTERISTICA 2', 'TIPO CAUSA', 'COD_ADMINISTRADO',
                                                 'PRIORIDAD', 'PUNTAJE',  'USUARIO', 'ADMINISTRADO', 'TIPO_ADMINISTRADO',
                                                 'CODIGO SINADA', 'ACTIVIDAD', 'FECHA_ULTIMO_MOV', 'USUARIO'], axis=1)

@@ -12,6 +12,7 @@ ancho_logo = vg.ancho_logo
 alto_ventana_secundaria = vg.alto_ventana_secundaria
 ancho_ventana_secundaria = vg.ancho_ventana_secundaria
 
+
 class logueo1_Ingreso_de_usuario(Ventana):
     """"""
     

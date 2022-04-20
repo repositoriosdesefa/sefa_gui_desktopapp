@@ -13,7 +13,9 @@ color_letra_titulo_2 = '#1d85bf'
 
 # BOTONES
 boton_cuando_pasa_cursor = '#b5c8e5'
+boton_cuando_pasa_cursor2 = '#b2e3df'
 boton_sin_que_pase_cursor = '#144ca4'
+boton_sin_que_pase_cursor2 = '#44bfb5'
 letras_del_boton = '#ffffff'
 letras_del_boton_cuando_pasa_cursor = '#000000'
 

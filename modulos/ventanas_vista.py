@@ -22,8 +22,11 @@ b_dr_hist = vg.b_dr_hist
 b_de = vg.b_de
 b_de_cod = vg.b_de_cod
 b_de_hist = vg.b_de_hist
+b_pr = vg.b_pr
 b_ep = vg.b_ep
+b_pr_cod = vg.b_pr_cod
 b_ep_cod = vg.b_ep_cod
+b_pr_hist = vg.b_pr_hist
 b_ep_hist = vg.b_ep_hist
 b_mp = vg.b_mp
 b_mp_cod = vg.b_mp_cod
@@ -31,14 +34,16 @@ b_mp_hist = vg.b_mp_hist
 
 base_datos_usuario = vg.base_datos_usuario
 base_relacion_docs = vg.base_relacion_docs
-base_relacion_dr_ep = vg.base_relacion_dr_ep
-base_relacion_de_ep = vg.base_relacion_de_ep
-base_relacion_mp_ep = vg.base_relacion_mp_ep
+base_relacion_dr_pr = vg.base_relacion_dr_pr
+base_relacion_de_pr = vg.base_relacion_de_pr
+base_relacion_mp_pr = vg.base_relacion_mp_pr
+base_relacion_ep_pr = vg.base_relacion_ep_pr
 
 base_relacion_docs_hist = vg.base_relacion_docs_hist
-base_relacion_dr_ep_hist = vg.base_relacion_dr_ep_hist
-base_relacion_de_ep_hist = vg.base_relacion_de_ep_hist
-base_relacion_mp_ep_hist = vg.base_relacion_mp_ep_hist
+base_relacion_dr_pr_hist = vg.base_relacion_dr_pr_hist
+base_relacion_de_pr_hist = vg.base_relacion_de_pr_hist
+base_relacion_mp_pr_hist = vg.base_relacion_mp_pr_hist
+base_relacion_ep_pr_hist = vg.base_relacion_ep_pr_hist
 
 # 2. Tablas
 tabla_directorio = vg.tabla_directorio
@@ -83,9 +88,10 @@ marco_pedido = vg.marco_pedido
 # 5. Tablas resumen
 # 5.0 Relaciones
 tabla_relacion_dr_de = vg.tabla_relacion_dr_de
-tabla_relacion_dr_ep = vg.tabla_relacion_dr_ep
-tabla_relacion_de_ep = vg.tabla_relacion_de_ep
-tabla_relacion_mp_ep = vg.tabla_relacion_mp_ep
+tabla_relacion_dr_pr = vg.tabla_relacion_dr_pr
+tabla_relacion_de_pr = vg.tabla_relacion_de_pr
+tabla_relacion_mp_pr = vg.tabla_relacion_mp_pr
+tabla_relacion_ep_pr = vg.tabla_relacion_ep_pr
 # 5.1 Documentos recibidos
 tabla_de_dr_cod = vg.tabla_de_dr_cod
 tabla_de_dr_completa = vg.tabla_de_dr_completa
@@ -94,14 +100,18 @@ tabla_de_dr_resumen = vg.tabla_de_dr_resumen
 tabla_de_de_cod = vg.tabla_de_de_cod
 tabla_de_de_completa = vg.tabla_de_de_completa
 tabla_de_de_resumen = vg.tabla_de_de_resumen
-# 5.3 Extremos de problema
-tabla_de_ep_cod = vg.tabla_de_ep_completa
-tabla_de_ep_completa = vg.tabla_de_ep_completa
+# 5.3 Problema
+tabla_de_pr_cod = vg.tabla_de_pr_completa
+tabla_de_pr_completa = vg.tabla_de_pr_completa
 tabla_de_ep_resumen = vg.tabla_de_ep_resumen
 # 5.4 Macroproblemas
 tabla_de_mp_cod = vg.tabla_de_mp_completa
 tabla_de_mp_completa = vg.tabla_de_mp_completa
 tabla_de_mp_resumen = vg.tabla_de_mp_resumen
+# 5.4 Extremos
+tabla_de_ep_cod = vg.tabla_de_ep_completa
+tabla_de_ep_completa = vg.tabla_de_ep_completa
+tabla_de_ep2_resumen = vg.tabla_de_ep2_resumen
     
 class Doc_recibidos_vista(funcionalidades_ospa):
     """"""
@@ -138,7 +148,7 @@ class Doc_recibidos_vista(funcionalidades_ospa):
         self.tabla_relacion_dr_de = tabla_relacion_dr_de
         # II.2 Lista de EP
         self.tabla_de_ep = tabla_de_ep_resumen
-        self.tabla_relacion_dr_ep = tabla_relacion_dr_ep
+        self.tabla_relacion_dr_pr = tabla_relacion_dr_pr
 
         # III. Títulos e imagen
         # III.1 Frame de Título
@@ -155,7 +165,7 @@ class Doc_recibidos_vista(funcionalidades_ospa):
 
             self.tabla_de_dr_cod = b_dr_cod.generar_dataframe()
             self.tabla_relacion_dr_de = base_relacion_docs.generar_dataframe()
-            self.tabla_relacion_dr_ep = base_relacion_dr_ep.generar_dataframe()
+            self.tabla_relacion_dr_pr = base_relacion_dr_pr.generar_dataframe()
 
             creador = b_dr_cod.obtener_usuario(base_datos_usuario, self.id_objeto_ingresado,  self.cod_tipo_objeto)
             fecha_creacion = b_dr_cod.obtener_valor_columna_con_codigo_unico(self.cod_tipo_objeto, self.id_objeto_ingresado, 'F_CREACION')
@@ -338,10 +348,10 @@ class Doc_recibidos_vista(funcionalidades_ospa):
         self.vitrina_2 = self.generar_vitrina(self.nuevo, 
                                             self.frame_vitrina_2,
                                             '(+) Agregar', self.busqueda_ep,
-                                            'Extremos de problemas asociados',
+                                            'Problemas ambientales asociados',
                                             self.cod_usuario_dr, self.tabla_de_dr_cod, 
-                                            self.tabla_de_ep, self.tabla_relacion_dr_ep, 
-                                            "ID_DR", "ID_EP", "COD_DR", 
+                                            self.tabla_de_ep, self.tabla_relacion_dr_pr, 
+                                            "ID_DR", "ID_PR", "COD_DR", 
                                             self.ver_ep, self.eliminar_ep_y_actualizar)
 
     #----------------------------------------------------------------------
@@ -383,12 +393,12 @@ class Doc_recibidos_vista(funcionalidades_ospa):
     def eliminar_ep_y_actualizar(self, id_objeto):
         """"""
         # Se elimina el DE
-        self.eliminar_objeto(self.cod_usuario_dr, "COD_DR", id_objeto, "COD_EP",
-                            self.tabla_de_dr_cod, tabla_de_ep_cod, 
-                            base_relacion_dr_ep, base_relacion_dr_ep_hist)
+        self.eliminar_objeto(self.cod_usuario_dr, "COD_DR", id_objeto, "COD_PR",
+                            self.tabla_de_dr_cod, tabla_de_pr_cod, 
+                            base_relacion_dr_pr, base_relacion_dr_pr_hist)
         
         # Se actualiza tabla de relaciones
-        self.tabla_relacion_dr_ep = base_relacion_dr_ep.generar_dataframe()
+        self.tabla_relacion_dr_pr = base_relacion_dr_pr.generar_dataframe()
         # Se actualiza la vista de vitrinas
         self.actualizar_vitrinas_dr()
     
@@ -419,10 +429,10 @@ class Doc_recibidos_vista(funcionalidades_ospa):
         self.vitrina_2 = self.generar_vitrina(self.nuevo, 
                                             self.frame_vitrina_2,
                                             '(+) Agregar', self.busqueda_ep,
-                                            'Extremo de problemas asociados',
+                                            'Problemas asociados',
                                             self.cod_usuario_dr, self.tabla_de_dr_cod, 
-                                            self.tabla_de_ep, self.tabla_relacion_dr_ep, 
-                                            "ID_DR", "ID_EP", "COD_DR", 
+                                            self.tabla_de_ep, self.tabla_relacion_dr_pr, 
+                                            "ID_DR", "ID_PR", "COD_DR", 
                                             self.ver_ep, self.eliminar_ep_y_actualizar)
     
 class Doc_emitidos_vista(funcionalidades_ospa):
@@ -458,7 +468,7 @@ class Doc_emitidos_vista(funcionalidades_ospa):
         self.tabla_relacion_dr_de = tabla_relacion_dr_de
         # II.2 Lista de EP
         self.tabla_de_ep = tabla_de_ep_resumen
-        self.tabla_relacion_de_ep = tabla_relacion_de_ep
+        self.tabla_relacion_de_pr = tabla_relacion_de_pr
 
         # III. Ubicaciones
         # III.1 Frame de Título
@@ -476,7 +486,7 @@ class Doc_emitidos_vista(funcionalidades_ospa):
 
             self.tabla_de_de_cod = b_de_cod.generar_dataframe()
             self.tabla_relacion_dr_de = base_relacion_docs.generar_dataframe()
-            self.tabla_relacion_de_ep = base_relacion_de_ep.generar_dataframe()
+            self.tabla_relacion_de_pr = base_relacion_de_pr.generar_dataframe()
             
             creador = b_de_cod.obtener_usuario(base_datos_usuario, self.id_objeto_ingresado,  self.cod_tipo_objeto)
             fecha_creacion = b_de_cod.obtener_valor_columna_con_codigo_unico(self.cod_tipo_objeto, self.id_objeto_ingresado, 'F_CREACION')
@@ -694,10 +704,10 @@ class Doc_emitidos_vista(funcionalidades_ospa):
         self.vitrina_2 = self.generar_vitrina(self.nuevo, 
                                             self.frame_vitrina_2,
                                             '(+) Agregar', self.busqueda_ep,
-                                            'Extremo de problemas asociados',
+                                            'Problemas asociados',
                                             self.cod_usuario_de, self.tabla_de_de_cod, 
-                                            self.tabla_de_ep, self.tabla_relacion_de_ep, 
-                                            "ID_DE", "ID_EP", "COD_DE", 
+                                            self.tabla_de_ep, self.tabla_relacion_de_pr, 
+                                            "ID_DE", "ID_PR", "COD_DE", 
                                             self.ver_ep, self.eliminar_ep_y_actualizar)
 
    #----------------------------------------------------------------------
@@ -727,12 +737,12 @@ class Doc_emitidos_vista(funcionalidades_ospa):
     def eliminar_ep_y_actualizar(self, id_objeto):
         """"""
         # Se elimina el DE
-        self.eliminar_objeto(self.cod_usuario_de, "COD_DE", id_objeto, "COD_EP",
-                            self.tabla_de_de_cod, tabla_de_ep_cod, 
-                            base_relacion_de_ep, base_relacion_de_ep_hist)
+        self.eliminar_objeto(self.cod_usuario_de, "COD_DE", id_objeto, "COD_PR",
+                            self.tabla_de_de_cod, tabla_de_pr_cod, 
+                            base_relacion_de_pr, base_relacion_de_pr_hist)
         
         # Se actualiza tabla de relaciones
-        self.tabla_relacion_de_ep = base_relacion_de_ep.generar_dataframe()
+        self.tabla_relacion_de_pr = base_relacion_de_pr.generar_dataframe()
         # Se actualiza la vista de vitrinas
         self.actualizar_vitrinas_de()
     
@@ -763,17 +773,17 @@ class Doc_emitidos_vista(funcionalidades_ospa):
         self.vitrina_2 = self.generar_vitrina(self.nuevo, 
                                             self.frame_vitrina_2,
                                             '(+) Agregar', self.busqueda_ep,
-                                            'Extremo de problemas asociados',
+                                            'Problemas asociados',
                                             self.cod_usuario_de, self.tabla_de_de_cod, 
-                                            self.tabla_de_ep, self.tabla_relacion_de_ep, 
-                                            "ID_DE", "ID_EP", "COD_DE", 
+                                            self.tabla_de_ep, self.tabla_relacion_de_pr, 
+                                            "ID_DE", "ID_PR", "COD_DE", 
                                             self.ver_ep, self.eliminar_ep_y_actualizar)
          
-class Extremo_problemas_vista(funcionalidades_ospa):
+class Problemas_vista(funcionalidades_ospa):
     """"""
     
     #----------------------------------------------------------------------
-    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None,  tipo_objeto = "EP"):
+    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None,  tipo_objeto = "PR"):
         """Constructor"""
 
         Ventana.__init__(self, *args)
@@ -785,7 +795,7 @@ class Extremo_problemas_vista(funcionalidades_ospa):
         
         # 0. Almacenamos información heredada
         self.nuevo = nuevo
-        self.cod_usuario_ep = id_objeto
+        self.cod_usuario_pr = id_objeto
         self.id_objeto_ingresado = id_objeto
         self.tipo_objeto = tipo_objeto
         self.cod_tipo_objeto = 'COD_' + str(tipo_objeto)
@@ -794,22 +804,25 @@ class Extremo_problemas_vista(funcionalidades_ospa):
         self.vitina_2 = None
 
         # Tablas para vitrina
-        # 0. Tablas de código de objeto
-        self.tabla_de_ep_cod = tabla_de_ep_cod
+        # 0. Tablas de código de objeto (tabla de problemas)
+        self.tabla_de_pr_cod = tabla_de_pr_cod
         # II.1 Lista de DR
         self.tabla_de_dr =  tabla_de_dr_resumen
-        self.tabla_relacion_dr_ep = tabla_relacion_dr_ep
+        self.tabla_relacion_dr_pr = tabla_relacion_dr_pr
         # II.2 Lista de DE
         self.tabla_de_de =  tabla_de_de_resumen
-        self.tabla_relacion_de_ep = tabla_relacion_de_ep
+        self.tabla_relacion_de_pr = tabla_relacion_de_pr
         # II.3 Lista de MP
         self.tabla_de_mp = tabla_de_mp_resumen
-        self.tabla_relacion_mp_ep = tabla_relacion_mp_ep
+        self.tabla_relacion_mp_pr = tabla_relacion_mp_pr
+        # II.3 Lista de EP
+        self.tabla_de_ep2_resumen = tabla_de_ep2_resumen
+        self.tabla_relacion_ep_pr = tabla_relacion_ep_pr
 
         # III. Títulos e imagen
         # III.1 Frame de Título
         titulos = Cuadro(self.frame_principal)
-        titulos.agregar_franja_superior_ospa('Detalle de extremo de problema', 
+        titulos.agregar_franja_superior_ospa('Registro de información del problema', 
                                             self.inicio_app, self.cerrar_sesion)
         # III.2 Frame de rejillas
         self.frame_rejilla = Cuadro(self.frame_principal)
@@ -818,18 +831,18 @@ class Extremo_problemas_vista(funcionalidades_ospa):
             self.id_objeto_ingresado = id_objeto
             self.lista_para_insertar = lista
 
-            self.tabla_de_ep_cod = b_ep_cod.generar_dataframe()
-            self.tabla_relacion_de_ep = base_relacion_de_ep.generar_dataframe()
-            self.tabla_relacion_dr_ep = base_relacion_dr_ep.generar_dataframe()
-            self.tabla_relacion_mp_ep = base_relacion_mp_ep.generar_dataframe()
+            self.tabla_de_pr_cod = b_pr_cod.generar_dataframe()
+            self.tabla_relacion_de_pr = base_relacion_de_pr.generar_dataframe()
+            self.tabla_relacion_dr_pr = base_relacion_dr_pr.generar_dataframe()
+            self.tabla_relacion_mp_pr = base_relacion_mp_pr.generar_dataframe()
 
-            creador = b_ep_cod.obtener_usuario(base_datos_usuario, self.id_objeto_ingresado,  self.cod_tipo_objeto)
-            fecha_creacion = b_ep_cod.obtener_valor_columna_con_codigo_unico(self.cod_tipo_objeto, self.id_objeto_ingresado, 'F_CREACION')
+            creador = b_pr_cod.obtener_usuario(base_datos_usuario, self.id_objeto_ingresado,  self.cod_tipo_objeto)
+            fecha_creacion = b_pr_cod.obtener_valor_columna_con_codigo_unico(self.cod_tipo_objeto, self.id_objeto_ingresado, 'F_CREACION')
 
-            ultimo_nombre = b_ep.obtener_usuario(base_datos_usuario, self.id_objeto_ingresado,  self.cod_tipo_objeto)
-            fecha_ultimo =  b_ep.obtener_valor_columna_con_codigo_unico(self.cod_tipo_objeto, self.id_objeto_ingresado, 'FECHA_ULTIMO_MOV')
+            ultimo_nombre = b_pr.obtener_usuario(base_datos_usuario, self.id_objeto_ingresado,  self.cod_tipo_objeto)
+            fecha_ultimo =  b_pr.obtener_valor_columna_con_codigo_unico(self.cod_tipo_objeto, self.id_objeto_ingresado, 'FECHA_ULTIMO_MOV')
 
-            titulo_cod_problema = 'Código: ' + str(self.cod_usuario_ep)
+            titulo_cod_problema = 'Código: ' + str(self.cod_usuario_pr)
             rejilla_ep = [
                 # Sección 1: Estado
                 ('T2', 0, 0, titulo_cod_problema),
@@ -837,88 +850,33 @@ class Extremo_problemas_vista(funcionalidades_ospa):
                 ('L', 1, 0, 'Estado'),
                 ('CX', 1, 1, estado_problemas),
 
-                # Sección 2: Origen
-                ('T2', 2, 0, 'Origen'),
+                # Sección 2: Ubigeo
+                ('T2', 2, 0, 'Ubicación'),
 
-                ('L', 3, 0, 'Código SINADA'),
-                ('EL', 3, 1, 47, 1),
-
-                # Sección 3: Ubigeo
-                ('T2', 4, 0, 'Ubicación'),
-
-                ('L', 5, 0, 'Departamento'),
-                ('CXDEP3', 5, 1, 44, tabla_lista_efa, "Doble", 
+                ('L', 3, 0, 'Departamento'),
+                ('CXDEP3', 3, 1, 44, tabla_lista_efa, "Doble", 
                 'DEPARTAMENTO ', 'Provincia', 'PROVINCIA ', 'Distrito', 'DISTRITO '),
 
-                ('L', 6, 2, 'Tipo de ubicación'),
-                ('CX', 6, 3, ubicacion),
+                # Sección 3: Descripción de problema
+                ('T2', 5, 0, 'Descripción del problema'),
 
-                ('L', 7, 0, 'Georreferencia Este'),
-                ('EL', 7, 1, 47, 1),
-
-                ('L', 7, 2, 'Georreferencia Norte'),
-                ('EL', 7, 3, 47, 1),
-
-                ('L', 8, 0, 'Extensión'),
-                ('CX', 8, 1, extension),
-
-                ('L', 8, 2, 'Ocurrencia'),
-                ('CX', 8, 3, ocurrencia),
-
-                # Sección 4: Descripción de problema
-                ('T2', 9, 0, 'Caracterización'),
-
-                ('L', 10, 0, 'Tipo de afectación'),
-                ('CX', 10, 1, tipo_afectacion),
-                
-                ('L', 10, 2, 'Agente contaminante'),
-                ('CX', 10, 3, agente_conta),
-
-                ('L', 11, 0, 'Tipo de causa'),
-                ('CX', 11, 1, tipo_causa),
-
-                ('L', 11, 2, 'Descripción'),
-                ('STP', 11, 3, 45, 2),
-
-                ('L', 12, 0, 'Componente ambiental'),
-                ('CX', 12, 1, componente_amb),
-
-                # Sección 4: Administrado
-                ('T2', 13, 0, 'Administrado'),
-                
-                ('L', 14, 0, 'Tipo'),
-                ('CX', 14, 1, tipo_administrado),
-
-                ('L', 14, 2, 'Administrado'),
-                ('EL', 14, 3, 47, 1),
-
-                ('L', 15, 0, 'Actividad'),
-                ('CXDEP3', 15, 1, 44, tabla_parametros, "Doble",
-                 'ACTIVIDAD', 'Característica 1', 'CARACTERÍSTICA 1', 'Característica 2', 'CARACTERÍSTICA 2'),
-
-                ('L', 16, 2, 'RUC/DNI'),
-                ('EL', 16, 3, 47, 1),
-
-                # Sección 5: 
-                ('T2', 17, 0, 'EFA'),
-                ('L', 18, 0, 'Tipo de EFA'),
-                ('CXDEP3', 18, 1, 44, tabla_directorio, "Doble",
-                'TIPO_OFICINA', 'Categoría EFA', 'EFA_OSPA', 'EFA', 'Entidad u oficina'),
+                ('L', 6, 0, 'Descripción'),
+                ('ST', 6, 1),
             
-                # Sección 6: Datos
-                ('T2', 20, 0, 'Datos'),
+                # Sección 4: Datos
+                ('T2', 7, 0, 'Datos'),
 
-                ('L', 21, 0, 'Creado por:'),
-                ('L', 21, 1, str(creador)),
+                ('L', 8, 0, 'Creado por:'),
+                ('L', 8, 1, str(creador)),
 
-                ('L', 21, 2, 'Actualizado por:'),
-                ('L', 21, 3, str(ultimo_nombre)),
+                ('L', 8, 2, 'Actualizado por:'),
+                ('L', 8, 3, str(ultimo_nombre)),
 
-                ('L', 22, 0, 'Fecha creación:'),
-                ('L', 22, 1, str(fecha_creacion)),
+                ('L', 9, 0, 'Fecha creación:'),
+                ('L', 9, 1, str(fecha_creacion)),
 
-                ('L', 22, 2, 'Fecha actualización:'),
-                ('L', 22, 3, str(fecha_ultimo))
+                ('L', 9, 2, 'Fecha actualización:'),
+                ('L', 9, 3, str(fecha_ultimo))
 
             ]
             # Se inserta rejilla con datos
@@ -933,73 +891,19 @@ class Extremo_problemas_vista(funcionalidades_ospa):
                 ('L', 1, 0, 'Estado'),
                 ('CXP', 1, 1, 44, estado_problemas, 'ABIERTO', "readonly"),
 
-                # Sección 2: Origen
-                ('T2', 2, 0, 'Origen'),
+                # Sección 2: Ubigeo
+                ('T2', 2, 0, 'Ubicación'),
 
-                ('L', 3, 0, 'Código SINADA'),
-                ('EL', 3, 1, 47, 1),
-
-                # Sección 3: Ubigeo
-                ('T2', 4, 0, 'Ubicación'),
-
-                ('L', 5, 0, 'Departamento'),
-                ('CXDEP3', 5, 1, 44, tabla_lista_efa, "Doble", 
+                ('L', 3, 0, 'Departamento'),
+                ('CXDEP3', 3, 1, 44, tabla_lista_efa, "Doble", 
                 'DEPARTAMENTO ', 'Provincia', 'PROVINCIA ', 'Distrito', 'DISTRITO '),
 
-                ('L', 6, 2, 'Tipo de ubicación'),
-                ('CX', 6, 3, ubicacion),
+                # Sección 3: Descripción de problema
+                ('T2', 5, 0, 'Descripción del problema'),
 
-                ('L', 7, 0, 'Georreferencia Este'),
-                ('EL', 7, 1, 47, 1),
+                ('L', 6, 0, 'Descripción'),
+                ('STP', 6, 1, 45, 2),
 
-                ('L', 7, 2, 'Georreferencia Norte'),
-                ('EL', 7, 3, 47, 1),
-
-                ('L', 8, 0, 'Extensión'),
-                ('CX', 8, 1, extension),
-
-                ('L', 8, 2, 'Ocurrencia'),
-                ('CX', 8, 3, ocurrencia),
-
-                # Sección 4: Descripción de problema
-                ('T2', 9, 0, 'Caracterización'),
-
-                ('L', 10, 0, 'Tipo de afectación'),
-                ('CX', 10, 1, tipo_afectacion),
-                
-                ('L', 10, 2, 'Agente contaminante'),
-                ('CX', 10, 3, agente_conta),
-
-                ('L', 11, 0, 'Tipo de causa'),
-                ('CX', 11, 1, tipo_causa),
-
-                ('L', 11, 2, 'Descripción'),
-                ('STP', 11, 3, 45, 2),
-
-                ('L', 12, 0, 'Componente ambiental'),
-                ('CX', 12, 1, componente_amb),
-
-                # Sección 4: Administrado
-                ('T2', 13, 0, 'Administrado'),
-                
-                ('L', 14, 0, 'Tipo'),
-                ('CX', 14, 1, tipo_administrado),
-
-                ('L', 14, 2, 'Administrado'),
-                ('EL', 14, 3, 47, 1),
-
-                ('L', 15, 0, 'Actividad'),
-                ('CXDEP3', 15, 1, 44, tabla_parametros, "Doble",
-                 'ACTIVIDAD', 'Característica 1', 'CARACTERÍSTICA 1', 'Característica 2', 'CARACTERÍSTICA 2'),
-
-                ('L', 16, 2, 'RUC/DNI'),
-                ('EL', 16, 3, 47, 1),
-
-                # Sección 5: EFA
-                ('T2', 17, 0, 'EFA'),
-                ('L', 18, 0, 'Tipo de EFA'),
-                ('CXDEP3', 18, 1, 44, tabla_directorio, "Doble",
-                'TIPO_OFICINA', 'Categoría EFA', 'EFA_OSPA', 'EFA', 'Entidad u oficina')
             ]
             # Se inserta rejilla nueva
             self.frame_rejilla.agregar_rejilla(rejilla_ep_nuevo)
@@ -1007,38 +911,49 @@ class Extremo_problemas_vista(funcionalidades_ospa):
         # III.3 Frame de botón de rejilla
         f_boton = Cuadro(self.frame_principal)
         f_boton.agregar_button(0, 1, 'Guardar', self.guardar_y_actualizar_ep)
-        
+
         # III.4 Frame de vitrina 1
         self.frame_vitrina_1 = Cuadro(self.frame_principal)
         self.vitrina_1 = self.generar_vitrina(self.nuevo, 
                                                 self.frame_vitrina_1,
-                                                '(+) Agregar', self.no_asociar,
-                                                'Macroproblemas asociados',
-                                                self.cod_usuario_ep, self.tabla_de_ep_cod, 
-                                                self.tabla_de_mp, self.tabla_relacion_mp_ep, 
-                                                "ID_EP", "ID_MP", "COD_EP", 
-                                                self.ver_mp, self.eliminar_mp_y_actualizar)
+                                                '(+) Añadir extremo', self.nuevo_extremo2,
+                                                'Lista de extremos asociados',
+                                                self.cod_usuario_pr, self.tabla_de_pr_cod, 
+                                                self.tabla_de_ep2_resumen, self.tabla_relacion_ep_pr, 
+                                                "ID_PR", "ID_EP", "COD_PR", 
+                                                self.ver_ep2, self.eliminar_ep_y_actualizar)
         
         # III.5 Frame de vitrina 2
         self.frame_vitrina_2 = Cuadro(self.frame_principal)
         self.vitrina_2 = self.generar_vitrina(self.nuevo, 
                                                 self.frame_vitrina_2,
                                                 '(+) Agregar', self.no_asociar,
-                                                'Documentos emitidos asociados',
-                                                self.cod_usuario_ep, self.tabla_de_ep_cod, 
-                                                self.tabla_de_de, self.tabla_relacion_de_ep, 
-                                                "ID_EP", "ID_DE", "COD_EP", 
-                                                self.ver_de, self.eliminar_de_y_actualizar)
+                                                'Macroproblemas asociados',
+                                                self.cod_usuario_pr, self.tabla_de_pr_cod, 
+                                                self.tabla_de_mp, self.tabla_relacion_mp_pr, 
+                                                "ID_PR", "ID_MP", "COD_PR", 
+                                                self.ver_mp, self.eliminar_mp_y_actualizar)
         
-        # III.5 Frame de vitrina 3
+        # III.6 Frame de vitrina 3
         self.frame_vitrina_3 = Cuadro(self.frame_principal)
         self.vitrina_3 = self.generar_vitrina(self.nuevo, 
                                                 self.frame_vitrina_3,
                                                 '(+) Agregar', self.no_asociar,
+                                                'Documentos emitidos asociados',
+                                                self.cod_usuario_pr, self.tabla_de_pr_cod, 
+                                                self.tabla_de_de, self.tabla_relacion_de_pr, 
+                                                "ID_PR", "ID_DE", "COD_PR", 
+                                                self.ver_de, self.eliminar_de_y_actualizar)
+        
+        # III.5 Frame de vitrina 3
+        self.frame_vitrina_4 = Cuadro(self.frame_principal)
+        self.vitrina_4 = self.generar_vitrina(self.nuevo, 
+                                                self.frame_vitrina_4,
+                                                '(+) Agregar', self.no_asociar,
                                                 'Documentos recibidos asociados',
-                                                self.cod_usuario_ep, self.tabla_de_ep_cod, 
-                                                self.tabla_de_dr, self.tabla_relacion_dr_ep, 
-                                                "ID_EP", "ID_DR", "COD_EP", 
+                                                self.cod_usuario_pr, self.tabla_de_pr_cod, 
+                                                self.tabla_de_dr, self.tabla_relacion_dr_pr, 
+                                                "ID_PR", "ID_DR", "COD_PR", 
                                                 self.ver_dr, self.eliminar_dr_y_actualizar)
 
 
@@ -1047,10 +962,10 @@ class Extremo_problemas_vista(funcionalidades_ospa):
         
         # Agregamos el objeto
         self.guardar_objeto(self.frame_rejilla,
-                            self.cod_usuario_ep, "COD_EP", self.tabla_de_ep_cod,
-                            b_ep_cod, b_ep, b_ep_hist, self.ver_ep)
+                            self.cod_usuario_pr, "COD_PR", self.tabla_de_pr_cod,
+                            b_pr_cod, b_pr, b_pr_hist, self.ver_ep)
         # Actualización de tabla de código y visualización
-        self.tabla_de_ep_cod = b_ep_cod.generar_dataframe()
+        self.tabla_de_pr_cod = b_pr_cod.generar_dataframe()
 
     #----------------------------------------------------------------------
     def actualizar_vitrinas_ep(self):
@@ -1075,9 +990,9 @@ class Extremo_problemas_vista(funcionalidades_ospa):
                                                 self.frame_vitrina_1,
                                                 '(+) Agregar', self.no_asociar,
                                                 'Macroproblemas asociados',
-                                                self.cod_usuario_ep, self.tabla_de_ep_cod, 
-                                                self.tabla_de_mp, self.tabla_relacion_mp_ep, 
-                                                "ID_EP", "ID_MP", "COD_EP", 
+                                                self.cod_usuario_pr, self.tabla_de_pr_cod, 
+                                                self.tabla_de_mp, self.tabla_relacion_mp_pr, 
+                                                "ID_PR", "ID_MP", "COD_PR", 
                                                 self.ver_mp, self.eliminar_mp_y_actualizar)
         
         # III.5 Frame de vitrina 2
@@ -1086,9 +1001,9 @@ class Extremo_problemas_vista(funcionalidades_ospa):
                                                 self.frame_vitrina_2,
                                                 '(+) Agregar', self.no_asociar,
                                                 'Documentos emitidos asociados',
-                                                self.cod_usuario_ep, self.tabla_de_ep_cod, 
-                                                self.tabla_de_de, self.tabla_relacion_de_ep, 
-                                                "ID_EP", "ID_DE", "COD_EP", 
+                                                self.cod_usuario_pr, self.tabla_de_pr_cod, 
+                                                self.tabla_de_de, self.tabla_relacion_de_pr, 
+                                                "ID_PR", "ID_DE", "COD_PR", 
                                                 self.ver_de, self.eliminar_de_y_actualizar)
         
         # III.5 Frame de vitrina 3
@@ -1097,21 +1012,21 @@ class Extremo_problemas_vista(funcionalidades_ospa):
                                                 self.frame_vitrina_3,
                                                 '(+) Agregar', self.no_asociar,
                                                 'Documentos recibidos asociados',
-                                                self.cod_usuario_ep, self.tabla_de_ep_cod, 
-                                                self.tabla_de_dr, self.tabla_relacion_dr_ep, 
-                                                "ID_EP", "ID_DR", "COD_EP", 
+                                                self.cod_usuario_pr, self.tabla_de_pr_cod, 
+                                                self.tabla_de_dr, self.tabla_relacion_dr_pr, 
+                                                "ID_PR", "ID_DR", "COD_PR", 
                                                 self.ver_dr, self.eliminar_dr_y_actualizar)
 
         
     #----------------------------------------------------------------------
     def eliminar_dr_y_actualizar(self, id_objeto):
         # Se elimina el DR
-        self.eliminar_objeto(self.cod_usuario_ep, "COD_EP", id_objeto, "COD_DR",
-                            self.tabla_de_ep_cod, tabla_de_dr_cod, 
-                            base_relacion_dr_ep, base_relacion_dr_ep_hist)
+        self.eliminar_objeto(self.cod_usuario_pr, "COD_PR", id_objeto, "COD_DR",
+                            self.tabla_de_pr_cod, tabla_de_dr_cod, 
+                            base_relacion_dr_pr, base_relacion_dr_pr_hist)
         
         # Se actualiza tabla de relaciones
-        self.tabla_relacion_dr_ep = base_relacion_dr_ep.generar_dataframe()
+        self.tabla_relacion_dr_pr = base_relacion_dr_pr.generar_dataframe()
         # Se actualiza la vista de vitrinas
         self.actualizar_vitrinas_ep()
 
@@ -1119,24 +1034,36 @@ class Extremo_problemas_vista(funcionalidades_ospa):
     #----------------------------------------------------------------------
     def eliminar_de_y_actualizar(self, id_objeto):
         # Se elimina el DE
-        self.eliminar_objeto(self.cod_usuario_ep, "COD_EP", id_objeto, "COD_DE",
-                            self.tabla_de_ep_cod, tabla_de_de_cod, 
-                            base_relacion_de_ep, base_relacion_de_ep_hist)
+        self.eliminar_objeto(self.cod_usuario_pr, "COD_PR", id_objeto, "COD_DE",
+                            self.tabla_de_pr_cod, tabla_de_de_cod, 
+                            base_relacion_de_pr, base_relacion_de_pr_hist)
         
         # Se actualiza tabla de relaciones
-        self.tabla_relacion_de_ep = base_relacion_de_ep.generar_dataframe()
+        self.tabla_relacion_de_pr = base_relacion_de_pr.generar_dataframe()
         # Se actualiza la vista de vitrinas
         self.actualizar_vitrinas_ep()
 
     #----------------------------------------------------------------------
     def eliminar_mp_y_actualizar(self, id_objeto):
         # Se elimina el DE
-        self.eliminar_objeto(self.cod_usuario_ep, "COD_EP", id_objeto, "COD_MP",
-                            self.tabla_de_ep_cod, tabla_de_mp_cod, 
-                            base_relacion_mp_ep, base_relacion_mp_ep_hist)
+        self.eliminar_objeto(self.cod_usuario_pr, "COD_PR", id_objeto, "COD_MP",
+                            self.tabla_de_pr_cod, tabla_de_mp_cod, 
+                            base_relacion_mp_pr, base_relacion_mp_pr_hist)
         
         # Se actualiza tabla de relaciones
-        self.tabla_relacion_mp_ep = base_relacion_mp_ep.generar_dataframe()
+        self.tabla_relacion_mp_pr = base_relacion_mp_pr.generar_dataframe()
+        # Se actualiza la vista de vitrinas
+        self.actualizar_vitrinas_ep()
+
+    #----------------------------------------------------------------------
+    def eliminar_ep_y_actualizar(self, id_objeto):
+        # Se elimina el DE
+        self.eliminar_objeto(self.cod_usuario_pr, "COD_PR", id_objeto, "COD_EP",
+                            self.tabla_de_pr_cod, tabla_de_pr_cod, 
+                            base_relacion_ep_pr, base_relacion_ep_pr_hist)
+        
+        # Se actualiza tabla de relaciones
+        self.tabla_relacion_ep_pr = base_relacion_ep_pr.generar_dataframe()
         # Se actualiza la vista de vitrinas
         self.actualizar_vitrinas_ep()
 
@@ -1144,6 +1071,324 @@ class Extremo_problemas_vista(funcionalidades_ospa):
     def no_asociar(self):
         messagebox.showerror("Error",
                             'Para asociar un documento, hágalo desde la vista de documentos')
+
+class Extremo_vinculados(funcionalidades_ospa):
+    """"""
+    
+    #----------------------------------------------------------------------
+    def __init__(self, *args, nuevo=True, lista=None, id_objeto = None,  tipo_objeto = "EP"):
+        """Constructor"""
+
+        Ventana.__init__(self, *args)
+         # Determinar la ventana principal a partir si es (o no) scrollable
+        if self.scrollable_ventana == True:
+            self.frame_principal = self.scrollframe
+        else:
+            self.frame_principal = self
+        
+        # 0. Almacenamos información heredada
+        self.nuevo = nuevo
+        self.cod_usuario_ep = id_objeto
+        self.id_objeto_ingresado = id_objeto
+        self.tipo_objeto = tipo_objeto
+        self.cod_tipo_objeto = 'COD_' + str(tipo_objeto)
+        # Parámetros de vitrina
+        #self.vitrina_1 = None
+        #self.vitina_2 = None
+        # Tablas para vitrina
+        # 0. Tablas de código de objeto (tabla de problemas)
+        self.tabla_de_ep_cod = tabla_de_ep_cod
+
+
+        # III. Títulos e imagen
+        # III.1 Frame de Título
+        titulos = Cuadro(self.frame_principal)
+        titulos.agregar_franja_superior_ospa('Registro extremo del problema', 
+                                            self.inicio_app, self.cerrar_sesion)
+        # III.2 Frame de rejillas
+        self.frame_rejilla = Cuadro(self.frame_principal)
+        # En caso exista precedente, se inserta en la rejilla
+        if self.nuevo == False: # Estamos en un extremo creado
+            self.id_objeto_ingresado = id_objeto
+            self.lista_para_insertar = lista
+
+            self.tabla_de_ep_cod = b_ep_cod.generar_dataframe()
+            self.tabla_relacion_ep_pr = base_relacion_ep_pr.generar_dataframe()
+
+            creador = b_ep_cod.obtener_usuario(base_datos_usuario, self.id_objeto_ingresado,  self.cod_tipo_objeto)
+            fecha_creacion = b_ep_cod.obtener_valor_columna_con_codigo_unico(self.cod_tipo_objeto, self.id_objeto_ingresado, 'F_CREACION')
+
+            ultimo_nombre = b_ep.obtener_usuario(base_datos_usuario, self.id_objeto_ingresado,  self.cod_tipo_objeto)
+            fecha_ultimo =  b_ep.obtener_valor_columna_con_codigo_unico(self.cod_tipo_objeto, self.id_objeto_ingresado, 'FECHA_ULTIMO_MOV')
+
+            titulo_cod_problema2 = 'Código: ' + str(self.cod_usuario_ep)
+            rejilla_ep = [
+                ('T2', 0, 0, titulo_cod_problema2),
+
+                ('L', 1, 0, 'Estado'),
+                ('CX', 1, 1, estado_problemas),
+
+                # Sección 2: Origen
+                ('T2', 2, 0, 'Origen'),
+
+                ('L', 3, 0, 'Código SINADA'),
+                ('EL', 3, 1, 47, 1),
+
+                # Sección 3: Ubigeo
+                ('T2', 4, 0, 'Ubicación'),
+
+                ('L', 5, 0, 'Tipo de ubicación'),
+                ('CX', 5, 1, ubicacion),
+
+                ('L', 6, 0, 'Georreferencia Este'),
+                ('EL', 6, 1, 47, 1),
+
+                ('L', 6, 2, 'Georreferencia Norte'),
+                ('EL', 6, 3, 47, 1),
+
+                ('L', 7, 0, 'Extensión'),
+                ('CX', 7, 1, extension),
+
+                ('L', 7, 2, 'Ocurrencia'),
+                ('CX', 7, 3, ocurrencia),
+
+                # Sección 4: Descripción de problema
+                ('T2', 8, 0, 'Caracterización'),
+
+                ('L', 9, 0, 'Tipo de afectación'),
+                ('CX', 9, 1, tipo_afectacion),
+                
+                ('L', 9, 2, 'Agente contaminante'),
+                ('CX', 9, 3, agente_conta),
+
+                ('L', 10, 0, 'Tipo de causa'),
+                ('CX', 10, 1, tipo_causa),
+
+                ('L', 10, 2, 'Componente ambiental'),
+                ('CX', 10, 3, componente_amb),
+
+                # Sección 4: Administrado
+                ('T2', 11, 0, 'Administrado'),
+                
+                ('L', 12, 0, 'Tipo'),
+                ('CX', 12, 1, tipo_administrado),
+
+                ('L', 12, 2, 'Administrado'),
+                ('EL', 12, 3, 47, 1),
+
+                ('L', 13, 0, 'Actividad'),
+                ('CXDEP3', 13, 1, 44, tabla_parametros, "Doble",
+                 'ACTIVIDAD', 'Característica 1', 'CARACTERÍSTICA 1', 'Característica 2', 'CARACTERÍSTICA 2'),
+
+                ('L', 14, 0, 'RUC/DNI'),
+                ('EL', 14, 1, 47, 1),
+
+                # Sección 5: 
+                ('T2', 15, 0, 'EFA'),
+                ('L', 16, 0, 'Tipo de EFA'),
+                ('CXDEP3', 16, 1, 44, tabla_directorio, "Doble",
+                'TIPO_OFICINA', 'Categoría EFA', 'EFA_OSPA', 'EFA', 'Entidad u oficina'),
+            
+                # Sección 6: Datos
+                ('T2', 18, 0, 'Datos'),
+
+                ('L', 19, 0, 'Creado por:'),
+                ('L', 19, 1, str(creador)),
+
+                ('L', 19, 2, 'Actualizado por:'),
+                ('L', 19, 3, str(ultimo_nombre)),
+
+                ('L', 20, 0, 'Fecha creación:'),
+                ('L', 20, 1, str(fecha_creacion)),
+
+                ('L', 20, 2, 'Fecha actualización:'),
+                ('L', 20, 3, str(fecha_ultimo)),
+
+                ('T2', 21, 0, '')
+
+            ]
+            # Se inserta rejilla con datos
+            self.frame_rejilla.agregar_rejilla(rejilla_ep)
+            self.frame_rejilla.insertar_lista_de_datos(self.lista_para_insertar)
+
+        else:
+            rejilla_ep_nuevo = [
+                # Sección 1: Estado
+                ('T2', 0, 0, 'Código'),
+
+                ('L', 1, 0, 'Estado'),
+                ('CXP', 1, 1, 44, estado_problemas, 'ABIERTO', "readonly"),
+
+                # Sección 2: Origen
+                ('T2', 2, 0, 'Origen'),
+
+                ('L', 3, 0, 'Código SINADA'),
+                ('EL', 3, 1, 47, 1),
+
+                # Sección 3: Ubigeo
+                ('T2', 4, 0, 'Ubicación'),
+
+                ('L', 5, 0, 'Tipo de ubicación'),
+                ('CX', 5, 1, ubicacion),
+
+                ('L', 6, 0, 'Georreferencia Este'),
+                ('EL', 6, 1, 47, 1),
+
+                ('L', 6, 2, 'Georreferencia Norte'),
+                ('EL', 6, 3, 47, 1),
+
+                ('L', 7, 0, 'Extensión'),
+                ('CX', 7, 1, extension),
+
+                ('L', 7, 2, 'Ocurrencia'),
+                ('CX', 7, 3, ocurrencia),
+
+                # Sección 4: Descripción de problema
+                ('T2', 8, 0, 'Caracterización'),
+
+                ('L', 9, 0, 'Tipo de afectación'),
+                ('CX', 9, 1, tipo_afectacion),
+                
+                ('L', 9, 2, 'Agente contaminante'),
+                ('CX', 9, 3, agente_conta),
+
+                ('L', 10, 0, 'Tipo de causa'),
+                ('CX', 10, 1, tipo_causa),
+
+                ('L', 10, 2, 'Componente ambiental'),
+                ('CX', 10, 3, componente_amb),
+
+                # Sección 4: Administrado
+                ('T2', 11, 0, 'Administrado'),
+                
+                ('L', 12, 0, 'Tipo'),
+                ('CX', 12, 1, tipo_administrado),
+
+                ('L', 12, 2, 'Administrado'),
+                ('EL', 12, 3, 47, 1),
+
+                ('L', 13, 0, 'Actividad'),
+                ('CXDEP3', 13, 1, 44, tabla_parametros, "Doble",
+                 'ACTIVIDAD', 'Característica 1', 'CARACTERÍSTICA 1', 'Característica 2', 'CARACTERÍSTICA 2'),
+
+                ('L', 14, 0, 'RUC/DNI'),
+                ('EL', 14, 1, 47, 1),
+
+                # Sección 5: EFA
+                ('T2', 15, 0, 'EFA'),
+                ('L', 16, 0, 'Tipo de EFA'),
+                ('CXDEP3', 16, 1, 44, tabla_directorio, "Doble",
+                'TIPO_OFICINA', 'Categoría EFA', 'EFA_OSPA', 'EFA', 'Entidad u oficina'),
+
+                ('T2', 17, 0, '')
+            
+                
+            ]
+            # Se inserta rejilla nueva
+            self.frame_rejilla.agregar_rejilla(rejilla_ep_nuevo)
+
+        # III.3 Frame de botón de rejilla
+        f_boton = Cuadro(self.frame_principal)
+        f_boton.agregar_button(0, 1, 'Guardar', self.guardar_y_actualizar_ep)
+        f_auxiliar = Cuadro(self.frame_principal)
+        f_auxiliar.agregar_titulo_2(1, 0, '')
+
+
+
+    #----------------------------------------------------------------------
+    def guardar_y_actualizar_ep(self):
+
+        
+        # Agregamos el objeto
+        self.asociar_ep_pr(self.ver_ep2, self.frame_rejilla,
+                            b_ep_hist, self.tabla_de_ep_cod, "COD_EP", self.cod_usuario_ep,
+                            b_ep_cod, b_ep)
+        # Actualización de tabla de código y visualización
+        self.tabla_de_ep_cod = b_ep_cod.generar_dataframe()
+        self.tabla_de_pr_cod = b_pr_cod.generar_dataframe()
+
+    def asociar_ep_pr(self, funcion_ver, rejilla_datos, base_objeto_clase_hist, tabla_objeto_clase, cod_entrada, cod_objeto_clase, base_codigo_objeto, base_objeto_clase):
+        """"""
+        tabla_objeto = tabla_objeto_clase
+        cod_objeto = cod_entrada
+        codigo_objeto = cod_objeto_clase
+        base_cod_objeto = base_codigo_objeto
+        base_objeto = base_objeto_clase
+        rejilla_frame = rejilla_datos
+        datos_ingresados = rejilla_frame.obtener_lista_de_datos()
+        base_objeto_hist = base_objeto_clase_hist
+        usuario = vg.cod_usuario
+        ahora = str(dt.datetime.now())
+        id_objeto_ingresado = self.id_objeto_ingresado
+        # A. Existe un código en la rejilla
+        if self.nuevo == False:
+            # Pestaña 1: Obtengo el ID interno a partir del código de usuario
+            tabla_codigo_objeto_filtrada = tabla_objeto[tabla_objeto[cod_objeto]==codigo_objeto]
+            id_interno_objeto_clase = tabla_codigo_objeto_filtrada.iloc[0,0]
+            
+            # Actualizo las tablas en la web
+            hora_de_modificacion = ahora
+
+            # Pestaña 2:       
+            # Cambio los datos de una fila
+            # Código interno del aplicativo + Código del usuario del DR + Hora de modificación
+            lista_a_sobreescribir = [id_interno_objeto_clase] + [codigo_objeto] + datos_ingresados + [hora_de_modificacion] + [usuario]
+            base_objeto.cambiar_los_datos_de_una_fila(codigo_objeto, lista_a_sobreescribir) # Se sobreescribe la información
+            # Pestaña 3
+            lista_historial = lista_a_sobreescribir
+            base_objeto_hist.agregar_datos(lista_historial) # Se sube la info
+
+            # Mensaje
+            messagebox.showinfo("¡Excelente!", "Se ha actualizado el registro")
+            funcion_ver(codigo_objeto)
+
+        # B. Es un código nuevo
+        else:
+            hora_de_modificacion = ahora
+            #OBTENER EL ID USUARIO DEL PROBLEMA
+            codigopr = id_objeto_ingresado
+            # OBTENER EL ID INTERNO DEL PROBLEMA
+            tabla_de_codigo_pr = b_pr.generar_dataframe()
+            tabla_codigo_de_filtrada = tabla_de_codigo_pr[tabla_de_codigo_pr.COD_PR == codigopr]
+            id_interno_pr = tabla_codigo_de_filtrada.iloc[0,0]
+            # BUSCAR RELACIONES
+            tabla_relaciones = base_relacion_ep_pr.generar_dataframe()
+            tabla_codigo_relaciones_filtrada = tabla_relaciones[tabla_relaciones['ID_PR']==id_interno_pr]
+            numero_extremo_problemas = len(tabla_codigo_relaciones_filtrada.index) + 1
+            nuevo_codigo = codigopr + "-" + str(numero_extremo_problemas)
+            base_cod_objeto.agregar_codigo(nuevo_codigo, ahora, usuario)
+        
+            # Definición de ID de relación
+            self.IDEP = b_ep_cod.listar_datos_de_fila(nuevo_codigo)
+            self.IDEP_FINAL = self.IDEP[0]
+            id_relacion_ep_pr = self.IDEP_FINAL + "/" + id_interno_pr
+
+            # GUARDAR RELACION
+            # Pestaña 1: Código Único
+            datos_insertar = [id_relacion_ep_pr,self.IDEP_FINAL,id_interno_pr,'ACTIVO',hora_de_modificacion]
+            base_relacion_ep_pr.agregar_datos(datos_insertar)
+            datos_a_cargar_hist = [id_relacion_ep_pr,self.IDEP_FINAL,id_interno_pr,'ACTIVO',hora_de_modificacion,hora_de_modificacion]
+            base_relacion_ep_pr_hist.agregar_datos(datos_a_cargar_hist)
+            # Descargo el código único
+            lista_descargada_codigo = base_cod_objeto.listar_datos_de_fila(nuevo_codigo) # Se trae la info
+        
+            # Pestaña 2:       
+            # Obtengo el ID interno
+            id_objeto = lista_descargada_codigo[0]
+            cod_objeto = lista_descargada_codigo[3]
+            # Creo el vector a subir 
+            lista_a_cargar = [id_objeto] + [cod_objeto] + datos_ingresados + [ahora] + [usuario]
+            base_objeto.agregar_datos(lista_a_cargar) # Se sube la info
+
+            # Pestaña 3
+            hora_de_creacion = str(ahora) # De lo creado en la pestaña 1
+            lista_historial = lista_a_cargar + [hora_de_creacion] # Lo subido a la pestaña 2 + hora
+            base_objeto_hist.agregar_datos(lista_historial) # Se sube la info
+
+            # Actualización de base y confirmación de registro
+            tabla_objeto_clase = base_cod_objeto.generar_dataframe()
+            messagebox.showinfo("¡Excelente!", "Se ha ingresado un nuevo registro")
+            funcion_ver(cod_objeto)
 
 class Macroproblemas_vista(funcionalidades_ospa):
     """"""
@@ -1174,7 +1419,7 @@ class Macroproblemas_vista(funcionalidades_ospa):
         self.tabla_de_mp_cod = tabla_de_mp_cod
         # II.1 Lista de EP
         self.tabla_de_ep =  tabla_de_ep_resumen
-        self.tabla_relacion_mp_ep = tabla_relacion_mp_ep
+        self.tabla_relacion_mp_pr = tabla_relacion_mp_pr
 
         # III. Títulos e imagen
         # III.1 Frame de Título
@@ -1189,7 +1434,7 @@ class Macroproblemas_vista(funcionalidades_ospa):
             self.lista_para_insertar = lista
 
             self.tabla_de_mp_cod = b_mp_cod.generar_dataframe()
-            self.tabla_relacion_mp_ep = base_relacion_mp_ep.generar_dataframe()
+            self.tabla_relacion_mp_pr = base_relacion_mp_pr.generar_dataframe()
 
             creador = b_mp_cod.obtener_usuario(base_datos_usuario, self.id_objeto_ingresado,  self.cod_tipo_objeto)
             fecha_creacion = b_mp_cod.obtener_valor_columna_con_codigo_unico(self.cod_tipo_objeto, self.id_objeto_ingresado, 'F_CREACION')
@@ -1291,8 +1536,8 @@ class Macroproblemas_vista(funcionalidades_ospa):
                                                 '(+) Agregar', self.busqueda_ep,
                                                 'Extremos de problemas asociados',
                                                 self.cod_usuario_mp, self.tabla_de_mp_cod, 
-                                                self.tabla_de_ep, self.tabla_relacion_mp_ep, 
-                                                "ID_MP", "ID_EP", "COD_MP", 
+                                                self.tabla_de_ep, self.tabla_relacion_mp_pr, 
+                                                "ID_MP", "ID_PR", "COD_MP", 
                                                 self.ver_ep, self.eliminar_ep_y_actualizar)
         
         
@@ -1311,12 +1556,12 @@ class Macroproblemas_vista(funcionalidades_ospa):
     def eliminar_ep_y_actualizar(self, id_objeto):
         """"""
          # Se elimina el DE
-        self.eliminar_objeto(self.cod_usuario_mp, "COD_MP", id_objeto, "COD_EP",
-                            self.tabla_de_mp_cod, tabla_de_ep_cod, 
-                            base_relacion_mp_ep, base_relacion_mp_ep_hist)
+        self.eliminar_objeto(self.cod_usuario_mp, "COD_MP", id_objeto, "COD_PR",
+                            self.tabla_de_mp_cod, tabla_de_pr_cod, 
+                            base_relacion_mp_pr, base_relacion_mp_pr_hist)
         
         # Se actualiza tabla de relaciones
-        self.tabla_relacion_mp_ep = base_relacion_mp_ep.generar_dataframe()
+        self.tabla_relacion_mp_pr = base_relacion_mp_pr.generar_dataframe()
         # Se actualiza la vista de vitrinas
         self.actualizar_vitrinas_mp()
     
@@ -1333,6 +1578,6 @@ class Macroproblemas_vista(funcionalidades_ospa):
                                                 '(+) Agregar', self.busqueda_ep,
                                                 'Extremos de problemas asociados',
                                                 self.cod_usuario_mp, self.tabla_de_mp_cod, 
-                                                self.tabla_de_ep, self.tabla_relacion_mp_ep, 
-                                                "ID_MP", "ID_EP", "COD_MP", 
+                                                self.tabla_de_ep, self.tabla_relacion_mp_pr, 
+                                                "ID_MP", "ID_PR", "COD_MP", 
                                                 self.ver_ep, self.eliminar_ep_y_actualizar)

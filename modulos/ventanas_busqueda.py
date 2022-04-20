@@ -34,9 +34,9 @@ b_dr_hist = vg.b_dr_hist
 b_de = vg.b_de
 b_de_cod = vg.b_de_cod
 b_de_hist = vg.b_de_hist
-b_ep = vg.b_ep
-b_ep_cod = vg.b_ep_cod
-b_ep_hist = vg.b_ep_hist
+b_pr = vg.b_pr
+b_pr_cod = vg.b_pr_cod
+b_pr_hist = vg.b_pr_hist
 b_mp = vg.b_mp
 b_mp_cod = vg.b_mp_cod
 b_mp_hist = vg.b_mp_hist
@@ -47,13 +47,13 @@ tabla_lista_efa = vg.tabla_lista_efa
 # 2. Tablas relacionales
 base_relacion_docs = vg.base_relacion_docs
 base_relacion_d_hist = vg.base_relacion_docs_hist
-base_relacion_dr_ep =  vg.base_relacion_dr_ep
-base_relacion_dr_ep_hist =  vg.base_relacion_dr_ep_hist
-base_relacion_de_ep =  vg.base_relacion_de_ep
-base_relacion_de_ep_hist =  vg.base_relacion_de_ep_hist
-b_relacion_mp_ep =  vg.base_relacion_mp_ep
-b_relacion_mp_ep_tabla = b_relacion_mp_ep.generar_dataframe()
-base_relacion_mp_ep_hist =  vg.base_relacion_mp_ep_hist
+base_relacion_dr_pr =  vg.base_relacion_dr_pr
+base_relacion_dr_pr_hist =  vg.base_relacion_dr_pr_hist
+base_relacion_de_pr =  vg.base_relacion_de_pr
+base_relacion_de_pr_hist =  vg.base_relacion_de_pr_hist
+b_relacion_mp_pr =  vg.base_relacion_mp_pr
+b_relacion_mp_ep_tabla = b_relacion_mp_pr.generar_dataframe()
+base_relacion_mp_pr_hist =  vg.base_relacion_mp_pr_hist
 
 class Doc_recibidos_busqueda(funcionalidades_ospa):
     """"""
@@ -211,7 +211,10 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
             self.frame_vitrina_dr.eliminar_cuadro()
             self.frame_vitrina_dr = Cuadro(self)
             self.frame_vitrina_dr.agregar_label(1, 2, '                  0 documentos encontrados')
-
+            self.frame_vitrina_dr.agregar_label(2, 2, ' ')
+            self.frame_vitrina_dr.agregar_label(3, 2, ' ')
+            self.frame_vitrina_dr.agregar_label(4, 2, ' ')
+            self.frame_vitrina_dr.agregar_label(5, 2, ' ')
     #----------------------------------------------------------------------
     def limpiar(self):
 
@@ -292,7 +295,7 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
                     
             # Asociación de extremos de problema de DR con DE
             # 1. Obtengo la tabla de relación entre DE y EP
-            tabla_de_dr_ep = base_relacion_dr_ep.generar_dataframe()
+            tabla_de_dr_ep = base_relacion_dr_pr.generar_dataframe()
             # 2. Filtro las relaciones que tiene el DE
             # Filtro para obtener las relaciones activas
             tabla_relacion_activos = tabla_de_dr_ep[tabla_de_dr_ep['ESTADO']=="ACTIVO"]
@@ -300,13 +303,13 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
             tabla_relacion_filtrada = tabla_relacion_activos[tabla_relacion_activos['ID_DR']==self.IDDR_FINAL]
             # 3. Obtengo el ID de los EP que están relacionados al DE
             # Me quedo con el vector a filtrar en forma de lista
-            lista_ep = list(tabla_relacion_filtrada['ID_EP'].unique())
+            lista_ep = list(tabla_relacion_filtrada['ID_PR'].unique())
             # 4. Concateno los ID de los EP relacionados al DE con el ID del DR
             if len(lista_ep) > 0:
                 for indice in range(len(lista_ep)):
                     cod_relacion = id_interno_de + "/" + lista_ep[indice]
                     datos_insertar = [cod_relacion, id_interno_de, lista_ep[indice], 'ACTIVO', hora_de_modificacion] 
-                    base_relacion_de_ep.agregar_datos(datos_insertar)
+                    base_relacion_de_pr.agregar_datos(datos_insertar)
             #else:
             #    messagebox.showinfo("¡Atención!", "El registro ha sido asociado con éxito")
 
@@ -606,54 +609,54 @@ class Extremos(funcionalidades_ospa):
             self.id_usuario = lista
         
         # Renombramos los encabezados
-        b_ep_tabla = b_ep.generar_dataframe()
+        b_ep_tabla = b_pr.generar_dataframe()
         self.tabla_renombrada = self.renombrar_encabezados(b_ep_tabla, tipo_base = 'ep')
         self.tabla_seleccionada = self.seleccionar_encabezados(self.tabla_renombrada, tipo_base = 'ep')
         self.tabla_epF = self.tabla_seleccionada.head(100)
 
         # Listas para desplegables
-        self.listaAG = sorted(list(set(self.tabla_renombrada['AGENT. CONTAMI.'])))
-        self.listaCA = sorted(list(set(self.tabla_renombrada['COMPONEN. AMBIE.'])))
-        self.listaACT = sorted(list(set(self.tabla_renombrada['ACTIVIDAD'])))
-        self.listaTIPOUBI = sorted(list(set(self.tabla_renombrada['TIPO DE UBICACION'])))
-        self.listaOCURR = sorted(list(set(self.tabla_renombrada['OCURRENCIA'])))
-        self.listaEFA = sorted(list(set(self.tabla_renombrada['EFA'])))
+        #self.listaAG = sorted(list(set(self.tabla_renombrada['AGENT. CONTAMI.'])))
+        #self.listaCA = sorted(list(set(self.tabla_renombrada['COMPONEN. AMBIE.'])))
+        #self.listaACT = sorted(list(set(self.tabla_renombrada['ACTIVIDAD'])))
+        #self.listaTIPOUBI = sorted(list(set(self.tabla_renombrada['TIPO DE UBICACION'])))
+        #self.listaOCURR = sorted(list(set(self.tabla_renombrada['OCURRENCIA'])))
+        #self.listaEFA = sorted(list(set(self.tabla_renombrada['EFA'])))
 
         # Agregando logo del ospa a la ventana y título
         titulos = Cuadro(self)
-        titulos.agregar_franja_superior_ospa('Búsqueda de extremos de problemas', 
+        titulos.agregar_franja_superior_ospa('Búsqueda de problemas', 
                                             self.inicio_app, self.cerrar_sesion)
     
         # Armando rejilla con los filtros
         self.rejilla_ep = (
 
-            ('L', 0, 0, 'Agente contaminante'),
-            ('CXP', 0, 1, 44, self.listaAG, '', "readonly"),
+            #('L', 0, 0, 'Agente contaminante'),
+            #('CXP', 0, 1, 44, self.listaAG, '', "readonly"),
 
-            ('L', 0, 2, 'Componente ambiental'),
-            ('CXP', 0, 3, 44, self.listaCA, '', "readonly"),
+            #('L', 0, 2, 'Componente ambiental'),
+            #('CXP', 0, 3, 44, self.listaCA, '', "readonly"),
 
-            ('L', 0, 4, 'Actividad'),
-            ('CXP', 0, 5, 44, self.listaACT, '', "readonly"),
+            #('L', 0, 4, 'Actividad'),
+            #('CXP', 0, 5, 44, self.listaACT, '', "readonly"),
 
-            ('L', 1, 0, 'Departamento'),
-            ('CXDEP3', 1, 1, 44, tabla_lista_efa, "Triple",
+            ('L', 0, 0, 'Departamento'),
+            ('CXDEP3', 0, 1, 44, tabla_lista_efa, "Triple",
             'DEPARTAMENTO ', 'Provincia', 'PROVINCIA ', 'Distrito', 'DISTRITO '),
 
-            ('L', 2, 0, 'Tipo de ubicación'),
-            ('CXP', 2, 1, 44, self.listaTIPOUBI, '', "readonly"),
+            #('L', 2, 0, 'Tipo de ubicación'),
+            #('CXP', 2, 1, 44, self.listaTIPOUBI, '', "readonly"),
 
-            ('L', 2, 2, 'Ocurrencia'),
-            ('CXP', 2, 3, 44, self.listaOCURR, '', "readonly"),
+            #('L', 2, 2, 'Ocurrencia'),
+            #('CXP', 2, 3, 44, self.listaOCURR, '', "readonly"),
 
-            ('L', 2, 4, 'EFA'),
-            ('CXE', 2, 5, 44, self.listaEFA, '', "normal"),
+            #('L', 2, 4, 'EFA'),
+            #('CXE', 2, 5, 44, self.listaEFA, '', "normal"),
 
-            ('L', 3, 0, 'Palabra clave en descripción'),
-            ('EE', 3, 1),
+            ('L', 1, 0, 'Palabra clave en descripción'),
+            ('EE', 1, 1),
 
-            ('L', 3, 2, 'Código extremo'),
-            ('EE', 3, 3)
+            ('L', 1, 2, 'Código problema'),
+            ('EE', 1, 3)
 
         )
         
@@ -688,44 +691,44 @@ class Extremos(funcionalidades_ospa):
         """"""
         # Obteniendo valores de la rejilla
         self.listas_filtroep = self.ep1.obtener_lista_de_datos()
-        self.AG = self.listas_filtroep[0]
-        self.CA = self.listas_filtroep[1]
-        self.ACTIVIDAD = self.listas_filtroep[2]
-        self.DEPART = self.listas_filtroep[3]
-        self.PROVI = self.listas_filtroep[4]
-        self.DISTR = self.listas_filtroep[5]
-        self.TIPOUBI = self.listas_filtroep[6]
-        self.OCURRE = self.listas_filtroep[7]
-        self.EFA = self.listas_filtroep[8]
-        self.CLAVE = self.listas_filtroep[9]
-        self.codigo = self.listas_filtroep[10]
+        #self.AG = self.listas_filtroep[0]
+        #self.CA = self.listas_filtroep[1]
+        #self.ACTIVIDAD = self.listas_filtroep[2]
+        self.DEPART = self.listas_filtroep[0]
+        self.PROVI = self.listas_filtroep[1]
+        self.DISTR = self.listas_filtroep[2]
+        #self.TIPOUBI = self.listas_filtroep[6]
+        #self.OCURRE = self.listas_filtroep[7]
+        #self.EFA = self.listas_filtroep[8]
+        self.CLAVE = self.listas_filtroep[3]
+        self.codigo = self.listas_filtroep[4]
 
         # Filtrando datos por palabras exactas
 
         filtro=""
-        if len(self.AG)>0 :
-            filtro="`AGENT. CONTAMI.`=="+"'"+self.AG+"' "
-    
-        if len(self.CA)>0 :
-            if len(filtro)>0 :
-                filtro = filtro+" & "
-            else:
-                filtro
-            filtro=filtro+"`COMPONEN. AMBIE.`=="+"'"+self.CA+"' "
-
-        if len(self.ACTIVIDAD)>0 :
-            if len(filtro)>0 :
-                filtro = filtro+" & "
-            else:
-                filtro
-            filtro=filtro+"ACTIVIDAD=="+"'"+self.ACTIVIDAD+"' "
-
         if len(self.DEPART)>0 :
-            if len(filtro)>0 :
-                filtro = filtro+" & "
-            else:
-                filtro
-            filtro=filtro+"DEPARTAMENTO=="+"'"+self.DEPART+"' "
+            filtro="DEPARTAMENTO=="+"'"+self.DEPART+"' "
+    
+        #if len(self.CA)>0 :
+        #    if len(filtro)>0 :
+        #        filtro = filtro+" & "
+        #    else:
+        #        filtro
+        #    filtro=filtro+"`COMPONEN. AMBIE.`=="+"'"+self.CA+"' "
+
+        #if len(self.ACTIVIDAD)>0 :
+        #    if len(filtro)>0 :
+        #        filtro = filtro+" & "
+        #    else:
+        #        filtro
+        #    filtro=filtro+"ACTIVIDAD=="+"'"+self.ACTIVIDAD+"' "
+
+        #if len(self.DEPART)>0 :
+        #    if len(filtro)>0 :
+        #        filtro = filtro+" & "
+        #    else:
+        #        filtro
+        #    filtro=filtro+"DEPARTAMENTO=="+"'"+self.DEPART+"' "
 
         if len(self.PROVI)>0 :
             if len(filtro)>0 :
@@ -741,19 +744,19 @@ class Extremos(funcionalidades_ospa):
                 filtro
             filtro=filtro+"DISTRITO=="+"'"+self.DISTR+"' "
 
-        if len(self.TIPOUBI)>0 :
-            if len(filtro)>0 :
-                filtro = filtro+" & "
-            else:
-                filtro
-            filtro=filtro+"`TIPO DE UBICACION`=="+"'"+self.TIPOUBI+"' "
+        #if len(self.TIPOUBI)>0 :
+        #    if len(filtro)>0 :
+        #        filtro = filtro+" & "
+        #    else:
+        #        filtro
+        #    filtro=filtro+"`TIPO DE UBICACION`=="+"'"+self.TIPOUBI+"' "
 
-        if len(self.OCURRE)>0 :
-            if len(filtro)>0 :
-                filtro = filtro+" & "
-            else:
-                filtro
-            filtro=filtro+"OCURRENCIA=="+"'"+self.OCURRE+"' "
+        #if len(self.OCURRE)>0 :
+        #    if len(filtro)>0 :
+        #        filtro = filtro+" & "
+        #    else:
+        #        filtro
+        #    filtro=filtro+"OCURRENCIA=="+"'"+self.OCURRE+"' "
 
         if len(self.codigo)>0 :
             if len(filtro)>0 :
@@ -770,10 +773,10 @@ class Extremos(funcionalidades_ospa):
 
         self.filtro0 = self.tabla_renombrada
         
-        if len(self.EFA)>0: # Filtro por palabra clave
-            self.vep.eliminar_vitrina2()
-            self.filtro0 = self.filtro0[self.filtro0['EFA'].str.contains(self.EFA)]
-            self.Complementoep(self.filtro0)
+        #if len(self.EFA)>0: # Filtro por palabra clave
+        #    self.vep.eliminar_vitrina2()
+        #    self.filtro0 = self.filtro0[self.filtro0['EFA'].str.contains(self.EFA)]
+        #    self.Complementoep(self.filtro0)
 
         if len(self.CLAVE)>0: # Filtro por palabra clave
             self.vep.eliminar_vitrina2()
@@ -829,13 +832,13 @@ class Extremos(funcionalidades_ospa):
     def ver_mp_ep(self, x):
         """"""
         self.x = x
-        texto_documento = 'Extremo de problema: ' + x
+        texto_documento = 'Problema: ' + x
 
         tabla_codigo_de_filtrada = self.tabla_renombrada.query("`CODIGO EXTREMO`==@self.x")
         self.id_interno_ep = tabla_codigo_de_filtrada.iloc[0,0]
-        tabla_codigo_de_filtrada2 = tabla_codigo_de_filtrada['ID_EP'].tolist()
-        self.relacion_mp_ep = b_relacion_mp_ep.generar_dataframe()
-        relacion_activos = self.relacion_mp_ep[self.relacion_mp_ep.ID_EP.isin(tabla_codigo_de_filtrada2)]
+        tabla_codigo_de_filtrada2 = tabla_codigo_de_filtrada['ID_PR'].tolist()
+        self.relacion_mp_ep = b_relacion_mp_pr.generar_dataframe()
+        relacion_activos = self.relacion_mp_ep[self.relacion_mp_ep.ID_PR.isin(tabla_codigo_de_filtrada2)]
         relacion_activos2 = relacion_activos['ID_MP'].tolist()
 
 
@@ -855,7 +858,7 @@ class Extremos(funcionalidades_ospa):
             messagebox.showinfo("Error", "No tiene antecedente que pueda asociarse")
         else:
             #OBTENER EL ID INTERNO DEL EXTREMO DE PROBLEMA
-            self.IDEP = b_ep.listar_datos_de_fila(self.x)
+            self.IDEP = b_pr.listar_datos_de_fila(self.x)
             self.IDEP_FINAL = self.IDEP[0]
 
             #OBTENER EL ID USUARIO DEL OBJETO A ASOCIAR
@@ -864,13 +867,13 @@ class Extremos(funcionalidades_ospa):
             if self.tipo_objeto_anterior == "DR":
                 tabla_de_codigo_dr = b_dr.generar_dataframe()
                 tabla_codigo_de_filtrada = tabla_de_codigo_dr[tabla_de_codigo_dr.COD_DR == id_objeto_anterior]
-                base_relacion_objetos = base_relacion_dr_ep 
-                base_relacion_objetos_hist = base_relacion_dr_ep_hist
+                base_relacion_objetos = base_relacion_dr_pr 
+                base_relacion_objetos_hist = base_relacion_dr_pr_hist
             elif self.tipo_objeto_anterior == "MP":
                 tabla_de_codigo_dr = b_mp.generar_dataframe()
                 tabla_codigo_de_filtrada = tabla_de_codigo_dr[tabla_de_codigo_dr.COD_MP == id_objeto_anterior]
-                base_relacion_objetos = b_relacion_mp_ep
-                base_relacion_objetos_hist = base_relacion_mp_ep_hist
+                base_relacion_objetos = b_relacion_mp_pr
+                base_relacion_objetos_hist = base_relacion_mp_pr_hist
             else:
                 raise messagebox.showinfo("Error", "No puede asociar extremos de problema desde esta vista")
             
