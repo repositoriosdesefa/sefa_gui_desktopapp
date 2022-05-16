@@ -5,55 +5,9 @@ import numpy as np
 from apoyo.elementos_de_GUI import Cuadro, Ventana, Vitrina
 from apoyo.manejo_de_bases import Base_de_datos
 from modulos import ventanas_vista, menus
-import apoyo.datos_frecuentes as vg
+import apoyo.datos_frecuentes as df
 from apoyo.funcionalidades_ospa import funcionalidades_ospa
 
-# Parámetros ventana 
-ancho_v_busqueda = vg.ancho_v_busqueda
-alto_v_busqueda = vg.alto_v_busqueda
-ancho_v_busqueda_vitrina = vg.ancho_v_busqueda_vitrina
-alto_v_busqueda_vitrina = vg.alto_v_busqueda_vitrina
-ancho_v_busqueda_de_vitrina = vg.ancho_v_busqueda_de_vitrina
-ancho_v_busqueda_ep_vitrina = vg.ancho_v_busqueda_ep_vitrina
-ancho_v_busqueda_pf_vitrina = vg.ancho_v_busqueda_pf_vitrina
-ancho_v_busqueda_peq1_vitrina = vg.ancho_v_busqueda_peq1_vitrina
-ancho_v_busqueda_mp_vitrina = vg.ancho_v_busqueda_mp_vitrina
-ancho_v_busqueda_mpf_vitrina = vg.ancho_v_busqueda_mpf_vitrina
-ancho_v_busqueda_prei_vitrina = vg.ancho_v_busqueda_prei_vitrina
-ancho_v_busqueda_peq2_vitrina = vg.ancho_v_busqueda_peq2_vitrina
-ancho_v_busqueda_progr_vitrina = vg.ancho_v_busqueda_progr_vitrina
-
-ancho_v_busqueda_franja = ancho_v_busqueda - 3
-alto_v_busqueda_franja = 78
-
-# 1. Bases
-b_dr = vg.b_dr
-#b_dr_tabla = b_dr.generar_dataframe()
-b_dr_cod = vg.b_dr_cod
-b_dr_hist = vg.b_dr_hist
-b_de = vg.b_de
-b_de_cod = vg.b_de_cod
-b_de_hist = vg.b_de_hist
-b_pr = vg.b_pr
-b_pr_cod = vg.b_pr_cod
-b_pr_hist = vg.b_pr_hist
-b_mp = vg.b_mp
-b_mp_cod = vg.b_mp_cod
-b_mp_hist = vg.b_mp_hist
-tabla_lista_efa = vg.tabla_lista_efa
-#b_adm = vg.b_adm
-#b_adm_tabla = b_adm.generar_dataframe()
-
-# 2. Tablas relacionales
-base_relacion_docs = vg.base_relacion_docs
-base_relacion_d_hist = vg.base_relacion_docs_hist
-base_relacion_dr_pr =  vg.base_relacion_dr_pr
-base_relacion_dr_pr_hist =  vg.base_relacion_dr_pr_hist
-base_relacion_de_pr =  vg.base_relacion_de_pr
-base_relacion_de_pr_hist =  vg.base_relacion_de_pr_hist
-b_relacion_mp_pr =  vg.base_relacion_mp_pr
-b_relacion_mp_ep_tabla = b_relacion_mp_pr.generar_dataframe()
-base_relacion_mp_pr_hist =  vg.base_relacion_mp_pr_hist
 
 class Doc_recibidos_busqueda(funcionalidades_ospa):
     """"""
@@ -71,6 +25,7 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
             self.id_objeto_ingresado = id_objeto
 
         # Generamos el dataframe a filtrar
+        b_dr = Base_de_datos(df.id_b_docs, 'DOC_RECIBIDOS')
         b_dr_tabla = b_dr.generar_dataframe()
         self.tabla_inicial = b_dr_tabla
         self.tabla_renombrada = self.renombrar_encabezados(self.tabla_inicial, tipo_base = 'dr')
@@ -125,11 +80,11 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
 
         # Creando vitrina
         self.vdr = Vitrina(self, self.tabla_drF, self.ver_dr, 
-                                   self.asociar_dr_de, funcion3 =None, tipo_vitrina = "Modelo3", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
+                                   self.asociar_dr_de, funcion3 =None, tipo_vitrina = "Modelo3", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_vitrina)
         
         # Franja inferior
         self.franjai = Cuadro(self)
-        self.franjai.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
+        self.franjai.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', df.alto_v_busqueda_franja, df.ancho_v_busqueda_franja)
 
     #----------------------------------------------------------------------  
     def Buscardr(self):
@@ -206,7 +161,7 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
             self.frame_vitrina_dr.eliminar_cuadro()
             self.frame_vitrina_dr = Cuadro(self)
             self.vdr = Vitrina(self, tabla_final, self.ver_dr, 
-                                   self.asociar_dr_de, funcion3 =None, tipo_vitrina = "Modelo3", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
+                                   self.asociar_dr_de, funcion3 =None, tipo_vitrina = "Modelo3", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_vitrina)
         else:
             self.frame_vitrina_dr.eliminar_cuadro()
             self.frame_vitrina_dr = Cuadro(self)
@@ -231,7 +186,7 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
         self.frame_vitrina_dr = Cuadro(self)
         # Creando vitrina
         self.vdr = Vitrina(self, self.tabla_drF, self.ver_dr, 
-                                   self.asociar_dr_de, funcion3 =None, tipo_vitrina = "Modelo3", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
+                                   self.asociar_dr_de, funcion3 =None, tipo_vitrina = "Modelo3", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_vitrina)
 
     #----------------------------------------------------------------------
     def asociar_dr_de(self, x):
@@ -243,12 +198,14 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
         else:
             
             #OBTENER EL ID INTERNO DEL DOCUMENTO RECIBIDO
+            b_dr = Base_de_datos(df.id_b_docs, 'DOC_RECIBIDOS')
             self.IDDR = b_dr.listar_datos_de_fila(self.x)
             self.IDDR_FINAL = self.IDDR[0]
 
             #OBTENER EL ID USUARIO DEL DOCUMENTO EMITIDO
             codigode = self.id_objeto_ingresado
-            # OBTENER EL ID INTERNO DEL DOCUMENTO EMITIDO
+            # OBTENER EL ID INTERNO DEL DOCUMENTO EMITIDO.
+            b_de = Base_de_datos(df.id_b_docs, 'DOC_EMITIDOS')
             tabla_de_codigo_de = b_de.generar_dataframe()
             tabla_codigo_de_filtrada = tabla_de_codigo_de[tabla_de_codigo_de.COD_DE == codigode]
             id_interno_de = tabla_codigo_de_filtrada.iloc[0,0]
@@ -257,6 +214,7 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
             id_relacion_doc = self.IDDR_FINAL + "/" + id_interno_de
 
             # BUSCAR COINCIDENCIAS
+            base_relacion_docs = Base_de_datos(df.id_b_parametros, 'RELACION_DOCS')
             valor_repetido = self.comprobar_id(base_relacion_docs, id_relacion_doc)
 
             # BUSCAR ESTADO DE ID RELACION SI EXISTE
@@ -276,6 +234,7 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
                 datos_insertar = [id_relacion_doc,self.IDDR_FINAL,id_interno_de,'ACTIVO',hora_de_modificacion]
                 b0.agregar_datos(datos_insertar)
                 datos_a_cargar_hist = [id_relacion_doc,self.IDDR_FINAL,id_interno_de,'ACTIVO',hora_de_modificacion,hora_de_modificacion]
+                base_relacion_d_hist = Base_de_datos(df.id_b_parametros, 'HISTORIAL_RELACION_D')
                 base_relacion_d_hist.agregar_datos(datos_a_cargar_hist)
                 messagebox.showinfo("¡Excelente!", "El registro ha sido asociado con éxito")
             else:
@@ -295,6 +254,7 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
                     
             # Asociación de extremos de problema de DR con DE
             # 1. Obtengo la tabla de relación entre DE y EP
+            base_relacion_dr_pr =  Base_de_datos(df.id_b_parametros, 'RELACION_DR-PR')
             tabla_de_dr_ep = base_relacion_dr_pr.generar_dataframe()
             # 2. Filtro las relaciones que tiene el DE
             # Filtro para obtener las relaciones activas
@@ -309,6 +269,7 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
                 for indice in range(len(lista_ep)):
                     cod_relacion = id_interno_de + "/" + lista_ep[indice]
                     datos_insertar = [cod_relacion, id_interno_de, lista_ep[indice], 'ACTIVO', hora_de_modificacion] 
+                    base_relacion_de_pr =  Base_de_datos(df.id_b_parametros, 'RELACION_DE-PR')
                     base_relacion_de_pr.agregar_datos(datos_insertar)
             #else:
             #    messagebox.showinfo("¡Atención!", "El registro ha sido asociado con éxito")
@@ -330,6 +291,7 @@ class Doc_emitidos_busqueda(funcionalidades_ospa):
             self.id_objeto_ingresado = id_objeto
 
         # Generamos el dataframe a filtrar
+        b_de = Base_de_datos(df.id_b_docs, 'DOC_EMITIDOS')
         b_de_tabla = b_de.generar_dataframe()
         self.tabla_inicial = b_de_tabla
         self.tabla_renombrada = self.renombrar_encabezados(self.tabla_inicial, tipo_base = 'de')
@@ -394,11 +356,11 @@ class Doc_emitidos_busqueda(funcionalidades_ospa):
 
         # Creando vitrina
         self.vde1 = Vitrina(self, self.tabla_deF, self.ver_de, 
-                                    self.asociar_de_dr, funcion3 =None, tipo_vitrina = "Modelo3", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_de_vitrina)
+                                    self.asociar_de_dr, funcion3 =None, tipo_vitrina = "Modelo3", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_de_vitrina)
         
         # Franja inferior
         self.cde16 = Cuadro(self)
-        self.cde16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
+        self.cde16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', df.alto_v_busqueda_franja, df.ancho_v_busqueda_franja)
 
     #----------------------------------------------------------------------
 
@@ -494,7 +456,7 @@ class Doc_emitidos_busqueda(funcionalidades_ospa):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_1.eliminar_cuadro()
             self.frame_vitrina_1 = Cuadro(self)
-            self.vde1 = Vitrina(self, tabla_filtro3, self.ver_de, self.asociar_de_dr, funcion3 =None, tipo_vitrina = "Modelo3", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_de_vitrina)
+            self.vde1 = Vitrina(self, tabla_filtro3, self.ver_de, self.asociar_de_dr, funcion3 =None, tipo_vitrina = "Modelo3", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_de_vitrina)
            
         else:
             self.frame_vitrina_1.eliminar_cuadro()
@@ -518,7 +480,7 @@ class Doc_emitidos_busqueda(funcionalidades_ospa):
         self.frame_vitrina_1 = Cuadro(self)
         # Creando vitrina
         self.vde1 = Vitrina(self, self.tabla_deF, self.ver_de, 
-                                    self.asociar_de_dr, funcion3 =None, tipo_vitrina = "Modelo3", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_de_vitrina)
+                                    self.asociar_de_dr, funcion3 =None, tipo_vitrina = "Modelo3", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_de_vitrina)
         
     #----------------------------------------------------------------------
     def asociar_de_dr(self, x):
@@ -530,12 +492,14 @@ class Doc_emitidos_busqueda(funcionalidades_ospa):
         else:
 
             #OBTENER EL ID INTERNO DEL DOCUMENTO EMITIDO
+            b_de = Base_de_datos(df.id_b_docs, 'DOC_EMITIDOS')
             self.IDDE = b_de.listar_datos_de_fila(self.x)
             self.IDDE_FINAL = self.IDDE[0]
 
             #OBTENER EL ID USUARIO DEL DOCUMENTO RECIBIDO
             codigodr = self.id_objeto_ingresado
             # OBTENER EL ID INTERNO DEL DOCUMENTO RECIBIDO
+            b_dr = Base_de_datos(df.id_b_docs, 'DOC_RECIBIDOS')
             tabla_de_codigo_dr = b_dr.generar_dataframe()
             tabla_codigo_de_filtrada = tabla_de_codigo_dr[tabla_de_codigo_dr.COD_DR == codigodr]
             id_interno_dr = tabla_codigo_de_filtrada.iloc[0,0]
@@ -544,6 +508,7 @@ class Doc_emitidos_busqueda(funcionalidades_ospa):
             id_relacion_doc = id_interno_dr + "/" +  self.IDDE_FINAL
 
             # BUSCAR COINCIDENCIAS
+            base_relacion_docs = Base_de_datos(df.id_b_parametros, 'RELACION_DOCS')
             valor_repetido = self.comprobar_id(base_relacion_docs, id_relacion_doc)
             hora_de_modificacion = str(dt.datetime.now())
 
@@ -556,6 +521,7 @@ class Doc_emitidos_busqueda(funcionalidades_ospa):
                 datos_insertar = [id_relacion_doc,id_interno_dr, self.IDDE_FINAL,'ACTIVO',hora_de_modificacion]
                 b0.agregar_datos(datos_insertar)
                 datos_a_cargar_hist = [id_relacion_doc, id_interno_dr, self.IDDE_FINAL,'ACTIVO',hora_de_modificacion,hora_de_modificacion]
+                base_relacion_d_hist = Base_de_datos(df.id_b_parametros, 'HISTORIAL_RELACION_D')
                 base_relacion_d_hist.agregar_datos(datos_a_cargar_hist)
                 messagebox.showinfo("¡Excelente!", "El registro ha sido asociado con éxito")
                 
@@ -609,6 +575,7 @@ class Extremos(funcionalidades_ospa):
             self.id_usuario = lista
         
         # Renombramos los encabezados
+        b_pr = Base_de_datos(df.id_b_problemas, 'PROBLEMA')
         b_ep_tabla = b_pr.generar_dataframe()
         self.tabla_renombrada = self.renombrar_encabezados(b_ep_tabla, tipo_base = 'ep')
         self.tabla_seleccionada = self.seleccionar_encabezados(self.tabla_renombrada, tipo_base = 'ep')
@@ -627,6 +594,8 @@ class Extremos(funcionalidades_ospa):
         titulos.agregar_franja_superior_ospa('Búsqueda de problemas', 
                                             self.inicio_app, self.cerrar_sesion)
     
+        b_lista_efa = Base_de_datos(df.id_b_lista_efa, 'Lista de EFA')
+        tabla_lista_efa = b_lista_efa.generar_dataframe()
         # Armando rejilla con los filtros
         self.rejilla_ep = (
 
@@ -679,11 +648,11 @@ class Extremos(funcionalidades_ospa):
         self.frame_vitrina_ep = Cuadro(self)
 
         # Creando vitrina
-        self.vep = Vitrina(self, self.tabla_epF, self.ver_ep, self.asociar_ep, self.ver_mp_ep, tipo_vitrina = "Modelo4", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_ep_vitrina)
+        self.vep = Vitrina(self, self.tabla_epF, self.ver_ep, self.asociar_ep, self.ver_mp_ep, tipo_vitrina = "Modelo4", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_ep_vitrina)
         
         # Franja inferior
         self.ep3 = Cuadro(self)
-        self.ep3.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
+        self.ep3.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', df.alto_v_busqueda_franja, df.ancho_v_busqueda_franja)
 
     #----------------------------------------------------------------------
     
@@ -806,7 +775,7 @@ class Extremos(funcionalidades_ospa):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_ep.eliminar_cuadro()
             self.frame_vitrina_ep = Cuadro(self)
-            self.vep = Vitrina(self, tabla_filtro3, self.ver_ep, self.asociar_ep, self.ver_mp_ep, tipo_vitrina = "Modelo4", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_ep_vitrina)
+            self.vep = Vitrina(self, tabla_filtro3, self.ver_ep, self.asociar_ep, self.ver_mp_ep, tipo_vitrina = "Modelo4", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_ep_vitrina)
         else:
             self.frame_vitrina_ep.eliminar_cuadro()
             self.frame_vitrina_ep = Cuadro(self)
@@ -826,7 +795,7 @@ class Extremos(funcionalidades_ospa):
         self.ep2 = Cuadro(self)
         self.ep2.agregar_rejilla(self.rejilla_ep2)
         self.frame_vitrina_ep = Cuadro(self)
-        self.vep = Vitrina(self, self.tabla_epF, self.ver_ep, self.asociar_ep, self.ver_mp_ep, tipo_vitrina = "Modelo4", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_ep_vitrina)
+        self.vep = Vitrina(self, self.tabla_epF, self.ver_ep, self.asociar_ep, self.ver_mp_ep, tipo_vitrina = "Modelo4", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_ep_vitrina)
           
     #----------------------------------------------------------------------
     def ver_mp_ep(self, x):
@@ -837,6 +806,7 @@ class Extremos(funcionalidades_ospa):
         tabla_codigo_de_filtrada = self.tabla_renombrada.query("`CODIGO EXTREMO`==@self.x")
         self.id_interno_ep = tabla_codigo_de_filtrada.iloc[0,0]
         tabla_codigo_de_filtrada2 = tabla_codigo_de_filtrada['ID_PR'].tolist()
+        b_relacion_mp_pr =  Base_de_datos(df.id_b_parametros, 'RELACION_MP-PR')
         self.relacion_mp_ep = b_relacion_mp_pr.generar_dataframe()
         relacion_activos = self.relacion_mp_ep[self.relacion_mp_ep.ID_PR.isin(tabla_codigo_de_filtrada2)]
         relacion_activos2 = relacion_activos['ID_MP'].tolist()
@@ -858,6 +828,7 @@ class Extremos(funcionalidades_ospa):
             messagebox.showinfo("Error", "No tiene antecedente que pueda asociarse")
         else:
             #OBTENER EL ID INTERNO DEL EXTREMO DE PROBLEMA
+            b_pr = Base_de_datos(df.id_b_problemas, 'PROBLEMA')
             self.IDEP = b_pr.listar_datos_de_fila(self.x)
             self.IDEP_FINAL = self.IDEP[0]
 
@@ -865,14 +836,20 @@ class Extremos(funcionalidades_ospa):
             id_objeto_anterior = self.id_objeto_ingresado
             # OBTENER EL ID INTERNO DEL DOCUMENTO RECIBIDO
             if self.tipo_objeto_anterior == "DR":
+                b_dr = Base_de_datos(df.id_b_docs, 'DOC_RECIBIDOS')
                 tabla_de_codigo_dr = b_dr.generar_dataframe()
                 tabla_codigo_de_filtrada = tabla_de_codigo_dr[tabla_de_codigo_dr.COD_DR == id_objeto_anterior]
-                base_relacion_objetos = base_relacion_dr_pr 
+                base_relacion_dr_pr =  Base_de_datos(df.id_b_parametros, 'RELACION_DR-PR')
+                base_relacion_objetos = base_relacion_dr_pr
+                base_relacion_dr_pr_hist =  Base_de_datos(df.id_b_parametros, 'HISTORIAL_RELACION_DR-PR')
                 base_relacion_objetos_hist = base_relacion_dr_pr_hist
             elif self.tipo_objeto_anterior == "MP":
+                b_mp = Base_de_datos(df.id_b_problemas, 'MACROPROBLEMA')
                 tabla_de_codigo_dr = b_mp.generar_dataframe()
                 tabla_codigo_de_filtrada = tabla_de_codigo_dr[tabla_de_codigo_dr.COD_MP == id_objeto_anterior]
+                b_relacion_mp_pr =  Base_de_datos(df.id_b_parametros, 'RELACION_MP-PR')
                 base_relacion_objetos = b_relacion_mp_pr
+                base_relacion_mp_pr_hist =  Base_de_datos(df.id_b_parametros, 'HISTORIAL_RELACION_MP-PR')
                 base_relacion_objetos_hist = base_relacion_mp_pr_hist
             else:
                 raise messagebox.showinfo("Error", "No puede asociar extremos de problema desde esta vista")
@@ -945,6 +922,7 @@ class Macroproblemas(funcionalidades_ospa):
             self.x2 = x
 
         # Generamos el dataframe a filtrar
+        b_mp = Base_de_datos(df.id_b_problemas, 'MACROPROBLEMA')
         b_mp_tabla = b_mp.generar_dataframe()
         self.tabla_renombrada = self.renombrar_encabezados(b_mp_tabla, tipo_base = 'mp')
         self.tabla_seleccionada = self.seleccionar_encabezados(self.tabla_renombrada, tipo_base = 'mp')
@@ -993,11 +971,11 @@ class Macroproblemas(funcionalidades_ospa):
         self.frame_vitrina_mp = Cuadro(self)
 
         # Creando vitrina
-        self.vmc = Vitrina(self, self.tabla_mpF, self.ver_mp, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_mp_vitrina)
+        self.vmc = Vitrina(self, self.tabla_mpF, self.ver_mp, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_mp_vitrina)
 
         # Franja inferior
         self.mc3 = Cuadro(self)
-        self.mc3.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
+        self.mc3.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', df.alto_v_busqueda_franja, df.ancho_v_busqueda_franja)
 
      #----------------------------------------------------------------------
 
@@ -1074,7 +1052,7 @@ class Macroproblemas(funcionalidades_ospa):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_mp.eliminar_cuadro()
             self.frame_vitrina_mp = Cuadro(self)
-            self.vmc = Vitrina(self, tabla_filtro3, self.ver_mp, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_mp_vitrina)
+            self.vmc = Vitrina(self, tabla_filtro3, self.ver_mp, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_mp_vitrina)
             
         else:
             self.frame_vitrina_mp.eliminar_cuadro()
@@ -1096,7 +1074,7 @@ class Macroproblemas(funcionalidades_ospa):
         self.mc2.agregar_rejilla(self.rejilla_mp2)
         self.frame_vitrina_mp = Cuadro(self)
         # Creando vitrina
-        self.vmc = Vitrina(self, self.tabla_mpF, self.ver_mp, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_mp_vitrina)
+        self.vmc = Vitrina(self, self.tabla_mpF, self.ver_mp, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_mp_vitrina)
         
 class Macroproblemas_filtrada(funcionalidades_ospa):
     """"""
@@ -1118,6 +1096,7 @@ class Macroproblemas_filtrada(funcionalidades_ospa):
             self.x2 = x
 
         # Renombramos los encabezados
+        b_mp = Base_de_datos(df.id_b_problemas, 'MACROPROBLEMA')
         b_mp_tabla = b_mp.generar_dataframe()
         self.mc = b_mp_tabla
 
@@ -1171,11 +1150,11 @@ class Macroproblemas_filtrada(funcionalidades_ospa):
         self.frame_vitrina_mp = Cuadro(self)
 
         # Creando vitrina
-        self.vmc = Vitrina(self, self.tabla_mpF, self.ver_mp, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_mpf_vitrina)
+        self.vmc = Vitrina(self, self.tabla_mpF, self.ver_mp, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_mpf_vitrina)
 
         # Franja inferior
         self.mc3 = Cuadro(self)
-        self.mc3.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
+        self.mc3.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', df.alto_v_busqueda_franja, df.ancho_v_busqueda_franja)
 
     #----------------------------------------------------------------------
     
@@ -1243,7 +1222,7 @@ class Macroproblemas_filtrada(funcionalidades_ospa):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_mp.eliminar_cuadro()
             self.frame_vitrina_mp = Cuadro(self)
-            self.vmc = Vitrina(self, tabla_filtro3, self.ver_mp, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_mpf_vitrina)
+            self.vmc = Vitrina(self, tabla_filtro3, self.ver_mp, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_mpf_vitrina)
             
         else:
             self.frame_vitrina_mp.eliminar_cuadro()
@@ -1266,7 +1245,7 @@ class Macroproblemas_filtrada(funcionalidades_ospa):
 
         self.frame_vitrina_mp = Cuadro(self)
         # Creando vitrina
-        self.vmc = Vitrina(self, self.tabla_mpF, self.ver_mp, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_mpf_vitrina)
+        self.vmc = Vitrina(self, self.tabla_mpF, self.ver_mp, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_mpf_vitrina)
       
 class Administrados(funcionalidades_ospa):
     """"""
@@ -1333,7 +1312,7 @@ class Administrados(funcionalidades_ospa):
         self.frame_vitrina_ad = Cuadro(self)
 
         # Creando vitrina
-        self.vad = Vitrina(self, self.tabla_adF, self.ver_ad, self.funcion_de_asociar_ad, funcion3=None, tipo_vitrina = "Modelo3", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_mp_vitrina)
+        self.vad = Vitrina(self, self.tabla_adF, self.ver_ad, self.funcion_de_asociar_ad, funcion3=None, tipo_vitrina = "Modelo3", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_mp_vitrina)
 
     #----------------------------------------------------------------------
     
@@ -1394,7 +1373,7 @@ class Administrados(funcionalidades_ospa):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_ad.eliminar_cuadro()
             self.frame_vitrina_ad = Cuadro(self)
-            self.vad = Vitrina(self, tabla_filtro3, self.ver_ad, self.funcion_de_asociar_ad, funcion3=None, tipo_vitrina = "Modelo3", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_mp_vitrina)
+            self.vad = Vitrina(self, tabla_filtro3, self.ver_ad, self.funcion_de_asociar_ad, funcion3=None, tipo_vitrina = "Modelo3", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_mp_vitrina)
         else:
             self.frame_vitrina_ad.eliminar_cuadro()
             self.frame_vitrina_ad = Cuadro(self)
@@ -1416,7 +1395,7 @@ class Administrados(funcionalidades_ospa):
 
         self.frame_vitrina_ad = Cuadro(self)
         # Creando vitrina
-        self.vad = Vitrina(self, self.tabla_adF, self.ver_ad, self.funcion_de_asociar_ad, funcion3=None, tipo_vitrina = "Modelo3", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_mp_vitrina)
+        self.vad = Vitrina(self, self.tabla_adF, self.ver_ad, self.funcion_de_asociar_ad, funcion3=None, tipo_vitrina = "Modelo3", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_mp_vitrina)
 
     #----------------------------------------------------------------------
     def actualizar(self):
@@ -1427,7 +1406,7 @@ class Administrados(funcionalidades_ospa):
         self.ad2.eliminar_cuadro()
         self.frame_vitrina_ad.eliminar_cuadro()
         # Actualizando data
-        #b_adm = vg.b_adm
+        #b_adm = df.b_adm
         #b_adm_tabla = b_adm.generar_dataframe()
         
         # Generamos el dataframe a filtrar 
@@ -1460,7 +1439,7 @@ class Administrados(funcionalidades_ospa):
 
         self.frame_vitrina_ad = Cuadro(self)
         # Creando vitrina
-        self.vad = Vitrina(self, self.tabla_adF, self.ver_ad, self.funcion_de_asociar_ad, funcion3=None, tipo_vitrina = "Modelo3", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_mp_vitrina)
+        self.vad = Vitrina(self, self.tabla_adF, self.ver_ad, self.funcion_de_asociar_ad, funcion3=None, tipo_vitrina = "Modelo3", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_mp_vitrina)
 
     #----------------------------------------------------------------------
     def ver_ad(self, x):
@@ -1503,6 +1482,7 @@ class Pendientes_jefe_firma(funcionalidades_ospa):
             self.id_objeto_ingresado = id_objeto
 
         # Generamos el dataframe a filtrar
+        b_de = Base_de_datos(df.id_b_docs, 'DOC_EMITIDOS')
         self.b_de_tabla = b_de.generar_dataframe()
         conditionlist = [(self.b_de_tabla['FECHA_FIRMA'] == '') & (self.b_de_tabla['FECHA_PROYECTO_FINAL'] != ''),
         (self.b_de_tabla['FECHA_FIRMA_REIT'] == '') & (self.b_de_tabla['FECHA_PROYECTO_REIT'] != ''),
@@ -1566,7 +1546,7 @@ class Pendientes_jefe_firma(funcionalidades_ospa):
 
 
         if len(self.tabla_pfirmaF.index) > 0:
-            self.vpfirma = Vitrina(self, self.tabla_pfirmaF, self.ver_dr, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina) 
+            self.vpfirma = Vitrina(self, self.tabla_pfirmaF, self.ver_dr, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_vitrina) 
             return self.vpfirma
         else:
             self.frame_vitrina_pfirma = Cuadro(self)
@@ -1574,7 +1554,7 @@ class Pendientes_jefe_firma(funcionalidades_ospa):
 
              # Franja inferior
             self.pfirma16 = Cuadro(self)
-            self.pfirma16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
+            self.pfirma16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', df.alto_v_busqueda_franja, df.ancho_v_busqueda_franja)
 
     #----------------------------------------------------------------------
 
@@ -1648,7 +1628,7 @@ class Pendientes_jefe_firma(funcionalidades_ospa):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_pfirma.eliminar_cuadro()
             self.frame_vitrina_pfirma = Cuadro(self)
-            self.vpfirma = Vitrina(self, tabla_filtro3, self.ver_de, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_pf_vitrina)
+            self.vpfirma = Vitrina(self, tabla_filtro3, self.ver_de, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_pf_vitrina)
             
         else:
             self.frame_vitrina_pfirma.eliminar_cuadro()
@@ -1672,7 +1652,7 @@ class Pendientes_jefe_firma(funcionalidades_ospa):
         self.frame_vitrina_pfirma = Cuadro(self)
        
         # Creando vitrina
-        self.vpfirma = Vitrina(self, self.tabla_pfirmaF, self.ver_de, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_pf_vitrina)
+        self.vpfirma = Vitrina(self, self.tabla_pfirmaF, self.ver_de, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_pf_vitrina)
         
 class Pendientes_jefe_asignar(funcionalidades_ospa):
     """"""
@@ -1690,6 +1670,7 @@ class Pendientes_jefe_asignar(funcionalidades_ospa):
             self.cod_doc_jpa = id_objeto
 
         # Generamos el dataframe a filtrar
+        b_dr = Base_de_datos(df.id_b_docs, 'DOC_RECIBIDOS')
         self.tabla_inicial0 = b_dr.generar_dataframe()
         self.tabla_inicial1 = self.tabla_inicial0.query("F_ASIGNACION_1=='' or ESPECIALISTA_1==' ' or ESPECIALISTA_1==''")
         self.tabla_renombrada = self.renombrar_encabezados( self.tabla_inicial1, tipo_base = 'dr')
@@ -1746,7 +1727,7 @@ class Pendientes_jefe_asignar(funcionalidades_ospa):
         self.frame_vitrina_jpa = Cuadro(self)
 
         if len(self.tabla_jpaF.index) > 0:
-            self.vjpa = Vitrina(self, self.tabla_jpaF, self.ver_dr, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina) 
+            self.vjpa = Vitrina(self, self.tabla_jpaF, self.ver_dr, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_vitrina) 
             return self.vjpa
         else:
             self.frame_vitrina_jpa = Cuadro(self)
@@ -1754,7 +1735,7 @@ class Pendientes_jefe_asignar(funcionalidades_ospa):
 
         # Franja inferior
             self.jpa16 = Cuadro(self)
-            self.jpa16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
+            self.jpa16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', df.alto_v_busqueda_franja, df.ancho_v_busqueda_franja)
   
     #----------------------------------------------------------------------
 
@@ -1831,7 +1812,7 @@ class Pendientes_jefe_asignar(funcionalidades_ospa):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_jpa.eliminar_cuadro()
             self.frame_vitrina_jpa = Cuadro(self)
-            self.vjpa = Vitrina(self, tabla_filtro3, self.ver_dr, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
+            self.vjpa = Vitrina(self, tabla_filtro3, self.ver_dr, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_vitrina)
             
         else:
             self.frame_vitrina_jpa.eliminar_cuadro()
@@ -1854,7 +1835,7 @@ class Pendientes_jefe_asignar(funcionalidades_ospa):
         self.jpa15.agregar_rejilla(self.rejilla_jpa2)
         self.frame_vitrina_jpa = Cuadro(self)
         # Creando vitrina
-        self.vjpa = Vitrina(self, self.tabla_jpaF, self.ver_dr, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_vitrina)
+        self.vjpa = Vitrina(self, self.tabla_jpaF, self.ver_dr, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_vitrina)
         
     
 class Pendientes_por_reiterar(funcionalidades_ospa):
@@ -1873,6 +1854,7 @@ class Pendientes_por_reiterar(funcionalidades_ospa):
             self.cod_doc_ppr = id_objeto
 
         # Generamos el dataframe a filtrar
+        b_de = Base_de_datos(df.id_b_docs, 'DOC_EMITIDOS')
         b_de_tabla = b_de.generar_dataframe()
         self.tabla_inicial0 = b_de_tabla
         self.tabla_inicial1 = self.tabla_inicial0.query("ESTADO_DOCE=='Enviar reiterativo' or ESTADO_DOCE=='Eviar OCI'")
@@ -1936,7 +1918,7 @@ class Pendientes_por_reiterar(funcionalidades_ospa):
 
         
         if len(self.tabla_pprF.index) > 0:
-            self.vppr = Vitrina(self, self.tabla_pprF, self.ver_de, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_prei_vitrina)
+            self.vppr = Vitrina(self, self.tabla_pprF, self.ver_de, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_prei_vitrina)
 
             return self.vppr
         else:
@@ -1945,7 +1927,7 @@ class Pendientes_por_reiterar(funcionalidades_ospa):
        
         # Franja inferior
             self.ppr16 = Cuadro(self)
-            self.ppr16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
+            self.ppr16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', df.alto_v_busqueda_franja, df.ancho_v_busqueda_franja)
 
     #----------------------------------------------------------------------
 
@@ -2028,7 +2010,7 @@ class Pendientes_por_reiterar(funcionalidades_ospa):
             self.frame_vitrina_ppr.eliminar_cuadro()
            
             self.frame_vitrina_ppr = Cuadro(self)
-            self.vppr = Vitrina(self, tabla_filtro3, self.ver_de, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_prei_vitrina)
+            self.vppr = Vitrina(self, tabla_filtro3, self.ver_de, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_prei_vitrina)
             
         else:
             self.frame_vitrina_ppr.eliminar_cuadro()
@@ -2052,7 +2034,7 @@ class Pendientes_por_reiterar(funcionalidades_ospa):
         self.ppr15.agregar_rejilla(self.rejilla_2_ppr)
         self.frame_vitrina_ppr = Cuadro(self)
         # Creando vitrina
-        self.vppr = Vitrina(self, self.tabla_pprF, self.ver_de, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_prei_vitrina)
+        self.vppr = Vitrina(self, self.tabla_pprF, self.ver_de, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_prei_vitrina)
        
     #----------------------------------------------------------------------
 
@@ -2072,6 +2054,7 @@ class Pendientes_eq1_trabajar(funcionalidades_ospa):
             self.cod_doc_peq1t = id_objeto
 
         # Generamos el dataframe a filtrar
+        b_dr = Base_de_datos(df.id_b_docs, 'DOC_RECIBIDOS')
         b_dr_tabla = b_dr.generar_dataframe()
         self.tabla_inicial0 = b_dr_tabla
         self.tabla_inicial1 = self.tabla_inicial0.query("F_EJECUCION_1==''")
@@ -2137,7 +2120,7 @@ class Pendientes_eq1_trabajar(funcionalidades_ospa):
         self.frame_vitrina_peq1t = Cuadro(self)
 
         if len(self.tabla_peq1tF.index) > 0:
-            self.vpeq1t = Vitrina(self, self.tabla_peq1tF, self.ver_dr, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_peq1_vitrina)
+            self.vpeq1t = Vitrina(self, self.tabla_peq1tF, self.ver_dr, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_peq1_vitrina)
 
             return self.vjpa
         else:
@@ -2149,7 +2132,7 @@ class Pendientes_eq1_trabajar(funcionalidades_ospa):
 
         # Franja inferior
             self.peq1t16 = Cuadro(self)
-            self.peq1t16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
+            self.peq1t16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', df.alto_v_busqueda_franja, df.ancho_v_busqueda_franja)
 
     #----------------------------------------------------------------------
 
@@ -2231,7 +2214,7 @@ class Pendientes_eq1_trabajar(funcionalidades_ospa):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_peq1t.eliminar_cuadro()
             self.frame_vitrina_peq1t = Cuadro(self)
-            self.vpeq1t = Vitrina(self, tabla_filtro3, self.ver_dr, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_peq1_vitrina)
+            self.vpeq1t = Vitrina(self, tabla_filtro3, self.ver_dr, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_peq1_vitrina)
             
         else:
             self.frame_vitrina_peq1t.eliminar_cuadro()
@@ -2254,7 +2237,7 @@ class Pendientes_eq1_trabajar(funcionalidades_ospa):
         self.frame_vitrina_peq1t = Cuadro(self)
         
         # Creando vitrina
-        self.vpeq1t = Vitrina(self, self.tabla_peq1tF, self.ver_dr, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_peq1_vitrina)
+        self.vpeq1t = Vitrina(self, self.tabla_peq1tF, self.ver_dr, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_peq1_vitrina)
         
 class Pendientes_eq2_calificarrpta(funcionalidades_ospa):
     """"""
@@ -2272,6 +2255,7 @@ class Pendientes_eq2_calificarrpta(funcionalidades_ospa):
             self.cod_doc_peq2t = id_objeto
 
         # Generamos el dataframe a filtrar
+        b_dr = Base_de_datos(df.id_b_docs, 'DOC_RECIBIDOS')
         b_dr_tabla = b_dr.generar_dataframe()
         self.tabla_inicial0 = b_dr_tabla
         self.tabla_inicial1 = self.tabla_inicial0.query("F_EJECUCION_2==''")
@@ -2337,7 +2321,7 @@ class Pendientes_eq2_calificarrpta(funcionalidades_ospa):
         self.frame_vitrina_peq2t = Cuadro(self)
 
         if len(self.tabla_peq2tF.index) > 0:
-            self.vpeq2t = Vitrina(self, self.tabla_peq2tF, self.ver_dr, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_peq2_vitrina)
+            self.vpeq2t = Vitrina(self, self.tabla_peq2tF, self.ver_dr, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_peq2_vitrina)
 
             return self.vpeq2t
         else:
@@ -2349,7 +2333,7 @@ class Pendientes_eq2_calificarrpta(funcionalidades_ospa):
 
         # Franja inferior
             self.peq2t16 = Cuadro(self)
-            self.peq2t16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
+            self.peq2t16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', df.alto_v_busqueda_franja, df.ancho_v_busqueda_franja)
 
     #----------------------------------------------------------------------
 
@@ -2430,7 +2414,7 @@ class Pendientes_eq2_calificarrpta(funcionalidades_ospa):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_peq2t.eliminar_cuadro()
             self.frame_vitrina_peq2t = Cuadro(self)
-            self.vpeq2t = Vitrina(self, tabla_filtro3, self.ver_dr, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_peq2_vitrina)
+            self.vpeq2t = Vitrina(self, tabla_filtro3, self.ver_dr, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_peq2_vitrina)
             
         else:
             self.frame_vitrina_peq2t.eliminar_cuadro()
@@ -2452,7 +2436,7 @@ class Pendientes_eq2_calificarrpta(funcionalidades_ospa):
         self.peq2t15.agregar_rejilla(self.rejilla_peq2t2)
         self.frame_vitrina_peq2t = Cuadro(self)
         # Creando vitrina
-        self.vpeq2t = Vitrina(self, self.tabla_peq2tF, self.ver_dr, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_peq2_vitrina)
+        self.vpeq2t = Vitrina(self, self.tabla_peq2tF, self.ver_dr, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_peq2_vitrina)
        
 
 class Pendientes_eq2_programaciones(funcionalidades_ospa):
@@ -2471,6 +2455,7 @@ class Pendientes_eq2_programaciones(funcionalidades_ospa):
             self.cod_doc_peq2pr = id_objeto
 
         # Generamos el dataframe a filtrar
+        b_de = Base_de_datos(df.id_b_docs, 'DOC_EMITIDOS')
         b_de_tabla = b_de.generar_dataframe()
         self.tabla_inicial0 = b_de_tabla
         self.tabla_inicial1 = self.tabla_inicial0[self.tabla_inicial0['CATEGORIA']=='Programación'] 
@@ -2525,11 +2510,11 @@ class Pendientes_eq2_programaciones(funcionalidades_ospa):
         self.frame_vitrina_peq2pr = Cuadro(self)
 
         # Creando vitrina 
-        self.vpeq2pr = Vitrina(self, self.tabla_peq2prF, self.ver_de, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_progr_vitrina)
+        self.vpeq2pr = Vitrina(self, self.tabla_peq2prF, self.ver_de, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_progr_vitrina)
         
         # Franja inferior
         self.peq2pr16 = Cuadro(self)
-        self.peq2pr16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
+        self.peq2pr16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', df.alto_v_busqueda_franja, df.ancho_v_busqueda_franja)
 
     #----------------------------------------------------------------------
 
@@ -2589,7 +2574,7 @@ class Pendientes_eq2_programaciones(funcionalidades_ospa):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_peq2pr.eliminar_cuadro()
             self.frame_vitrina_peq2pr = Cuadro(self)
-            self.vpeq2pr = Vitrina(self, tabla_filtro3, self.ver_de, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_mp_vitrina)
+            self.vpeq2pr = Vitrina(self, tabla_filtro3, self.ver_de, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_mp_vitrina)
            
         else:
             self.frame_vitrina_peq2pr.eliminar_cuadro()
@@ -2612,7 +2597,7 @@ class Pendientes_eq2_programaciones(funcionalidades_ospa):
         self.peq2pr15.agregar_rejilla(self.rejilla_peq2pr2)
         self.frame_vitrina_peq2pr = Cuadro(self)
         # Creando vitrina
-        self.vpeq2pr = Vitrina(self, self.tabla_peq2prF, self.ver_de, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_mp_vitrina)
+        self.vpeq2pr = Vitrina(self, self.tabla_peq2prF, self.ver_de, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_mp_vitrina)
      
 class Pendientes_notificar(funcionalidades_ospa):
     """"""
@@ -2631,6 +2616,7 @@ class Pendientes_notificar(funcionalidades_ospa):
             self.id_objeto_ingresado = id_objeto
 
         # Generamos el dataframe a filtrar
+        b_de = Base_de_datos(df.id_b_docs, 'DOC_EMITIDOS')
         self.b_de_tabla = b_de.generar_dataframe()
         conditionlist = [(self.b_de_tabla['FECHA_NOTIFICACION'] == '') & (self.b_de_tabla['FECHA_FIRMA'] != ''),
         (self.b_de_tabla['FECHA_NOTIFICACION_REIT'] == '') & (self.b_de_tabla['FECHA_FIRMA_REIT'] != ''),
@@ -2694,11 +2680,11 @@ class Pendientes_notificar(funcionalidades_ospa):
 
         # Creando vitrina
         self.vpfirma = Vitrina(self, self.tabla_pfirmaF, 
-                                                    self.ver_de, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_pf_vitrina)
+                                                    self.ver_de, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_pf_vitrina)
         
         # Franja inferior
         self.pfirma16 = Cuadro(self)
-        self.pfirma16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', alto_v_busqueda_franja, ancho_v_busqueda_franja)
+        self.pfirma16.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', df.alto_v_busqueda_franja, df.ancho_v_busqueda_franja)
 
     #----------------------------------------------------------------------
 
@@ -2772,7 +2758,7 @@ class Pendientes_notificar(funcionalidades_ospa):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_pfirma.eliminar_cuadro()
             self.frame_vitrina_pfirma = Cuadro(self)
-            self.vpfirma = Vitrina(self, tabla_filtro3, self.ver_de, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_pf_vitrina)
+            self.vpfirma = Vitrina(self, tabla_filtro3, self.ver_de, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_pf_vitrina)
             
         else:
             self.frame_vitrina_pfirma.eliminar_cuadro()
@@ -2796,5 +2782,5 @@ class Pendientes_notificar(funcionalidades_ospa):
         self.frame_vitrina_pfirma = Cuadro(self)
        
         # Creando vitrina
-        self.vpfirma = Vitrina(self, self.tabla_pfirmaF, self.ver_de, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=alto_v_busqueda_vitrina, width=ancho_v_busqueda_pf_vitrina)
+        self.vpfirma = Vitrina(self, self.tabla_pfirmaF, self.ver_de, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_pf_vitrina)
         

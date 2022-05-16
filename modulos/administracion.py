@@ -1,14 +1,10 @@
 import datetime as dt
 import pandas as pd
-
 from tkinter import Tk, Frame, messagebox
-
 from random import choice
-
 from apoyo.elementos_de_GUI import Cuadro, Ventana, Vitrina
 from apoyo.manejo_de_bases import Base_de_datos, Correo_electronico
-import apoyo.datos_frecuentes as vg
-
+import apoyo.datos_frecuentes as df
 from modulos.ventanas_vista import Doc_recibidos_vista
 from modulos import logueo
 
@@ -203,7 +199,7 @@ class Pantalla_de_usuario(Ventana):
             ('L', 4, 0, 'Apellidos:'),
             ('E', 5, 0),
             ('L', 6, 0, 'Oficina:'),
-            ('CX', 7, 0, vg.oficinas)
+            ('CX', 7, 0, df.oficinas)
         )
         
         self.c2 = Cuadro(self)
@@ -321,7 +317,7 @@ class Pantalla_de_usuario(Ventana):
         """"""
 
         longitud = 8
-        caracteres_posibles = vg.valores
+        caracteres_posibles = df.valores
 
         p = ""
         p = p.join([choice(caracteres_posibles) for i in range(longitud)])

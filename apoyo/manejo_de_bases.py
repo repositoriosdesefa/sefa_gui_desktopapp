@@ -8,6 +8,7 @@ import email.message
 from email.message import EmailMessage
 import email.mime.text
 import apoyo.formato as formato 
+#import apoyo.datos_frecuentes as df
 
 class Base_de_datos():
     """"""
@@ -224,6 +225,23 @@ class Base_de_datos():
             self.lista_de_datos_completos = self.datos_obligatorios + [dato_unico] + [dato_2] + [dato_3]
             
         self.worksheet.append_row(self.lista_de_datos_completos)
+
+#class Base_de_datos_v2():
+#    """"""
+    
+    #----------------------------------------------------------------------
+    #def __init__(self, pestanna):
+    #    """Constructor"""
+        
+    #    self.pestanna = pestanna
+    #    self.basefiltrada = df.TodasBases.query("`PESTAÑA`==@self.pestanna")
+    #    self.key = self.basefiltrada.iloc[0, 1]
+    #    self.gc = gs.service_account(filename='accesos.json')
+    #    self.sh = self.gc.open_by_key(self.key)
+    #    self.worksheet = self.sh.worksheet(self.pestanna)
+    #    self.hoy = dt.datetime.now()
+    #    self.dataframe = pd.DataFrame(self.worksheet.get_all_records())
+    #    return self.dataframe
 
 
 class Correo_electronico():

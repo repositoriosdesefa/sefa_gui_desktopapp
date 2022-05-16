@@ -2,46 +2,11 @@ from tkinter import  messagebox
 import pandas as pd
 from apoyo.elementos_de_GUI import  Ventana, Vitrina
 from modulos import menus, ventanas_busqueda, ventanas_vista, logueo
-import apoyo.datos_frecuentes as vg
+import apoyo.datos_frecuentes as df
 import webbrowser
 import datetime as dt
+from apoyo.manejo_de_bases import Base_de_datos
 
-# Parámetros ventana
-alto_ventana_secundaria = vg.alto_ventana_secundaria
-ancho_ventana_secundaria = vg.ancho_ventana_secundaria
-
-ancho_v_vista = vg.ancho_v_vista
-alto_v_vista = vg.alto_v_vista
-ancho_v_vista_vitrina = vg.ancho_v_vista_vitrina
-alto_v_vista_vitrina = vg.alto_v_vista_vitrina
-
-ancho_v_busqueda = vg.ancho_v_busqueda
-alto_v_busqueda = vg.alto_v_busqueda
-ancho_v_busqueda_vitrina = vg.ancho_v_busqueda_vitrina
-alto_v_busqueda_vitrina = vg.alto_v_busqueda_vitrina
-
-alto_franja_inferior_1 = vg.alto_franja_inferior_1
-ancho_franja_inferior_1 = vg.ancho_franja_inferior_1
-
-# 1. Bases
-b_dr = vg.b_dr
-b_dr_cod = vg.b_dr_cod
-b_dr_hist = vg.b_dr_hist
-b_de = vg.b_de
-b_de_cod = vg.b_de_cod
-b_de_hist = vg.b_de_hist
-b_pr = vg.b_pr
-b_pr_cod = vg.b_pr_cod
-b_pr_hist = vg.b_pr_hist
-b_ep_cod = vg.b_ep_cod
-b_ep = vg.b_ep
-b_ep_hist = vg.b_ep_hist
-b_mp = vg.b_mp
-b_mp_cod = vg.b_mp_cod
-b_mp_hist = vg.b_mp_hist
-base_relacion_ep_pr = vg.base_relacion_ep_pr
-# 2. Tablas
-tabla_parametros = vg.tabla_parametros
 
 class funcionalidades_ospa(Ventana):
     #----------------------------------------------------------------------
@@ -69,9 +34,9 @@ class funcionalidades_ospa(Ventana):
 
         if confirmacion == True:
             self.destruir()
-            texto_bienvenida = vg.texto_bienvenida
+            texto_bienvenida = df.texto_bienvenida
             # LargoxAncho
-            subFrame = menus.inicio_app_OSPA(self, alto_ventana_secundaria, ancho_ventana_secundaria, texto_bienvenida)
+            subFrame = menus.inicio_app_OSPA(self, df.alto_ventana_secundaria, df.ancho_ventana_secundaria, texto_bienvenida)
         else:
             messagebox.showinfo("¡Importante!", "No olvides guardar tus cambios")
         
@@ -95,7 +60,7 @@ class funcionalidades_ospa(Ventana):
         base_cod_objeto = base_codigo_objeto
         tabla_objeto_clase = base_objeto.generar_dataframe()
         ahora = str(dt.datetime.now())
-        usuario = vg.cod_usuario
+        usuario = df.cod_usuario
         
         
 	    # A. Existe un código en la rejilla
@@ -156,8 +121,9 @@ class funcionalidades_ospa(Ventana):
                 if cod_entrada == "COD_DR":
                     base_cod_objeto.agregar_codigo(cod_objeto_ingresado, ahora, usuario)
                 elif cod_entrada == "COD_PR":
-                    departamento = datos_ingresados[2]
+                    departamento = datos_ingresados[1]
 	                # Obtención de sigla de departamento
+                    tabla_parametros = df.tabla_parametros
                     tabla_siglas_filtrada = tabla_parametros[tabla_parametros['DEPARTAMENTO']==departamento]
                     sigla_cod_interno = tabla_siglas_filtrada.iloc[0,1]
 		            # Obtención de número de problema
@@ -301,7 +267,7 @@ class funcionalidades_ospa(Ventana):
             tabla_vitrina = tabla_filtrada.drop([id_salida], axis=1)
             if len(tabla_vitrina.index) > 0:
                 self.vitrina = Vitrina(self.frame_principal, tabla_vitrina, funcion_ver, funcion_eliminar, funcion3 = None, tipo_vitrina = 'Modelo2',
-                                             height=alto_v_vista_vitrina, width=ancho_v_vista_vitrina) 
+                                             height=df.alto_v_vista_vitrina, width=df.ancho_v_vista_vitrina) 
                 return self.vitrina
             else:
                 frame_vitrina.agregar_label(1, 2, '     ')
@@ -319,7 +285,7 @@ class funcionalidades_ospa(Ventana):
 
         texto_dr = "Nuevo documento Recibido"
         # LargoxAncho
-        SubFrame = ventanas_vista.Doc_recibidos_vista(self, alto_v_vista, ancho_v_vista, texto_dr, True)
+        SubFrame = ventanas_vista.Doc_recibidos_vista(self, df.alto_v_vista, df.ancho_v_vista, texto_dr, True)
 
     #----------------------------------------------------------------------
     def busqueda_dr(self):
@@ -332,7 +298,7 @@ class funcionalidades_ospa(Ventana):
 
             # Genero la nueva ventana
             self.destruir()
-            SubFrame = ventanas_busqueda.Doc_recibidos_busqueda(self, alto_v_busqueda, ancho_v_busqueda, texto_pantalla, 
+            SubFrame = ventanas_busqueda.Doc_recibidos_busqueda(self, df.alto_v_busqueda, df.ancho_v_busqueda, texto_pantalla, 
                                                                 nuevo=False, id_objeto = id_objeto_ingresado, tipo_objeto_anterior = tipo_objeto_pantalla)
 
         elif self.nuevo == None:
@@ -341,7 +307,7 @@ class funcionalidades_ospa(Ventana):
 
             # Genero la nueva ventana
             self.destruir()
-            SubFrame = ventanas_busqueda.Doc_recibidos_busqueda(self, alto_v_busqueda, ancho_v_busqueda, texto_pantalla)
+            SubFrame = ventanas_busqueda.Doc_recibidos_busqueda(self, df.alto_v_busqueda, df.ancho_v_busqueda, texto_pantalla)
            
         else:
             # En caso no estuviera guardado la ficha
@@ -351,13 +317,13 @@ class funcionalidades_ospa(Ventana):
     def ver_dr(self, id_objeto_ingresado):
         """"""
         texto_documento = 'Documento recibido: ' + id_objeto_ingresado
-
+        b_dr = Base_de_datos(df.id_b_docs, 'DOC_RECIBIDOS')
         lb1 = b_dr.listar_datos_de_fila(id_objeto_ingresado)
         lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8], lb1[9], lb1[10], lb1[11], 
                                  lb1[12], lb1[13], lb1[14], lb1[15], lb1[16],  lb1[17], lb1[18], lb1[19], lb1[20], lb1[21]]
         
         self.destruir()
-        subframe = ventanas_vista.Doc_recibidos_vista(self, alto_v_vista, ancho_v_vista, texto_documento, True,
+        subframe = ventanas_vista.Doc_recibidos_vista(self, df.alto_v_vista, df.ancho_v_vista, texto_documento, True,
                                                       nuevo=False, lista=lista_para_insertar, id_objeto = id_objeto_ingresado)
 
     #----------------------------------------------------------------------
@@ -367,7 +333,7 @@ class funcionalidades_ospa(Ventana):
 
         texto_de = "Nuevo documento emitido"
         # LargoxAncho
-        SubFrame = ventanas_vista.Doc_emitidos_vista(self, alto_v_vista, ancho_v_vista, texto_de, True)
+        SubFrame = ventanas_vista.Doc_emitidos_vista(self, df.alto_v_vista, df.ancho_v_vista, texto_de, True)
     
    #----------------------------------------------------------------------
     def busqueda_de(self):
@@ -380,7 +346,7 @@ class funcionalidades_ospa(Ventana):
 
             # Genero la nueva ventana
             self.destruir()
-            SubFrame = ventanas_busqueda.Doc_emitidos_busqueda(self, alto_v_busqueda, ancho_v_busqueda, texto_pantalla, 
+            SubFrame = ventanas_busqueda.Doc_emitidos_busqueda(self, df.alto_v_busqueda, df.ancho_v_busqueda, texto_pantalla, 
                                                                 nuevo=False, id_objeto = id_objeto_ingresado, tipo_objeto_anterior = tipo_objeto_pantalla)
         elif self.nuevo == None:
 
@@ -388,7 +354,7 @@ class funcionalidades_ospa(Ventana):
             texto_pantalla = "Búsqueda de documentos emitidos"
 
             self.destruir()
-            SubFrame = ventanas_busqueda.Doc_emitidos_busqueda(self, alto_v_busqueda, ancho_v_busqueda, texto_pantalla)
+            SubFrame = ventanas_busqueda.Doc_emitidos_busqueda(self, df.alto_v_busqueda, df.ancho_v_busqueda, texto_pantalla)
    
         else:
             # En caso no estuviera guardado la ficha
@@ -398,14 +364,14 @@ class funcionalidades_ospa(Ventana):
     def ver_de(self, id_usuario):
         """"""
         texto_documento = 'Documento emitido: ' + id_usuario
-
+        b_de = Base_de_datos(df.id_b_docs, 'DOC_EMITIDOS')
         lb1 = b_de.listar_datos_de_fila(id_usuario)
         lista_para_insertar = [lb1[2], lb1[3], lb1[4], lb1[5], lb1[6], lb1[7],
                                 lb1[8], lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14],
                                 lb1[15], lb1[16], lb1[17], lb1[18], lb1[19], lb1[20],
                                 lb1[21], lb1[22], lb1[23], lb1[24], lb1[25], lb1[26]]
         self.destruir()
-        subframe = ventanas_vista.Doc_emitidos_vista(self, alto_v_vista, ancho_v_vista, texto_documento, True,
+        subframe = ventanas_vista.Doc_emitidos_vista(self, df.alto_v_vista, df.ancho_v_vista, texto_documento, True,
                                                      nuevo=False, lista=lista_para_insertar, id_objeto = id_usuario)
     
     #----------------------------------------------------------------------
@@ -415,7 +381,7 @@ class funcionalidades_ospa(Ventana):
 
         texto_ep = "Nuevo problema"
         # LargoxAncho
-        SubFrame = ventanas_vista.Problemas_vista(self, alto_v_vista, ancho_v_vista, texto_ep, True)
+        SubFrame = ventanas_vista.Problemas_vista(self, df.alto_v_vista, df.ancho_v_vista, texto_ep, True)
     #----------------------------------------------------------------------
     def nuevo_extremo2(self):
 
@@ -428,7 +394,7 @@ class funcionalidades_ospa(Ventana):
             self.destruir()
 
             # LargoxAncho
-            SubFrame = ventanas_vista.Extremo_vinculados(self, alto_v_vista, ancho_v_vista, texto_ep, True,
+            SubFrame = ventanas_vista.Extremo_vinculados(self, df.alto_v_vista, df.ancho_v_vista, texto_ep, True,
              id_objeto = id_objeto_ingresado)
     
         elif self.nuevo == None:
@@ -437,7 +403,7 @@ class funcionalidades_ospa(Ventana):
             texto_pantalla = "Búsqueda de extremos de problemas"
 
             self.destruir()
-            SubFrame = ventanas_vista.Extremo_vinculados(self, alto_v_vista, ancho_v_vista, texto_ep, True)
+            SubFrame = ventanas_vista.Extremo_vinculados(self, df.alto_v_vista, df.ancho_v_vista, texto_ep, True)
    
         else:
             # En caso no estuviera guardado la ficha
@@ -454,7 +420,7 @@ class funcionalidades_ospa(Ventana):
 
             # Genero la nueva ventana
             self.destruir()
-            SubFrame = ventanas_busqueda.Extremos(self, alto_v_busqueda, ancho_v_busqueda, texto_pantalla, 
+            SubFrame = ventanas_busqueda.Extremos(self, df.alto_v_busqueda, df.ancho_v_busqueda, texto_pantalla, 
                                                   nuevo=False, id_objeto = id_objeto_ingresado, tipo_objeto_anterior = tipo_objeto_pantalla)
 
         elif self.nuevo == None:
@@ -463,7 +429,7 @@ class funcionalidades_ospa(Ventana):
             texto_pantalla = "Búsqueda de extremos de problema"
 
             self.destruir()
-            SubFrame = ventanas_busqueda.Extremos(self, alto_v_busqueda, ancho_v_busqueda, texto_pantalla)
+            SubFrame = ventanas_busqueda.Extremos(self, df.alto_v_busqueda, df.ancho_v_busqueda, texto_pantalla)
 
         else:
             # En caso no estuviera guardado la ficha
@@ -473,26 +439,26 @@ class funcionalidades_ospa(Ventana):
     def ver_ep(self, id_usuario):
         """"""
         texto_documento = 'Problema: ' + id_usuario
-
+        b_pr = Base_de_datos(df.id_b_problemas, 'PROBLEMA')
         lb1 = b_pr.listar_datos_de_fila(id_usuario)
         lista_para_insertar = [lb1[2], lb1[3], lb1[4], lb1[5], lb1[6]]
 
         self.destruir()
-        subframe = ventanas_vista.Problemas_vista(self, alto_v_vista, ancho_v_vista, texto_documento, True,
+        subframe = ventanas_vista.Problemas_vista(self, df.alto_v_vista, df.ancho_v_vista, texto_documento, True,
                                         nuevo=False, lista=lista_para_insertar, id_objeto = id_usuario)
 
     #----------------------------------------------------------------------
     def ver_ep2(self, id_usuario):
         """"""
         texto_documento = 'Extremo de problema: ' + id_usuario
-
+        b_ep = Base_de_datos(df.id_b_problemas, 'EXT_PROBLEMA')
         lb1 = b_ep.listar_datos_de_fila(id_usuario)
         lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8],
                                lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14],
                                lb1[15], lb1[16], lb1[17], lb1[18], lb1[19], lb1[20]]
 
         self.destruir()
-        subframe = ventanas_vista.Extremo_vinculados(self, alto_v_vista, ancho_v_vista, texto_documento, True,
+        subframe = ventanas_vista.Extremo_vinculados(self, df.alto_v_vista, df.ancho_v_vista, texto_documento, True,
                                         nuevo=False, lista=lista_para_insertar, id_objeto = id_usuario)
     
     #----------------------------------------------------------------------
@@ -502,7 +468,7 @@ class funcionalidades_ospa(Ventana):
 
         texto_mp = "Creación de macroproblemas"
         # LargoxAncho
-        SubFrame = ventanas_vista.Macroproblemas_vista(self, alto_v_vista, ancho_v_vista, texto_mp, True)
+        SubFrame = ventanas_vista.Macroproblemas_vista(self, df.alto_v_vista, df.ancho_v_vista, texto_mp, True)
     
     #----------------------------------------------------------------------
     def busqueda_mp(self):
@@ -515,7 +481,7 @@ class funcionalidades_ospa(Ventana):
 
             # Genero la nueva ventana
             self.destruir()
-            SubFrame = ventanas_busqueda.Macroproblemas(self, alto_v_busqueda, ancho_v_busqueda, texto_pantalla, 
+            SubFrame = ventanas_busqueda.Macroproblemas(self, df.alto_v_busqueda, df.ancho_v_busqueda, texto_pantalla, 
                                                         nuevo=False, id_objeto = id_objeto_ingresado, tipo_objeto_anterior = tipo_objeto_pantalla)
         
         elif self.nuevo == None:
@@ -525,7 +491,7 @@ class funcionalidades_ospa(Ventana):
             # Genero la nueva ventana
             texto_pantalla = "Búsqueda de macroproblemas"
 
-            SubFrame = ventanas_busqueda.Macroproblemas(self, alto_v_busqueda, ancho_v_busqueda, texto_pantalla)
+            SubFrame = ventanas_busqueda.Macroproblemas(self, df.alto_v_busqueda, df.ancho_v_busqueda, texto_pantalla)
   
         else:
             # En caso no estuviera guardado la ficha
@@ -535,12 +501,12 @@ class funcionalidades_ospa(Ventana):
     def ver_mp(self, id_usuario):
         """"""
         texto_documento = 'Macroproblema: ' + id_usuario
-
+        b_mp = Base_de_datos(df.id_b_problemas, 'MACROPROBLEMA')
         lb1 = b_mp.listar_datos_de_fila(id_usuario)
         lista_para_insertar = [lb1[2], lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8]]
 
         self.destruir()
-        subframe = ventanas_vista.Macroproblemas_vista(self, alto_v_vista, ancho_v_vista, texto_documento, True,
+        subframe = ventanas_vista.Macroproblemas_vista(self, df.alto_v_vista, df.ancho_v_vista, texto_documento, True,
                                                         nuevo=False, lista=lista_para_insertar, id_objeto = id_usuario)
     
     #----------------------------------------------------------------------
@@ -563,10 +529,10 @@ class funcionalidades_ospa(Ventana):
 
         if confirmacion == True:
             self.destruir()
-            vg.cod_usuario = None
-            vg.usuario = None
-            vg.oficina = None
-            vg.texto_bienvenida = None
+            df.cod_usuario = None
+            df.usuario = None
+            df.oficina = None
+            df.texto_bienvenida = None
             subFrame = logueo.logueo1_Ingreso_de_usuario(self, 590, 453, "ASPA - Versión 0.0", False)
         else:
             messagebox.showinfo("¡Importante!", "No olvides guardar tus cambios")
@@ -659,60 +625,60 @@ class funcionalidades_ospa(Ventana):
 
         self.destruir()
         texto_b_dr = "Búsqueda de documentos recibidos"
-        SubFrame = ventanas_busqueda.Doc_recibidos_busqueda(self, alto_v_busqueda, ancho_v_busqueda, texto_b_dr, False)
+        SubFrame = ventanas_busqueda.Doc_recibidos_busqueda(self, df.alto_v_busqueda, df.ancho_v_busqueda, texto_b_dr, False)
 #----------------------------------------------------------------------
     def actualizar_de(self):
 
         self.destruir()
         texto_b_de = "Búsqueda de documentos emitidos"
-        SubFrame = ventanas_busqueda.Doc_emitidos_busqueda(self, alto_v_busqueda, ancho_v_busqueda, texto_b_de, False)
+        SubFrame = ventanas_busqueda.Doc_emitidos_busqueda(self, df.alto_v_busqueda, df.ancho_v_busqueda, texto_b_de, False)
 #----------------------------------------------------------------------
     def actualizar_ep(self):
 
         self.destruir()
         texto_b_pr = "Búsqueda de extremos de problemas"
-        SubFrame = ventanas_busqueda.Extremos(self, alto_v_busqueda, ancho_v_busqueda, texto_b_pr, False)
+        SubFrame = ventanas_busqueda.Extremos(self, df.alto_v_busqueda, df.ancho_v_busqueda, texto_b_pr, False)
 #----------------------------------------------------------------------
     def actualizar_peq1(self):
 
         self.destruir()
         texto_b_peq1 = "Documentos pendientes de trabajar - Equipo 1"
-        SubFrame = ventanas_busqueda.Pendientes_eq1_trabajar(self, alto_v_busqueda, ancho_v_busqueda, texto_b_peq1, False)
+        SubFrame = ventanas_busqueda.Pendientes_eq1_trabajar(self, df.alto_v_busqueda, df.ancho_v_busqueda, texto_b_peq1, False)
 #----------------------------------------------------------------------
     def actualizar_peq2(self):
 
         self.destruir()
         texto_b_peq2 = "Pendientes de calificar respuesta"
-        SubFrame = ventanas_busqueda.Pendientes_eq2_calificarrpta(self, alto_v_busqueda, ancho_v_busqueda, texto_b_peq2, False)
+        SubFrame = ventanas_busqueda.Pendientes_eq2_calificarrpta(self, df.alto_v_busqueda, df.ancho_v_busqueda, texto_b_peq2, False)
 
 #----------------------------------------------------------------------
     def actualizar_bmp(self):
 
         self.destruir()
         texto_b_mp = "Búsqueda de Macroproblemas"
-        SubFrame = ventanas_busqueda.Macroproblemas(self, alto_v_busqueda, ancho_v_busqueda, texto_b_mp, False)
+        SubFrame = ventanas_busqueda.Macroproblemas(self, df.alto_v_busqueda, df.ancho_v_busqueda, texto_b_mp, False)
 #----------------------------------------------------------------------
     def actualizar_pf(self):
 
         self.destruir()
         texto_b_pf = "Documentos pendientes de firma"
-        SubFrame = ventanas_busqueda.Pendientes_jefe_firma(self, alto_v_busqueda, ancho_v_busqueda, texto_b_pf, False)
+        SubFrame = ventanas_busqueda.Pendientes_jefe_firma(self, df.alto_v_busqueda, df.ancho_v_busqueda, texto_b_pf, False)
 
 #----------------------------------------------------------------------
     def actualizar_pasignar(self):
 
         self.destruir()
         texto_b_pa = "Documentos pendientes de asignar"
-        SubFrame = ventanas_busqueda.Pendientes_jefe_asignar(self, alto_v_busqueda, ancho_v_busqueda, texto_b_pa, False)
+        SubFrame = ventanas_busqueda.Pendientes_jefe_asignar(self, df.alto_v_busqueda, df.ancho_v_busqueda, texto_b_pa, False)
 #----------------------------------------------------------------------
     def actualizar_preiter(self):
 
         self.destruir()
         texto_b_proci = "Documentos pendientes de reiterar/comunicación al OCI"
-        SubFrame = ventanas_busqueda.Pendientes_por_reiterar(self, alto_v_busqueda, ancho_v_busqueda, texto_b_proci, False)
+        SubFrame = ventanas_busqueda.Pendientes_por_reiterar(self, df.alto_v_busqueda, df.ancho_v_busqueda, texto_b_proci, False)
 #----------------------------------------------------------------------
     def actualizar_programaciones(self):
 
         self.destruir()
         texto_b_progra = "Programaciones"
-        SubFrame = ventanas_busqueda.Pendientes_eq2_programaciones(self, alto_v_busqueda, ancho_v_busqueda, texto_b_progra, False)
+        SubFrame = ventanas_busqueda.Pendientes_eq2_programaciones(self, df.alto_v_busqueda, df.ancho_v_busqueda, texto_b_progra, False)

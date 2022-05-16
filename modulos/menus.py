@@ -1,27 +1,10 @@
 import datetime as dt
 import webbrowser
 from tkinter import messagebox
-
 from apoyo.funcionalidades_ospa import funcionalidades_ospa
 from modulos import ventanas_busqueda, ventanas_vista
-import apoyo.datos_frecuentes as vg
-
+import apoyo.datos_frecuentes as df
 from apoyo.elementos_de_GUI import Cuadro, Ventana
-
-# Parámetros ventana
-alto_ventana_secundaria = vg.alto_ventana_secundaria
-ancho_ventana_secundaria = vg.ancho_ventana_secundaria
-
-ancho_v_vista = vg.ancho_v_vista
-alto_v_vista = vg.alto_v_vista
-ancho_v_busqueda = vg.ancho_v_busqueda
-alto_v_busqueda = vg.alto_v_busqueda
-
-alto_logo = vg.alto_logo
-ancho_logo = vg.ancho_logo
-
-alto_franja_inferior_1 = vg.alto_franja_inferior_1
-ancho_franja_inferior_1 = vg.ancho_franja_inferior_1
 
 # I. Inicio de aplicativo
 class inicio_app_OSPA(funcionalidades_ospa):
@@ -36,7 +19,7 @@ class inicio_app_OSPA(funcionalidades_ospa):
         c0 = Cuadro(self)
         c0.agregar_label(0, 1, ' ')
         c0.agregar_label(1, 1, ' ')
-        c0.agregar_imagen(2, 1,'Logo_OSPA.png', ancho_logo, alto_logo)
+        c0.agregar_imagen(2, 1,'Logo_OSPA.png', df.ancho_logo, df.alto_logo)
         c0.agregar_label(3, 1, ' ')
         c1 = Cuadro(self)
         c1.agregar_label(4, 1,' ')
@@ -54,7 +37,7 @@ class inicio_app_OSPA(funcionalidades_ospa):
         c1.agregar_label(16, 1, ' ')
      
         c2 = Cuadro(self)
-        c2.agregar_franja_inferior('Franja_Inferior_OSPA.png', alto_franja_inferior_1, ancho_franja_inferior_1)
+        c2.agregar_franja_inferior('Franja_Inferior_OSPA.png', df.alto_franja_inferior_1, df.ancho_franja_inferior_1)
 
 
     #----------------------------------------------------------------------
@@ -64,7 +47,7 @@ class inicio_app_OSPA(funcionalidades_ospa):
 
         texto_b_mp = "Búsqueda de macroproblemas"
         # LargoxAncho
-        SubFrame = ventanas_busqueda.Macroproblemas(self, alto_v_busqueda, ancho_v_busqueda, texto_b_mp, False, 
+        SubFrame = ventanas_busqueda.Macroproblemas(self, df.alto_v_busqueda, df.ancho_v_busqueda, texto_b_mp, False, 
                                                     nuevo = False)
     
     #----------------------------------------------------------------------
@@ -74,7 +57,7 @@ class inicio_app_OSPA(funcionalidades_ospa):
 
         texto_b_pr = "Búsqueda de problemas"
         # LargoxAncho
-        SubFrame = ventanas_busqueda.Extremos(self, alto_v_busqueda, ancho_v_busqueda, texto_b_pr, False)
+        SubFrame = ventanas_busqueda.Extremos(self, df.alto_v_busqueda, df.ancho_v_busqueda, texto_b_pr, False)
 
     #----------------------------------------------------------------------
     def n_busqueda_dr(self):
@@ -83,7 +66,7 @@ class inicio_app_OSPA(funcionalidades_ospa):
 
         texto_b_dr = "Búsqueda de documentos recibidos"
         # LargoxAncho
-        SubFrame = ventanas_busqueda.Doc_recibidos_busqueda(self, alto_v_busqueda, ancho_v_busqueda, texto_b_dr, False)
+        SubFrame = ventanas_busqueda.Doc_recibidos_busqueda(self, df.alto_v_busqueda, df.ancho_v_busqueda, texto_b_dr, False)
     
     #----------------------------------------------------------------------
     def n_busqueda_de(self):
@@ -92,7 +75,7 @@ class inicio_app_OSPA(funcionalidades_ospa):
 
         texto_b_de = "Búsqueda de documentos emitidos"
         # LargoxAncho
-        SubFrame = ventanas_busqueda.Doc_emitidos_busqueda(self, alto_v_busqueda, ancho_v_busqueda, texto_b_de, False)
+        SubFrame = ventanas_busqueda.Doc_emitidos_busqueda(self, df.alto_v_busqueda, df.ancho_v_busqueda, texto_b_de, False)
 
     
     #----------------------------------------------------------------------
@@ -100,7 +83,7 @@ class inicio_app_OSPA(funcionalidades_ospa):
 
         self.desaparecer()
         # LargoxAncho
-        SubFrame = Equipos(self, alto_ventana_secundaria, ancho_ventana_secundaria,  "Pantalla de equipos")
+        SubFrame = Equipos(self, df.alto_ventana_secundaria, df.ancho_ventana_secundaria,  "Pantalla de equipos")
 
     #----------------------------------------------------------------------
     def volver_anterior(self):
@@ -122,7 +105,7 @@ class Equipos(inicio_app_OSPA):
 
         c0 = Cuadro(self)
         c0.agregar_label(0, 0, ' ')
-        c0.agregar_imagen(1, 0,'Logo_OSPA.png', ancho_logo, alto_logo)
+        c0.agregar_imagen(1, 0,'Logo_OSPA.png', df.ancho_logo, df.alto_logo)
         
         c1 = Cuadro(self)
         c1.agregar_label(2, 0,' ')
@@ -151,21 +134,21 @@ class Equipos(inicio_app_OSPA):
 
 
         c3 = Cuadro(self)
-        c3.agregar_franja_inferior('Franja_Inferior_OSPA.png', alto_franja_inferior_1, ancho_franja_inferior_1)
+        c3.agregar_franja_inferior('Franja_Inferior_OSPA.png', df.alto_franja_inferior_1, df.ancho_franja_inferior_1)
 
  #----------------------------------------------------------------------
     def jefe_asig(self):
         
         self.desaparecer()
         # LargoxAncho
-        SubFrame = ventanas_busqueda.Pendientes_jefe_asignar(self, alto_v_busqueda, ancho_v_busqueda, "Documentos pendientes de asignar")
+        SubFrame = ventanas_busqueda.Pendientes_jefe_asignar(self, df.alto_v_busqueda, df.ancho_v_busqueda, "Documentos pendientes de asignar")
     
 #----------------------------------------------------------------------
     def jefe_firma(self):
         
         self.desaparecer()
         # LargoxAncho
-        SubFrame = ventanas_busqueda.Pendientes_jefe_firma(self, alto_v_busqueda, ancho_v_busqueda, "Documentos pendientes de firma")
+        SubFrame = ventanas_busqueda.Pendientes_jefe_firma(self, df.alto_v_busqueda, df.ancho_v_busqueda, "Documentos pendientes de firma")
 #----------------------------------------------------------------------
 
     def Pendientes_reiterar(self):
@@ -173,7 +156,7 @@ class Equipos(inicio_app_OSPA):
         self.desaparecer()
         # LargoxAncho
 
-        SubFrame = ventanas_busqueda.Pendientes_por_reiterar(self, alto_v_busqueda, ancho_v_busqueda, 
+        SubFrame = ventanas_busqueda.Pendientes_por_reiterar(self, df.alto_v_busqueda, df.ancho_v_busqueda, 
                     "Documentos pendientes de reiterar/comunicar al OCI")
 
 #----------------------------------------------------------------------
@@ -182,7 +165,7 @@ class Equipos(inicio_app_OSPA):
         self.desaparecer()
         # LargoxAncho
 
-        SubFrame = ventanas_busqueda.Pendientes_notificar(self, alto_v_busqueda, ancho_v_busqueda, 
+        SubFrame = ventanas_busqueda.Pendientes_notificar(self, df.alto_v_busqueda, df.ancho_v_busqueda, 
                     "Documentos pendientes de notificación")
 
 #----------------------------------------------------------------------
@@ -190,14 +173,14 @@ class Equipos(inicio_app_OSPA):
 
         self.desaparecer()
         # LargoxAncho
-        SubFrame = ventanas_busqueda.Pendientes_eq1_trabajar(self, alto_v_busqueda, ancho_v_busqueda, "Documentos pendientes de trabajar")
+        SubFrame = ventanas_busqueda.Pendientes_eq1_trabajar(self, df.alto_v_busqueda, df.ancho_v_busqueda, "Documentos pendientes de trabajar")
 
     #----------------------------------------------------------------------
     def pendientes_eq2(self):
 
         self.desaparecer()
         # LargoxAncho
-        SubFrame = ventanas_busqueda.Pendientes_eq2_calificarrpta(self, alto_v_busqueda, ancho_v_busqueda, 
+        SubFrame = ventanas_busqueda.Pendientes_eq2_calificarrpta(self, df.alto_v_busqueda, df.ancho_v_busqueda, 
                     "Documentos pendientes de calificar respuesta")
 
     #----------------------------------------------------------------------
@@ -205,7 +188,7 @@ class Equipos(inicio_app_OSPA):
 
         self.desaparecer()
         # LargoxAncho
-        SubFrame = ventanas_busqueda.Pendientes_eq2_programaciones(self, alto_v_busqueda, ancho_v_busqueda, 
+        SubFrame = ventanas_busqueda.Pendientes_eq2_programaciones(self, df.alto_v_busqueda, df.ancho_v_busqueda, 
                     "Programaciones")
     #----------------------------------------------------------------------
     def LinkBD(self):

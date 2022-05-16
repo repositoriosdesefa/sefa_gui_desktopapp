@@ -5,12 +5,7 @@ from apoyo.elementos_de_GUI import Cuadro, Ventana
 from apoyo.manejo_de_bases import Base_de_datos, Correo_electronico
 from modulos import administracion as adm
 from modulos import menus
-import apoyo.datos_frecuentes as vg
-
-alto_logo = vg.alto_logo
-ancho_logo = vg.ancho_logo
-alto_ventana_secundaria = vg.alto_ventana_secundaria
-ancho_ventana_secundaria = vg.ancho_ventana_secundaria
+import apoyo.datos_frecuentes as df
 
 
 class logueo1_Ingreso_de_usuario(Ventana):
@@ -24,7 +19,7 @@ class logueo1_Ingreso_de_usuario(Ventana):
 
         c0 = Cuadro(self)
         c0.agregar_label(0, 0,' ')
-        c0.agregar_imagen(1,0,'Logo_OSPA.png',ancho_logo, alto_logo)
+        c0.agregar_imagen(1,0,'Logo_OSPA.png',df.ancho_logo, df.alto_logo)
         c1 = Cuadro(self)
         c1.agregar_label(0, 0,' ')
         c1.agregar_imagen(1, 0,'Icono_OSPA.png', 150, 150)
@@ -61,32 +56,32 @@ class logueo1_Ingreso_de_usuario(Ventana):
         correo = datos_ingresados[0]
         contrasenna = datos_ingresados[1]
 
-        b1 = vg.base_usuario
-        b2 = vg.base_datos_usuario
+        b1 = Base_de_datos(df.id_usuarios, 'Usuario')
+        b2 = Base_de_datos(df.id_usuarios, 'Datos_de_usuario')
 
         if b1.contar_coincidencias(correo) == 0:
             messagebox.showerror('Error al ingresar datos', 'Usted ha ingresado un correo electrónico no registrado.')
         else:
             lista_para_identificar_usuario = b1.listar_datos_de_fila(correo)
-            vg.cod_usuario = lista_para_identificar_usuario[0]
-            lista_con_datos_de_usuario = b2.listar_datos_de_fila(vg.cod_usuario)
+            df.cod_usuario = lista_para_identificar_usuario[0]
+            lista_con_datos_de_usuario = b2.listar_datos_de_fila(df.cod_usuario)
             if lista_con_datos_de_usuario[7] == 'ELIMINADO':
                 messagebox.showinfo('Usuario deshabilitado', 'El correo ingresado pertenece a un usuario que se encuentra deshabilitado. En caso de requerir su habilitación, por favor contáctese con el administrador a través del correo proyectossefa@oefa.gob.pe')
             else:
                 if lista_con_datos_de_usuario[6] != contrasenna:
                     messagebox.showerror('Error al ingresar datos', 'Usted ha ingresado una contraseña incorrecta')
                 else:
-                    vg.usuario = lista_con_datos_de_usuario[4]
-                    vg.oficina = lista_con_datos_de_usuario[5]
+                    df.usuario = lista_con_datos_de_usuario[4]
+                    df.oficina = lista_con_datos_de_usuario[5]
                     self.ir()
 
     #----------------------------------------------------------------------
     def ir(self):
         """"""
-        vg.texto_bienvenida = "Bienvenido " + vg.usuario
-        texto_bienvenida = vg.texto_bienvenida
+        df.texto_bienvenida = "Bienvenido " + df.usuario
+        texto_bienvenida = df.texto_bienvenida
         self.desaparecer()
-        subframe = menus.inicio_app_OSPA(self, alto_ventana_secundaria, ancho_ventana_secundaria, texto_bienvenida, False)
+        subframe = menus.inicio_app_OSPA(self, df.alto_ventana_secundaria, df.ancho_ventana_secundaria, texto_bienvenida, False)
     
     #----------------------------------------------------------------------
     def ir_a_recuperar_contrasena(self, event):
@@ -149,8 +144,8 @@ class logueo2_Recuperar_contrasena(Ventana):
             messagebox.showerror('Error al ingresar datos', 'Usted ha ingresado un correo electrónico no registrado.')
         else:
             lista_para_identificar_usuario = b1.listar_datos_de_fila(correo)
-            vg.cod_usuario = lista_para_identificar_usuario[0]
-            lista_con_datos_de_usuario = b2.listar_datos_de_fila(vg.cod_usuario)
+            df.cod_usuario = lista_para_identificar_usuario[0]
+            lista_con_datos_de_usuario = b2.listar_datos_de_fila(df.cod_usuario)
             if lista_con_datos_de_usuario[7] == 'ELIMINADO':
                 messagebox.showinfo('Usuario deshabilitado', 'El correo ingresado pertenece a un usuario que se encuentra deshabilitado. En caso de requerir su habilitación, por favor contáctese con el administrador a través del correo proyectossefa@oefa.gob.pe.')
             else:
@@ -213,8 +208,8 @@ class logueo3_Cambiar_contrasena(Ventana):
             messagebox.showerror('Error al ingresar datos', 'Usted ha ingresado un correo electrónico no registrado.')
         else:
             lista_para_identificar_usuario = b1.listar_datos_de_fila(correo)
-            vg.cod_usuario = lista_para_identificar_usuario[0]
-            lista_con_datos_de_usuario = b2.listar_datos_de_fila(vg.cod_usuario)
+            df.cod_usuario = lista_para_identificar_usuario[0]
+            lista_con_datos_de_usuario = b2.listar_datos_de_fila(df.cod_usuario)
             if lista_con_datos_de_usuario[7] == 'ELIMINADO':
                 messagebox.showinfo('Usuario deshabilitado', 'El correo ingresado pertenece a un usuario que se encuentra deshabilitado. En caso de requerir su habilitación, por favor contáctese con el administrador a través del correo proyectossefa@oefa.gob.pe')
             else:
@@ -224,8 +219,8 @@ class logueo3_Cambiar_contrasena(Ventana):
                     if nueva_contrasenna != nueva_contrasenna_confirmacion:
                         messagebox.showerror('Error al ingresar datos', 'La nueva contraseña no coincide con el texto ingresado para su confirmación.')
                     else:
-                        b2.cambiar_un_dato_de_una_fila(vg.cod_usuario, 7, nueva_contrasenna)
-                        nuevos_datos_de_usuario = b2.listar_datos_de_fila(vg.cod_usuario)
+                        b2.cambiar_un_dato_de_una_fila(df.cod_usuario, 7, nueva_contrasenna)
+                        nuevos_datos_de_usuario = b2.listar_datos_de_fila(df.cod_usuario)
                         hora = str(dt.datetime.now())
                         nuevos_datos_de_usuario_para_historial = nuevos_datos_de_usuario + [hora]
                         b3.agregar_datos(nuevos_datos_de_usuario_para_historial)

@@ -2,9 +2,11 @@
 # DATOS DE USO FRECUENTES (LISTA, TUPLAS, DICCIONARIOS) #
 # VARIABLES GLOBALES - ACCESIBLES DESDE TODA LA APP     #
 #########################################################
-
+import pandas as pd
 from apoyo.manejo_de_bases import Base_de_datos
 
+archivo = 'C:/Users/lucia/Desktop/APLICATIVO ASPA/ASPA FINAL/sefa_gui_desktopapp/BasesDatos.xlsx'
+TodasBases = pd.read_excel(archivo, sheet_name='bases')
 
 valores = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ<=>@#%&+"
 #pruebaaa
@@ -42,12 +44,16 @@ oficinas = [
     'SEFA'
 ]
 
+# I. Tamaño de las pantallas de vista
 ancho_v_vista = 1025
 alto_v_vista = 600
 ancho_v_vista_vitrina = 895
 alto_v_vista_vitrina = 120
 
+# II. Tamaño de las pantallas de búsqueda
 ancho_v_busqueda = 1300
+ancho_v_busqueda_franja = ancho_v_busqueda - 3
+alto_v_busqueda_franja = 78
 alto_v_busqueda = 568
 ancho_v_busqueda_vitrina = 950
 ancho_v_busqueda_de_vitrina = 1065
@@ -61,92 +67,38 @@ ancho_v_busqueda_prei_vitrina = 1065
 ancho_v_busqueda_peq2_vitrina = 1180
 ancho_v_busqueda_progr_vitrina = 710
 
+# III. Tamaño del logo, franja
 alto_logo = 50
 ancho_logo = 280
-
 alto_ventana_secundaria = 600
 ancho_ventana_secundaria = 403
-
 alto_franja_inferior_1 = 52
 ancho_franja_inferior_1 = 400
 
+# IV. Otras variables
 cod_usuario = None
 usuario = None
 oficina = None
 texto_bienvenida = None
 
-# 0. ID de Bases de Datos
-id_usuarios = '12gzaAx7GkEUDjEmiJG693in8ADyCPxej5cUv9YA2vyY'
-id_b_docs = "1wDGtiCiT92K1lP62SQ0nBr_nuBQiHlJ17CPysdVMPM8"
-id_b_problemas = "1YQjdeoEharOx54rsNoehLOTaCVF8-kubhTr2Vs7-xhk"
-id_b_parametros = "1La4fmSRGUEzo5143VFNJmNwDFnzZkQUkm6EyRPtJnZ0"
-id_b_directorio_efa = "1pjHXiz15Zmw-49Nr4o1YdXJnddUX74n7Tbdf5SH7Lb0"
-id_b_lista_efa = "1ephi7hS0tHRQQq5nlkV141ZCY54FUfkw13EeKn310Y4"
+# V. ID de Bases de Datos
+id_usuarios = TodasBases.query("TIPO_DE_BASE=='usuarios'").iloc[0, 1]
+id_b_docs = TodasBases.query("TIPO_DE_BASE=='documentos'").iloc[0, 1]
+id_b_problemas = TodasBases.query("TIPO_DE_BASE=='problemas'").iloc[0, 1]
+id_b_parametros = TodasBases.query("TIPO_DE_BASE=='parametros-relaciones'").iloc[0, 1]
+id_b_directorio_efa = TodasBases.query("TIPO_DE_BASE=='directorio'").iloc[0, 1]
+id_b_lista_efa = TodasBases.query("TIPO_DE_BASE=='listadoefa'").iloc[0, 1]
 
-# 1. Bases de datos principales
-# Documentos recibidos
-b_dr_cod = Base_de_datos(id_b_docs, 'DOCS_R')
-b_dr = Base_de_datos(id_b_docs, 'DOC_RECIBIDOS')
-b_dr_hist = Base_de_datos(id_b_docs, 'HISTORIAL_DR')
-# Documentos emitidos
-b_de_cod = Base_de_datos(id_b_docs, 'DOCS_E')
-b_de = Base_de_datos(id_b_docs, 'DOC_EMITIDOS')
-b_de_hist = Base_de_datos(id_b_docs, 'HISTORIAL_DE')
-# Relación de documentos
-base_relacion_docs = Base_de_datos(id_b_docs, 'RELACION_DOCS')
-base_relacion_docs_hist = Base_de_datos(id_b_docs, 'HISTORIAL_RELACION_D')
-# Problemas
-b_pr_cod = Base_de_datos(id_b_problemas, 'PR_P')
-b_pr = Base_de_datos(id_b_problemas, 'PROBLEMA')
-b_pr_hist = Base_de_datos(id_b_problemas, 'HISTORIAL_PR')
-# Extremos Problemas
-b_ep_cod = Base_de_datos(id_b_problemas, 'EXT_P')
-b_ep = Base_de_datos(id_b_problemas, 'EXT_PROBLEMA')
-b_ep_hist = Base_de_datos(id_b_problemas, 'HISTORIAL_EP')
-# Macro problemas
-b_mp_cod = Base_de_datos(id_b_problemas, 'MC_P')
-b_mp = Base_de_datos(id_b_problemas, 'MACROPROBLEMA')
-b_mp_hist = Base_de_datos(id_b_problemas, 'HISTORIAL_MP')
-# Relación de problemas
-base_relacion_mp_pr =  Base_de_datos(id_b_problemas, 'RELACION_MP-PR')
-base_relacion_mp_pr_hist =  Base_de_datos(id_b_problemas, 'HISTORIAL_RELACION_MP-PR')
 
-# 2. Bases de datos complementarias
-# 2.0 Usuarios y parámetros
-base_usuario = Base_de_datos(id_usuarios, 'Usuario')
-base_datos_usuario = Base_de_datos(id_usuarios, 'Datos_de_usuario')
+# VI. Bases de datos complementarias
+# 6.0 Usuarios y parámetros
+
 base_parametros = Base_de_datos(id_b_parametros, 'PARAMETROS')
 
-# 2.1 Directorio de Oficinas y Lista de EFA
-b_efa = Base_de_datos(id_b_directorio_efa, 'Directorio')
-b_lista_efa = Base_de_datos(id_b_lista_efa, 'Lista de EFA')
 
-# 2.3 Relaciones auxiliares
-base_relacion_dr_pr =  Base_de_datos(id_b_parametros, 'RELACION_DR-PR')
-base_relacion_dr_pr_hist =  Base_de_datos(id_b_parametros, 'HISTORIAL_RELACION_DR-PR')
-base_relacion_de_pr =  Base_de_datos(id_b_parametros, 'RELACION_DE-PR')
-base_relacion_de_pr_hist =  Base_de_datos(id_b_parametros, 'HISTORIAL_RELACION_DE-PR')
-base_relacion_ep_pr =  Base_de_datos(id_b_parametros, 'RELACION_EP-PR')
-base_relacion_ep_pr_hist =  Base_de_datos(id_b_parametros, 'HISTORIAL_RELACION_EP-PR')
-       
-# 3. Listas dependientes
-# 3.1 Directorio de SEFA
-tabla_directorio = b_efa.generar_dataframe()
-tabla_directorio_efa = tabla_directorio[tabla_directorio['TIPO_OFICINA']!="OTRO"]
-tabla_directorio_efa_final = tabla_directorio_efa[tabla_directorio_efa['Tipo de entidad u oficina']!="T_EFA_DIR"]
-lista_efa_dependiente = tabla_directorio.loc[:,['Tipo de entidad u oficina', 'EFA ABREVIADO', 'Departamento', 'Entidad u oficina', 'EFA_OSPA']]
-lista_efa_ospa = sorted(list(lista_efa_dependiente['EFA_OSPA'].unique()))
-# 3.2 Ubigeo
-tabla_lista_efa = b_lista_efa.generar_dataframe()
-tabla_departamento_efa = tabla_lista_efa.loc[:, ['DEP_OSPA', 'PROV_DIST_OSPA']]
-departamento_ospa = sorted(list(tabla_lista_efa['DEP_OSPA'].unique()))
-
-# 4. Parámetros
-
-
-# 4.1 Bases de datos
+# VIII. Bases de datos parámetros
 tabla_parametros = base_parametros.generar_dataframe()
-# 4.2 Desplegables en Drive
+# 8.0 Desplegables en Drive
 combo_vacio = ()
 agente_conta = list(set(tabla_parametros['AGENTE CALCULADORA']))
 componente_amb = list(set(tabla_parametros['COMPONENTE CALCULADORA']))
@@ -169,52 +121,8 @@ tipo_respuesta = list(set(tabla_parametros['T_RPTA']))
 categorias = list(set(tabla_parametros['CATEGORIAS_PEDIDO']))
 marco_pedido = list(set(tabla_parametros['MARCO_PEDIDO']))
 
-# 5. Tablas resumen
-# 5.0 Relaciones
-tabla_relacion_dr_de = base_relacion_docs.generar_dataframe()
-tabla_relacion_dr_pr = base_relacion_dr_pr.generar_dataframe()
-tabla_relacion_de_pr = base_relacion_de_pr.generar_dataframe()
-tabla_relacion_mp_pr = base_relacion_mp_pr.generar_dataframe()
-tabla_relacion_ep_pr = base_relacion_ep_pr.generar_dataframe()
-# 5.1 Documentos recibidos
-tabla_de_dr_cod = b_dr_cod.generar_dataframe()
-tabla_de_dr_completa = b_dr.generar_dataframe()
-tabla_de_dr_resumen = tabla_de_dr_completa.drop(['VIA_RECEPCION', 'HT_ENTRANTE', 'TIPO_REMITENTE', 'CATEGORIA_REMITENTE',
-                                            'F_ING_OEFA', 'TIPO_DOC', 'ESPECIALISTA_1', 'ESPECIALISTA_2',
-                                            'ACCION_1', 'F_ASIGNACION_1', 'F_ASIGNACION_2', 'TIPO_RESPUESTA', 'RESPUESTA',
-                                            'F_EJECUCION_1', 'F_EJECUCION_2',
-                                            'FECHA_ULTIMO_MOV', 'USUARIO'], axis=1)
+b_lista_efa = Base_de_datos(id_b_lista_efa, 'Lista de EFA')
+tabla_lista_efa = b_lista_efa.generar_dataframe()
 
-# 5.2 Documentos emitidos
-tabla_de_de_cod = b_de_cod.generar_dataframe()
-tabla_de_de_completa = b_de.generar_dataframe()
-tabla_de_de_resumen =  tabla_de_de_completa.drop(['HT_SALIDA', 'FECHA_PROYECTO_FINAL', 
-                                                    'FECHA_FIRMA', 'TIPO_DOC', 'CATEGORIA_DESTINATARIO',
-                                                    'MARCO_PEDIDO', 'FECHA_ULTIMO_MOV', 'TIPO_DESTINATARIO',
-                                                    'PLAZO', 'ESTADO_DOCE', 'ESPECIALISTA', 'USUARIO',
-                                                    'FECHA_PROYECTO_REIT',	'SE_EMITIO_REIT', 	'TIPO_DOC_REIT',
-                                                    'NUM_DOC_REIT', 'FECHA_FIRMA_REIT', 'FECHA_NOTIFICACION_REIT',
-                                                    'FECHA_PROYECTO_OCI', 'SE_EMITIO_OCI', 'TIPO_DOC_OCI', 'NUM_DOC_OCI',
-                                                    'FECHA_FIRMA_OCI', 'FECHA_NOTIFICACION_OCI', 'PLAZO_REIT','FECHA_MAX_REIT',
-                                                    'SEGUIMIENTO_REIT','FECHA_MAX','SEGUIMIENTO_DOC'], axis=1)
-
-# 5.3 Problema
-tabla_de_ep_cod = b_pr_cod.generar_dataframe()
-tabla_de_pr_completa = b_pr.generar_dataframe()
-tabla_de_ep_resumen = tabla_de_pr_completa.drop(['DISTRITO', 
-                                                'USUARIO', 'FECHA_ULTIMO_MOV'], axis=1)
-
-# 5.3 Extremos
-tabla_de_ep2_cod = b_ep_cod.generar_dataframe()
-tabla_de_ep_completa = b_ep.generar_dataframe()
-tabla_de_ep2_resumen = tabla_de_ep_completa.drop(['OCURRENCIA', 'EXTENSION', 'TIPO DE AFECTACION',
-                                                'TIPO DE UBICACION','TIPO_EFA', 'CATEGORIA_EFA', 
-                                                'GEO_ESTE', 'GEO_NORTE',
-                                                'CARACTERISTICA 1', 'CARACTERISTICA 2', 'TIPO CAUSA', 'COD_ADMINISTRADO',
-                                                'PRIORIDAD', 'PUNTAJE',  'USUARIO', 'ADMINISTRADO', 'TIPO_ADMINISTRADO',
-                                                'CODIGO SINADA', 'ACTIVIDAD', 'FECHA_ULTIMO_MOV', 'USUARIO'], axis=1)
-
-# 5.4 Macroproblemas
-tabla_de_mp_cod = b_mp_cod.generar_dataframe()
-tabla_de_mp_completa = b_mp.generar_dataframe()
-tabla_de_mp_resumen = tabla_de_mp_completa.drop(['FECHA_ULTIMO_MOV', 'USUARIO', 'COMPONENTE', 'AGENTE'], axis=1)
+b_efa = Base_de_datos(id_b_directorio_efa, 'Directorio')
+tabla_directorio = b_efa.generar_dataframe()
