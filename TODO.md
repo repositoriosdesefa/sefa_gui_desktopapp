@@ -13,16 +13,18 @@
 - [x] Colocar los nombres de los módulos en los botones en lugar del "Ir"
 - [x] 1) Adecuar la vista de problemas de acuerdo al prototipo conversado
 - [x] 2) Adecuar el resto de pantallas de acuerdo al cambio
-- [ ] 3) Investigar: Cálculo de plazo en días hábiles para el vencimiento
-- [ ] 4) Automatizar el estado general
-- [ ] 5) Agregar el botón volver
-- [ ] 6) Automatizar el puntaje de la calculadora, Investigar: Ventana emergente con resultado de calculadora
-- [ ] Cambiar la búsqueda por problemas
+- [x] 3) Cambiar la búsqueda por problemas
+- [x] 4) Revisar el tiempo de carga del aplicativo (Se ordenó el código para que no demore la carga inicial)
+- [x] 5) Se organizó la sección de "Datos frecuentes".
+- [ ] 6) Investigar: Cálculo de plazo en días hábiles para el vencimiento
+- [ ] 7) Automatizar el estado general
+- [ ] 8) Agregar el botón volver
+- [ ] 9) Automatizar el puntaje de la calculadora, Investigar: Ventana emergente con resultado de calculadora
 - [ ] En las vistas donde incluya a los problemas, debe aparecer su descripción
 - [ ] Ampliar el ancho de las listas desplegables que contienen EFA
 - [ ] Revisión de la conversión realizada a los códigos de problema de la base antigua
 - [ ] Elaborar cronograma para trasladar los documentos recibidos a la base del aplicativo
-- [ ] Revisar el tiempo de carga del aplicativo (Dante)
+
 
 ## Otros pendientes
 - [ ] Permitir el copiar y pegar de la HT
