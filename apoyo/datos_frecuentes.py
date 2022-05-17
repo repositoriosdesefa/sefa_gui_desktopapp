@@ -5,8 +5,7 @@
 import pandas as pd
 from apoyo.manejo_de_bases import Base_de_datos
 
-archivo = 'C:/Users/lucia/Desktop/APLICATIVO ASPA/ASPA FINAL/sefa_gui_desktopapp/BasesDatos.xlsx'
-TodasBases = pd.read_excel(archivo, sheet_name='bases')
+TodasBases = pd.read_excel('BasesDatos.xlsx', sheet_name='bases')
 
 valores = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ<=>@#%&+"
 #pruebaaa
