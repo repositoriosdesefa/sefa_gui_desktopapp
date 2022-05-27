@@ -236,7 +236,7 @@ class funcionalidades_ospa(Ventana):
                         codigo_frame, tabla_codigo_ficha, 
                         tabla_vista_vitrina, tabla_relacion, 
                         id_entrada, id_salida, cod_salida, 
-                        funcion_ver, funcion_eliminar):
+                        funcion_ver, funcion_eliminar, funcion3):
         """"""
 
         # Se agrega el botón y título del Frame
@@ -266,16 +266,22 @@ class funcionalidades_ospa(Ventana):
             # Tabla de documentos emitidos filtrada
             tabla_vitrina = tabla_filtrada.drop([id_salida], axis=1)
             if len(tabla_vitrina.index) > 0:
-                self.vitrina = Vitrina(self.frame_principal, tabla_vitrina, funcion_ver, funcion_eliminar, funcion3 = None, tipo_vitrina = 'Modelo2',
-                                             height=df.alto_v_vista_vitrina, width=df.ancho_v_vista_vitrina) 
+                if texto_titulo == 'Problemas asociados':
+
+                    self.vitrina = Vitrina(self.frame_principal, tabla_vitrina, funcion_ver, funcion_eliminar, funcion3, tipo_vitrina = 'Modelo5',
+                                             height=df.alto_v_vista_vitrina, width=df.ancho_v_vista_vitrinapr)
+                else:
+                    self.vitrina = Vitrina(self.frame_principal, tabla_vitrina, funcion_ver, funcion_eliminar, funcion3, tipo_vitrina = 'Modelo1',
+                                             height=df.alto_v_vista_vitrina, width=df.ancho_v_vista_vitrina)
+                    
                 return self.vitrina
             else:
                 frame_vitrina.agregar_label(1, 2, '     ')
-                frame_vitrina.agregar_label(2, 2, '                  0 documentos recibidos asociados')
+                frame_vitrina.agregar_label(2, 2, '                  0 resultados')
                 frame_vitrina.agregar_titulo(3, 2, '     ')
         else:
             frame_vitrina.agregar_label(1, 2, '     ')
-            frame_vitrina.agregar_label(2, 2, '                  0 documentos recibidos asociados')
+            frame_vitrina.agregar_label(2, 2, '                  0 resultados')
             frame_vitrina.agregar_titulo(3, 2, '     ')
     
     #----------------------------------------------------------------------
@@ -416,7 +422,7 @@ class funcionalidades_ospa(Ventana):
 
             id_objeto_ingresado = self.id_objeto_ingresado
             tipo_objeto_pantalla = self.tipo_objeto
-            texto_pantalla = "Problema que se asociará: " + id_objeto_ingresado
+            texto_pantalla = "Macroproblema que se asociará: " + id_objeto_ingresado
 
             # Genero la nueva ventana
             self.destruir()

@@ -14,8 +14,8 @@ class Aplicacion(object):
 
         self.root = parent
         self.root.withdraw()
-        subFrame = logueo.logueo1_Ingreso_de_usuario(self, 590, 453, "ASPA - Versión 0.0", False)
-        #subFrame = menus.inicio_app_OSPA(self, 600, 403, 'Bienvenido')
+        #subFrame = logueo.logueo1_Ingreso_de_usuario(self, 590, 453, "ASPA - Versión 0.0", False)
+        subFrame = menus.inicio_app_OSPA(self, 600, 403, 'Bienvenido')
 
         # LargoxAncho
         # subFrame = vista_dr.Doc_recibidos_vista(self, 650, 1100,'Documentos recibidos')

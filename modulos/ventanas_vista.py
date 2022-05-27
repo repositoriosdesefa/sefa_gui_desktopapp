@@ -1585,13 +1585,12 @@ class Macroproblemas_vista(funcionalidades_ospa):
         self.vitrina_1 = self.generar_vitrina(self.nuevo, 
                                                 self.frame_vitrina_1,
                                                 '(+) Agregar', self.busqueda_ep,
-                                                'Extremos de problemas asociados',
+                                                'Problemas asociados',
                                                 self.cod_usuario_mp, self.tabla_de_mp_cod, 
                                                 self.tabla_de_ep, self.tabla_relacion_mp_pr, 
                                                 "ID_MP", "ID_PR", "COD_MP", 
-                                                self.ver_ep, self.eliminar_ep_y_actualizar)
-        
-        
+                                                self.ver_ep, self.eliminar_ep_y_actualizar, self.ver_ep)
+ 
     #----------------------------------------------------------------------
     def guardar_y_actualizar_mp(self):
         """"""

@@ -961,7 +961,7 @@ class Macroproblemas(funcionalidades_ospa):
             ('B', 5, 4, 'Buscar', self.Buscar_mp),
             ('B', 5, 5, 'Limpiar', self.limpiar_mp),
             ('B', 5, 6, 'Actualizar', self.actualizar_bmp),
-            ('B', 5, 7, 'Volver', self.volver),
+            ('B', 5, 7, 'Volver', self.volver_anterior),
             ('B', 5, 9, 'Crear macrop.', self.crear_macroproblema)
         )
         
@@ -971,7 +971,7 @@ class Macroproblemas(funcionalidades_ospa):
         self.frame_vitrina_mp = Cuadro(self)
 
         # Creando vitrina
-        self.vmc = Vitrina(self, self.tabla_mpF, self.ver_mp, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_mp_vitrina)
+        self.vmc = Vitrina(self, self.tabla_mpF, self.ver_mp, funcion2=None, funcion3=None, tipo_vitrina = "Modelo6", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_mp_vitrina)
 
         # Franja inferior
         self.mc3 = Cuadro(self)
@@ -1075,6 +1075,11 @@ class Macroproblemas(funcionalidades_ospa):
         self.frame_vitrina_mp = Cuadro(self)
         # Creando vitrina
         self.vmc = Vitrina(self, self.tabla_mpF, self.ver_mp, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_mp_vitrina)
+        
+    def volver_anterior(self):
+        """"""
+        self.desaparecer()
+        self.ventana_anterior.aparecer()
         
 class Macroproblemas_filtrada(funcionalidades_ospa):
     """"""
