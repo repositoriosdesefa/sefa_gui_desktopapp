@@ -1445,7 +1445,7 @@ class Vitrina(Frame):
             self.width_botoneliminar = 1
         elif self.tipo_vitrina == "Modelo5":
             self.height_ce=25
-            self.width_columnas = 22
+            self.width_columnas = 20
             self.formatoboton_c = formato.color_negro
             self.font_c = formato.tipo_de_letra_tabla
             self.width_ol = 18

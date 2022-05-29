@@ -1465,9 +1465,9 @@ class Macroproblemas_vista(funcionalidades_ospa):
         self.tabla_de_mp_cod = tabla_de_mp_cod
         # II.1 Lista de EP
         tabla_de_pr_completa = Base_de_datos(df.id_b_problemas, 'PROBLEMA').generar_dataframe()
-        tabla_de_ep_resumen = tabla_de_pr_completa.drop(['DISTRITO', 
-                                                'USUARIO', 'FECHA_ULTIMO_MOV'], axis=1)
-        self.tabla_de_ep =  tabla_de_ep_resumen
+        tabla_de_pr_resumen0 = tabla_de_pr_completa.rename(columns={'COD_PR':'CODIGO'})
+        tabla_de_pr_resumen = tabla_de_pr_resumen0.drop(['USUARIO', 'FECHA_ULTIMO_MOV'], axis=1)
+        self.tabla_de_pr =  tabla_de_pr_resumen
         tabla_relacion_mp_pr = Base_de_datos(df.id_b_parametros, 'RELACION_MP-PR').generar_dataframe()
         self.tabla_relacion_mp_pr = tabla_relacion_mp_pr
 
@@ -1587,7 +1587,7 @@ class Macroproblemas_vista(funcionalidades_ospa):
                                                 '(+) Agregar', self.busqueda_ep,
                                                 'Problemas asociados',
                                                 self.cod_usuario_mp, self.tabla_de_mp_cod, 
-                                                self.tabla_de_ep, self.tabla_relacion_mp_pr, 
+                                                self.tabla_de_pr, self.tabla_relacion_mp_pr, 
                                                 "ID_MP", "ID_PR", "COD_MP", 
                                                 self.ver_ep, self.eliminar_ep_y_actualizar, self.ver_ep)
  
@@ -1639,8 +1639,8 @@ class Macroproblemas_vista(funcionalidades_ospa):
         self.vitrina_1 = self.generar_vitrina(self.nuevo, 
                                                 self.frame_vitrina_1,
                                                 '(+) Agregar', self.busqueda_ep,
-                                                'Extremos de problemas asociados',
+                                                'Problemas asociados',
                                                 self.cod_usuario_mp, self.tabla_de_mp_cod, 
-                                                self.tabla_de_ep, self.tabla_relacion_mp_pr, 
+                                                self.tabla_de_pr, self.tabla_relacion_mp_pr, 
                                                 "ID_MP", "ID_PR", "COD_MP", 
-                                                self.ver_ep, self.eliminar_ep_y_actualizar)
+                                                self.ver_ep, self.eliminar_ep_y_actualizar, self.ver_ep)
