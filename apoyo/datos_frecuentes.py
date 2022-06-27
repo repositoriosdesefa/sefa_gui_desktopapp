@@ -50,6 +50,8 @@ ancho_v_vista_vitrina = 895
 alto_v_vista_vitrina = 120
 # PARA PROBLEMAS AMBIENTALES
 ancho_v_vista_vitrinapr = 885
+# PARA EXTREMOS
+ancho_v_vista_vitrinaep = 920
 # II. Tamaño de las pantallas de búsqueda
 ancho_v_busqueda = 1300
 ancho_v_busqueda_franja = ancho_v_busqueda - 3
