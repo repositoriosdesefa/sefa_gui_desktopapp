@@ -767,14 +767,15 @@ class Extremos(funcionalidades_ospa):
         b_relacion_mp_pr =  Base_de_datos(df.id_b_parametros, 'RELACION_MP-PR')
         self.relacion_mp_ep = b_relacion_mp_pr.generar_dataframe()
         relacion_activos = self.relacion_mp_ep[self.relacion_mp_ep.ID_PR.isin(tabla_codigo_de_filtrada2)]
-        relacion_activos2 = relacion_activos['ID_MP'].tolist()
+        relacion_activos1 = relacion_activos[relacion_activos['ESTADO']=="ACTIVO"]
+        relacion_activos2 = relacion_activos1['ID_MP'].tolist()
 
 
-        if len(relacion_activos) == 0:
+        if len(relacion_activos1) == 0:
             messagebox.showinfo("Error", "No tiene macroproblemas asociados")
         else:
             self.desaparecer()
-            subframe = Macroproblemas_filtrada(self, 500, 1200,texto_documento, nuevo=False, id_objeto = self.id_interno_ep, x = x, listamc = relacion_activos2)
+            subframe = Macroproblemas_filtrada(self, 570, 1300,texto_documento, nuevo=False, id_objeto = self.id_interno_ep, x = x, listamc = relacion_activos2)
     #----------------------------------------------------------------------
     def asociar_ep(self, x):
         """"""
@@ -1056,6 +1057,7 @@ class Macroproblemas_filtrada(funcionalidades_ospa):
             self.id_usuario= id_objeto
             self.x2 = x
 
+
         # Renombramos los encabezados
         b_mp = Base_de_datos(df.id_b_problemas, 'MACROPROBLEMA')
         b_mp_tabla = b_mp.generar_dataframe()
@@ -1075,7 +1077,7 @@ class Macroproblemas_filtrada(funcionalidades_ospa):
 
         # Agregando logo del ospa a la ventana y título
         titulos = Cuadro(self)
-        titulos.agregar_franja_superior_ospa('Búsqueda de Macroproblemas filtrada', 
+        titulos.agregar_franja_superior_ospa('Macroproblemas asociados', 
                                             self.inicio_app, self.cerrar_sesion)
     
         # Armando rejilla con los filtros
@@ -1111,8 +1113,8 @@ class Macroproblemas_filtrada(funcionalidades_ospa):
         self.frame_vitrina_mp = Cuadro(self)
 
         # Creando vitrina
-        self.vmc = Vitrina(self, self.tabla_mpF, self.ver_mp, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_mpf_vitrina)
-
+        self.vmc = Vitrina(self, self.tabla_mpF, self.ver_mp, funcion2=None, funcion3=None, tipo_vitrina = "Modelo7", height=df.alto_v_busqueda_mpf_vitrina, width=df.ancho_v_busqueda_mpf_vitrina)
+        
         # Franja inferior
         self.mc3 = Cuadro(self)
         self.mc3.agregar_franja_inferior('Franja_Inferior_Ancha_OSPA.png', df.alto_v_busqueda_franja, df.ancho_v_busqueda_franja)
@@ -1131,15 +1133,8 @@ class Macroproblemas_filtrada(funcionalidades_ospa):
         # Filtrando datos por palabras exactas
 
         filtro=""
-        if len(self.CODIGOf)>0 :
-            filtro="`COD. MACROPROBLEMA`=="+"'"+self.CODIGOf+"' "
-
         if len(self.ESTADOf)>0 :
-            if len(filtro)>0 :
-                filtro = filtro+" & "
-            else:
-                filtro
-            filtro=filtro+"ESTADO=="+"'"+self.ESTADOf+"' "
+            filtro="ESTADO=="+"'"+self.ESTADOf+"' "
         
         self.mostrarDatosmcf(filtro)       
 
@@ -1152,6 +1147,11 @@ class Macroproblemas_filtrada(funcionalidades_ospa):
         if len(self.NOMBREf)>0: # Filtro por palabra clave
             self.vmc.eliminar_vitrina2()
             self.filtro0 = self.filtro0[self.filtro0['NOMBRE PROBLEMA'].str.contains(self.NOMBREf)]
+            self.Complementomcf(self.filtro0)
+
+        if len(self.CODIGOf)>0: # Filtro por palabra clave
+            self.vmc.eliminar_vitrina2()
+            self.filtro0 = self.filtro0[self.filtro0['COD. MACROPROBLEMA'].str.contains(self.CODIGOf)]
             self.Complementomcf(self.filtro0)
 
         if len(self.DESCRIPf)>0: # Filtro por palabra clave
@@ -1183,7 +1183,7 @@ class Macroproblemas_filtrada(funcionalidades_ospa):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_mp.eliminar_cuadro()
             self.frame_vitrina_mp = Cuadro(self)
-            self.vmc = Vitrina(self, tabla_filtro3, self.ver_mp, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_mpf_vitrina)
+            self.vmc = Vitrina(self, tabla_filtro3, self.ver_mp, funcion2=None, funcion3=None, tipo_vitrina = "Modelo7", height=df.alto_v_busqueda_mpf_vitrina, width=df.ancho_v_busqueda_mpf_vitrina)
             
         else:
             self.frame_vitrina_mp.eliminar_cuadro()
@@ -1206,7 +1206,7 @@ class Macroproblemas_filtrada(funcionalidades_ospa):
 
         self.frame_vitrina_mp = Cuadro(self)
         # Creando vitrina
-        self.vmc = Vitrina(self, self.tabla_mpF, self.ver_mp, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_mpf_vitrina)
+        self.vmc = Vitrina(self, self.tabla_mpF, self.ver_mp, funcion2=None, funcion3=None, tipo_vitrina = "Modelo7", height=df.alto_v_busqueda_mpf_vitrina, width=df.ancho_v_busqueda_mpf_vitrina)
       
 class Administrados(funcionalidades_ospa):
     """"""
