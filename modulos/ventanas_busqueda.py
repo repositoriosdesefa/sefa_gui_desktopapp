@@ -677,27 +677,6 @@ class Extremos(funcionalidades_ospa):
         filtro=""
         if len(self.DEPART)>0 :
             filtro="DEPARTAMENTO=="+"'"+self.DEPART+"' "
-    
-        #if len(self.CA)>0 :
-        #    if len(filtro)>0 :
-        #        filtro = filtro+" & "
-        #    else:
-        #        filtro
-        #    filtro=filtro+"`COMPONEN. AMBIE.`=="+"'"+self.CA+"' "
-
-        #if len(self.ACTIVIDAD)>0 :
-        #    if len(filtro)>0 :
-        #        filtro = filtro+" & "
-        #    else:
-        #        filtro
-        #    filtro=filtro+"ACTIVIDAD=="+"'"+self.ACTIVIDAD+"' "
-
-        #if len(self.DEPART)>0 :
-        #    if len(filtro)>0 :
-        #        filtro = filtro+" & "
-        #    else:
-        #        filtro
-        #    filtro=filtro+"DEPARTAMENTO=="+"'"+self.DEPART+"' "
 
         if len(self.PROVI)>0 :
             if len(filtro)>0 :
@@ -712,27 +691,6 @@ class Extremos(funcionalidades_ospa):
             else:
                 filtro
             filtro=filtro+"DISTRITO=="+"'"+self.DISTR+"' "
-
-        #if len(self.TIPOUBI)>0 :
-        #    if len(filtro)>0 :
-        #        filtro = filtro+" & "
-        #    else:
-        #        filtro
-        #    filtro=filtro+"`TIPO DE UBICACION`=="+"'"+self.TIPOUBI+"' "
-
-        #if len(self.OCURRE)>0 :
-        #    if len(filtro)>0 :
-        #        filtro = filtro+" & "
-        #    else:
-        #        filtro
-        #    filtro=filtro+"OCURRENCIA=="+"'"+self.OCURRE+"' "
-
-        if len(self.codigo)>0 :
-            if len(filtro)>0 :
-                filtro = filtro+" & "
-            else:
-                filtro
-            filtro=filtro+"`CODIGO EXTREMO`=="+"'"+self.codigo+"' "
         
         self.mostrarDatosep(filtro)       
 
@@ -742,14 +700,14 @@ class Extremos(funcionalidades_ospa):
 
         self.filtro0 = self.tabla_renombrada
         
-        #if len(self.EFA)>0: # Filtro por palabra clave
-        #    self.vep.eliminar_vitrina2()
-        #    self.filtro0 = self.filtro0[self.filtro0['EFA'].str.contains(self.EFA)]
-        #    self.Complementoep(self.filtro0)
-
         if len(self.CLAVE)>0: # Filtro por palabra clave
             self.vep.eliminar_vitrina2()
             self.filtro0 = self.filtro0[self.filtro0['DESCRIPCION'].str.contains(self.CLAVE)]
+            self.Complementoep(self.filtro0)
+
+        if len(self.codigo)>0: # Filtro por palabra clave
+            self.vep.eliminar_vitrina2()
+            self.filtro0 = self.filtro0[self.filtro0['CODIGO EXTREMO'].str.contains(self.codigo)]
             self.Complementoep(self.filtro0)
   
         if len(filtro)>0:
@@ -971,7 +929,7 @@ class Macroproblemas(funcionalidades_ospa):
         self.frame_vitrina_mp = Cuadro(self)
 
         # Creando vitrina
-        self.vmc = Vitrina(self, self.tabla_mpF, self.ver_mp, funcion2=None, funcion3=None, tipo_vitrina = "Modelo6", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_mp_vitrina)
+        self.vmc = Vitrina(self, self.tabla_mpF, self.ver_mp, funcion2=None, funcion3=None, tipo_vitrina = "Modelo7", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_mp_vitrina)
 
         # Franja inferior
         self.mc3 = Cuadro(self)
@@ -999,15 +957,8 @@ class Macroproblemas(funcionalidades_ospa):
         # Filtrando datos por palabras exactas
 
         filtro=""
-        if len(self.CODIGO)>0 :
-            filtro="`COD. MACROPROBLEMA`=="+"'"+self.CODIGO+"' "
-
         if len(self.ESTADO)>0 :
-            if len(filtro)>0 :
-                filtro = filtro+" & "
-            else:
-                filtro
-            filtro=filtro+"ESTADO=="+"'"+self.ESTADO+"' "
+            filtro="ESTADO=="+"'"+self.ESTADO+"' "
         
         self.mostrarDatosmc(filtro)       
 
@@ -1020,6 +971,11 @@ class Macroproblemas(funcionalidades_ospa):
         if len(self.NOMBRE)>0: # Filtro por palabra clave
             self.vmc.eliminar_vitrina2()
             self.filtro0 = self.filtro0[self.filtro0['NOMBRE PROBLEMA'].str.contains(self.NOMBRE)]
+            self.Complementomc(self.filtro0)
+
+        if len(self.CODIGO)>0: # Filtro por palabra clave
+            self.vmc.eliminar_vitrina2()
+            self.filtro0 = self.filtro0[self.filtro0['COD. MACROPROBLEMA'].str.contains(self.CODIGO)]
             self.Complementomc(self.filtro0)
 
         if len(self.DESCRIP)>0: # Filtro por palabra clave
@@ -1052,7 +1008,7 @@ class Macroproblemas(funcionalidades_ospa):
         if len(tabla_filtro3.index) > 0:
             self.frame_vitrina_mp.eliminar_cuadro()
             self.frame_vitrina_mp = Cuadro(self)
-            self.vmc = Vitrina(self, tabla_filtro3, self.ver_mp, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_mp_vitrina)
+            self.vmc = Vitrina(self, tabla_filtro3, self.ver_mp, funcion2=None, funcion3=None, tipo_vitrina = "Modelo7", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_mp_vitrina)
             
         else:
             self.frame_vitrina_mp.eliminar_cuadro()
@@ -1074,7 +1030,7 @@ class Macroproblemas(funcionalidades_ospa):
         self.mc2.agregar_rejilla(self.rejilla_mp2)
         self.frame_vitrina_mp = Cuadro(self)
         # Creando vitrina
-        self.vmc = Vitrina(self, self.tabla_mpF, self.ver_mp, funcion2=None, funcion3=None, tipo_vitrina = "Modelo5", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_mp_vitrina)
+        self.vmc = Vitrina(self, self.tabla_mpF, self.ver_mp, funcion2=None, funcion3=None, tipo_vitrina = "Modelo7", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_mp_vitrina)
         
     def volver_anterior(self):
         """"""

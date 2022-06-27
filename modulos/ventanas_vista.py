@@ -772,21 +772,17 @@ class Problemas_vista(funcionalidades_ospa):
 
         # Tablas para vitrina
         # 0. Tablas de código de objeto (tabla de problemas)
-        tabla_de_pr_cod = Base_de_datos(df.id_b_problemas, 'PROBLEMA').generar_dataframe()
-        self.tabla_de_pr_cod = tabla_de_pr_cod
+        self.tabla_de_pr_cod = Base_de_datos(df.id_b_problemas, 'PROBLEMA').generar_dataframe()
         # II.1 Lista de DR
-        tabla_de_dr_completa = Base_de_datos(df.id_b_docs, 'DOC_RECIBIDOS').generar_dataframe()
-        tabla_de_dr_resumen = tabla_de_dr_completa.drop(['VIA_RECEPCION', 'HT_ENTRANTE', 'TIPO_REMITENTE', 'CATEGORIA_REMITENTE',
+        self.tabla_de_dr = Base_de_datos(df.id_b_docs, 'DOC_RECIBIDOS').generar_dataframe().drop(['VIA_RECEPCION', 'HT_ENTRANTE', 'TIPO_REMITENTE', 'CATEGORIA_REMITENTE',
                                             'F_ING_OEFA', 'TIPO_DOC', 'ESPECIALISTA_1', 'ESPECIALISTA_2',
                                             'ACCION_1', 'F_ASIGNACION_1', 'F_ASIGNACION_2', 'TIPO_RESPUESTA', 'RESPUESTA',
                                             'F_EJECUCION_1', 'F_EJECUCION_2',
                                             'FECHA_ULTIMO_MOV', 'USUARIO'], axis=1)
-        self.tabla_de_dr =  tabla_de_dr_resumen
-        tabla_relacion_dr_pr = Base_de_datos(df.id_b_parametros, 'RELACION_DR-PR').generar_dataframe()
-        self.tabla_relacion_dr_pr = tabla_relacion_dr_pr
+     
+        self.tabla_relacion_dr_pr = Base_de_datos(df.id_b_parametros, 'RELACION_DR-PR').generar_dataframe()
         # II.2 Lista de DE
-        tabla_de_de_completa = Base_de_datos(df.id_b_docs, 'DOC_EMITIDOS').generar_dataframe()
-        tabla_de_de_resumen =  tabla_de_de_completa.drop(['HT_SALIDA', 'FECHA_PROYECTO_FINAL', 
+        self.tabla_de_de = Base_de_datos(df.id_b_docs, 'DOC_EMITIDOS').generar_dataframe().drop(['HT_SALIDA', 'FECHA_PROYECTO_FINAL', 
                                                     'FECHA_FIRMA', 'TIPO_DOC', 'CATEGORIA_DESTINATARIO',
                                                     'MARCO_PEDIDO', 'FECHA_ULTIMO_MOV', 'TIPO_DESTINATARIO',
                                                     'PLAZO', 'ESTADO_DOCE', 'ESPECIALISTA', 'USUARIO',
@@ -796,27 +792,19 @@ class Problemas_vista(funcionalidades_ospa):
                                                     'FECHA_FIRMA_OCI', 'FECHA_NOTIFICACION_OCI', 'PLAZO_REIT','FECHA_MAX_REIT',
                                                     'SEGUIMIENTO_REIT','FECHA_MAX','SEGUIMIENTO_DOC'], axis=1)
 
-        self.tabla_de_de =  tabla_de_de_resumen
-        tabla_relacion_de_pr = Base_de_datos(df.id_b_parametros, 'RELACION_DE-PR').generar_dataframe()
-        self.tabla_relacion_de_pr = tabla_relacion_de_pr
+        self.tabla_relacion_de_pr = Base_de_datos(df.id_b_parametros, 'RELACION_DE-PR').generar_dataframe()
         # II.3 Lista de MP
-        tabla_de_mp_completa = Base_de_datos(df.id_b_problemas, 'MACROPROBLEMA').generar_dataframe()
-        tabla_de_mp_resumen = tabla_de_mp_completa.drop(['FECHA_ULTIMO_MOV', 'USUARIO', 'COMPONENTE', 'AGENTE'], axis=1)
-        self.tabla_de_mp = tabla_de_mp_resumen
-        tabla_relacion_mp_pr = Base_de_datos(df.id_b_parametros, 'RELACION_MP-PR').generar_dataframe()
-        self.tabla_relacion_mp_pr = tabla_relacion_mp_pr
+        self.tabla_de_mp = Base_de_datos(df.id_b_problemas, 'MACROPROBLEMA').generar_dataframe().drop(['FECHA_ULTIMO_MOV', 'USUARIO', 'COMPONENTE', 'AGENTE'], axis=1)
+        self.tabla_relacion_mp_pr = Base_de_datos(df.id_b_parametros, 'RELACION_MP-PR').generar_dataframe()
         # II.3 Lista de EP
-        tabla_de_ep_completa = Base_de_datos(df.id_b_problemas, 'EXT_PROBLEMA').generar_dataframe()
-        tabla_de_ep2_resumen = tabla_de_ep_completa.drop(['OCURRENCIA', 'EXTENSION', 'TIPO DE AFECTACION',
+        self.tabla_de_ep2_resumen = Base_de_datos(df.id_b_problemas, 'EXT_PROBLEMA').generar_dataframe().drop(['OCURRENCIA', 'EXTENSION', 'TIPO DE AFECTACION',
                                                 'TIPO DE UBICACION','TIPO_EFA', 'CATEGORIA_EFA', 
                                                 'GEO_ESTE', 'GEO_NORTE',
                                                 'CARACTERISTICA 1', 'CARACTERISTICA 2', 'TIPO CAUSA', 'COD_ADMINISTRADO',
                                                 'PRIORIDAD', 'PUNTAJE',  'USUARIO', 'ADMINISTRADO', 'TIPO_ADMINISTRADO',
-                                                'CODIGO SINADA', 'ACTIVIDAD', 'FECHA_ULTIMO_MOV', 'USUARIO'], axis=1)
+                                                'CODIGO SINADA', 'FECHA_ULTIMO_MOV', 'USUARIO'], axis=1).rename(columns={'COD_EP':'CODIGO EXTREMO'})
 
-        self.tabla_de_ep2_resumen = tabla_de_ep2_resumen
-        tabla_relacion_ep_pr = Base_de_datos(df.id_b_parametros, 'RELACION_EP-PR').generar_dataframe()
-        self.tabla_relacion_ep_pr = tabla_relacion_ep_pr
+        self.tabla_relacion_ep_pr = Base_de_datos(df.id_b_parametros, 'RELACION_EP-PR').generar_dataframe()
 
         # III. Títulos e imagen
         # III.1 Frame de Título
@@ -924,7 +912,7 @@ class Problemas_vista(funcionalidades_ospa):
                                                 self.cod_usuario_pr, self.tabla_de_pr_cod, 
                                                 self.tabla_de_ep2_resumen, self.tabla_relacion_ep_pr, 
                                                 "ID_PR", "ID_EP", "COD_PR", 
-                                                self.ver_ep2, self.eliminar_ep_y_actualizar)
+                                                self.ver_ep2, self.eliminar_ep_y_actualizar, self.ver_ep2)
         
         # III.5 Frame de vitrina 2
         self.frame_vitrina_2 = Cuadro(self.frame_principal)
@@ -935,7 +923,7 @@ class Problemas_vista(funcionalidades_ospa):
                                                 self.cod_usuario_pr, self.tabla_de_pr_cod, 
                                                 self.tabla_de_mp, self.tabla_relacion_mp_pr, 
                                                 "ID_PR", "ID_MP", "COD_PR", 
-                                                self.ver_mp, self.eliminar_mp_y_actualizar)
+                                                self.ver_mp, self.eliminar_mp_y_actualizar, self.ver_mp)
         
         # III.6 Frame de vitrina 3
         self.frame_vitrina_3 = Cuadro(self.frame_principal)
@@ -946,7 +934,7 @@ class Problemas_vista(funcionalidades_ospa):
                                                 self.cod_usuario_pr, self.tabla_de_pr_cod, 
                                                 self.tabla_de_de, self.tabla_relacion_de_pr, 
                                                 "ID_PR", "ID_DE", "COD_PR", 
-                                                self.ver_de, self.eliminar_de_y_actualizar)
+                                                self.ver_de, self.eliminar_de_y_actualizar, self.ver_de)
         
         # III.5 Frame de vitrina 3
         self.frame_vitrina_4 = Cuadro(self.frame_principal)
@@ -957,7 +945,7 @@ class Problemas_vista(funcionalidades_ospa):
                                                 self.cod_usuario_pr, self.tabla_de_pr_cod, 
                                                 self.tabla_de_dr, self.tabla_relacion_dr_pr, 
                                                 "ID_PR", "ID_DR", "COD_PR", 
-                                                self.ver_dr, self.eliminar_dr_y_actualizar)
+                                                self.ver_dr, self.eliminar_dr_y_actualizar, self.ver_dr)
 
 
     #----------------------------------------------------------------------

@@ -270,6 +270,11 @@ class funcionalidades_ospa(Ventana):
 
                     self.vitrina = Vitrina(self.frame_principal, tabla_vitrina, funcion_ver, funcion_eliminar, funcion3, tipo_vitrina = 'Modelo5',
                                              height=df.alto_v_vista_vitrina, width=df.ancho_v_vista_vitrinapr)
+
+                elif texto_titulo == 'Lista de extremos asociados':
+
+                    self.vitrina = Vitrina(self.frame_principal, tabla_vitrina, funcion_ver, funcion_eliminar, funcion3, tipo_vitrina = 'Modelo6',
+                                             height=df.alto_v_vista_vitrina, width=df.ancho_v_vista_vitrinaep)
                 else:
                     self.vitrina = Vitrina(self.frame_principal, tabla_vitrina, funcion_ver, funcion_eliminar, funcion3, tipo_vitrina = 'Modelo1',
                                              height=df.alto_v_vista_vitrina, width=df.ancho_v_vista_vitrina)
