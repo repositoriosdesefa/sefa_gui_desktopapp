@@ -1446,8 +1446,22 @@ class Vitrina(Frame):
         elif self.tipo_vitrina == "Modelo5":
             self.height_ce=25
             self.width_columnas = 20
-            self.formatoboton_c = formato.color_negro
-            self.font_c = formato.tipo_de_letra_tabla
+            self.formatoboton_c = formato.color_blanco
+            self.font_c = formato.tipo_de_letra_tablaep
+            self.width_ol = 18
+            self.boton_ver = 'Detalle'
+            self.height_tabla = 2
+            self.height_botonver= 9
+            self.width_botonver = 2
+            self.boton_elimiar = 'Eliminar'
+            self.height_botoneliminar= 2
+            self.width_botoneliminar = 9
+
+        elif self.tipo_vitrina == "Modelo6":
+            self.height_ce=27
+            self.width_columnas = 25
+            self.formatoboton_c = formato.color_blanco
+            self.font_c = formato.tipo_de_letra_tablaep
             self.width_ol = 18
             self.boton_ver = 'Detalle'
             self.height_tabla = 2
@@ -1703,6 +1717,14 @@ class Vitrina(Frame):
                 boton_eliminar.bind("<Button-1>",lambda e,argumento=argumento:self.funcion2(argumento))
                 self.Efecto_de_boton(boton_eliminar)
 
+            elif self.tipo_vitrina == "Modelo6":
+                boton_ver.grid(row=0, column=len(lista_de_valores)+1)
+                boton_ver.bind("<Button-1>", lambda e, argumento=argumento:self.funcion1(argumento))
+                self.Efecto_de_boton(boton_ver)
+
+                boton_eliminar.grid(row=0, column=len(lista_de_valores)+2)
+                boton_eliminar.bind("<Button-1>",lambda e,argumento=argumento:self.funcion2(argumento))
+                self.Efecto_de_boton(boton_eliminar)
             else:
                 boton_ver.grid(row=0, column=len(lista_de_valores)+1)
                 boton_ver.bind("<Button-1>",lambda e,argumento=argumento:self.funcion1(argumento))
