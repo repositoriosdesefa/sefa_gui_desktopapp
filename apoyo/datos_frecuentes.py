@@ -64,6 +64,7 @@ ancho_v_busqueda_peq1_vitrina = 1040
 ancho_v_busqueda_pf_vitrina = 900
 ancho_v_busqueda_mp_vitrina = 800
 ancho_v_busqueda_mpf_vitrina = 800
+alto_v_busqueda_mpf_vitrina = 245
 alto_v_busqueda_vitrina = 240
 ancho_v_busqueda_prei_vitrina = 1065
 ancho_v_busqueda_peq2_vitrina = 1180
