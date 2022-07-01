@@ -809,7 +809,7 @@ class Problemas_vista(funcionalidades_ospa):
         # III. Títulos e imagen
         # III.1 Frame de Título
         titulos = Cuadro(self.frame_principal)
-        titulos.agregar_franja_superior_ospa('Registro de información del problema', 
+        titulos.agregar_franja_superior_ospa('Registro de información del problema ambiental', 
                                             self.inicio_app, self.cerrar_sesion)
         # III.2 Frame de rejillas
         self.frame_rejilla = Cuadro(self.frame_principal)
