@@ -639,7 +639,7 @@ class Extremos(funcionalidades_ospa):
             ('B', 5, 5, 'Limpiar', self.limpiar_ep),
             ('B', 5, 6, 'Actualizar', self.actualizar_ep),
             ('B', 5, 7, 'Volver', self.volver),
-            ('B', 5, 9, 'Crear extremo', self.nuevo_ep)
+            ('B', 5, 9, 'Crear problema', self.nuevo_ep)
         )
         
         # Agregando rejilla de botones a la ventana

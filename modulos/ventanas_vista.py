@@ -257,7 +257,7 @@ class Doc_recibidos_vista(funcionalidades_ospa):
                                             self.cod_usuario_dr, self.tabla_de_dr_cod, 
                                             self.tabla_de_de, self.tabla_relacion_dr_de, 
                                             "ID_DR", "ID_DE", "COD_DR", 
-                                            self.ver_de, self.eliminar_de_y_actualizar)
+                                            self.ver_de, self.eliminar_de_y_actualizar, self.ver_de)
 
         # III.5 Frame de vitrina 2
         self.frame_vitrina_2 = Cuadro(self.frame_principal)
@@ -268,7 +268,7 @@ class Doc_recibidos_vista(funcionalidades_ospa):
                                             self.cod_usuario_dr, self.tabla_de_dr_cod, 
                                             self.tabla_de_ep, self.tabla_relacion_dr_pr, 
                                             "ID_DR", "ID_PR", "COD_DR", 
-                                            self.ver_ep, self.eliminar_ep_y_actualizar)
+                                            self.ver_ep, self.eliminar_ep_y_actualizar, self.ver_ep)
 
     #----------------------------------------------------------------------
     def guardar_y_actualizar_dr(self):
