@@ -794,13 +794,13 @@ class Problemas_vista(funcionalidades_ospa):
 
         self.tabla_relacion_de_pr = Base_de_datos(df.id_b_parametros, 'RELACION_DE-PR').generar_dataframe()
         # II.3 Lista de MP
-        self.tabla_de_mp = Base_de_datos(df.id_b_problemas, 'MACROPROBLEMA').generar_dataframe().drop(['FECHA_ULTIMO_MOV', 'USUARIO', 'COMPONENTE', 'AGENTE'], axis=1)
+        self.tabla_de_mp = Base_de_datos(df.id_b_problemas, 'MACROPROBLEMA').generar_dataframe().drop(['FECHA_ULTIMO_MOV', 'USUARIO', 'OBSERVACIONES','AVANCE'], axis=1).rename(columns={'COD_MP':'CODIGO MACROPR.', 'NOMBRE_DEL_PROBLEMA':'NOMBRE PROBLEMA'})
         self.tabla_relacion_mp_pr = Base_de_datos(df.id_b_parametros, 'RELACION_MP-PR').generar_dataframe()
         # II.3 Lista de EP
         self.tabla_de_ep2_resumen = Base_de_datos(df.id_b_problemas, 'EXT_PROBLEMA').generar_dataframe().drop(['OCURRENCIA', 'EXTENSION', 'TIPO DE AFECTACION',
                                                 'TIPO DE UBICACION','TIPO_EFA', 'CATEGORIA_EFA', 
                                                 'GEO_ESTE', 'GEO_NORTE',
-                                                'CARACTERISTICA 1', 'CARACTERISTICA 2', 'TIPO CAUSA', 'COD_ADMINISTRADO',
+                                                'CARACTERISTICA 1', 'CARACTERISTICA 2', 'TIPO CAUSA', 'RUC_DNI',
                                                 'PRIORIDAD', 'PUNTAJE',  'USUARIO', 'ADMINISTRADO', 'TIPO_ADMINISTRADO',
                                                 'CODIGO SINADA', 'FECHA_ULTIMO_MOV', 'USUARIO'], axis=1).rename(columns={'COD_EP':'CODIGO EXTREMO'})
 
@@ -1075,8 +1075,8 @@ class Problemas_vista(funcionalidades_ospa):
 
         base_relacion_ep_pr =  Base_de_datos(df.id_b_parametros, 'RELACION_EP-PR')
         base_relacion_ep_pr_hist =  Base_de_datos(df.id_b_parametros, 'HISTORIAL_RELACION_EP-PR')
-        tabla_de_pr_cod = Base_de_datos(df.id_b_problemas, 'PROBLEMA').generar_dataframe()
-        self.tabla_de_pr_cod = Base_de_datos(df.id_b_problemas, 'PROBLEMA').generar_dataframe()
+        tabla_de_pr_cod = Base_de_datos(df.id_b_problemas, 'EXT_PROBLEMA').generar_dataframe()
+        self.tabla_de_pr_cod = Base_de_datos(df.id_b_problemas, 'PR_P').generar_dataframe()
 
         # Se elimina el DE
         self.eliminar_objeto(self.cod_usuario_pr, "COD_PR", id_objeto, "COD_EP",
@@ -1173,7 +1173,7 @@ class Extremo_vinculados(funcionalidades_ospa):
                 ('L', 7, 0, 'Extensión'),
                 ('CX', 7, 1, df.extension),
 
-                ('L', 7, 2, 'df.ocurrencia'),
+                ('L', 7, 2, 'Ocurrencia'),
                 ('CX', 7, 3, df.ocurrencia),
 
                 # Sección 4: Descripción de problema
@@ -1204,31 +1204,39 @@ class Extremo_vinculados(funcionalidades_ospa):
                 ('CXDEP3', 13, 1, 44, df.tabla_parametros, "Doble",
                  'ACTIVIDAD', 'Característica 1', 'CARACTERÍSTICA 1', 'Característica 2', 'CARACTERÍSTICA 2'),
 
-                ('L', 14, 0, 'RUC/DNI'),
-                ('EL', 14, 1, 47, 1),
+                ('L', 14, 2, 'RUC/DNI'),
+                ('EL', 14, 3, 47, 1),
 
                 # Sección 5: 
                 ('T2', 15, 0, 'EFA'),
                 ('L', 16, 0, 'Tipo de EFA'),
                 ('CXDEP3', 16, 1, 44, df.tabla_directorio, "Doble",
                 'TIPO_OFICINA', 'Categoría EFA', 'EFA_OSPA', 'EFA', 'Entidad u oficina'),
+
+                # Sección 5:
+                ('T2', 18, 0, 'Calculadora'),
+                ('L', 19, 0, 'Puntaje'),
+                ('EL', 19, 1, 47, 1),
+
+                ('L', 19, 2, '¿Es prioritario?'),
+                ('CX', 19, 3, df.prioridad),
             
                 # Sección 6: Datos
-                ('T2', 18, 0, 'Datos'),
+                ('T2', 20, 0, 'Datos'),
 
-                ('L', 19, 0, 'Creado por:'),
-                ('L', 19, 1, str(creador)),
+                ('L', 21, 0, 'Creado por:'),
+                ('L', 21, 1, str(creador)),
 
-                ('L', 19, 2, 'Actualizado por:'),
-                ('L', 19, 3, str(ultimo_nombre)),
+                ('L', 21, 2, 'Actualizado por:'),
+                ('L', 21, 3, str(ultimo_nombre)),
 
-                ('L', 20, 0, 'Fecha creación:'),
-                ('L', 20, 1, str(fecha_creacion)),
+                ('L', 22, 0, 'Fecha creación:'),
+                ('L', 22, 1, str(fecha_creacion)),
 
-                ('L', 20, 2, 'Fecha actualización:'),
-                ('L', 20, 3, str(fecha_ultimo)),
+                ('L', 22, 2, 'Fecha actualización:'),
+                ('L', 22, 3, str(fecha_ultimo)),
 
-                ('T2', 21, 0, '')
+                ('T2', 23, 0, '')
 
             ]
             # Se inserta rejilla con datos
@@ -1264,7 +1272,7 @@ class Extremo_vinculados(funcionalidades_ospa):
                 ('L', 7, 0, 'Extensión'),
                 ('CX', 7, 1, df.extension),
 
-                ('L', 7, 2, 'df.ocurrencia'),
+                ('L', 7, 2, 'Ocurrencia'),
                 ('CX', 7, 3, df.ocurrencia),
 
                 # Sección 4: Descripción de problema
@@ -1295,8 +1303,8 @@ class Extremo_vinculados(funcionalidades_ospa):
                 ('CXDEP3', 13, 1, 44, df.tabla_parametros, "Doble",
                  'ACTIVIDAD', 'Característica 1', 'CARACTERÍSTICA 1', 'Característica 2', 'CARACTERÍSTICA 2'),
 
-                ('L', 14, 0, 'RUC/DNI'),
-                ('EL', 14, 1, 47, 1),
+                ('L', 14, 2, 'RUC/DNI'),
+                ('EL', 14, 3, 47, 1),
 
                 # Sección 5: EFA
                 ('T2', 15, 0, 'EFA'),
@@ -1304,7 +1312,15 @@ class Extremo_vinculados(funcionalidades_ospa):
                 ('CXDEP3', 16, 1, 44, df.tabla_directorio, "Doble",
                 'TIPO_OFICINA', 'Categoría EFA', 'EFA_OSPA', 'EFA', 'Entidad u oficina'),
 
-                ('T2', 17, 0, '')
+                # Sección 5:
+                ('T2', 18, 0, 'Calculadora'),
+                ('L', 19, 0, 'Puntaje'),
+                ('EL', 19, 1, 47, 1),
+
+                ('L', 19, 2, '¿Es prioritario?'),
+                ('CX', 19, 3, df.prioridad),
+
+                ('T2', 20, 0, '')
             
                 
             ]
@@ -1314,6 +1330,8 @@ class Extremo_vinculados(funcionalidades_ospa):
         # III.3 Frame de botón de rejilla
         f_boton = Cuadro(self.frame_principal)
         f_boton.agregar_button(0, 1, 'Guardar', self.guardar_y_actualizar_ep)
+        f_boton_volver = Cuadro(self.frame_principal)
+        f_boton_volver.agregar_button(0, 3, 'Volver', self.volver_ep)
         f_auxiliar = Cuadro(self.frame_principal)
         f_auxiliar.agregar_titulo_2(1, 0, '')
 
@@ -1325,7 +1343,7 @@ class Extremo_vinculados(funcionalidades_ospa):
         b_ep = Base_de_datos(df.id_b_problemas, 'EXT_PROBLEMA')
         b_ep_cod = Base_de_datos(df.id_b_problemas, 'EXT_P')
         b_ep_hist = Base_de_datos(df.id_b_problemas, 'HISTORIAL_EP')
-        self.tabla_de_ep_cod = Base_de_datos(df.id_b_problemas, 'PR_P').generar_dataframe()
+        self.tabla_de_ep_cod = Base_de_datos(df.id_b_problemas, 'EXT_PROBLEMA').generar_dataframe()
 
         # Agregamos el objeto
         self.asociar_ep_pr(self.ver_ep2, self.frame_rejilla,
@@ -1423,6 +1441,30 @@ class Extremo_vinculados(funcionalidades_ospa):
             messagebox.showinfo("¡Excelente!", "Se ha ingresado un nuevo registro")
             funcion_ver(cod_objeto)
 
+    #----------------------------------------------------------------------
+    def volver_ep(self):
+
+
+        self.desaparecer()
+        id_usuario = self.id_objeto_ingresado
+        self.tabla_de_ep_cod = Base_de_datos(df.id_b_problemas, 'EXT_PROBLEMA').generar_dataframe()
+        cod_objeto = "COD_EP"
+        tabla_codigo_objeto_filtrada = self.tabla_de_ep_cod[self.tabla_de_ep_cod[cod_objeto]==id_usuario]
+        id_interno_objeto_clase = tabla_codigo_objeto_filtrada.iloc[0,0]
+
+        # BUSCAR RELACIONES
+        base_relacion_ep_pr =  Base_de_datos(df.id_b_parametros, 'RELACION_EP-PR')
+        tabla_relaciones = base_relacion_ep_pr.generar_dataframe()
+        tabla_codigo_relaciones_filtrada = tabla_relaciones[tabla_relaciones['ID_EP']==id_interno_objeto_clase]
+        id_interno_objeto_clase2 = tabla_codigo_relaciones_filtrada.iloc[0,2]
+
+        self.tabla_de_ep_cod2 = Base_de_datos(df.id_b_problemas, 'PROBLEMA').generar_dataframe()
+        cod_objeto2 = "ID_PR"
+        tabla_codigo_objeto_filtrada3 = self.tabla_de_ep_cod2[self.tabla_de_ep_cod2[cod_objeto2]==id_interno_objeto_clase2]
+        id_interno_objeto_clase3 = tabla_codigo_objeto_filtrada3.iloc[0,1]
+
+        self.ver_ep(id_interno_objeto_clase3)
+        
 class Macroproblemas_vista(funcionalidades_ospa):
     """"""
     
@@ -1565,8 +1607,12 @@ class Macroproblemas_vista(funcionalidades_ospa):
             self.frame_rejilla.agregar_rejilla(rejilla_mp_nuevo)
 
         # III.3 Frame de botón de rejilla
+        
         f_boton = Cuadro(self.frame_principal)
         f_boton.agregar_button(0, 1, 'Guardar', self.guardar_y_actualizar_mp)
+
+        f2_boton = Cuadro(self.frame_principal)
+        f2_boton.agregar_button(2, 3, 'Actualizar', self.guardar_y_actualizar_mp)
         
         # III.4 Frame de vitrina 1
         self.frame_vitrina_1 = Cuadro(self.frame_principal)

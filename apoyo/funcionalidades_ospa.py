@@ -273,8 +273,19 @@ class funcionalidades_ospa(Ventana):
 
                 elif texto_titulo == 'Lista de extremos asociados':
 
-                    self.vitrina = Vitrina(self.frame_principal, tabla_vitrina, funcion_ver, funcion_eliminar, funcion3, tipo_vitrina = 'Modelo6',
+                    self.vitrina = Vitrina(self.frame_principal, tabla_vitrina, funcion_ver, funcion_eliminar, funcion3, tipo_vitrina = 'Modelo5',
                                              height=df.alto_v_vista_vitrina, width=df.ancho_v_vista_vitrinaep)
+
+                elif texto_titulo == 'Macroproblemas asociados':
+
+                    self.vitrina = Vitrina(self.frame_principal, tabla_vitrina, funcion_ver, funcion_eliminar, funcion3, tipo_vitrina = 'Modelo5',
+                                             height=df.alto_v_vista_vitrina, width=df.ancho_v_vista_vitrinaep)
+
+                elif texto_titulo == 'Documentos emitidos asociados':
+
+                    self.vitrina = Vitrina(self.frame_principal, tabla_vitrina, funcion_ver, funcion_eliminar, funcion3, tipo_vitrina = 'Modelo5',
+                                             height=df.alto_v_vista_vitrina, width=df.ancho_v_vista_vitrinaep)
+
                 else:
                     self.vitrina = Vitrina(self.frame_principal, tabla_vitrina, funcion_ver, funcion_eliminar, funcion3, tipo_vitrina = 'Modelo1',
                                              height=df.alto_v_vista_vitrina, width=df.ancho_v_vista_vitrina)
@@ -466,7 +477,7 @@ class funcionalidades_ospa(Ventana):
         lb1 = b_ep.listar_datos_de_fila(id_usuario)
         lista_para_insertar = [lb1[2],lb1[3], lb1[4], lb1[5], lb1[6], lb1[7], lb1[8],
                                lb1[9], lb1[10], lb1[11], lb1[12], lb1[13], lb1[14],
-                               lb1[15], lb1[16], lb1[17], lb1[18], lb1[19], lb1[20]]
+                               lb1[15], lb1[16], lb1[17], lb1[18], lb1[19], lb1[20], lb1[21], lb1[22], lb1[23]]
 
         self.destruir()
         subframe = ventanas_vista.Extremo_vinculados(self, df.alto_v_vista, df.ancho_v_vista, texto_documento, True,
@@ -668,6 +679,7 @@ class funcionalidades_ospa(Ventana):
         self.destruir()
         texto_b_mp = "Búsqueda de Macroproblemas"
         SubFrame = ventanas_busqueda.Macroproblemas(self, df.alto_v_busqueda, df.ancho_v_busqueda, texto_b_mp, False)
+
 #----------------------------------------------------------------------
     def actualizar_pf(self):
 

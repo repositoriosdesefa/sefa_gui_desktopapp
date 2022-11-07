@@ -45,9 +45,9 @@ oficinas = [
 
 # I. Tamaño de las pantallas de vista
 ancho_v_vista = 1025
-alto_v_vista = 600
+alto_v_vista = 700
 ancho_v_vista_vitrina = 895
-alto_v_vista_vitrina = 120
+alto_v_vista_vitrina = 90
 # PARA PROBLEMAS AMBIENTALES
 ancho_v_vista_vitrinapr = 885
 # PARA EXTREMOS
@@ -111,6 +111,7 @@ ubicacion = list(set(tabla_parametros['UBICACION CALCULADORA']))
 ocurrencia = list(set(tabla_parametros['OCURRENCIA CALCULADORA']))
 tipo_afectacion = list(set(tabla_parametros['T_AFECTACION']))
 tipo_administrado = list(set(tabla_parametros['T_ADMINISTRADO']))
+prioridad = list(set(tabla_parametros['SI_NO']))
 estado_problemas = list(set(tabla_parametros['ESTADO_PROBLEMAS']))
 tipo_causa = list(set(tabla_parametros['T_CAUSA']))
 tipo_ingreso = list(set(tabla_parametros['T_INGRESO']))
