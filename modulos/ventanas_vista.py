@@ -734,7 +734,7 @@ class Doc_emitidos_vista(funcionalidades_ospa):
                                             self.cod_usuario_de, self.tabla_de_de_cod, 
                                             self.tabla_de_dr, self.tabla_relacion_dr_de, 
                                             "ID_DE", "ID_DR", "COD_DE", 
-                                            self.ver_dr, self.eliminar_dr_y_actualizar)
+                                            self.ver_dr, self.eliminar_dr_y_actualizar, self.ver_dr)
         
         # I.2 Ventana de documentos recibidos   
         self.frame_vitrina_2.eliminar_cuadro()                     

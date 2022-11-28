@@ -159,7 +159,6 @@ class Base_de_datos():
         tabla_usuario_objeto = tabla_objeto.loc[:, ['USUARIO', abrev_codigo_objeto]]
         tabla_usuario_objeto_filtrada = tabla_usuario_objeto[tabla_usuario_objeto[abrev_codigo_objeto]==codigo_objeto]
         cod_usuario = tabla_usuario_objeto_filtrada.iloc[0,0]
-
         usuario = self.obtener_nombre_usuario_a_partir_de_codigo(b_usuario, cod_usuario)
 
         # Obtener nombre de usuario
@@ -171,16 +170,17 @@ class Base_de_datos():
         # Obtención de código de usuario
         b_usuario = base_usuario
         codigo_usuario = cod_usuario
-
+        
         tabla_usuarios = b_usuario.generar_dataframe()
-        tabla_usuario = tabla_usuarios.loc[:, ['Usuario', 'Código de usuario']]
+        tabla_usuario = tabla_usuarios.loc[:, ['Código de usuario', 'Usuario']]
 
         # Filtrar tablas de usuario
         tabla_usuario_filtrada = tabla_usuario[tabla_usuario['Código de usuario']==codigo_usuario]
-        usuario = tabla_usuario_filtrada.iloc[0,0]
+
+        usuario = tabla_usuario_filtrada.iloc[0, 0]
 
         # Obtener nombre de usuario
-        return usuario
+        return print(usuario)#usuario
     
     #----------------------------------------------------------------------
     def obtener_valor_columna_con_codigo_unico(self, nombre_columna_con_codigo, cod_unico, nombre_columna_valor):
