@@ -209,7 +209,7 @@ class Base_de_datos():
         
         self.codigo = self.pestanna + "-" + str(self.hoy.year) + "-" + str(numero)
         self.datos_obligatorios = [self.codigo, str(tiempo), numero]
-        dato_unico = dato
+        dato_unico = str(numero) + "/" + dato
         
         # Sin datos adicionales
         if dato_adicional == None and dato_adicional_2 == None :

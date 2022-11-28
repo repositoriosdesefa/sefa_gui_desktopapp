@@ -399,11 +399,12 @@ class Doc_emitidos_vista(funcionalidades_ospa):
         self.tabla_de_de_cod = tabla_de_de_cod
         # II.1 Lista de DR
         tabla_de_dr_completa = Base_de_datos(df.id_b_docs, 'DOC_RECIBIDOS').generar_dataframe()
-        tabla_de_dr_resumen = tabla_de_dr_completa.drop(['VIA_RECEPCION', 'HT_ENTRANTE', 'TIPO_REMITENTE', 'CATEGORIA_REMITENTE',
+        tabla_de_dr_resumen = tabla_de_dr_completa.drop(['TIPO_REMITENTE', 'CATEGORIA_REMITENTE',
                                             'F_ING_OEFA', 'TIPO_DOC', 'ESPECIALISTA_1', 'ESPECIALISTA_2',
                                             'ACCION_1', 'F_ASIGNACION_1', 'F_ASIGNACION_2', 'TIPO_RESPUESTA', 'RESPUESTA',
                                             'F_EJECUCION_1', 'F_EJECUCION_2',
-                                            'FECHA_ULTIMO_MOV', 'USUARIO'], axis=1)
+                                            'FECHA_ULTIMO_MOV', 'USUARIO', 'APORTE_DOC', 'NUM_DOC'], axis=1).rename(columns={'COD_DR':'NUMERO DOC','F_ING_SEFA':'FECHA INGRESO SEFA','VIA_RECEPCION':'VIA RECEPCION'})
+                                            
         self.tabla_de_dr =  tabla_de_dr_resumen
         tabla_relacion_dr_de = Base_de_datos(df.id_b_parametros, 'RELACION_DOCS').generar_dataframe()
         self.tabla_relacion_dr_de = tabla_relacion_dr_de
@@ -646,7 +647,7 @@ class Doc_emitidos_vista(funcionalidades_ospa):
                                             self.cod_usuario_de, self.tabla_de_de_cod, 
                                             self.tabla_de_dr, self.tabla_relacion_dr_de, 
                                             "ID_DE", "ID_DR", "COD_DE", 
-                                            self.ver_de, self.eliminar_dr_y_actualizar)
+                                            self.ver_de, self.eliminar_dr_y_actualizar, self.ver_de)
         
         # III.5 Frame de vitrina 2
         self.frame_vitrina_2 = Cuadro(self.frame_principal)
@@ -657,7 +658,7 @@ class Doc_emitidos_vista(funcionalidades_ospa):
                                             self.cod_usuario_de, self.tabla_de_de_cod, 
                                             self.tabla_de_ep, self.tabla_relacion_de_pr, 
                                             "ID_DE", "ID_PR", "COD_DE", 
-                                            self.ver_ep, self.eliminar_ep_y_actualizar)
+                                            self.ver_ep, self.eliminar_ep_y_actualizar, self.ver_de)
 
    #----------------------------------------------------------------------
     def guardar_y_actualizar_de(self):

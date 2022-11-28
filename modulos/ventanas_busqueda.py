@@ -228,7 +228,7 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
             if valor_repetido != True:
             
                 # GUARDAR RELACION
-                b0 = Base_de_datos('1wDGtiCiT92K1lP62SQ0nBr_nuBQiHlJ17CPysdVMPM8', 'RELACION_DOCS')
+                b0 = Base_de_datos(df.id_b_parametros, 'RELACION_DOCS')
 
                 # Pestaña 1: Código Único
                 datos_insertar = [id_relacion_doc,self.IDDR_FINAL,id_interno_de,'ACTIVO',hora_de_modificacion]
@@ -515,7 +515,7 @@ class Doc_emitidos_busqueda(funcionalidades_ospa):
             if valor_repetido == False:
             
                 # GUARDAR RELACION
-                b0 = Base_de_datos('1wDGtiCiT92K1lP62SQ0nBr_nuBQiHlJ17CPysdVMPM8', 'RELACION_DOCS')
+                b0 = Base_de_datos(df.id_b_parametros, 'RELACION_DOCS')
 
                 # Pestaña 1: Código Único
                 datos_insertar = [id_relacion_doc,id_interno_dr, self.IDDE_FINAL,'ACTIVO',hora_de_modificacion]

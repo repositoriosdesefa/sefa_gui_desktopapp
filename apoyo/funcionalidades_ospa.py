@@ -151,7 +151,8 @@ class funcionalidades_ospa(Ventana):
                     cod_objeto_ingresado = "MP" + numero_mp
                     base_cod_objeto.agregar_codigo(cod_objeto_ingresado, ahora, usuario)
                 else:
-                    base_cod_objeto.agregar_nuevo_codigo(cod_objeto_ingresado, ahora, usuario)
+                    print(ahora)
+                    base_cod_objeto.agregar_codigo(cod_objeto_ingresado, ahora, usuario)
 
                 # Descargo el código único
                 lista_descargada_codigo = base_cod_objeto.listar_datos_de_fila(ahora) # Se trae la info
@@ -166,7 +167,7 @@ class funcionalidades_ospa(Ventana):
 
                 # Pestaña 3
                 hora_de_creacion = str(ahora) # De lo creado en la pestaña 1
-                lista_historial = lista_a_cargar + [hora_de_creacion] # Lo subido a la pestaña 2 + hora
+                lista_historial = lista_a_cargar #+ [hora_de_creacion] # Lo subido a la pestaña 2 + hora
                 base_objeto_hist.agregar_datos(lista_historial) # Se sube la info
 
                 # Actualización de base y confirmación de registro
@@ -287,8 +288,8 @@ class funcionalidades_ospa(Ventana):
                                              height=df.alto_v_vista_vitrina, width=df.ancho_v_vista_vitrinaep)
 
                 else:
-                    self.vitrina = Vitrina(self.frame_principal, tabla_vitrina, funcion_ver, funcion_eliminar, funcion3, tipo_vitrina = 'Modelo1',
-                                             height=df.alto_v_vista_vitrina, width=df.ancho_v_vista_vitrina)
+                    self.vitrina = Vitrina(self.frame_principal, tabla_vitrina, funcion_ver, funcion_eliminar, funcion3, tipo_vitrina = 'Modelo5',
+                                             height=df.alto_v_vista_vitrina, width=df.ancho_v_vista_vitrinaep)
                     
                 return self.vitrina
             else:
