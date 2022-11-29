@@ -30,7 +30,7 @@ class Doc_recibidos_busqueda(funcionalidades_ospa):
         self.tabla_inicial = b_dr_tabla
         self.tabla_renombrada = self.renombrar_encabezados(self.tabla_inicial, tipo_base = 'dr')
         self.tabla_seleccionada = self.seleccionar_encabezados(self.tabla_renombrada, tipo_base = 'dr')
-        self.tabla_drF = self.tabla_seleccionada.head(100)
+        self.tabla_drF = self.tabla_seleccionada.head(0)
         
         # Información para las listas desplegables
         self.listatipodoc = sorted(list(set(self.tabla_renombrada['TIPO DOC'])))
@@ -296,7 +296,7 @@ class Doc_emitidos_busqueda(funcionalidades_ospa):
         self.tabla_inicial = b_de_tabla
         self.tabla_renombrada = self.renombrar_encabezados(self.tabla_inicial, tipo_base = 'de')
         self.tabla_seleccionada = self.seleccionar_encabezados(self.tabla_renombrada, tipo_base = 'de')
-        self.tabla_deF = self.tabla_seleccionada.head(100)
+        self.tabla_deF = self.tabla_seleccionada.head(0)
        
         # Información para las listas desplegables
         self.listacategoria = sorted(list(set(self.tabla_renombrada['CATEGORIA'])))
@@ -579,7 +579,7 @@ class Extremos(funcionalidades_ospa):
         b_ep_tabla = b_pr.generar_dataframe()
         self.tabla_renombrada = self.renombrar_encabezados(b_ep_tabla, tipo_base = 'ep')
         self.tabla_seleccionada = self.seleccionar_encabezados(self.tabla_renombrada, tipo_base = 'ep')
-        self.tabla_epF = self.tabla_seleccionada.head(100)
+        self.tabla_epF = self.tabla_seleccionada.head(0)
 
         # Listas para desplegables
         #self.listaAG = sorted(list(set(self.tabla_renombrada['AGENT. CONTAMI.'])))
@@ -885,7 +885,7 @@ class Macroproblemas(funcionalidades_ospa):
         b_mp_tabla = b_mp.generar_dataframe()
         self.tabla_renombrada = self.renombrar_encabezados(b_mp_tabla, tipo_base = 'mp')
         self.tabla_seleccionada = self.seleccionar_encabezados(self.tabla_renombrada, tipo_base = 'mp')
-        self.tabla_mpF = self.tabla_seleccionada.head(100)
+        self.tabla_mpF = self.tabla_seleccionada.head(0)
 
         # Listas para desplegables
         self.listaestado = list(set(self.tabla_renombrada['ESTADO']))
@@ -930,6 +930,7 @@ class Macroproblemas(funcionalidades_ospa):
         self.frame_vitrina_mp = Cuadro(self)
 
         # Creando vitrina
+        #self.frame_vitrina_mp.agregar_label(1, 2, '                  0 macroproblemas encontrados')
         self.vmc = Vitrina(self, self.tabla_mpF, self.ver_mp, funcion2=None, funcion3=None, tipo_vitrina = "Modelo7", height=df.alto_v_busqueda_vitrina, width=df.ancho_v_busqueda_mp_vitrina)
 
         # Franja inferior
@@ -966,6 +967,8 @@ class Macroproblemas(funcionalidades_ospa):
     #----------------------------------------------------------------------
 
     def mostrarDatosmc(self, filtro):
+
+
 
         self.filtro0 = self.tabla_renombrada
         

@@ -19,22 +19,23 @@ class inicio_app_OSPA(funcionalidades_ospa):
         c0 = Cuadro(self)
         c0.agregar_label(0, 1, ' ')
         c0.agregar_label(1, 1, ' ')
-        c0.agregar_imagen(2, 1,'Logo_OSPA.png', df.ancho_logo, df.alto_logo)
-        c0.agregar_label(3, 1, ' ')
+        c0.agregar_label(2, 1, ' ')
+        c0.agregar_imagen(3, 1,'Logo_OSPA.png', df.ancho_logo, df.alto_logo)
+        c0.agregar_label(4, 1, ' ')
         c1 = Cuadro(self)
-        c1.agregar_label(4, 1,' ')
-        c1.agregar_boton_grande(5, 1, "Macroproblemas", self.n_busqueda_mp, 20, color = "Modelo1")
+        c1.agregar_label(5, 1,' ')
         c1.agregar_label(6, 1,' ')
-        c1.agregar_boton_grande(7, 1, "Problemas", self.n_busqueda_ep, 20, color = "Modelo1")
-        c1.agregar_label(8, 1,' ')
-        c1.agregar_boton_grande(9, 1, "Documentos recibidos", self.n_busqueda_dr, 20, color = "Modelo1")
+        c1.agregar_label(7, 1,' ')
+        c1.agregar_boton_grande(8, 1, "Equipos", self.pantallaequipos, 20, color = "Modelo1")
+        c1.agregar_label(9, 1,' ')
         c1.agregar_label(10, 1,' ')
-        c1.agregar_boton_grande(11, 1, "Documentos emitidos", self.n_busqueda_de, 20, color = "Modelo1")
-        c1.agregar_label(12, 1, ' ')
-        c1.agregar_boton_grande(13, 1, "Equipos", self.pantallaequipos, 20, color = "Modelo1")
+        c1.agregar_label(11, 1,' ')
+        c1.agregar_boton_grande(12, 1, "Buscadores", self.pantallabuscadores, 20, color = "Modelo1")
+        c1.agregar_label(13, 1, ' ')
         c1.agregar_label(14, 1, ' ')
         c1.agregar_label(15, 1, ' ')
         c1.agregar_label(16, 1, ' ')
+        
      
         c2 = Cuadro(self)
         c2.agregar_franja_inferior('Franja_Inferior_OSPA.png', df.alto_franja_inferior_1, df.ancho_franja_inferior_1)
@@ -84,6 +85,13 @@ class inicio_app_OSPA(funcionalidades_ospa):
         self.desaparecer()
         # LargoxAncho
         SubFrame = Equipos(self, df.alto_ventana_secundaria, df.ancho_ventana_secundaria,  "Pantalla de equipos")
+
+        #----------------------------------------------------------------------
+    def pantallabuscadores(self):
+
+        self.desaparecer()
+        # LargoxAncho
+        SubFrame = Buscadores(self, df.alto_ventana_secundaria, df.ancho_ventana_secundaria,  "Pantalla de buscadores")
 
     #----------------------------------------------------------------------
     def volver_anterior(self):
@@ -199,3 +207,42 @@ class Equipos(inicio_app_OSPA):
     def LinkTC(self):
 
         webbrowser.open("https://datastudio.google.com/u/0/reporting/6df9744f-15c8-4d44-86ab-5421643636fc/page/zMF5B?s=qNfv_U6QI-c")
+
+
+class Buscadores(inicio_app_OSPA):
+    
+    #----------------------------------------------------------------------
+    def __init__(self, *args, nuevo = None):
+        """Constructor"""
+        
+        Ventana.__init__(self, *args)
+
+        # Información sobre la ventana
+        self.nuevo = nuevo
+        
+        c0 = Cuadro(self)
+        c0.agregar_label(0, 1, ' ')
+        c0.agregar_label(1, 1, ' ')
+        c0.agregar_imagen(2, 1,'Logo_OSPA.png', df.ancho_logo, df.alto_logo)
+        c0.agregar_label(3, 1, ' ')
+        c1 = Cuadro(self)
+        c1.agregar_label(4, 1,' ')
+        c1.agregar_label(5, 1,' ')
+        c1.agregar_boton_grande(6, 1, "Macroproblemas", self.n_busqueda_mp, 20, color = "Modelo1")
+        c1.agregar_label(7, 1,' ')
+        c1.agregar_boton_grande(8, 1, "Problemas", self.n_busqueda_ep, 20, color = "Modelo1")
+        c1.agregar_label(9, 1,' ')
+        c1.agregar_boton_grande(10, 1, "Documentos recibidos", self.n_busqueda_dr, 20, color = "Modelo1")
+        c1.agregar_label(11, 1,' ')
+        c1.agregar_boton_grande(12, 1, "Documentos emitidos", self.n_busqueda_de, 20, color = "Modelo1")
+        c1.agregar_label(13, 1, ' ')
+        c1.agregar_label(14, 1, ' ')
+        c1.agregar_label(15, 1, ' ')
+       
+
+        c2 = Cuadro(self)
+        c2.agregar_boton_grande(16, 0, "Volver", self.volver_anterior, 12, color = "Modelo1")
+
+
+        c3 = Cuadro(self)
+        c3.agregar_franja_inferior('Franja_Inferior_OSPA.png', df.alto_franja_inferior_1, df.ancho_franja_inferior_1)
