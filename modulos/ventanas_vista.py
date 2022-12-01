@@ -1411,8 +1411,8 @@ class Extremo_vinculados(funcionalidades_ospa):
             b_ep_cod = Base_de_datos(df.id_b_problemas, 'EXT_P')
             self.IDEP = b_ep_cod.listar_datos_de_fila(nuevo_codigo)
             self.IDEP_FINAL = self.IDEP[0]
-            id_relacion_ep_pr = self.IDEP_FINAL + "/" + id_interno_pr
-
+            #id_relacion_ep_pr = self.IDEP_FINAL + "/" + id_interno_pr
+            id_relacion_ep_pr = id_interno_pr
             # GUARDAR RELACION
             # Pestaña 1: Código Único
             datos_insertar = [id_relacion_ep_pr,self.IDEP_FINAL,id_interno_pr,'ACTIVO',hora_de_modificacion]
